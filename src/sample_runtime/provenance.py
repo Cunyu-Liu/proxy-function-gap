@@ -28,3 +28,6 @@ STEP_LIBRARIES = (
     "step_worst_to_best_no_uatg",
 )
 EXPECTED_COUNTS = {"step": 5710, "target": 7106}
+GATE0_SEQUENCE_INDEX = Path("/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1/sequence_index.tsv.gz")
+GATE0_SPLIT_V1_DIR = Path("/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v1")
+DEFAULT_MODEL_ROLE_MANIFEST = STAGING_ROOT / "configs" / "model_roles_v1.json"

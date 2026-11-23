@@ -37,7 +37,17 @@ Each successful run atomically publishes:
 - `target_predictions.csv`: 7,106 designed target rows; `sparse_step` is empty because target `info2` is not a step index.
 - `provenance.json`: code commit, official commit, weight/data hashes, scaler, requested/actual device, GPU, versions, and dtype.
 - `validation.json`: target `info2` check, independent NumPy samples, and connection/row-conservation checks.
-- `artifact_hashes.json`: deterministic hashes for the two prediction tables, provenance, and validation.
+- `artifact_hashes.json`: deterministic hashes for prediction tables, model views, manifests, provenance, and validation.
 - `run_metadata.json`: variable timestamps and command metadata, excluded from double-run hash equality.
 
 `measured_rl` is experimental. `original_raw_output` and `retrained_raw_output` are standardized model outputs. `original_pred_mrl` and `retrained_pred_mrl` use only the frozen eGFP first-40k scaler (`mean=5.993167213121654`, `scale=1.799413065189219`, `ddof=0`). Target `published_pred_info2` is a published prediction used only for numerical validation, never as a measured label or fitted scaler.
+
+## Gate 0 identity and model-specific permission views
+
+Prediction rows use the same identifiers as Gate 0: `sequence_id=sample2019_<sha256(normalized_utr)>`, `sequence_hash=<sha256(normalized_utr)>`, and `raw_row_id=GSM3130443:row-<one-based-row-number>` with seven digits. Every row is asserted against Gate 0 `sequence_index.tsv.gz`; `(library,id,sparse_step,utr)` remains as the original connection key.
+
+`configs/model_roles_v1.json` controls model-specific roles. The original model is the random-library source proxy. The retrained model has `unknown_retrain_membership` and `blind=false`; its field-safe Learner view is restricted to nonblind diagnostics and cannot support a blind claim. Missing roles and unknown-lineage blind claims are rejected.
+
+Each run writes separate `step` and `target` Learner/Evaluator CSVs under `views/original/` and `views/retrained/`. Learner columns are restricted to Gate 0 IDs, the original connection metadata, UTR, allowed target-design metadata, and the model output for that view. `measured_rl`, `total_reads`, and `published_pred_info2` are Evaluator-only. The target public `info2` remains a numerical-validation input and is never a blind feature.
+
+For split-v2, join model views and role assignments by `raw_row_id`, with `sequence_id` and the original connection key as assertions. `view_manifest.json` provides relative paths, exact columns, row counts, model lineage, blind status, and label-holder roles. Split assignment and label-vault state remain external to this runtime.

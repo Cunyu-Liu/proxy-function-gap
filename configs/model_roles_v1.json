@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "models": {
+    "original": {
+      "role": "official_source_proxy",
+      "lineage_status": "official_random_training_only",
+      "blind": true,
+      "learner_view_allowed": true,
+      "evaluator_view_allowed": true,
+      "usage_scope": "source_proxy_features_subject_to_split_role"
+    },
+    "retrained": {
+      "role": "official_retrained_unknown_lineage",
+      "lineage_status": "unknown_retrain_membership",
+      "blind": false,
+      "learner_view_allowed": true,
+      "evaluator_view_allowed": true,
+      "usage_scope": "nonblind_diagnostic_only"
+    }
+  }
+}
