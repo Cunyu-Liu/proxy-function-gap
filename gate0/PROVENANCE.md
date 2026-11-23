@@ -26,3 +26,12 @@ No split/vault assignment, real model inference, training, or E1 evaluation is i
 The split-v2 update was integrated with `git subtree pull --prefix=gate0`. Only `README.md` conflicted: the resolution retained all upstream split-v2 content and the existing integrated-path/provenance documentation. Existing E0 code and the original Gate 0 implementation were not overwritten. The original source commit and the split-v2 source commit are both ancestors of the main repository.
 
 Trainer preflight consumes the frozen split-v2 manifest and explicit Learner allowlist. The trainer does not create or modify splits/vaults.
+
+## Fresh CNN v2 production update
+
+- Source commit: `a2f10ee5511b5334d04fab11306a81c63647120c`
+- Source subject: `Complete fresh CNN v2 production delivery`
+- Source tree: `f525338f25060d61904b032a59944684d1cfa85e`
+- Integrated merge: `77077f8` (`Merge commit 'a2f10ee5511b5334d04fab11306a81c63647120c'`)
+
+The fresh CNN v2 production delivery was integrated with `git subtree pull --prefix=gate0`, preserving the source commit as an ancestor. Existing E0, Gate 0, split-v2, runtime, and trainer code were retained. The authorized selected build is `build_a`; its root child/integration/verification/final-validation chain authorizes fresh training while E1 and outer metrics remain disabled.

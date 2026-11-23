@@ -157,3 +157,12 @@ def test_allowlist_role_path_must_exist(tmp_path):
     manifest_path.write_text(json.dumps(manifest))
     with pytest.raises(PermissionError, match="missing role path"):
         preflight(manifest_path)
+
+
+def test_physical_order_requirement_rejects_reversed_source_tsv(tmp_path):
+    manifest_path = make_synthetic_pack(tmp_path / "pack")
+    manifest = json.loads(manifest_path.read_text())
+    manifest["role_sources"]["train"]["physical_order_required"] = True
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="physical row-order mismatch for train"):
+        preflight(manifest_path)

@@ -41,6 +41,7 @@ class PreflightReport:
     learner_allowlist_sha256: str
     source_sha256: Dict[str, str]
     row_order_sha256: Dict[str, str]
+    physical_row_order_verified: Dict[str, bool]
     training_authorized: bool
     synthetic: bool
 
@@ -57,6 +58,7 @@ class PreflightReport:
             "learner_allowlist_sha256": self.learner_allowlist_sha256,
             "source_sha256": dict(self.source_sha256),
             "row_order_sha256": dict(self.row_order_sha256),
+            "physical_row_order_verified": dict(self.physical_row_order_verified),
             "training_authorized": self.training_authorized,
             "synthetic": self.synthetic,
             "ready_for_formal_training": self.training_authorized and not self.synthetic,
@@ -171,6 +173,7 @@ def preflight(manifest_path) -> PreflightReport:
 
     arrays, order_hashes = _read_pack(pack_path, manifest["role_counts"])
     source_hashes = {}
+    physical_verified = {}
     for role in ROLES:
         source_path, source_hash = _evidence(manifest["role_sources"], role)
         source_hashes[role] = source_hash
@@ -179,6 +182,9 @@ def preflight(manifest_path) -> PreflightReport:
         pack_ids = arrays[role][2]
         if len(source_ids) != len(pack_ids) or set(source_ids) != set(pack_ids):
             raise ValueError(f"row_id set/count mismatch for {role}")
+        physical_verified[role] = bool(manifest["role_sources"][role].get("physical_order_required", False))
+        if physical_verified[role] and source_ids != list(pack_ids):
+            raise ValueError(f"physical row-order mismatch for {role}")
         source_order_hash = canonical_row_order_hash(source_ids)
         if source_order_hash != order_hashes[role]:
             raise ValueError(f"canonical row-order hash mismatch for {role}")
@@ -200,6 +206,7 @@ def preflight(manifest_path) -> PreflightReport:
         learner_allowlist_sha256=allowlist_hash,
         source_sha256=source_hashes,
         row_order_sha256=order_hashes,
+        physical_row_order_verified=physical_verified,
         training_authorized=manifest["training_authorized"] is True,
         synthetic=manifest["synthetic"] is True,
     )

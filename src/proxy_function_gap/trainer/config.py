@@ -105,3 +105,25 @@ class TrainerConfig:
     def effective_config_sha256(self):
         payload = json.dumps(self.effective_config(), sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(payload.encode()).hexdigest()
+
+    def frozen_config(self):
+        return {
+            "data_manifest": str(self.data_manifest),
+            "output_root": str(self.output_root),
+            "seeds": list(self.seeds),
+            "memory_fractions": list(self.memory_fractions),
+            "gpu_index": self.gpu_index,
+            "dtype": self.dtype,
+            "batch_size": self.batch_size,
+            "learning_rate": self.learning_rate,
+            "min_delta": self.min_delta,
+            "patience": self.patience,
+            "resume_from": {
+                str(seed): {"path": path, "sha256": expected_hash}
+                for seed, path, expected_hash in self.resume_from
+            },
+        }
+
+    def frozen_config_sha256(self):
+        payload = json.dumps(self.frozen_config(), sort_keys=True, separators=(",", ":"))
+        return hashlib.sha256(payload.encode()).hexdigest()

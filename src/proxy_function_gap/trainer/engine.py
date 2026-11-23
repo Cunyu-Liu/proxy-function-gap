@@ -3,8 +3,10 @@ import json
 import math
 import multiprocessing as mp
 import os
+import queue
+import subprocess
 import time
-from concurrent.futures import ProcessPoolExecutor
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -15,6 +17,19 @@ from .cuda import configure_cuda, cuda_self_check
 from .data import TargetScaler, load_roles, preflight, sha256_file
 from .model import FreshSampleCNN, model_definition_hash, model_hash, state_dict_hash
 from .synthetic import ZeroParameterModel
+
+
+REPOSITORY = Path(__file__).resolve().parents[3]
+
+
+def _code_commit():
+    return subprocess.check_output(["git", "-C", str(REPOSITORY), "rev-parse", "HEAD"], text=True).strip()
+
+
+def _require_clean_repository():
+    status = subprocess.check_output(["git", "-C", str(REPOSITORY), "status", "--porcelain"], text=True).strip()
+    if status:
+        raise RuntimeError(f"formal training requires a clean code repository: {status}")
 
 
 def _epoch_batches(x, y, batch_size, epoch, seed, shuffle):
@@ -61,6 +76,8 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
     fresh_initialization_model_hash = model_hash(model)
     initial_model_hash = fresh_initialization_model_hash
     effective_config_sha256 = config.effective_config_sha256()
+    frozen_config_sha256 = config.frozen_config_sha256()
+    code_commit = _code_commit()
     code_identity = trainer_code_identity()
     optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
     plateau = DualPlateau(config.min_delta, config.patience)
@@ -179,6 +196,7 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
                 "pack_sha256": report.data_pack_sha256,
                 "row_order_sha256": dict(report.row_order_sha256),
                 "config_sha256": effective_config_sha256,
+                "frozen_config_sha256": frozen_config_sha256,
                 "model_state_sha256": state_dict_hash(model.state_dict()),
                 "shuffle_seed": seed + epoch,
                 "shuffle_epoch": epoch,
@@ -209,7 +227,10 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
         "best_model_hash": model_hash(model),
         "model_definition_sha256": model_definition_sha256,
         "effective_config_sha256": effective_config_sha256,
+        "frozen_config_sha256": frozen_config_sha256,
+        "code_commit": code_commit,
         "code_identity_sha256": code_identity["sha256"],
+        "converged_dev_plateau": stop_reason is not None,
         "data_pack_sha256": report.data_pack_sha256,
         "row_order_sha256": dict(report.row_order_sha256),
         "source_sha256": dict(report.source_sha256),
@@ -249,17 +270,57 @@ def _cuda_worker(payload):
     return cuda_self_check(gpu_index, fraction, dtype, seed)
 
 
+def _process_entry(worker, payload, index, result_queue):
+    try:
+        result_queue.put((index, True, worker(payload)))
+    except BaseException as error:
+        import traceback
+        result_queue.put((index, False, f"{type(error).__name__}: {error}\n{traceback.format_exc()}"))
+
+
 def _parallel_results(worker, payloads):
     context = mp.get_context("spawn")
-    with ProcessPoolExecutor(max_workers=len(payloads), mp_context=context) as executor:
-        futures = [executor.submit(worker, payload) for payload in payloads]
-        return [future.result() for future in futures]
+    result_queue = context.Queue()
+    processes = [
+        context.Process(target=_process_entry, args=(worker, payload, index, result_queue))
+        for index, payload in enumerate(payloads)
+    ]
+    for process in processes:
+        process.start()
+    results = [None] * len(payloads)
+    completed = 0
+    try:
+        while completed < len(payloads):
+            try:
+                index, success, value = result_queue.get(timeout=1.0)
+            except queue.Empty:
+                failed = [process for process in processes if process.exitcode not in (None, 0)]
+                if failed:
+                    raise RuntimeError(f"worker exited unexpectedly: {[process.exitcode for process in failed]}")
+                continue
+            if not success:
+                raise RuntimeError(value)
+            results[index] = value
+            completed += 1
+    except BaseException:
+        for process in processes:
+            if process.is_alive():
+                process.terminate()
+        for process in processes:
+            process.join()
+        result_queue.close()
+        raise
+    for process in processes:
+        process.join()
+    result_queue.close()
+    return results
 
 
 def run_parallel_training(config):
     report = preflight(config.data_manifest)
     if not report.training_authorized or report.synthetic:
         raise PermissionError("formal training requires explicit authorization and a non-synthetic pack")
+    _require_clean_repository()
     payloads = [
         (config, seed, fraction, report)
         for seed, fraction in zip(config.seeds, config.memory_fractions)

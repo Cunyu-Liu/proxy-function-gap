@@ -53,6 +53,12 @@ Resume configuration must name every seed's checkpoint and its expected SHA256:
 
 Before loading, the actual checkpoint SHA256 must match. Resume then rejects completed status or any mismatch in seed, code identity, model definition, effective config, scaler, pack, source, split, allowlist, or row-order identity. All state and history are restored and written to a new run directory. Final model weights are restored from best.
 
+## Production adapter and formal-run provenance
+
+`trainer.production.prepare_production_pack` accepts only an authorized fresh child v2 selected build. It verifies the root child/integration/verification/final-validation chain, parent pack/split/raw manifests, learner allowlist, per-role production NPZ and fresh TSV hashes, sequence hashes, role fields, and exact physical row order before writing a unified training NPZ and manifest. Outer NPZ/TSV files are never read by the adapter.
+
+The formal engine additionally requires a clean main Git repository. Each summary records the actual code commit and a frozen-config SHA256 covering data/output paths, seeds, per-process fractions, device, dtype, batch size, learning rate, min_delta, patience, and resume references. Parallel workers are monitored as spawn processes: any exception or abnormal exit terminates and joins every other worker immediately. Partial history/checkpoints are preserved but are never marked converged.
+
 ## Commands
 
 ```bash

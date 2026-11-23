@@ -12,8 +12,8 @@ GATE0_SOURCE = ROOT / "gate0" / "gate0_sample2019"
 RUNTIME_SOURCE = ROOT / "runtime" / "src" / "sample_runtime"
 E0_IMPORTS = {"argparse", "dataclasses", "enum", "hashlib", "json", "math", "pathlib", "random", "typing"}
 GATE0_IMPORTS = {
-    "argparse", "csv", "datetime", "fcntl", "gzip", "hashlib", "itertools", "json",
-    "collections", "math", "os", "pathlib", "platform", "re", "subprocess", "sys",
+    "argparse", "ast", "csv", "datetime", "fcntl", "gzip", "hashlib", "io", "itertools", "json",
+    "collections", "math", "numpy", "os", "pathlib", "platform", "re", "struct", "subprocess", "sys", "zipfile",
 }
 RUNTIME_IMPORTS = {
     "argparse", "csv", "datetime", "gzip", "hashlib", "h5py", "json", "math", "numpy",
@@ -21,7 +21,7 @@ RUNTIME_IMPORTS = {
 }
 TRAINER_IMPORTS = {
     "argparse", "concurrent", "copy", "csv", "dataclasses", "gzip", "hashlib", "json", "math",
-    "multiprocessing", "numpy", "os", "pathlib", "tempfile", "time", "torch", "typing",
+    "multiprocessing", "numpy", "os", "pathlib", "queue", "subprocess", "tempfile", "time", "torch", "traceback", "typing",
 }
 SOURCE_COMMITS = {
     "gate0": "25d6fd4a8133aadde85f6cc4718503c0efe21249",
