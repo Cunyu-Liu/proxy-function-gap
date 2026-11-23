@@ -52,3 +52,19 @@ The official model's first 20,000 high-read rows are `official_seen_test`, not a
 Learner label access is restricted to explicit role/column/path allowlists. Query features are unlabeled and query labels require a selection-hash- and time-checked reveal. Outer features and labels are Evaluator-only, and the outer evaluation method is disabled. Every reveal uses a new run directory; repeating a selection requires a new run ID and preserves earlier run artifacts. No outer regret or outer per-sequence labels are returned by these protocols.
 
 For main-repository integration, use `integration_manifest.json` in the split output directory. It pins the staging commit, required code files, split/role manifests and protocol entrypoints. `split_delivery.json` records the gate status and remaining blockers; `delivery_checksums.json` covers all derived role views and protocol test artifacts.
+
+## Model-specific split v2
+
+`configs/split_v2.json` creates an immutable `sample2019-split-v2`; v1 is never overwritten. Original and retrained evolution models have separate role manifests, row-level assignments, historical outer permissions and E1 decisions. The original fixed-pool E1 context is only `eGFP|unmod|designed_single_assay`; step sequences are complete-trajectory historical measured-state replay only. Retrained evolution remains NO-GO while the 2695 retraining sequence list is unresolved.
+
+```bash
+/root/miniconda3/bin/python -m gate0_sample2019.freeze_split_v2 --config configs/split_v2.json
+/root/miniconda3/bin/python -m gate0_sample2019.verify_split_v2 --config configs/split_v2.json
+# After all three rounds pass, commit staging and run:
+/root/miniconda3/bin/python -m gate0_sample2019.finalize_split_v2 --config configs/split_v2.json
+/root/miniconda3/bin/python -m gate0_sample2019.validate_split_v2_delivery --config configs/split_v2.json
+```
+
+Target/step `designed=False` observations and their full allocation units are control-only. The first 40,000 scaler rows and linked components, official train/test/boundary rows and all near-duplicate components remain isolated. Replicate 2, modified RNA and mCherry are independent contexts and are not pooled with eGFP unmodified replicate 1.
+
+Control assignment takes precedence over official train/test/boundary roles for any allocation unit containing target/step `designed=False`; official exposure remains recorded in `official_model_role` and `exposure_flags`, and the unit still cannot become outer. If all step trajectories are excluded by training/scaler/control lineage, `original_Paper1_historical_replay_authorized` is false rather than inventing a historical outer pool.

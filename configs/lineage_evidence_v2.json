@@ -1,0 +1,16 @@
+{
+  "author_repository_commit": "d53df410c7fb3fcd4bc4541bd7e8c6dc52b66fbe",
+  "original_evolution": {
+    "training_context": "The stepwise notebook describes evolution_model.hdf5 as an older model trained on unmodified EGFP replicate 1.",
+    "scaler": "stepwise_evolve_utrs.ipynb cell 2 uses scale_utrs = df[:40000]. Its sort_values call is not assigned or inplace, so v2 conservatively marks the first 40000 raw rows and their complete allocation units as scaler-seen.",
+    "historical_evaluation": "Nature Fig. 3 shows the original model used to generate sequences and evaluates those measured states. Such outer pools are historical measured-state outer, never never-evaluated."
+  },
+  "retrained_evolution": {
+    "training": "Nature Fig. 3d states that the original Optimus 5-Prime was retrained using sequences from the designed library.",
+    "historical_evaluation": "Nature Fig. 3c shows retrained predictions on measured stepwise states; Supplementary Fig. 13 reports historical retrained/original comparisons on designed sub-libraries.",
+    "retraining_2695": "The independent review requires 2695 retraining sequences to be excluded. No sequence-level list was found in the reviewed public code or supplementary text, so random, target/step designed=True and every possible retrained outer are conservatively development/quarantine."
+  },
+  "controls": "target designed=False and step designed=False trigger complete allocation-unit control roles. Linked designed=True rows are also kept out of the design pool to avoid splitting a near component.",
+  "contexts": "eGFP unmod replicate 1 is the only original fixed-pool E1 context. Rep2, pseudouridine, 1-methylpseudouridine and mCherry are separate contexts and are never pooled into eGFP unmod replicate 1.",
+  "replicate_summary": "E1 uses only the designated single-assay/rep1 context. Replicate measurements within a sequence/context are not independent evidence. If a future protocol uses multiple replicates, aggregate measured MRL by median within sequence/context, retain replicate count and missingness, and exclude missing values from the median."
+}
