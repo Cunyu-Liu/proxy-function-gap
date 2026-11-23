@@ -1,34 +1,48 @@
-# E0 三轮独立角度检查记录
+# E0 复核后三轮检查记录
 
-日期：2026-11-23。这里的“独立”指使用不同检查角度和独立参考实现，不冒充外部人员审查。
+日期：2026-11-23。本文对应 VGSC-inspired fixed-pool 重构；旧版 V-only/joint 记录只保留在历史 artifacts，不再描述当前实现。“独立”指不同角度和独立参考实现，不冒充外部人员评审。
 
-## 第一轮：接口与数学性质
+## 第一轮：重构接口与数学门禁
 
-- 完整 pytest 初轮：47 passed；修复审查发现后完整套件：50 passed，无 xfail。
-- 覆盖候选池输入校验、约束重归一化、alpha=0、倾斜归一化、池级 Q 约去、六种策略、合成误差结构、regret 和 CLI。
-- `checks/independent_math_check.py` 使用 Fraction 手工参考值和全提议路径枚举，不复用生产倾斜函数。
-- 解析分布最大绝对误差 0；有限 cap=2 拒绝采样的参考分布为 `[0.705, 0.295]`，固定种子 20261123 的 10,000 次经验分布为 `[0.7101, 0.2899]`，最大绝对误差 0.0051，小于预设 0.025。
+- 初次新套件为 109 passed、2 failed；两处为共享 cache 测试预期和三候选掩码构造错误，修正后完整套件为 **111 passed**。
+- 独立数学脚本初次发现“每提议接受率”参考公式误用期望值之比；改为逐接受路径累加 `路径概率/实际提议数` 后通过。失败日志均保留。
+- C=1/2/3 分别穷举 2/4/8 条有序提议路径；每个 cap 使用 6000 次固定种子模拟，选择分布最大绝对误差分别为 0.011333、0.006000、0.001195，均小于 0.025。轨迹接受率、回退率和每提议接受率误差均小于 0.02。
+- 源码审计覆盖 9 个运行时文件，仅允许标准库，确认真值隔离和无 GPU/训练/前缀路径。
 
-## 第二轮：预算公平
+## 第二轮：预算公平与语义空洞
 
-- 专项测试：`tests/test_budget_fairness.py` 与 `tests/test_selection.py` 合计 26 passed。
-- 验证 BoN/WSC/greedy 抽满 N，V-only/joint 提前接受时报告实际调用，random 不调用模型。
-- 验证重复序列不缓存、模型预算超限在额外计分前停止、非 BoN 没有隐藏 proxy 调用、不可行高分候选不计分。
-- 结论仅是通过计数正确性门禁；相同 N 不等于相同实际成本，E1 仍须按分模型实际调用报告。
+新增并验证：
 
-## 第三轮：源码审查与边界审计
+- WSC 按序列身份求和投票，greedy 只做原始 verifier reward argmax；FP-TILT 不接受 Q。
+- product/min/mean 只取一次 alpha；alpha=0、全零、Q=0、w=1 和默认拒选/显式 uniform。
+- 所有排序器 top-k 身份不放回，多轨迹共享总预算、cache 和分轨迹 delta 计数。
+- ensemble 逐成员收费，BatchScorer 按 item 收费，显式 cache 才允许命中，Random 的 item-forward 为 0。
+- adversarial/independent/oracle 合成真值、V/Q 概率 logit 零噪声和端点。
+- 常数 V 的 FP-REJ 在 C=1/2/3 全路径上回到基础分布，最大误差约 1.11e-16；FP-TILT alpha=0 省略 V/Q 计分。
 
-审查发现并修复：
+完整结果：**116 passed**，独立数学检查 PASS，源码审计 PASS。
 
-1. 浮点累计舍入的兜底原来可能返回最后的零概率/零权重项；现改为最后正质量项，并加入近 1 阈值回归测试。
-2. WSC 全零权重的均匀回退原只在代码和测试中出现；现已写入冻结协议。
-3. greedy 的共同池级 Q 因子不改变排序；现已写入协议并加入不同 Q 选择一致的测试。
-4. 首次 macOS 传输产生 AppleDouble 文件和 UID 所有权问题；已仅在新项目内清理/修复，后续禁用属主保留并加入忽略规则。原始失败日志保留。
+## 第三轮：协议一致性与复现
 
-`checks/code_audit.py` 对 7 个运行时文件做 AST 导入与 forbidden-path 检查：仅使用允许的标准库；选择器/候选池不引用 synthetic truth、oracle 或 regret；运行时代码没有 GPU、训练或前缀路径。结论 PASS。
+- 完整 pytest 再次 **116 passed**，无 xfail。
+- 独立数学检查再次 PASS；输出保存为 `round3_independent_math.json`。
+- 源码审计增加默认 `ZeroWeightPolicy.ABSTAIN`、product 单次指数和 pool 不含 qhat 的静态断言，结果 PASS。
+- 默认 CLI 双运行 JSON 字节一致。配置哈希为 `72c9f35629af2699ff455f1bdad11cb0cce6d11bdd1cd8a0441570c54ffdc4ed`，JSON SHA-256 为 `009632086edad208ca5d0e095dfd5b303ecd0cd65aa79fa261525cb75ee31354`。
+- smoke 的实际成本：Random=0；BoN=24 proxy item-forward；WSC/greedy=24 verifier item-forward；FP-TILT=9 verifier item-forward；FP-REJ=20 verifier + 3 Q item-forward。相同 proposal cap 不代表相同实际成本。
 
-## 复现与范围结论
+## 审查发现与修复
 
-同一冻结配置两次 CLI 输出 JSON 字节一致，配置哈希为 `148f9ae491196c3de26c15d8b67e34deae6311dd4aea5ad8707d87d820f1e87d`，文件 SHA-256 为 `d1d5e7b3851e6bbc16fbf41c8d9edb55e54fdf1870f71f27b160a43e4d39e27a`。
+1. 修正共享 cache 测试对首次轨迹计分次数的错误预期。
+2. 修正三候选测试的可行掩码长度。
+3. 修正独立参考脚本的每提议接受率期望定义。
+4. 补充批量排序器 top-k、常数 V 和 alpha=0 成本测试。
+5. 替换旧审查文档中 V-only/joint、联合 greedy 和静默均匀回退的过期描述。
 
-E0 软件正确性门禁通过。没有使用真实标签、没有启动 GPU 训练、没有生成前缀或新序列，也没有测试任何生物效果。E1 及后续阶段未启动。
+## 未解决项与边界
+
+- `ScoreCache` 只按 score kind 和 sequence ID 索引；调用方必须保证同一 cache 内 scorer/ensemble 已冻结，跨模型复用需另建 cache。
+- 多轨迹采用固定 RNG 的顺序执行；未声称并行归约复现。
+- ensemble 当前固定为成员均值；product/min/mean 是 V/Q 聚合，不是 ensemble 聚合。
+- 全路径穷举是小候选池正确性证据，不是对所有分布的形式化证明，也不构成生物效果证据。
+- FP-TILT 需要评分全部正提议质量身份，实际成本可能高于提前接受的 FP-REJ。
+- 仍无真实标签、GPU 训练、前缀生成或 E1 结果。

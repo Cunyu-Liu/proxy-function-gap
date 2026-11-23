@@ -3,6 +3,10 @@ from dataclasses import dataclass
 from typing import Optional, Sequence, Tuple
 
 
+class ZeroNormalizerError(ValueError):
+    pass
+
+
 @dataclass(frozen=True)
 class Candidate:
     index: int
@@ -63,7 +67,6 @@ class CandidatePool:
         self,
         verifier_scores: Sequence[float],
         alpha: float,
-        qhat: Optional[float] = None,
     ) -> Tuple[float, ...]:
         scores = tuple(float(value) for value in verifier_scores)
         if len(scores) != len(self):
@@ -72,14 +75,11 @@ class CandidatePool:
             raise ValueError("verifier scores must be in [0, 1]")
         if not math.isfinite(alpha) or alpha < 0:
             raise ValueError("alpha must be finite and non-negative")
-        if qhat is not None and (not math.isfinite(qhat) or not 0 <= qhat <= 1):
-            raise ValueError("qhat must be in [0, 1]")
         base = self.masked_proposal_probs()
         if alpha == 0:
             return base
-        joint_factor = 1.0 if qhat is None else qhat ** alpha
-        weights = tuple(p * (score ** alpha) * joint_factor for p, score in zip(base, scores))
+        weights = tuple(p * (score ** alpha) for p, score in zip(base, scores))
         normalizer = math.fsum(weights)
         if normalizer <= 0:
-            raise ValueError("tilted distribution has zero normalizer")
+            raise ZeroNormalizerError("tilted distribution has zero normalizer")
         return tuple(weight / normalizer for weight in weights)

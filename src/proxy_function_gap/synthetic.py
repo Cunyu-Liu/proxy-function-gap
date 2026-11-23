@@ -1,18 +1,27 @@
 import random
 from dataclasses import dataclass
+from enum import Enum
 from typing import Tuple
 
 from .constraints import UTRConstraints, utr_constraint_mask
 from .pool import CandidatePool
 
 
+class SyntheticScenario(str, Enum):
+    ADVERSARIAL = "adversarial"
+    INDEPENDENT = "independent"
+    ORACLE = "oracle"
+
+
 @dataclass(frozen=True)
 class SyntheticCase:
     seed: int
+    scenario: SyntheticScenario
     pool: CandidatePool
     synthetic_truth: Tuple[float, ...]
+    proxy_signal: Tuple[float, ...]
     structured_bias: Tuple[float, ...]
-    gaussian_noise: Tuple[float, ...]
+    synthetic_proxy_noise: Tuple[float, ...]
     proxy_values: Tuple[float, ...]
     verifier_values: Tuple[float, ...]
     qhat: float
@@ -28,7 +37,10 @@ class SyntheticCase:
         return self.qhat
 
 
-def make_known_error_case(seed: int = 314159) -> SyntheticCase:
+def make_known_error_case(
+    seed: int = 314159, scenario: SyntheticScenario = SyntheticScenario.ADVERSARIAL
+) -> SyntheticCase:
+    scenario = SyntheticScenario(scenario)
     rng = random.Random(seed)
     ids = ("decoy", "best", "middle", "masked-uaug")
     sequences = ("AAAAAA", "CCCCCC", "GGGGGG", "AUGAAA")
@@ -37,16 +49,30 @@ def make_known_error_case(seed: int = 314159) -> SyntheticCase:
     feasible = utr_constraint_mask(sequences, constraints)
     pool = CandidatePool(ids, sequences, proposal_probs, feasible)
     truth = (0.10, 1.00, 0.40, 0.20)
-    bias = (2.50, 0.00, 0.00, 4.00)
-    noise = tuple(rng.gauss(0.0, 0.01) for _ in ids)
-    proxy = tuple(y + b + epsilon for y, b, epsilon in zip(truth, bias, noise))
-    verifier = (0.05, 0.95, 0.60, 1.00)
+    if scenario == SyntheticScenario.ADVERSARIAL:
+        proxy_signal = truth
+        bias = (2.50, 0.00, 0.00, 4.00)
+        noise = tuple(rng.gauss(0.0, 0.01) for _ in ids)
+        verifier = (0.05, 0.95, 0.60, 1.00)
+    elif scenario == SyntheticScenario.INDEPENDENT:
+        proxy_signal = (0.80, 0.15, 0.65, 0.10)
+        bias = (0.00, 0.00, 0.00, 0.00)
+        noise = tuple(rng.gauss(0.0, 0.01) for _ in ids)
+        verifier = (0.80, 0.20, 0.70, 1.00)
+    else:
+        proxy_signal = truth
+        bias = (0.00, 0.00, 0.00, 0.00)
+        noise = (0.00, 0.00, 0.00, 0.00)
+        verifier = truth
+    proxy = tuple(signal + b + epsilon for signal, b, epsilon in zip(proxy_signal, bias, noise))
     return SyntheticCase(
         seed=seed,
+        scenario=scenario,
         pool=pool,
         synthetic_truth=truth,
+        proxy_signal=proxy_signal,
         structured_bias=bias,
-        gaussian_noise=noise,
+        synthetic_proxy_noise=noise,
         proxy_values=proxy,
         verifier_values=verifier,
         qhat=0.80,
