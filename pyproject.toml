@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proxy-function-gap"
-version = "0.3.0"
-description = "E0 fixed-pool selection checks and reproducible Gate 0 data processing"
-requires-python = ">=3.9"
-dependencies = []
+version = "0.4.0"
+description = "E0, Gate 0, Sample runtime, and fresh CUDA proxy training checks"
+requires-python = ">=3.10"
+dependencies = ["numpy>=2.2,<3", "torch>=2.7,<3", "h5py>=3.14,<4"]
 
 [project.optional-dependencies]
 dev = ["pytest>=7,<9"]
@@ -19,13 +19,14 @@ proxy-gap-gate0-build = "gate0_sample2019.build:main"
 proxy-gap-gate0-verify = "gate0_sample2019.verify:main"
 proxy-gap-gate0-finalize = "gate0_sample2019.finalize:main"
 proxy-gap-gate0-validate = "gate0_sample2019.validate_delivery:main"
+proxy-gap-trainer = "proxy_function_gap.trainer.cli:main"
 
 [tool.setuptools.packages.find]
-where = ["src", "gate0"]
-include = ["proxy_function_gap*", "gate0_sample2019*"]
+where = ["src", "gate0", "runtime/src"]
+include = ["proxy_function_gap*", "gate0_sample2019*", "sample_runtime*"]
 namespaces = false
 
 [tool.pytest.ini_options]
-pythonpath = ["src", "gate0"]
-testpaths = ["tests", "gate0/tests"]
+pythonpath = ["src", "gate0", "runtime/src"]
+testpaths = ["tests", "gate0/tests", "runtime/tests"]
 addopts = "-ra"

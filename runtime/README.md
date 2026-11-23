@@ -4,6 +4,8 @@ This independent staging recomputes predictions from the official Sample 2019 ev
 
 ## Provenance
 
+Integrated source commit and subtree details are recorded in `PROVENANCE.md`. No official GPL Python code or HDF5 weights are copied into the integrated repository.
+
 - Official repository: `https://github.com/pjsample/human_5utr_modeling`
 - Official commit: `d53df410c7fb3fcd4bc4541bd7e8c6dc52b66fbe`
 - Original weights: `/home/proxy-function-gap-sample-audit/official-d53df410/modeling/saved_models/evolution_model.hdf5`
@@ -17,11 +19,11 @@ The PyTorch implementation maps the verified 54-by-4 Keras input to channels-fir
 The staging-private `.deps` directory contains only `h5py==3.14.0`; the confirmed interpreter supplies `torch==2.7.1+cu128` and `numpy==2.2.6`.
 
 ```bash
-cd /home/proxy-function-gap-sample-runtime
-PYTHONPATH=.deps:src CUBLAS_WORKSPACE_CONFIG=:4096:8 \
-  /root/miniconda3/envs/lucaone_cu128/bin/python -m unittest discover -s tests -v
+cd /home/proxy-function-gap
+PYTHONPATH=/home/proxy-function-gap-sample-runtime/.deps:src:runtime/src:gate0 CUBLAS_WORKSPACE_CONFIG=:4096:8 \
+  /root/miniconda3/envs/lucaone_cu128/bin/python -m unittest discover -s runtime/tests -v
 
-PYTHONPATH=.deps:src CUBLAS_WORKSPACE_CONFIG=:4096:8 \
+PYTHONPATH=/home/proxy-function-gap-sample-runtime/.deps:src:runtime/src:gate0 CUBLAS_WORKSPACE_CONFIG=:4096:8 \
   /root/miniconda3/envs/lucaone_cu128/bin/python -m sample_runtime.run \
   --requested-device cuda:0 --batch-size 128 \
   --output-dir /teams/HoulabData_1788502323/liucunyu/proxy_function_gap/sample_runtime/run1

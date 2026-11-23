@@ -13,13 +13,13 @@ def test_gate0_package_and_pyproject_paths_are_integrated():
     assert Path(gate0_sample2019.__file__).parent == ROOT / "gate0" / "gate0_sample2019"
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     pytest_ini = (ROOT / "pytest.ini").read_text(encoding="utf-8")
-    assert 'where = ["src", "gate0"]' in pyproject
-    assert 'include = ["proxy_function_gap*", "gate0_sample2019*"]' in pyproject
+    assert 'where = ["src", "gate0", "runtime/src"]' in pyproject
+    assert 'include = ["proxy_function_gap*", "gate0_sample2019*", "sample_runtime*"]' in pyproject
     assert "namespaces = false" in pyproject
-    assert 'pythonpath = ["src", "gate0"]' in pyproject
-    assert 'testpaths = ["tests", "gate0/tests"]' in pyproject
-    assert "pythonpath = src gate0" in pytest_ini
-    assert "testpaths = tests gate0/tests" in pytest_ini
+    assert 'pythonpath = ["src", "gate0", "runtime/src"]' in pyproject
+    assert 'testpaths = ["tests", "gate0/tests", "runtime/tests"]' in pyproject
+    assert "pythonpath = src gate0 runtime/src" in pytest_ini
+    assert "testpaths = tests gate0/tests runtime/tests" in pytest_ini
 
 
 def test_gate0_source_commit_is_ancestor_and_initial_tree_matches():

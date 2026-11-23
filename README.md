@@ -10,13 +10,12 @@
 
 ## 环境与运行
 
-运行时仅使用 Python 标准库（Python >=3.9）：
+E0/Gate0 仅使用 Python 标准库；Sample runtime 和 fresh trainer 需要 Python >=3.10、numpy、torch 和 h5py。当前已核验 CUDA 环境为 `/root/miniconda3/envs/lucaone_cu128/bin/python`：
 
 ```bash
-/root/miniconda3/bin/python -m venv .venv
-.venv/bin/python -m pip install 'pytest>=7,<9'
-.venv/bin/python -m pip install -e .
-.venv/bin/python -m pytest -q
+export PYTHONPATH=/home/proxy-function-gap-sample-runtime/.deps:/home/proxy-function-gap/src:/home/proxy-function-gap/gate0:/home/proxy-function-gap/runtime/src
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
+/root/miniconda3/envs/lucaone_cu128/bin/python -m pytest -q
 ```
 
 端到端合成 smoke：
@@ -30,6 +29,12 @@
 ```
 
 输出中的 synthetic regret 只用于正确性检查，拒选的 regret 为缺失，不是生物实验结论。
+
+## Split-v2、Sample runtime 与 fresh trainer
+
+split-v2 来源提交 `05eb96b5e730c9dd6cebc96486220bd6266c30d9` 通过 subtree merge `56d3e3b` 保留；独立 Sample runtime 来源提交 `3c8d047816a4a216a3954c66112c1e858c7dc2c7` 通过 subtree merge `981a3de` 保留。官方 GPL Python 代码和 HDF5 权重未复制进 Git，详见 `runtime/PROVENANCE.md`。
+
+fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同一显式 CUDA 设备并行，train-only scaler、双 loss plateau、无 epoch/step 上限、原子 checkpoint 和完整 history 均有测试。正式训练未启动；`preflight`、`cuda-self-check` 与 `train --execute-training` 分离，synthetic smoke 不是科学结果。
 
 ## Gate 0 集成
 

@@ -4,7 +4,7 @@
 
 The main repository now contains both the E0 fixed-pool synthetic checks and the completed Sample 2019 Gate 0 processing code. Gate 0 comes from commit `25d6fd4a8133aadde85f6cc4718503c0efe21249` and is integrated under `gate0/` with Git ancestry preserved. See `gate0/PROVENANCE.md` for the exact source tree and merge method.
 
-This integration does not implement split/vault assignment, does not run real model inference or training, and does not authorize E1. Existing split-ready groups remain proposed and unfrozen.
+The initial Gate 0 integration did not implement split/vault assignment, run real model inference or training, or authorize E1. A later authorized update adds the completed split-v2 commit `05eb96b5e730c9dd6cebc96486220bd6266c30d9` and Sample runtime commit `3c8d047816a4a216a3954c66112c1e858c7dc2c7` with subtree provenance. Split-v2 roles are now available to the trainer preflight; no new split/vault implementation is written by the trainer.
 
 ## Package and test layout
 
@@ -43,4 +43,4 @@ Integration is accepted only after three rounds of the combined E0+Gate0 pytest 
 - E0 independent math checks and integrated source/data-boundary audits passed in every round.
 - The first wheel exposed an unintended top-level `tests` package. Package discovery was restricted to `proxy_function_gap*` and `gate0_sample2019*`; a second failure was traced to the stale generated `build/lib/tests` directory. A clean rebuild contains only the two intended packages and their dist-info, with no raw data members.
 - The audit covers tracked and candidate files, rejects raw-data suffixes and files over 1 MiB, and verifies the source commit is an ancestor of the integrated repository.
-- The source repository HEAD remains at the same `staging` commit, and integration did not modify it. During final verification, concurrently created untracked `configs/split_v1.json`, `gate0_sample2019/freeze_split.py`, and `gate0_sample2019/protocol.py` were observed. Their contents were not read, integrated, or modified; they are excluded from the main repository. No real data processing entry point was executed during integration.
+- The initial Gate 0 source HEAD remained at `25d6fd4a…`; concurrent split files were excluded at that stage. The subsequent authorized split-v2 update integrates the completed `05eb96b5…` commit through merge `56d3e3b`, while unrelated working-tree changes remain excluded. No real data processing entry point was executed during the initial integration.

@@ -15,3 +15,14 @@ The source repository and its `staging` branch were not modified. Raw inputs and
 The upstream author-code evidence has its own independent provenance in `configs/author_code_evidence.json`: repository `pjsample/human_5utr_modeling`, commit `d53df410c7fb3fcd4bc4541bd7e8c6dc52b66fbe`, with per-notebook hashes.
 
 No split/vault assignment, real model inference, training, or E1 evaluation is introduced by this integration.
+
+## Split-v2 update
+
+- Updated source commit: `05eb96b5e730c9dd6cebc96486220bd6266c30d9`
+- Source subject: `Add model-specific Gate 0 split v2`
+- Source tree: `aeee1de6b0f219b550e29c728d685468e386332e`
+- Integrated merge: `56d3e3b` (`Merge commit '05eb96b5e730c9dd6cebc96486220bd6266c30d9'`)
+
+The split-v2 update was integrated with `git subtree pull --prefix=gate0`. Only `README.md` conflicted: the resolution retained all upstream split-v2 content and the existing integrated-path/provenance documentation. Existing E0 code and the original Gate 0 implementation were not overwritten. The original source commit and the split-v2 source commit are both ancestors of the main repository.
+
+Trainer preflight consumes the frozen split-v2 manifest and explicit Learner allowlist. The trainer does not create or modify splits/vaults.

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-STAGING_ROOT = Path("/home/proxy-function-gap-sample-runtime")
+STAGING_ROOT = Path("/home/proxy-function-gap/runtime")
 AUDIT_ROOT = Path("/home/proxy-function-gap-sample-audit")
 OFFICIAL_ROOT = AUDIT_ROOT / "official-d53df410"
 MODEL_ROOT = OFFICIAL_ROOT / "modeling" / "saved_models"
