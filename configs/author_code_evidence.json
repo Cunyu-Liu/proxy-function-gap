@@ -1,0 +1,32 @@
+{
+  "repository": "https://github.com/pjsample/human_5utr_modeling",
+  "commit": "d53df410c7fb3fcd4bc4541bd7e8c6dc52b66fbe",
+  "notebooks": [
+    {
+      "path": "modeling/training_MRL_CNN.ipynb",
+      "sha256": "c0910309874b849f773a37e90a672b52f63955d7581245369d65bff62ffd9452",
+      "evidence": ["def one_hot_encode(df, col='utr', seq_len=50)", "for i,seq in enumerate(df[col].str[:seq_len])", "seq_e_train = one_hot_encode(e_train,seq_len=50)"]
+    },
+    {
+      "path": "modeling/cds_modification_comparisons/compare_all_chemistries_avg_models.ipynb",
+      "sha256": "e69ada4d675ce5edb6ecbf8d2e856dc2830cf35e4444a2a08211ba28647be3f6",
+      "evidence": ["def one_hot_encode(df, col='utr', seq_len=50)", "seq_e_train = one_hot_encode(e_train,seq_len=50)"]
+    },
+    {
+      "path": "modeling/cds_modification_comparisons/compare_cds.ipynb",
+      "sha256": "142b23f1d66b2c5192e7cef4788bfacd9aa77f5819779743c64c7188025151e8",
+      "evidence": ["def one_hot_encode(df, col='utr', seq_len=50)", "seq_e_train = one_hot_encode(e_train,seq_len=50)", "seq_c_train = one_hot_encode(c_train,seq_len=50)"]
+    },
+    {
+      "path": "modeling/Varying_length_25to100_modeling.ipynb",
+      "sha256": "14ad1a7d37464ce80eafeac0b1889d1aa2c0fb7855b4b71af0e5269d88b6c145",
+      "evidence": ["def one_hot_encode(df, col='utr100', seq_len=100)", "df['utr100'] = 75*'N' +df['utr']", "df['utr100'] = df['utr100'].str[-100:]"]
+    },
+    {
+      "path": "sequence_design/stepwise_evolve_utrs.ipynb",
+      "sha256": "ae4bd696ef7f752183841e7b1d4334ddb820f90c9b0aba5c289ec64da908a200",
+      "evidence": ["The original evolution model uses seq_len=54 and includes the first four CDS bases ATGG.", "The design sequence itself uses seq_len=50."]
+    }
+  ],
+  "interpretation": "Fixed-file normalized UTR is the author-used first 50 nt after raw length/suffix validation. Variable-length rows retain their full UTR and are not truncated."
+}

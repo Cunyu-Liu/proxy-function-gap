@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "normalization_version": "sample2019-fixed-utr-v1",
+  "input_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+  "output_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1",
+  "author_repository_commit": "d53df410c7fb3fcd4bc4541bd7e8c6dc52b66fbe",
+  "near_duplicate": {
+    "metric": "hamming",
+    "max_distance": 1,
+    "same_length_only": true,
+    "candidate_rule": "same length and identical left or right half, followed by full Hamming verification"
+  },
+  "fixed_formats": {
+    "GSM3130435_egfp_unmod_1.csv.gz": {"length": 50, "suffix": "", "format": "UTR50"},
+    "GSM3130436_egfp_unmod_2.csv.gz": {"length": 59, "suffix": "ATGGGCGAA", "format": "UTR50_ATGGGCGAA"},
+    "GSM3130437_egfp_pseudo_1.csv.gz": {"length": 59, "suffix": "ATGGGCGAA", "format": "UTR50_ATGGGCGAA"},
+    "GSM3130438_egfp_pseudo_2.csv.gz": {"length": 59, "suffix": "ATGGGCGAA", "format": "UTR50_ATGGGCGAA"},
+    "GSM3130439_egfp_m1pseudo_1.csv.gz": {"length": 59, "suffix": "ATGGGCGAA", "format": "UTR50_ATGGGCGAA"},
+    "GSM3130440_egfp_m1pseudo_2.csv.gz": {"length": 54, "suffix": "ATGG", "format": "UTR50_ATGG"},
+    "GSM3130441_mcherry_1.csv.gz": {"length": 50, "suffix": "", "format": "UTR50"},
+    "GSM3130442_mcherry_2.csv.gz": {"length": 50, "suffix": "", "format": "UTR50"},
+    "GSM3130443_designed_library.csv.gz": {"length": 50, "suffix": "", "format": "UTR50"},
+    "GSM4084997_varying_length_25to100.csv.gz": {"length": null, "suffix": null, "format": "VARIABLE_UTR_25_100"}
+  },
+  "normalization_evidence": [
+    "modeling/training_MRL_CNN.ipynb uses df[col].str[:seq_len] with seq_len=50 for egfp_unmod_1.",
+    "compare_all_chemistries_avg_models.ipynb and compare_cds.ipynb use seq_len=50 across CDS/chemistry comparisons.",
+    "stepwise_evolve_utrs.ipynb documents 54 nt as the 50 nt UTR plus the first four CDS bases ATGG.",
+    "Varying_length_25to100_modeling.ipynb preserves variable UTR length and left-pads with N to 100 nt; it is not truncated to 50.",
+    "Every fixed-file row must additionally match the declared raw length and constant suffix before first-50 normalization is allowed."
+  ]
+}
