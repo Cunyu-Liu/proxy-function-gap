@@ -100,3 +100,7 @@ A verified child can authorize training start, but `E1_enabled` remains false. M
 `configs/fresh_cnn_v2.json` independently re-reviews v1 random outer without inheriting blanket original/retrained random exclusions. Fresh unmodified rep1 is restored when its allocation unit, near component and trajectory do not overlap fresh train/scaler/dev/calibration/query or designed outer. Original/retrained manifests are unchanged.
 
 `data_manifest.json` and `production/*.npz` use deterministic standard-library NPY/NPZ encoding. NPZ row_id order is exactly the source TSV order and includes UTR50 one-hot, measured_rl only for labeled roles, role/allocation/context/source hashes and `synthetic=false`. Query has no measured-label array. Production outer NPZ remains Evaluator-only. Train-only scaler statistics remain deferred to the trainer.
+
+## Immutable fixed candidate pools
+
+`configs/fixed_pools_v1.json` builds one fixed pool per role: dev=64, calibration=64, outer random=256, outer designed=64. Each complete allocation unit is an independent cluster; sequence/context deduplication, q=1/N unique feasible sequences, cluster assignments, source split hash and paired proposal seed plan are explicit. Outer learner views contain no labels and Evaluator vaults are references only. Small pools are protocol fixtures, not independent replication series; no variance or outer score is computed.
