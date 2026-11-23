@@ -1,0 +1,17 @@
+{
+  "schema_version": "2.0",
+  "split_version": "sample2019-split-v2",
+  "parent_split_version": "sample2019-split-v1",
+  "parent_split_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v1",
+  "split_ready_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1",
+  "split_ready_checksums": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1/post_validation_checksums.json",
+  "input_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+  "output_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v2",
+  "model_lineages": ["original_evolution", "retrained_evolution"],
+  "scaler_rows": 40000,
+  "retraining_sequence_count": 2695,
+  "retraining_sequence_list_status": "unknown; no sequence-level allowlist was found in the author repository or supplementary evidence reviewed, so retrained outer is forbidden",
+  "original_e1_context": "eGFP|unmod|designed_single_assay",
+  "E1_enabled": false,
+  "outer_metrics_enabled": false
+}

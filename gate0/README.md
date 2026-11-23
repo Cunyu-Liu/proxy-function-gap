@@ -1,6 +1,6 @@
 # Sample 2019 Gate 0 data builder
 
-This integrated subtree builds file-level Gate 0 artifacts without model training, model inference, outer-result access, split/vault assignment, or E1 scientific evaluation. Its source provenance is recorded in `PROVENANCE.md`.
+This integrated subtree builds file-level Gate 0 and split-v2 artifacts without model training, model inference, outer-result access, or E1 scientific evaluation. Source provenance is recorded in `PROVENANCE.md`.
 
 Requirements: Python 3.9 standard library only. Raw inputs are validated against `data_manifest.json` and are never modified.
 
@@ -33,4 +33,38 @@ The Hamming-1 candidate rule is exact: two equal-length sequences at distance on
 
 The original designed-library CSV index is not unique (46,988 repeated-index rows); it is preserved in `raw_index` and independently counted in round 1. Only the source-row-number-based `raw_row_id` is used as the unique row key.
 
-After `finalize`, `gate0_sample2019.validate_delivery` independently rechecks every derived checksum, every raw input hash, the integrated commit and the no-E1/no-training flags, and writes `final_validation.json`. Legacy JSON keys named `staging_commit` and `staging_status_clean` remain unchanged for compatibility with already delivered artifacts. Raw and derived data stay under `/teams` and are not tracked by Git.
+After `finalize`, `gate0_sample2019.validate_delivery` independently rechecks every derived checksum, every raw input hash, the integrated commit and the no-E1/no-training flags, and writes `final_validation.json`. Legacy JSON keys named `staging_commit` and `staging_status_clean` remain for compatibility. Raw and derived data stay under `/teams` and are not tracked by Git.
+
+## Frozen split and label-vault protocol
+
+`configs/split_v1.json` defines `sample2019-split-v1`. Allocation units join near-duplicate components with every component belonging to the same complete trajectory. Role assignment is deterministic within random/designed source-library strata and mixed random/designed overlap strata.
+
+```bash
+.venv/bin/python -m gate0_sample2019.freeze_split --config gate0/configs/split_v1.json
+.venv/bin/python -m gate0_sample2019.verify_split --config gate0/configs/split_v1.json
+# After all three rounds pass, commit staging and run:
+.venv/bin/python -m gate0_sample2019.finalize_split --config gate0/configs/split_v1.json
+.venv/bin/python -m gate0_sample2019.validate_split_delivery --config gate0/configs/split_v1.json
+```
+
+The official model's first 20,000 high-read rows are `official_seen_test`, not a new blind test. The next 260,000 are official-seen training rows. Rows tied at either cutoff (`total_reads` 2497 or 267) and their complete allocation units are `official_boundary_ambiguous` and can never become outer.
+
+Learner label access is restricted to explicit role/column/path allowlists. Query features are unlabeled and query labels require a selection-hash- and time-checked reveal. Outer features and labels are Evaluator-only, and the outer evaluation method is disabled. Every reveal uses a new run directory; repeating a selection requires a new run ID and preserves earlier run artifacts. No outer regret or outer per-sequence labels are returned by these protocols.
+
+For main-repository integration, use `integration_manifest.json` in the split output directory. It pins the staging commit, required code files, split/role manifests and protocol entrypoints. `split_delivery.json` records the gate status and remaining blockers; `delivery_checksums.json` covers all derived role views and protocol test artifacts.
+
+## Model-specific split v2
+
+`configs/split_v2.json` creates an immutable `sample2019-split-v2`; v1 is never overwritten. Original and retrained evolution models have separate role manifests, row-level assignments, historical outer permissions and E1 decisions. The original fixed-pool E1 context is only `eGFP|unmod|designed_single_assay`; step sequences are complete-trajectory historical measured-state replay only. Retrained evolution remains NO-GO while the 2695 retraining sequence list is unresolved.
+
+```bash
+.venv/bin/python -m gate0_sample2019.freeze_split_v2 --config gate0/configs/split_v2.json
+.venv/bin/python -m gate0_sample2019.verify_split_v2 --config gate0/configs/split_v2.json
+# After all three rounds pass, commit staging and run:
+.venv/bin/python -m gate0_sample2019.finalize_split_v2 --config gate0/configs/split_v2.json
+.venv/bin/python -m gate0_sample2019.validate_split_v2_delivery --config gate0/configs/split_v2.json
+```
+
+Target/step `designed=False` observations and their full allocation units are control-only. The first 40,000 scaler rows and linked components, official train/test/boundary rows and all near-duplicate components remain isolated. Replicate 2, modified RNA and mCherry are independent contexts and are not pooled with eGFP unmodified replicate 1.
+
+Control assignment takes precedence over official train/test/boundary roles for any allocation unit containing target/step `designed=False`; official exposure remains recorded in `official_model_role` and `exposure_flags`, and the unit still cannot become outer. If all step trajectories are excluded by training/scaler/control lineage, `original_Paper1_historical_replay_authorized` is false rather than inventing a historical outer pool.
