@@ -94,9 +94,10 @@ class SelectionRecord:
     abstain: bool
     verifier_item_forwards: int = 0
     v_model_item_forwards: int = 0
+    noise_sigma: float = 0.0
 
     def to_dict(self):
-        return {
+        value = {
             "pool_id": self.pool_id,
             "strategy": self.strategy,
             "alpha": self.alpha,
@@ -113,6 +114,9 @@ class SelectionRecord:
             "verifier_item_forwards": self.verifier_item_forwards,
             "v_model_item_forwards": self.v_model_item_forwards,
         }
+        if self.noise_sigma > 0:
+            value["noise_sigma"] = self.noise_sigma
+        return value
 
 
 def evaluate_strategy(pool: PoolData, member_scorers, verifier_values, strategy, alpha, proposal_cap, seed, lambda_=1.0, v_model=None):

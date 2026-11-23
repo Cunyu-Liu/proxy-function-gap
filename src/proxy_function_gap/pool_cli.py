@@ -10,6 +10,7 @@ from .production_selection import run_production_grid
 from .outer_learner import load_outer_pool, run_outer_grid
 from .outer_evaluator import evaluate_outer_pool
 from .castillo import build_castillo_context, evaluate_castillo_pool, load_castillo_pool, run_castillo_grid
+from .proxy_noise import run_noise_grid
 from .q_head import QHeadConfig, fit_q_head, save_q_head_artifacts
 from .selection_eval import SelectionRecord, run_budget_grid, selection_config_hash, write_selection_records
 from .v_head import VHeadConfig, fit_v_head, save_v_head_artifacts
@@ -83,6 +84,12 @@ def main(argv=None):
     castillo_eval.add_argument("--pool-id", required=True)
     castillo_eval.add_argument("--selection", required=True)
     castillo_eval.add_argument("--output", required=True)
+    castillo_noise = commands.add_parser("castillo-noise")
+    castillo_noise.add_argument("--pool-dir", required=True)
+    castillo_noise.add_argument("--pool-id", required=True)
+    castillo_noise.add_argument("--train-reference", required=True)
+    castillo_noise.add_argument("--inference-config", required=True)
+    castillo_noise.add_argument("--output", required=True)
     grid = commands.add_parser("synthetic-grid")
     grid.add_argument("--manifest", required=True)
     grid.add_argument("--output", required=True)
@@ -135,6 +142,12 @@ def main(argv=None):
         pool = load_castillo_pool(args.pool_dir, args.pool_id, args.train_reference)
         inference = EnsembleInferenceConfig.from_json(args.inference_config)
         config_hash = run_castillo_grid(pool, inference, args.output)
+        print(json.dumps({"pool_id": pool.pool_id, "selection_config_sha256": config_hash, "outer_labels_read": False}))
+        return 0
+    if args.command == "castillo-noise":
+        pool = load_castillo_pool(args.pool_dir, args.pool_id, args.train_reference)
+        inference = EnsembleInferenceConfig.from_json(args.inference_config)
+        config_hash = run_noise_grid(pool, inference, args.output)
         print(json.dumps({"pool_id": pool.pool_id, "selection_config_sha256": config_hash, "outer_labels_read": False}))
         return 0
     if args.command == "castillo-evaluate":

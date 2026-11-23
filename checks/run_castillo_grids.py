@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--inference-config", required=True)
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--workers", type=int, default=8)
+    parser.add_argument("--noise", action="store_true")
     args = parser.parse_args()
     output = Path(args.output_dir)
     output.mkdir(parents=True, exist_ok=False)
@@ -26,12 +27,14 @@ def main():
     def execute(index):
         pool_id = f"castillo_{args.context}_{index:03d}"
         target = output / f"{pool_id}.json"
-        command = [args.python, "-m", "proxy_function_gap.pool_cli", "castillo-grid", "--pool-dir", args.pool_dir, "--pool-id", pool_id, "--train-reference", args.train_reference, "--inference-config", args.inference_config, "--output", str(target)]
+        command_name = "castillo-noise" if args.noise else "castillo-grid"
+        command = [args.python, "-m", "proxy_function_gap.pool_cli", command_name, "--pool-dir", args.pool_dir, "--pool-id", pool_id, "--train-reference", args.train_reference, "--inference-config", args.inference_config, "--output", str(target)]
         with (output / f"{pool_id}.log").open("w") as log:
             subprocess.run(command, check=True, stdout=log, stderr=subprocess.STDOUT, env=environment)
         payload = json.loads(target.read_text())
-        assert len(payload["records"]) == 50 and all(row["regret"] is None for row in payload["records"])
-        return {"pool_id": pool_id, "records": 50}
+        expected = 150 if args.noise else 50
+        assert len(payload["records"]) == expected and all(row["regret"] is None for row in payload["records"])
+        return {"pool_id": pool_id, "records": expected}
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as executor:
         results = list(executor.map(execute, range(args.count)))

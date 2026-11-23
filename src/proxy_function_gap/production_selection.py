@@ -26,9 +26,14 @@ def encode_utr50(sequence):
 
 
 class FreshMemberScorer:
-    def __init__(self, member, pool, config: EnsembleInferenceConfig):
+    def __init__(self, member, pool, config: EnsembleInferenceConfig, noise_sigma=0.0, noise_seed=None):
+        if noise_sigma < 0 or (noise_sigma > 0 and noise_seed is None):
+            raise ValueError("valid noise sigma and deterministic seed are required")
         self.pool = pool
         self.seed = member.seed
+        self.noise_sigma = noise_sigma
+        self.noise_seed = noise_seed
+        self.calls = 0
         self.scaler = None
         self.device, self.dtype, self.gpu = configure_cuda(config.gpu_index, config.memory_fraction, config.dtype, member.seed)
         if sha256_file(member.checkpoint) != member.sha256:
@@ -48,6 +53,10 @@ class FreshMemberScorer:
     def score_index(self, index):
         values = encode_utr50(self.pool.utr50[index])
         normalized = predict_array(self.model, values, 1, self.device, self.dtype)
+        self.calls += 1
+        if self.noise_sigma > 0:
+            generator = torch.Generator(device=self.device).manual_seed(self.noise_seed + self.calls)
+            normalized = (torch.from_numpy(normalized).to(device=self.device, dtype=self.dtype) + torch.randn(normalized.shape, generator=generator, device=self.device, dtype=self.dtype) * self.noise_sigma).detach().cpu().numpy()
         return float(inverse_target_transform(normalized, self.scaler)[0])
 
     def __call__(self, candidate):

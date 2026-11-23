@@ -17,6 +17,7 @@ def main():
     parser.add_argument("--evaluation-dir", required=True)
     parser.add_argument("--count", type=int, default=16)
     parser.add_argument("--round", required=True)
+    parser.add_argument("--expected", type=int, default=50)
     args = parser.parse_args()
     errors = []
     for index in range(args.count):
@@ -30,7 +31,7 @@ def main():
         payload = json.loads(selection.read_text())
         assert all(row["regret"] is None for row in payload["records"])
         evaluation = json.loads((Path(args.evaluation_dir) / f"{pool_id}.json").read_text())
-        if evaluation["selection_sha256"] != sha256_file(selection) or evaluation["labels_returned_to_learner"] or len(evaluation["records"]) != 50:
+        if evaluation["selection_sha256"] != sha256_file(selection) or evaluation["labels_returned_to_learner"] or len(evaluation["records"]) != args.expected:
             errors.append(f"provenance:{pool_id}")
         for actual, original in zip(evaluation["records"], payload["records"]):
             expected = expected_max - labels[original["selected_id"]]
