@@ -1,6 +1,9 @@
+import csv
+import tempfile
 import unittest
+from pathlib import Path
 
-from sample_runtime.data import connection_key, gate0_raw_row_id, gate0_sequence_id, load_design_rows, validate_connections, validate_gate0_rows
+from sample_runtime.data import connection_key, gate0_raw_row_id, gate0_sequence_id, load_design_rows, validate_connections, validate_gate0_rows, write_rows
 from sample_runtime.provenance import EXPECTED_COUNTS
 
 
@@ -30,6 +33,15 @@ class DataTests(unittest.TestCase):
         step[0]["sequence_id"] = "sample2019_invalid"
         with self.assertRaises(ValueError):
             validate_connections(step, target)
+
+    def test_writer_projects_declared_schema(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "rows.csv"
+            write_rows(path, [{"id": "1", "extra": "not-in-schema"}], ("id",))
+            with path.open() as handle:
+                rows = list(csv.DictReader(handle))
+            self.assertEqual(rows, [{"id": "1"}])
+
 
 
 if __name__ == "__main__":

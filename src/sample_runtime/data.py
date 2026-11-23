@@ -143,4 +143,4 @@ def write_rows(path, rows, fields):
     with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="raise")
         writer.writeheader()
-        writer.writerows(rows)
+        writer.writerows({field: row.get(field, "") for field in fields} for row in rows)
