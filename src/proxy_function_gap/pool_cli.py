@@ -9,6 +9,7 @@ from .production_pool import build_production_pool
 from .production_selection import run_production_grid
 from .outer_learner import load_outer_pool, run_outer_grid
 from .outer_evaluator import evaluate_outer_pool
+from .castillo import build_castillo_context, evaluate_castillo_pool, load_castillo_pool, run_castillo_grid
 from .q_head import QHeadConfig, fit_q_head, save_q_head_artifacts
 from .selection_eval import SelectionRecord, run_budget_grid, selection_config_hash, write_selection_records
 from .v_head import VHeadConfig, fit_v_head, save_v_head_artifacts
@@ -65,6 +66,23 @@ def main(argv=None):
     evaluate_outer.add_argument("--selection", required=True)
     evaluate_outer.add_argument("--q-decisions", required=True)
     evaluate_outer.add_argument("--output", required=True)
+    castillo_build = commands.add_parser("castillo-build")
+    castillo_build.add_argument("--raw-file", required=True)
+    castillo_build.add_argument("--context", required=True)
+    castillo_build.add_argument("--sample-roles", nargs="+", required=True)
+    castillo_build.add_argument("--train-reference", required=True)
+    castillo_build.add_argument("--output-dir", required=True)
+    castillo_grid = commands.add_parser("castillo-grid")
+    castillo_grid.add_argument("--pool-dir", required=True)
+    castillo_grid.add_argument("--pool-id", required=True)
+    castillo_grid.add_argument("--train-reference", required=True)
+    castillo_grid.add_argument("--inference-config", required=True)
+    castillo_grid.add_argument("--output", required=True)
+    castillo_eval = commands.add_parser("castillo-evaluate")
+    castillo_eval.add_argument("--pool-dir", required=True)
+    castillo_eval.add_argument("--pool-id", required=True)
+    castillo_eval.add_argument("--selection", required=True)
+    castillo_eval.add_argument("--output", required=True)
     grid = commands.add_parser("synthetic-grid")
     grid.add_argument("--manifest", required=True)
     grid.add_argument("--output", required=True)
@@ -107,6 +125,20 @@ def main(argv=None):
         return 0
     if args.command == "evaluate-outer":
         result = evaluate_outer_pool(args.source_pool_manifest, args.pool_id, args.selection, args.q_decisions, args.output)
+        print(json.dumps(result))
+        return 0
+    if args.command == "castillo-build":
+        result = build_castillo_context(args.raw_file, args.context, args.sample_roles, args.train_reference, args.output_dir)
+        print(json.dumps({"context": result["context"], "selected_rows": result["selected_rows"], "labels_returned_to_learner": False}))
+        return 0
+    if args.command == "castillo-grid":
+        pool = load_castillo_pool(args.pool_dir, args.pool_id, args.train_reference)
+        inference = EnsembleInferenceConfig.from_json(args.inference_config)
+        config_hash = run_castillo_grid(pool, inference, args.output)
+        print(json.dumps({"pool_id": pool.pool_id, "selection_config_sha256": config_hash, "outer_labels_read": False}))
+        return 0
+    if args.command == "castillo-evaluate":
+        result = evaluate_castillo_pool(args.pool_dir, args.pool_id, args.selection, args.output)
         print(json.dumps(result))
         return 0
     if args.command == "synthetic-grid":

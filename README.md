@@ -40,6 +40,8 @@ fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同
 
 VGSC 固定池 pilot 的已复核负结果与门禁决定见 `docs/PILOT_V3_RESULT.md`；outer 协议见 `docs/E1_OUTER_PROTOCOL.md`。FP-REJ/Q 未通过主线门禁，当前不声称预印本完成。
 
+Paper 1 固定池外部压力结果见 `docs/PAPER1_EXTERNAL_RESULT.md` 和 `docs/PAPER1_EXTERNAL_PROTOCOL.md`。Castillo-Hair 的四个外部情境均未复现 Sample designed 的持续单调收益，支持压力效应的情境边界；分数匹配与机制消融仍待完成。
+
 ## Gate 0 集成
 
 Gate 0 代码位于 `gate0/gate0_sample2019/`，来源为 `/home/proxy-function-gap-data` 的提交 `25d6fd4a8133aadde85f6cc4718503c0efe21249`。通过 Git subtree ancestry 和 `gate0/PROVENANCE.md` 保留 provenance；staging 未修改。打包、命令和数据边界见 `docs/GATE0_INTEGRATION.md`。原始与派生数据继续放在 `/teams`，不进入 Git。
