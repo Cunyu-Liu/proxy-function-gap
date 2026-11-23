@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proxy-function-gap"
-version = "0.4.1"
+version = "0.4.3"
 description = "E0, Gate 0, Sample runtime, and fresh CUDA proxy training checks"
 requires-python = ">=3.10"
 dependencies = ["numpy>=2.2,<3", "torch>=2.7,<3", "h5py>=3.14,<4"]

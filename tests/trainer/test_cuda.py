@@ -77,9 +77,11 @@ def test_cuda_self_check_and_fresh_model_dtype():
     assert not metadata["scientific_result"]
     device = torch.device("cuda:0")
     model = FreshSampleCNN().to(device=device, dtype=torch.float32)
-    output = model(torch.zeros((2, 4, 50), device=device))
+    inputs = torch.zeros((2, 4, 50), device=device, requires_grad=True)
+    output = model(inputs)
     assert output.shape == (2,)
     assert output.is_cuda
+    output.square().mean().backward()
     assert len(model_hash(model)) == 64
 
 

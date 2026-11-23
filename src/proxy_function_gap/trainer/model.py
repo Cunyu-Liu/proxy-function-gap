@@ -13,12 +13,11 @@ class FreshSampleCNN(nn.Module):
             nn.MaxPool1d(kernel_size=2),
             nn.Conv1d(32, 64, kernel_size=5),
             nn.ReLU(),
-            nn.AdaptiveMaxPool1d(1),
         )
         self.regressor = nn.Sequential(nn.Flatten(), nn.Linear(64, 32), nn.ReLU(), nn.Linear(32, 1))
 
     def forward(self, inputs):
-        return self.regressor(self.features(inputs)).squeeze(1)
+        return self.regressor(self.features(inputs).mean(dim=2)).squeeze(1)
 
 
 def model_definition_hash(model: nn.Module) -> str:
