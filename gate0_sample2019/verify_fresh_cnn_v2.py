@@ -4,7 +4,7 @@ import json
 from collections import Counter
 from pathlib import Path
 
-from .common import load_config, sha256_file
+from .common import load_config, sha256_file, sha256_text
 from .fresh_cnn_common import role_intersections, row_list_hash, semantic_manifest
 from .fresh_proxy_common import read_tsv, write_json
 from .npy_io import decode_float64, decode_unicode, read_npz
@@ -167,7 +167,7 @@ def compare_npz_tsv(npz_path, tsv_path, role):
     if "synthetic" not in arrays or arrays["synthetic"][2] != b"\x00":
         errors.append("synthetic")
     ids = decode_unicode(*arrays["row_id"])
-    expected_ids = [row["raw_row_id"] for row in rows]
+    expected_ids = [row["raw_row_id"] if "raw_row_id" in row else row["row_id"] for row in rows]
     if ids != expected_ids:
         errors.append("row_id_order")
     if len(ids) != len(rows) or set(ids) != set(expected_ids):
@@ -184,8 +184,14 @@ def compare_npz_tsv(npz_path, tsv_path, role):
     for index, row in enumerate(rows[:25]):
         if decode_unicode(*arrays["utr50"])[index] != row["utr50"]:
             errors.append("utr50_string")
-        if role != "query" and decode_float64(arrays["measured_rl"][2])[index] != float(row["measured_rl"]):
-            errors.append("measured_rl")
+        if role != "query":
+            expected_value = float(row["measured_rl"]) if row["measured_rl"] else None
+            actual_value = decode_float64(arrays["measured_rl"][2])[index]
+            if expected_value is None:
+                if not __import__("math").isnan(actual_value):
+                    errors.append("missing_rl_not_nan")
+            elif actual_value != expected_value:
+                errors.append("measured_rl")
         sequence = row["utr50"]
         payload = arrays["utr50_onehot"][2]
         mapping = {"A": 0, "C": 1, "G": 2, "T": 3}
@@ -223,8 +229,16 @@ def round3(config, root):
         other = manifest_b["production_files"][role]
         if item["sha256"] != other["sha256"]:
             comparisons.append({"role": role, "errors": ["double_build_manifest_hash"]})
+    allow_a = json.loads((first / "learner_allowlist.json").read_text())
+    allow_b = json.loads((second / "learner_allowlist.json").read_text())
+    normalized_allow_a = json.loads(json.dumps(allow_a, sort_keys=True).replace(str(first), "<BUILD_DIR>"))
+    normalized_allow_b = json.loads(json.dumps(allow_b, sort_keys=True).replace(str(second), "<BUILD_DIR>"))
+    if normalized_allow_a != normalized_allow_b:
+        comparisons.append({"file": "learner_allowlist_semantic", "match": False})
     semantic_a = json.loads(json.dumps(manifest_a).replace(str(first), "<BUILD_DIR>"))
     semantic_b = json.loads(json.dumps(manifest_b).replace(str(second), "<BUILD_DIR>"))
+    semantic_a["learner_allowlist_sha256"] = sha256_text(json.dumps(normalized_allow_a, sort_keys=True))
+    semantic_b["learner_allowlist_sha256"] = sha256_text(json.dumps(normalized_allow_b, sort_keys=True))
     comparisons.append({"file": "data_manifest_semantic", "match": semantic_a == semantic_b})
     result = {
         "round": 3,

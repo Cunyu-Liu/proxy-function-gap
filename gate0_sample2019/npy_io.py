@@ -33,7 +33,7 @@ def uint8_array(values):
 
 
 def float64_array(values):
-    return "<f8", (len(values),), b"".join(struct.pack("<d", float(value)) for value in values)
+    return "<f8", (len(values),), b"".join(struct.pack("<d", float(value) if value not in (None, "") else float("nan")) for value in values)
 
 
 def bool_array(value):

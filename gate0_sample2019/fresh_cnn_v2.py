@@ -125,8 +125,13 @@ def build(config, output):
                 "raw_row_sha256": row["raw_row_sha256"],
             })
         for raw_id in sorted(outer):
-            assignment = outer[raw_id]
+            assignment = dict(outer[raw_id])
             label = labels[raw_id]
+            assignment["utr50"] = label["normalized_sequence"]
+            assignment["context"] = assignment["evaluation_context_id"]
+            assignment["source_file_sha256"] = source_hashes[assignment["source_file"]]
+            assignment["measured_rl"] = label["measured_rl"]
+            outer[raw_id] = assignment
             target = "evaluator/designed_outer_rows.tsv.gz" if assignment["outer_stratum"].startswith("designed|") else "evaluator/random_outer_rows.tsv.gz"
             write_row(writers[target], {
                 "raw_row_id": raw_id,
@@ -197,18 +202,19 @@ def build(config, output):
     }
     write_json(output / "learner_allowlist.json", learner_allowlist)
     outer_counts = Counter(row["outer_stratum"] for row in outer.values())
+    final_random_ids = {raw_id for raw_id, row in outer.items() if row["outer_stratum"].startswith("random_")}
     outer_manifest = {
         "child_split_version": config["child_split_version"],
         "child_lineage_version": config["child_lineage_version"],
         "lineage_hash": lineage_hash,
         "designed_candidate_rows_reviewed": config["designed_candidate_rows"],
         "designed_outer_rows": len(designed),
-        "random_outer_rows": len(random),
+        "random_outer_rows": len(final_random_ids),
         "fresh_main_random_unmod_rep1_rows": outer_counts.get("random_main|eGFP_unmod_rep1", 0),
         "outer_strata": dict(outer_counts),
         "outer_row_hashes": {
             "designed": row_list_hash(designed),
-            "random": row_list_hash(random),
+            "random": row_list_hash(final_random_ids),
             "fresh_main_random_unmod_rep1": row_list_hash({raw_id for raw_id, row in outer.items() if row["outer_stratum"] == "random_main|eGFP_unmod_rep1"}),
         },
         "excluded": dict(excluded),
@@ -307,20 +313,20 @@ def build(config, output):
         "synthetic": False,
     }
     write_json(output / "candidate_manifest.json", candidate)
-    print(json.dumps({"build_dir": str(output), "train_scaler_rows": len(role_rows["train"]), "designed_outer_rows": len(designed), "random_outer_rows": len(random), "fresh_main_random_unmod_rep1_rows": outer_manifest["fresh_main_random_unmod_rep1_rows"], "excluded": dict(excluded), "lineage_hash": lineage_hash}))
+    print(json.dumps({"build_dir": str(output), "train_scaler_rows": len(role_rows["train"]), "designed_outer_rows": len(designed), "random_outer_rows": len(final_random_ids), "fresh_main_random_unmod_rep1_rows": outer_manifest["fresh_main_random_unmod_rep1_rows"], "excluded": dict(excluded), "lineage_hash": lineage_hash}))
 
 
 def arrays_for_rows(config, rows, role, outer=False):
     ordered = list(rows.values())
-    sequences = [row["utr50"] for row in ordered]
+    sequences = [row["utr50"] if "utr50" in row else row["normalized_sequence"] for row in ordered]
     arrays = {
-        "row_id": unicode_array([row["raw_row_id"] for row in ordered]),
+        "row_id": unicode_array([row["raw_row_id"] if "raw_row_id" in row else row["row_id"] for row in ordered]),
         "sequence_id": unicode_array([row["sequence_id"] for row in ordered]),
         "utr50": unicode_array(sequences),
         "utr50_onehot": one_hot(sequences),
         "role": unicode_array([role for _ in ordered]),
         "allocation_unit_id": unicode_array([row["allocation_unit_id"] for row in ordered]),
-        "context": unicode_array([row["context"] for row in ordered]),
+        "context": unicode_array([row["context"] if "context" in row else row["evaluation_context_id"] for row in ordered]),
         "source_file_sha256": unicode_array([row["source_file_sha256"] for row in ordered]),
         "raw_row_sha256": unicode_array([row["raw_row_sha256"] for row in ordered]),
         "sequence_hash": unicode_array([sha256_text(sequence) for sequence in sequences]),
@@ -330,9 +336,9 @@ def arrays_for_rows(config, rows, role, outer=False):
     }
     if role != "query":
         arrays["measured_rl"] = float64_array([row["measured_rl"] for row in ordered])
-    for field in ["near_group_id", "trajectory_id", "replicate_id", "outer_stratum", "E1_pool_eligible", "historical_evaluation_status"]:
+    for field in ["near_group_id", "trajectory_id", "replicate_id", "outer_stratum", "E1_pool_eligible", "historical_evaluation_status", "measured_status"]:
         if field in ordered[0] if ordered else False:
-            arrays[field] = unicode_array([row[field] for row in ordered])
+            arrays[field] = unicode_array([str(row[field]) for row in ordered])
     return arrays
 
 

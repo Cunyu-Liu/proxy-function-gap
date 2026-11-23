@@ -94,3 +94,9 @@ Control assignment takes precedence over official train/test/boundary roles for 
 ```
 
 A verified child can authorize training start, but `E1_enabled` remains false. Model hash, epoch, convergence, V/Q calibration and configuration freeze are null until real evidence exists. Outer is always historical measured-state, never never-evaluated.
+
+## fresh_proxy_cnn_v2 and production NPZ
+
+`configs/fresh_cnn_v2.json` independently re-reviews v1 random outer without inheriting blanket original/retrained random exclusions. Fresh unmodified rep1 is restored when its allocation unit, near component and trajectory do not overlap fresh train/scaler/dev/calibration/query or designed outer. Original/retrained manifests are unchanged.
+
+`data_manifest.json` and `production/*.npz` use deterministic standard-library NPY/NPZ encoding. NPZ row_id order is exactly the source TSV order and includes UTR50 one-hot, measured_rl only for labeled roles, role/allocation/context/source hashes and `synthetic=false`. Query has no measured-label array. Production outer NPZ remains Evaluator-only. Train-only scaler statistics remain deferred to the trainer.
