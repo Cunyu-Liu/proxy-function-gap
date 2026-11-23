@@ -33,7 +33,7 @@ def main():
         "staging_commit": commit,
         "provenance_commit_matches": commit == provenance["git_commit"],
         "staging_status_clean": not status,
-        "split_manifest_hash_matches": sha256_file(Path(config["parent_split_dir"]) / "split_manifest_v2.json") == split["parent_split_manifest_sha256"],
+        "split_manifest_hash_matches": sha256_file(Path(config["parent_split_dir"]) / "split_manifest_v2.json") == pack["split_manifest_sha256"],
         "data_manifest_hash_matches": sha256_file(Path(config["input_manifest"])) == pack["data_manifest_sha256"],
         "outer_labels_read_or_packaged": pack["outer_labels_read_or_packaged"],
         "outer_learner_package_created": pack["outer_learner_package_created"],
