@@ -68,3 +68,35 @@ For main-repository integration, use `integration_manifest.json` in the split ou
 Target/step `designed=False` observations and their full allocation units are control-only. The first 40,000 scaler rows and linked components, official train/test/boundary rows and all near-duplicate components remain isolated. Replicate 2, modified RNA and mCherry are independent contexts and are not pooled with eGFP unmodified replicate 1.
 
 Control assignment takes precedence over official train/test/boundary roles for any allocation unit containing target/step `designed=False`; official exposure remains recorded in `official_model_role` and `exposure_flags`, and the unit still cannot become outer. If all step trajectories are excluded by training/scaler/control lineage, `original_Paper1_historical_replay_authorized` is false rather than inventing a historical outer pool.
+
+## Fresh proxy data packs
+
+`configs/fresh_proxy_v1.json` builds deterministic train/dev/calibration/query packages without opening outer label vaults or the label-bearing total sequence index. Only eGFP unmodified replicate 1 and the designed single assay are included. Rep2, modified RNA and mCherry remain separate and are not packed. Query has no measured-label column and no outer Learner package is produced. Train-only scaling statistics are deferred to the trainer.
+
+```bash
+/root/miniconda3/bin/python -m gate0_sample2019.fresh_proxy_pack --config configs/fresh_proxy_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.verify_fresh_proxy --config configs/fresh_proxy_v1.json
+# After all three rounds pass, commit staging and run:
+/root/miniconda3/bin/python -m gate0_sample2019.finalize_fresh_proxy --config configs/fresh_proxy_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.validate_fresh_proxy_delivery --config configs/fresh_proxy_v1.json
+```
+
+## fresh_proxy_cnn_v1 conditional child manifest
+
+`configs/fresh_cnn_v1.json` builds an immutable fresh-proxy child lineage without official weights or distillation. Train/dev/calibration/query come only from the frozen fresh pack. Outer strata are independently reviewed from v1 random outer and the v2 original 3163 designed candidates; unmodified rep1 random, target/step designed=True, official-seen, control and quarantine are not relaxed into fresh outer. Random outer is external-context only and never enters the main E1 pool.
+
+```bash
+/root/miniconda3/bin/python -m gate0_sample2019.fresh_cnn_child --config configs/fresh_cnn_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.verify_fresh_cnn --config configs/fresh_cnn_v1.json
+# After all three rounds pass, commit staging and run:
+/root/miniconda3/bin/python -m gate0_sample2019.finalize_fresh_cnn --config configs/fresh_cnn_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.validate_fresh_cnn_delivery --config configs/fresh_cnn_v1.json
+```
+
+A verified child can authorize training start, but `E1_enabled` remains false. Model hash, epoch, convergence, V/Q calibration and configuration freeze are null until real evidence exists. Outer is always historical measured-state, never never-evaluated.
+
+## fresh_proxy_cnn_v2 and production NPZ
+
+`configs/fresh_cnn_v2.json` independently re-reviews v1 random outer without inheriting blanket original/retrained random exclusions. Fresh unmodified rep1 is restored when its allocation unit, near component and trajectory do not overlap fresh train/scaler/dev/calibration/query or designed outer. Original/retrained manifests are unchanged.
+
+`data_manifest.json` and `production/*.npz` use deterministic standard-library NPY/NPZ encoding. NPZ row_id order is exactly the source TSV order and includes UTR50 one-hot, measured_rl only for labeled roles, role/allocation/context/source hashes and `synthetic=false`. Query has no measured-label array. Production outer NPZ remains Evaluator-only. Train-only scaler statistics remain deferred to the trainer.

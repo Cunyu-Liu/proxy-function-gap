@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "child_split_version": "fresh-proxy-cnn-split-v1",
+  "child_lineage_version": "fresh-proxy-cnn-lineage-v1",
+  "parent_pack_commit": "137c33a86d619269040117a6f95bf8641322219d",
+  "parent_pack_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a",
+  "parent_split_v1_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v1",
+  "parent_split_v2_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v2",
+  "input_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/fresh_proxy_cnn_v1",
+  "build_names": ["build_a", "build_b"],
+  "designed_outer_context": "eGFP|unmod|designed_single_assay",
+  "designed_candidate_rows": 3163,
+  "fresh_initialization": "fresh_random",
+  "official_weights": false,
+  "distillation": false,
+  "E1_enabled": false,
+  "outer_metrics_enabled": false
+}

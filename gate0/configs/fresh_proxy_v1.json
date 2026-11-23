@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "pack_version": "fresh-proxy-egfp-unmod-v1",
+  "normalization_version": "sample2019-fixed-utr-v1",
+  "parent_split_version": "sample2019-split-v2",
+  "parent_split_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v2",
+  "parent_split_v1_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v1",
+  "input_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1",
+  "build_names": ["build_a", "build_b"],
+  "model_lineage_for_roles": "original_evolution",
+  "allowed_contexts": ["eGFP|unmod|1", "eGFP|unmod|designed_single_assay"],
+  "pack_roles": ["train", "dev", "calibration", "query"],
+  "proof_roles": ["train", "dev", "calibration", "query", "historical_measured_state_outer"],
+  "replicate_summary_rule": "Use eGFP unmod replicate 1 and the designed single assay only. Do not pool rep2, modified RNA or mCherry. Within sequence/context, measured replicates are not independent; current sources have one row per sequence/context. Future multi-replicate summaries use median measured MRL with replicate count and missingness retained.",
+  "train_statistics": "DEFERRED_TO_TRAINER",
+  "outer_metrics_enabled": false
+}
