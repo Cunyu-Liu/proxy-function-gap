@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "split_version": "sample2019-split-v1",
+  "split_ready_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1",
+  "split_ready_checksums": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1/post_validation_checksums.json",
+  "input_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+  "output_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v1",
+  "roles": ["train", "dev", "calibration", "query", "outer"],
+  "additional_nonblind_roles": ["official_seen_test", "official_boundary_ambiguous"],
+  "role_weights": {"train": 0.40, "dev": 0.20, "calibration": 0.15, "query": 0.15, "outer": 0.10},
+  "minimum_outer_units_per_stratum": 2,
+  "official_model": {
+    "source_file": "GSM3130435_egfp_unmod_1.csv.gz",
+    "sort_field": "total_reads",
+    "sort_direction": "descending",
+    "test_rows": 20000,
+    "train_rows": 260000,
+    "combined_rows": 280000,
+    "test_boundary_reads": 2497.0,
+    "train_boundary_reads": 267.0,
+    "boundary_policy": "Rows tied at an official cutoff and their full allocation units are quarantined as official_boundary_ambiguous and can never become outer."
+  },
+  "parameter_edit_roles": ["dev", "calibration"],
+  "E1_enabled": false
+}
