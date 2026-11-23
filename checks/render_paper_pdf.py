@@ -7,7 +7,9 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 def main():
     source = Path('/home/proxy-function-gap/paper/PAPER1_DRAFT.md')
-    target = source.with_suffix('.pdf')
+    target_dir = Path('/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper')
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target = target_dir / 'PAPER1_DRAFT.pdf'
     lines = source.read_text().splitlines()
     pdf = PdfPages(target)
     fig = None
