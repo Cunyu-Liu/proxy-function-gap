@@ -24,8 +24,8 @@ def main():
     commit = subprocess.check_output(["git", "-C", str(repository), "rev-parse", "HEAD"], text=True).strip()
     status = subprocess.check_output(["git", "-C", str(repository), "status", "--porcelain"], text=True).strip()
     if status:
-        raise ValueError(f"Staging repository is not clean: {status}")
-    code_files = sorted(list((repository / "gate0_sample2019").glob("*.py")) + list((repository / "tests").glob("*.py")) + list((repository / "configs").glob("*.json")) + [repository / "README.md", Path(args.config).resolve()])
+        raise ValueError(f"Integrated repository is not clean: {status}")
+    code_files = sorted(list((repository / "gate0_sample2019").glob("*.py")) + list((repository / "tests").glob("*.py")) + list((repository / "configs").glob("*.json")) + [repository / "README.md", repository / "PROVENANCE.md", Path(args.config).resolve()])
     provenance = {
         "git_repository": str(repository),
         "git_commit": commit,

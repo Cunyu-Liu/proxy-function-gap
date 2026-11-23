@@ -7,3 +7,15 @@ build/
 dist/
 .DS_Store
 ._*
+data/
+derived/
+raw-data/
+*.csv
+*.csv.gz
+*.tsv
+*.tsv.gz
+*.npy
+*.npz
+*.pt
+*.pth
+*.ckpt

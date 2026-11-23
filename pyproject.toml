@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proxy-function-gap"
-version = "0.2.0"
-description = "E0 synthetic checks for fixed-pool proxy-guided selection"
+version = "0.3.0"
+description = "E0 fixed-pool selection checks and reproducible Gate 0 data processing"
 requires-python = ">=3.9"
 dependencies = []
 
@@ -14,11 +14,18 @@ dev = ["pytest>=7,<9"]
 
 [project.scripts]
 proxy-gap-e0 = "proxy_function_gap.run:main"
+proxy-gap-gate0-inspect = "gate0_sample2019.inspect_formats:main"
+proxy-gap-gate0-build = "gate0_sample2019.build:main"
+proxy-gap-gate0-verify = "gate0_sample2019.verify:main"
+proxy-gap-gate0-finalize = "gate0_sample2019.finalize:main"
+proxy-gap-gate0-validate = "gate0_sample2019.validate_delivery:main"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src", "gate0"]
+include = ["proxy_function_gap*", "gate0_sample2019*"]
+namespaces = false
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
-testpaths = ["tests"]
+pythonpath = ["src", "gate0"]
+testpaths = ["tests", "gate0/tests"]
 addopts = "-ra"

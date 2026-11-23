@@ -1,17 +1,17 @@
 # Sample 2019 Gate 0 data builder
 
-This staging repository builds file-level Gate 0 artifacts without model training, model inference, outer-result access, or E1 scientific evaluation.
+This integrated subtree builds file-level Gate 0 artifacts without model training, model inference, outer-result access, split/vault assignment, or E1 scientific evaluation. Its source provenance is recorded in `PROVENANCE.md`.
 
 Requirements: Python 3.9 standard library only. Raw inputs are validated against `data_manifest.json` and are never modified.
 
 ```bash
-cd /home/proxy-function-gap-data
-/root/miniconda3/bin/python -m gate0_sample2019.inspect_formats --config configs/gate0_v1.json
-/root/miniconda3/bin/python -m gate0_sample2019.build --config configs/gate0_v1.json
-/root/miniconda3/bin/python -m unittest discover -s tests -v
-/root/miniconda3/bin/python -m gate0_sample2019.verify --config configs/gate0_v1.json
-# After verification, commit the staging repository, then record its commit:
-/root/miniconda3/bin/python -m gate0_sample2019.finalize --config configs/gate0_v1.json
+cd /home/proxy-function-gap
+.venv/bin/python -m gate0_sample2019.inspect_formats --config gate0/configs/gate0_v1.json
+.venv/bin/python -m gate0_sample2019.build --config gate0/configs/gate0_v1.json
+.venv/bin/python -m unittest discover -s gate0/tests -v
+.venv/bin/python -m gate0_sample2019.verify --config gate0/configs/gate0_v1.json
+# After verification, commit the integrated repository, then record its commit:
+.venv/bin/python -m gate0_sample2019.finalize --config gate0/configs/gate0_v1.json
 ```
 
 The output directory is created once and existing derived artifacts are never overwritten. Use a new output version for any changed configuration. Normalization evidence is stored in `length_format_validation.json`.
@@ -33,4 +33,4 @@ The Hamming-1 candidate rule is exact: two equal-length sequences at distance on
 
 The original designed-library CSV index is not unique (46,988 repeated-index rows); it is preserved in `raw_index` and independently counted in round 1. Only the source-row-number-based `raw_row_id` is used as the unique row key.
 
-After `finalize`, `gate0_sample2019.validate_delivery` independently rechecks every derived checksum, every raw input hash, the staging commit and the no-E1/no-training flags, and writes `final_validation.json`.
+After `finalize`, `gate0_sample2019.validate_delivery` independently rechecks every derived checksum, every raw input hash, the integrated commit and the no-E1/no-training flags, and writes `final_validation.json`. Legacy JSON keys named `staging_commit` and `staging_status_clean` remain unchanged for compatibility with already delivered artifacts. Raw and derived data stay under `/teams` and are not tracked by Git.

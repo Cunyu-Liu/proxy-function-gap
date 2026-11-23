@@ -1,6 +1,6 @@
-# Proxy–Function Gap：E0 VGSC-inspired fixed-pool
+# Proxy–Function Gap：E0 + Gate 0
 
-本仓库只包含 E0 固定完整序列候选池的合成验证。主方法是 **FP-REJ**（有界拒绝采样），**FP-TILT** 是解析 V 倾斜对照；另有 Random、BoN、按序列身份加权投票的 WSC 和 verifier reward argmax 的 greedy。没有真实标签、前缀生成、模型训练或 GPU 路径。
+本仓库包含 E0 固定完整序列候选池的合成验证，以及保留来源历史的 Sample 2019 Gate 0 可复现处理代码。E0 主方法是 **FP-REJ**（有界拒绝采样），**FP-TILT** 是解析 V 倾斜对照；另有 Random、BoN、按序列身份加权投票的 WSC 和 verifier reward argmax 的 greedy。Gate 0 只提供 proposed/unfrozen 的 split-ready groups；本整合不实现 split/vault，不做真实模型推理或训练，不进入 E1。
 
 ## 协议边界
 
@@ -31,12 +31,17 @@
 
 输出中的 synthetic regret 只用于正确性检查，拒选的 regret 为缺失，不是生物实验结论。
 
+## Gate 0 集成
+
+Gate 0 代码位于 `gate0/gate0_sample2019/`，来源为 `/home/proxy-function-gap-data` 的提交 `25d6fd4a8133aadde85f6cc4718503c0efe21249`。通过 Git subtree ancestry 和 `gate0/PROVENANCE.md` 保留 provenance；staging 未修改。打包、命令和数据边界见 `docs/GATE0_INTEGRATION.md`。原始与派生数据继续放在 `/teams`，不进入 Git。
+
 ## 目录
 
-- `src/proxy_function_gap/`：实现。
-- `tests/`：接口、数学、预算、噪声和合成测试。
+- `src/proxy_function_gap/`：E0 实现。
+- `gate0/gate0_sample2019/`：Gate 0 处理实现。
+- `tests/` 与 `gate0/tests/`：E0 和 Gate 0 测试。
 - `checks/independent_math_check.py`：C=1/2/3 全路径独立检查。
 - `checks/code_audit.py`：源码边界审计。
 - `docs/`：冻结协议、逐条复核响应和审查记录。
 
-运行记录保存在 `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/e0/`，不写入既有 `/home/rna_jev*` 项目。
+E0 运行记录保存在 `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/e0/`，整合记录保存在 `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/integration/`，不写入既有 `/home/rna_jev*` 项目。
