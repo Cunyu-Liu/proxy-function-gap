@@ -21,13 +21,30 @@ class FreshSampleCNN(nn.Module):
         return self.regressor(self.features(inputs)).squeeze(1)
 
 
-def model_hash(model: nn.Module) -> str:
+def model_definition_hash(model: nn.Module) -> str:
     digest = hashlib.sha256()
+    digest.update(model.__class__.__module__.encode())
     digest.update(model.__class__.__name__.encode())
     for name, tensor in sorted(model.state_dict().items()):
+        digest.update(name.encode())
+        digest.update(str(tensor.dtype).encode())
+        digest.update(str(tuple(tensor.shape)).encode())
+    return digest.hexdigest()
+
+
+def state_dict_hash(state_dict) -> str:
+    digest = hashlib.sha256()
+    for name, tensor in sorted(state_dict.items()):
         value = tensor.detach().cpu()
         digest.update(name.encode())
         digest.update(str(value.dtype).encode())
         digest.update(str(tuple(value.shape)).encode())
         digest.update(value.numpy().tobytes())
+    return digest.hexdigest()
+
+
+def model_hash(model: nn.Module) -> str:
+    digest = hashlib.sha256()
+    digest.update(model.__class__.__name__.encode())
+    digest.update(state_dict_hash(model.state_dict()).encode())
     return digest.hexdigest()

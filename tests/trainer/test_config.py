@@ -51,5 +51,5 @@ def test_resume_requires_all_seed_checkpoints():
         TrainerConfig.from_dict({
             "data_manifest": "m",
             "output_root": "r",
-            "resume_from": {"11": "seed11.pt"},
+            "resume_from": {"11": {"path": "seed11.pt", "sha256": "0" * 64}},
         })

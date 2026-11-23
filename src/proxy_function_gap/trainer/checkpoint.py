@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import tempfile
@@ -54,3 +55,13 @@ def load_checkpoint(path, device):
     if not path.is_file():
         raise FileNotFoundError(path)
     return torch.load(path, map_location=device, weights_only=False)
+
+
+def trainer_code_identity():
+    root = Path(__file__).parent
+    files = {}
+    for path in sorted(root.glob("*.py")):
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        files[path.name] = digest
+    payload = json.dumps(files, sort_keys=True, separators=(",", ":"))
+    return {"files": files, "sha256": hashlib.sha256(payload.encode()).hexdigest()}

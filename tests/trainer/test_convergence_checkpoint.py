@@ -21,14 +21,26 @@ def test_plateau_requires_both_train_and_dev_to_stop_significantly_improving():
     assert plateau.best_epoch == 3
 
 
-def test_small_improvement_updates_best_but_counts_as_plateau():
+def test_small_absolute_best_updates_best_and_resets_plateau():
     plateau = DualPlateau(min_delta=0.1, patience=1)
     plateau.update(1, 1.0, 1.0)
-    decision = plateau.update(2, 0.95, 0.95)
+    decision = plateau.update(2, 1.0, 0.95)
     assert decision["dev_best"]
-    assert decision["stop"]
+    assert not decision["stop"]
+    assert plateau.plateau_epochs == 0
     assert plateau.best_dev == 0.95
     assert plateau.best_epoch == 2
+    assert plateau.update(3, 1.0, 0.95)["stop"]
+
+
+def test_continuous_small_absolute_dev_bests_never_stop():
+    plateau = DualPlateau(min_delta=0.1, patience=2)
+    plateau.update(1, 1.0, 1.0)
+    for epoch in range(2, 8):
+        decision = plateau.update(epoch, 1.0, 1.0 - epoch * 0.001)
+        assert decision["dev_best"]
+        assert not decision["stop"]
+        assert plateau.plateau_epochs == 0
 
 
 def test_nonfinite_loss_is_rejected():

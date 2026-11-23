@@ -26,7 +26,7 @@ class DualPlateau:
         if dev_best:
             self.best_dev = dev_loss
             self.best_epoch = epoch
-        if train_significant or dev_significant:
+        if dev_best or train_significant or dev_significant:
             self.plateau_epochs = 0
         else:
             self.plateau_epochs += 1

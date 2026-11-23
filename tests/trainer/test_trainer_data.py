@@ -1,3 +1,5 @@
+import csv
+import gzip
 import json
 
 import numpy as np
@@ -7,16 +9,33 @@ from proxy_function_gap.trainer.data import TargetScaler, encode_50nt, load_role
 from proxy_function_gap.trainer.synthetic import make_synthetic_pack
 
 
-def test_preflight_checks_roles_hashes_and_permission(tmp_path):
+def test_preflight_checks_exact_roles_hashes_and_permission(tmp_path):
     manifest_path = make_synthetic_pack(tmp_path / "pack")
     report = preflight(manifest_path)
     assert report.split_version == "sample2019-split-v2"
     assert report.role_counts == {"train": 8, "dev": 8, "calibration": 8}
     assert report.data_pack_sha256 == sha256_file(report.pack_path)
+    assert set(report.source_sha256) == {"train", "dev", "calibration"}
+    assert set(report.row_order_sha256) == {"train", "dev", "calibration"}
+    assert all(len(value) == 64 for value in report.row_order_sha256.values())
     assert not report.training_authorized
     assert report.synthetic
     assert not report.to_dict()["ready_for_formal_training"]
-    assert set(load_roles(report)) == {"train", "dev", "calibration"}
+    roles = load_roles(report)
+    assert set(roles) == {"train", "dev", "calibration"}
+    assert len(roles["train"][2]) == 8
+
+
+def test_production_manifest_with_false_synthetic_is_ready_when_authorized(tmp_path):
+    manifest_path = make_synthetic_pack(tmp_path / "pack")
+    manifest = json.loads(manifest_path.read_text())
+    manifest["synthetic"] = False
+    manifest["training_authorized"] = True
+    manifest_path.write_text(json.dumps(manifest))
+    report = preflight(manifest_path)
+    assert not report.synthetic
+    assert report.training_authorized
+    assert report.to_dict()["ready_for_formal_training"]
 
 
 def test_pack_hash_tampering_is_rejected(tmp_path):
@@ -30,6 +49,44 @@ def test_pack_hash_tampering_is_rejected(tmp_path):
         preflight(manifest_path)
     with pytest.raises(ValueError, match="changed after preflight"):
         load_roles(report)
+
+
+def test_row_id_set_mismatch_is_rejected_even_with_same_count(tmp_path):
+    manifest_path = make_synthetic_pack(tmp_path / "pack")
+    manifest = json.loads(manifest_path.read_text())
+    source = manifest["role_sources"]["train"]
+    with gzip.open(source["path"], "rt", newline="") as handle:
+        rows = list(csv.DictReader(handle, delimiter="\t"))
+    rows[0]["row_id"] = "synthetic-train-missing"
+    with gzip.open(source["path"], "wt", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["row_id", "measured_rl"], delimiter="\t", lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+    source["sha256"] = sha256_file(source["path"])
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="row_id set/count mismatch for train"):
+        preflight(manifest_path)
+
+
+def test_source_hash_and_manifest_order_hash_are_enforced(tmp_path):
+    manifest_path = make_synthetic_pack(tmp_path / "pack")
+    manifest = json.loads(manifest_path.read_text())
+    source = manifest["role_sources"]["train"]
+    with gzip.open(source["path"], "rt", newline="") as handle:
+        content = handle.read()
+    with gzip.open(source["path"], "wt", newline="") as handle:
+        handle.write(content + "\n")
+    with pytest.raises(ValueError, match="evidence hash mismatch for train"):
+        preflight(manifest_path)
+
+
+def test_manifest_order_hash_mismatch_is_rejected(tmp_path):
+    manifest_path = make_synthetic_pack(tmp_path / "pack")
+    manifest = json.loads(manifest_path.read_text())
+    manifest["row_order_sha256"]["train"] = "0" * 64
+    manifest_path.write_text(json.dumps(manifest))
+    with pytest.raises(ValueError, match="manifest row-order hash mismatch for train"):
+        preflight(manifest_path)
 
 
 def test_outer_allowlist_permission_is_rejected_even_with_updated_hash(tmp_path):

@@ -5,16 +5,16 @@ import multiprocessing as mp
 import os
 import time
 from concurrent.futures import ProcessPoolExecutor
-from pathlib import Path
 
 import numpy as np
 import torch
 
-from .checkpoint import atomic_json_write, atomic_torch_save, load_checkpoint
+from .checkpoint import atomic_json_write, atomic_torch_save, load_checkpoint, trainer_code_identity
 from .convergence import DualPlateau
 from .cuda import configure_cuda, cuda_self_check
 from .data import TargetScaler, load_roles, preflight, sha256_file
-from .model import FreshSampleCNN, model_hash
+from .model import FreshSampleCNN, model_definition_hash, model_hash, state_dict_hash
+from .synthetic import ZeroParameterModel
 
 
 def _epoch_batches(x, y, batch_size, epoch, seed, shuffle):
@@ -24,7 +24,7 @@ def _epoch_batches(x, y, batch_size, epoch, seed, shuffle):
         yield x[selected], y[selected]
 
 
-def _loss(model, inputs, labels, device, dtype):
+def _forward(model, inputs, labels, device, dtype):
     inputs = torch.from_numpy(inputs).to(device=device, dtype=dtype)
     labels = torch.from_numpy(labels).to(device=device, dtype=dtype)
     if not inputs.is_cuda or not labels.is_cuda:
@@ -37,8 +37,7 @@ def _evaluate(model, x, y, batch_size, device, dtype):
     count = 0
     with torch.no_grad():
         for inputs, labels in _epoch_batches(x, y, batch_size, 0, 0, False):
-            inputs, labels = _loss(model, inputs, labels, device, dtype)
-            outputs, labels = inputs, labels
+            outputs, labels = _forward(model, inputs, labels, device, dtype)
             loss = torch.mean((outputs - labels) ** 2)
             total += float(loss.item()) * len(labels)
             count += len(labels)
@@ -58,46 +57,82 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
     scaler = TargetScaler.fit(roles["train"][1])
     model = (model_factory or FreshSampleCNN)()
     model.to(device=device, dtype=dtype)
-    initial_model_hash = model_hash(model)
+    model_definition_sha256 = model_definition_hash(model)
+    fresh_initialization_model_hash = model_hash(model)
+    initial_model_hash = fresh_initialization_model_hash
+    effective_config_sha256 = config.effective_config_sha256()
+    code_identity = trainer_code_identity()
     optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
     plateau = DualPlateau(config.min_delta, config.patience)
     history = []
     start_epoch = 1
     best_model_state = copy.deepcopy(model.state_dict())
-    resume_path = resume_from or config.resume_for(seed)
-    if resume_path is not None:
+    resume_reference = resume_from or config.resume_for(seed)
+    resume_path = None
+    resume_checkpoint_sha256 = None
+    if resume_reference is not None:
+        resume_path, expected_sha256 = resume_reference
+        resume_checkpoint_sha256 = sha256_file(resume_path)
+        if resume_checkpoint_sha256 != expected_sha256:
+            raise ValueError("resume checkpoint SHA256 mismatch")
         checkpoint = load_checkpoint(resume_path, device)
-        if checkpoint["seed"] != seed or checkpoint["data_pack_sha256"] != report.data_pack_sha256:
-            raise ValueError("resume checkpoint seed or data hash mismatch")
+        if checkpoint.get("status") == "completed":
+            raise ValueError("completed checkpoint cannot be resumed")
+        expected_identities = {
+            "seed": seed,
+            "data_pack_sha256": report.data_pack_sha256,
+            "row_order_sha256": report.row_order_sha256,
+            "source_sha256": report.source_sha256,
+            "split_manifest_sha256": report.split_manifest_sha256,
+            "learner_allowlist_sha256": report.learner_allowlist_sha256,
+            "code_identity": code_identity,
+            "model_definition_sha256": model_definition_sha256,
+            "effective_config_sha256": effective_config_sha256,
+            "scaler": scaler.to_dict(),
+        }
+        for key, expected in expected_identities.items():
+            if checkpoint.get(key) != expected:
+                raise ValueError(f"resume identity mismatch: {key}")
+        initial_model_hash = checkpoint["initial_model_hash"]
         model.load_state_dict(checkpoint["model_state"])
         optimizer.load_state_dict(checkpoint["optimizer_state"])
         plateau.load_state_dict(checkpoint["plateau"])
         history = list(checkpoint["history"])
         start_epoch = int(checkpoint["epoch"]) + 1
         best_model_state = checkpoint["best_model_state"]
-        if scaler.to_dict() != checkpoint["scaler"]:
-            raise ValueError("resume scaler is not train-only identical")
 
     run_dir = config.output_root / f"seed_{seed}"
     run_dir.mkdir(parents=True, exist_ok=False)
     latest_path = run_dir / "latest.pt"
     best_path = run_dir / "best.pt"
     history_path = run_dir / "history.jsonl"
-    if resume_path is not None:
-        atomic_torch_save(
-            {
-                "epoch": start_epoch - 1,
-                "seed": seed,
-                "model_state": best_model_state,
-                "optimizer_state": optimizer.state_dict(),
-                "scaler": scaler.to_dict(),
-                "plateau": plateau.state_dict(),
-                "history": history,
-                "best_model_state": best_model_state,
-                "data_pack_sha256": report.data_pack_sha256,
-            },
-            best_path,
-        )
+
+    def checkpoint_payload(epoch, model_state, status):
+        return {
+            "status": status,
+            "epoch": epoch,
+            "seed": seed,
+            "model_state": model_state,
+            "model_state_sha256": state_dict_hash(model_state),
+            "model_definition_sha256": model_definition_sha256,
+            "initial_model_hash": initial_model_hash,
+            "optimizer_state": optimizer.state_dict(),
+            "scaler": scaler.to_dict(),
+            "plateau": plateau.state_dict(),
+            "history": history,
+            "best_model_state": best_model_state,
+            "data_pack_sha256": report.data_pack_sha256,
+            "row_order_sha256": dict(report.row_order_sha256),
+            "source_sha256": dict(report.source_sha256),
+            "split_manifest_sha256": report.split_manifest_sha256,
+            "learner_allowlist_sha256": report.learner_allowlist_sha256,
+            "code_identity": code_identity,
+            "effective_config_sha256": effective_config_sha256,
+        }
+
+    if resume_reference is not None:
+        atomic_torch_save(checkpoint_payload(start_epoch - 1, best_model_state, "running"), best_path)
+
     train_x = roles["train"][0]
     train_y = scaler.transform(roles["train"][1]).astype(np.float64)
     dev_x = roles["dev"][0]
@@ -114,8 +149,7 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
             total = 0.0
             count = 0
             for inputs, labels in _epoch_batches(train_x, train_y, config.batch_size, epoch, seed, True):
-                inputs, labels = _loss(model, inputs, labels, device, dtype)
-                outputs, labels = inputs, labels
+                outputs, labels = _forward(model, inputs, labels, device, dtype)
                 loss = torch.mean((outputs - labels) ** 2)
                 if not math.isfinite(float(loss.item())):
                     raise ValueError("non-finite training loss")
@@ -124,55 +158,61 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
                 optimizer.step()
                 total += float(loss.item()) * len(labels)
                 count += len(labels)
-            train_loss = total / count
+            train_online_loss = total / count
             model.eval()
-            dev_loss = _evaluate(model, dev_x, dev_y, config.batch_size, device, dtype)
-            decision = plateau.update(epoch, train_loss, dev_loss)
+            train_eval_loss = _evaluate(model, train_x, train_y, config.batch_size, device, dtype)
+            dev_eval_loss = _evaluate(model, dev_x, dev_y, config.batch_size, device, dtype)
+            decision = plateau.update(epoch, train_eval_loss, dev_eval_loss)
             if decision["dev_best"]:
                 best_model_state = copy.deepcopy(model.state_dict())
             record = {
                 "epoch": epoch,
-                "train_loss": train_loss,
-                "dev_loss": dev_loss,
+                "train_online_loss": train_online_loss,
+                "train_eval_loss": train_eval_loss,
+                "dev_eval_loss": dev_eval_loss,
                 "best_dev_loss": plateau.best_dev,
                 "best_epoch": plateau.best_epoch,
                 "plateau_epochs": plateau.plateau_epochs,
                 "train_significant_improvement": decision["train_significant_improvement"],
                 "dev_significant_improvement": decision["dev_significant_improvement"],
+                "dev_absolute_best": decision["dev_best"],
+                "pack_sha256": report.data_pack_sha256,
+                "row_order_sha256": dict(report.row_order_sha256),
+                "config_sha256": effective_config_sha256,
+                "model_state_sha256": state_dict_hash(model.state_dict()),
+                "shuffle_seed": seed + epoch,
+                "shuffle_epoch": epoch,
                 "epoch_seconds": time.perf_counter() - epoch_started,
                 "total_elapsed_seconds": time.perf_counter() - started,
             }
             history.append(record)
             _write_history(history_handle, record)
-            checkpoint = {
-                "epoch": epoch,
-                "seed": seed,
-                "model_state": model.state_dict(),
-                "optimizer_state": optimizer.state_dict(),
-                "scaler": scaler.to_dict(),
-                "plateau": plateau.state_dict(),
-                "history": history,
-                "best_model_state": best_model_state,
-                "data_pack_sha256": report.data_pack_sha256,
-            }
-            atomic_torch_save(checkpoint, latest_path)
+            atomic_torch_save(checkpoint_payload(epoch, model.state_dict(), "running"), latest_path)
             if decision["dev_best"]:
-                atomic_torch_save(checkpoint, best_path)
+                atomic_torch_save(checkpoint_payload(epoch, model.state_dict(), "running"), best_path)
             if decision["stop"]:
-                stop_reason = "train_and_dev_plateau_min_delta_patience"
+                stop_reason = "train_eval_and_dev_eval_plateau_min_delta_patience"
                 break
 
+    atomic_torch_save(checkpoint_payload(epoch, model.state_dict(), "completed"), latest_path)
     best_checkpoint = load_checkpoint(best_path, device)
     model.load_state_dict(best_checkpoint["model_state"])
     summary = {
         "seed": seed,
+        "status": "completed",
         "total_epochs": epoch,
         "best_epoch": plateau.best_epoch,
         "stop_reason": stop_reason,
         "total_training_seconds": time.perf_counter() - started,
         "initial_model_hash": initial_model_hash,
+        "fresh_initialization_model_hash": fresh_initialization_model_hash,
         "best_model_hash": model_hash(model),
+        "model_definition_sha256": model_definition_sha256,
+        "effective_config_sha256": effective_config_sha256,
+        "code_identity_sha256": code_identity["sha256"],
         "data_pack_sha256": report.data_pack_sha256,
+        "row_order_sha256": dict(report.row_order_sha256),
+        "source_sha256": dict(report.source_sha256),
         "split_manifest_sha256": report.split_manifest_sha256,
         "learner_allowlist_sha256": report.learner_allowlist_sha256,
         "split_version": report.split_version,
@@ -186,7 +226,7 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
         "best_checkpoint_sha256": sha256_file(best_path),
         "history_records": len(history),
         "resumed_from": str(resume_path) if resume_path is not None else None,
-        "resume_checkpoint_sha256": sha256_file(resume_path) if resume_path is not None else None,
+        "resume_checkpoint_sha256": resume_checkpoint_sha256,
         "synthetic_smoke": report.synthetic,
         "scientific_result": False,
     }
@@ -197,6 +237,11 @@ def train_one(config, seed, memory_fraction, report, model_factory=None, resume_
 def _train_worker(payload):
     config, seed, fraction, report = payload
     return train_one(config, seed, fraction, report)
+
+
+def _synthetic_train_worker(payload):
+    config, seed, fraction, report = payload
+    return train_one(config, seed, fraction, report, model_factory=ZeroParameterModel)
 
 
 def _cuda_worker(payload):
@@ -220,6 +265,17 @@ def run_parallel_training(config):
         for seed, fraction in zip(config.seeds, config.memory_fractions)
     ]
     return _parallel_results(_train_worker, payloads)
+
+
+def run_synthetic_parallel_training(config):
+    report = preflight(config.data_manifest)
+    if not report.synthetic or report.training_authorized:
+        raise PermissionError("synthetic smoke requires synthetic=true and training_authorized=false")
+    payloads = [
+        (config, seed, fraction, report)
+        for seed, fraction in zip(config.seeds, config.memory_fractions)
+    ]
+    return _parallel_results(_synthetic_train_worker, payloads)
 
 
 def run_parallel_cuda_self_checks(config):

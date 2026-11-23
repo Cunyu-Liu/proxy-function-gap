@@ -2,37 +2,56 @@
 
 ## Scope
 
-The trainer is an independent fresh Sample-like 50nt CNN regression implementation. It does not load official weights or copy official GPL code. Formal training is not launched during integration. Synthetic smoke checks are software checks only and always record `scientific_result=false`.
+The trainer is an independent fresh Sample-like 50nt CNN regression implementation. It does not load official weights or copy official GPL code. Formal training is not launched during development. Synthetic smoke is software validation only and always records `scientific_result=false`.
 
-## Roles, permissions, and hashes
+## Production pack and preflight
 
-`data_manifest.json` must pin the pack, split-v2 manifest, and Learner allowlist by path and SHA-256. Preflight requires:
+A production data pack consists of an NPZ and `data_manifest.json`. The NPZ contains exactly `x_role`, `y_role`, and `row_id_role` for train/dev/calibration. Inputs are finite one-hot `(n,4,50)` arrays, labels are finite vectors, and row IDs are non-empty unique strings.
 
+The manifest must pin:
+
+- `pack`, `split_manifest`, and `learner_allowlist` by path and SHA-256.
 - `split_version=sample2019-split-v2`, matching `split_hash`, and `model_lineage=original_evolution`.
-- split-v2 role counts for train/dev/calibration, with outer metrics disabled.
-- Learner feature and label allowlists containing exactly the required development roles and no outer role; dev/calibration parameter origin is allowed.
-- Exactly x/y arrays for train/dev/calibration. Inputs are finite one-hot `(n,4,50)` arrays and labels are finite vectors with matching counts.
-- Actual pack SHA-256 before preflight and again in every worker before use.
+- `role_sources`: each role's fresh TSV path, SHA-256, and `row_id_column` (default `row_id`). Label allowlist paths must equal these TSV paths; no outer role is allowed.
+- `row_order_sha256`: each role's canonical order hash, defined as SHA-256 of the sorted unique row IDs joined by newline, including the trailing newline.
 
-`training_authorized=true` and `synthetic=false` are both required by the parallel formal training engine. The CLI additionally requires `train --execute-training`. Preflight success alone does not authorize training.
+Preflight requires exact equality of NPZ and fresh TSV row-ID sets and unique counts. Different physical row order is allowed only when the canonical sorted-ID hash is identical. Pack counts must match the manifest and may not exceed split-v2 role counts. Source hashes are verified independently. Worker loading repeats pack and per-role order-hash checks.
 
-## Model and train-only scaler
+Formal parallel training requires `synthetic=false` and `training_authorized=true`. The CLI also requires `train --execute-training`. Preflight success alone does not authorize training. Synthetic uses the same schema with `synthetic=true` and `training_authorized=false` and can run only through the explicitly named smoke engine.
 
-`FreshSampleCNN` uses channels-first 4x50 one-hot input, two Conv1d/ReLU blocks, pooling, and a small fully connected regression head. Each seed initializes a fresh model. The target scaler is mean and population standard deviation fitted only on train labels; dev/calibration never affect it. Constant train targets use scale 1 and record raw_std 0.
+## Model, scaler, and CUDA
 
-## CUDA and parallel execution
+`FreshSampleCNN` uses channels-first 4x50 input, two Conv1d/ReLU blocks, pooling, and a small regression head. Each seed initializes a fresh model. Target mean and population standard deviation are fitted only on train labels; constant train targets use scale 1 and record raw_std 0.
 
-Every worker calls `configure_cuda` before model/data allocation. It requires CUDA, an existing device index, `CUBLAS_WORKSPACE_CONFIG=:4096:8`, and an explicit per-process memory fraction. There is no CPU training fallback. The default three seeds are 11, 23, 37, each with fraction 0.2; custom runs require at least three unique seeds, one fraction per process, and fractions summing to at most 1.
+Every worker requires CUDA, a valid device index, `CUBLAS_WORKSPACE_CONFIG=:4096:8`, and an explicit per-process memory fraction before model/data allocation. There is no CPU training fallback. At least three unique seeds and one fraction per seed are required, with fractions summing to at most 1. Spawn workers share the specified single GPU. Actual GPU, dtype, deterministic/TF32 state, and `max_memory_allocated` are recorded; utilization is never fabricated.
 
-Parallel execution uses spawn and one ProcessPoolExecutor worker per seed on the same explicit CUDA device. GPU name, capability, requested/actual device, actual dtype, deterministic/TF32 state, and actual `max_memory_allocated` are recorded. No GPU-utilization percentage is inferred or fabricated.
+## Eval-based convergence and per-epoch identity
 
-## Convergence and history
+There is no maximum epoch or fixed-step limit. Each epoch records online batch-training loss separately as `train_online_loss`. After optimization, the model is switched to `eval()` and the same frozen weights compute full-train and full-dev normalized MSE: `train_eval_loss` and `dev_eval_loss`. Only these two eval losses drive convergence.
 
-There is no maximum epoch, fixed step limit, or accepted `max_epochs/max_steps` config. Each epoch evaluates full train and dev normalized MSE. An improvement is significant only when the corresponding absolute best loss decreases by more than `min_delta`. The plateau counter resets when either train or dev improves significantly; only simultaneous non-significant changes increment it. Training stops only when this counter reaches `patience`.
+Significant improvement requires a decrease greater than `min_delta` from the corresponding absolute best. Plateau resets for significant train/dev improvement and **always resets for a dev absolute best**, even when the improvement is smaller than `min_delta`. Thus a continuing sequence of small absolute dev improvements cannot stop training. Only simultaneous lack of significant improvement without dev absolute best increments plateau, and only reaching `patience` stops training.
 
-Every epoch appends train/dev loss, best dev, best epoch, plateau state, significant-improvement flags, epoch seconds, and cumulative seconds to `history.jsonl` with fsync. `latest.pt` is written every epoch; `best.pt` is updated whenever dev reaches a new absolute best. Both use temporary-file + fsync + atomic `os.replace` + directory fsync.
+Every history record includes train_online/train_eval/dev_eval losses, best dev/epoch, plateau state, pack SHA-256, per-role canonical order hashes, effective-config SHA-256, model-state SHA-256, and both `shuffle_seed=seed+epoch` and `shuffle_epoch=epoch`. Batch order therefore remains auditable and is preserved by resume.
 
-The checkpoint stores model, optimizer, train-only scaler, plateau state, complete history, best model state, seed, and data hash. Resume requires every seed's checkpoint, verifies seed/data/scaler identity, restores all state, preserves prior history, and writes to a new run directory. Final model weights are restored from best. Summaries include initial/best model hash, data/split/allowlist hashes, best epoch, total epochs, total training time, actual GPU/dtype, actual peak memory, and history/checkpoint hashes.
+## Checkpoint and strict resume
+
+`latest.pt` is atomically updated every epoch with `status=running`; `best.pt` is atomically updated on every dev absolute best. At convergence, latest is rewritten with `status=completed`. A completed checkpoint is rejected for resume. A best checkpoint remains a running snapshot captured at its epoch and may be used when its identity matches.
+
+Every checkpoint contains model/optimizer state, true initial model hash from the original run, model-definition hash, trainer code-file identity, effective-config hash, train-only scaler, plateau/history, best model state, pack/source/split/allowlist hashes, and per-role order hashes. `initial_model_hash` is never replaced by a fresh initialization hash during resume.
+
+Resume configuration must name every seed's checkpoint and its expected SHA256:
+
+```json
+{
+  "resume_from": {
+    "11": {"path": "/teams/.../seed_11/best.pt", "sha256": "<64-lowercase-hex>"},
+    "23": {"path": "/teams/.../seed_23/best.pt", "sha256": "<64-lowercase-hex>"},
+    "37": {"path": "/teams/.../seed_37/best.pt", "sha256": "<64-lowercase-hex>"}
+  }
+}
+```
+
+Before loading, the actual checkpoint SHA256 must match. Resume then rejects completed status or any mismatch in seed, code identity, model definition, effective config, scaler, pack, source, split, allowlist, or row-order identity. All state and history are restored and written to a new run directory. Final model weights are restored from best.
 
 ## Commands
 
@@ -42,16 +61,14 @@ export PYTHONPATH=/home/proxy-function-gap-sample-runtime/.deps:src:gate0:runtim
 PY=/root/miniconda3/envs/lucaone_cu128/bin/python
 $PY -m proxy_function_gap.trainer.cli preflight --config configs/trainer.example.json
 $PY -m proxy_function_gap.trainer.cli cuda-self-check --config configs/trainer.example.json
-# Formal training is not authorized by integration:
+# Only the explicitly synthetic, unauthorized three-seed smoke:
+$PY -m proxy_function_gap.trainer.cli synthetic-train-smoke --config <synthetic-config.json>
+# Formal training remains unauthorized in this integration:
 $PY -m proxy_function_gap.trainer.cli train --config configs/trainer.example.json --execute-training
 ```
 
-`make-synthetic-pack` creates only a tiny test pack with `training_authorized=false` and `synthetic=true`. It cannot be used by the formal parallel training engine.
+`make-synthetic-pack` creates a tiny NPZ plus role TSVs and manifest. It cannot be used by the formal engine.
 
-## Integration verification
+## Verification status
 
-Three complete rounds of E0/Gate0/split-v2/Sample-runtime/trainer pytest each passed 175 tests. The integrated source/data-boundary audit and E0 independent math check passed in every round. Wheel inspection contains only the intended Python packages and no raw data or official weights.
-
-The real CLI preflight verified a synthetic pack, split manifest, Learner allowlist, all hashes, and role counts, while returning `ready_for_formal_training=false`. Three spawned CUDA self-check processes passed on one NVIDIA GeForce RTX 5090 with device `cuda:0`, dtype `torch.float32`, seeds 11/23/37, and per-process fraction 0.05. Each record includes actual device, allocated memory, and `scientific_result=false`.
-
-A synthetic request with `--execute-training` was rejected by the formal-training permission check before any training worker was launched. No fresh formal proxy training was started during integration.
+The preceding integration passed 175 tests in three rounds. The independent-review repair adds production row-ID/source/order checks, eval-based stopping, absolute-best behavior, strict resume identities, completed-checkpoint rejection, and three-seed synthetic training/resume coverage. Three new full pytest rounds passed 190, 191, and 191 tests respectively, each with three-process CUDA self-checks and source/data audits. The CLI three-seed training and expected-SHA256 resume smoke also passed. These are software checks, not scientific results. Formal training remains unauthorized and was not started.

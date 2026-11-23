@@ -3,22 +3,19 @@ import json
 import pytest
 import torch
 
+from proxy_function_gap.trainer.checkpoint import atomic_torch_save, load_checkpoint
 from proxy_function_gap.trainer.cli import main
 from proxy_function_gap.trainer.config import TrainerConfig
 from proxy_function_gap.trainer.cuda import configure_cuda, cuda_self_check
-from proxy_function_gap.trainer.data import preflight
-from proxy_function_gap.trainer.engine import run_parallel_cuda_self_checks, run_parallel_training, train_one
+from proxy_function_gap.trainer.data import preflight, sha256_file
+from proxy_function_gap.trainer.engine import (
+    run_parallel_cuda_self_checks,
+    run_parallel_training,
+    run_synthetic_parallel_training,
+    train_one,
+)
 from proxy_function_gap.trainer.model import FreshSampleCNN, model_hash
-from proxy_function_gap.trainer.synthetic import make_synthetic_pack
-
-
-class ZeroModel(torch.nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.weight = torch.nn.Parameter(torch.zeros(1))
-
-    def forward(self, inputs):
-        return inputs[:, 0, 0] * 0 + self.weight
+from proxy_function_gap.trainer.synthetic import ZeroParameterModel, make_synthetic_pack
 
 
 def config_for(manifest, output, patience=1):
@@ -30,6 +27,16 @@ def config_for(manifest, output, patience=1):
         "patience": patience,
         "min_delta": 0.0,
     })
+
+
+def resume_references(run_dir, seeds=(11, 23, 37), name="best.pt"):
+    return {
+        str(seed): {
+            "path": str(run_dir / f"seed_{seed}" / name),
+            "sha256": sha256_file(run_dir / f"seed_{seed}" / name),
+        }
+        for seed in seeds
+    }
 
 
 def test_cuda_unavailable_never_falls_back_to_cpu(monkeypatch):
@@ -57,6 +64,7 @@ def test_preflight_cli_reports_not_ready_for_formal_training(tmp_path, capsys):
     assert main(["preflight", "--config", str(config)]) == 0
     report = json.loads(capsys.readouterr().out)
     assert report["role_counts"]["train"] == 8
+    assert len(report["row_order_sha256"]["train"]) == 64
     assert not report["ready_for_formal_training"]
 
 
@@ -86,23 +94,28 @@ def test_three_process_single_gpu_self_checks(tmp_path):
     assert all(item["self_check"] == "PASS" for item in results)
 
 
-@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is required for trainer smoke")
-def test_zero_loss_training_history_best_restore_and_resume(tmp_path):
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is required for three-seed smoke")
+def test_three_seed_synthetic_training_and_resume_full_pipeline(tmp_path):
     manifest = make_synthetic_pack(tmp_path / "pack")
-    report = preflight(manifest)
-    config = config_for(manifest, tmp_path / "run1")
-    summary = train_one(config, 11, 0.1, report, model_factory=ZeroModel)
-    assert summary["total_epochs"] == 2
-    assert summary["best_epoch"] == 1
-    assert summary["history_records"] == 2
-    assert summary["stop_reason"] == "train_and_dev_plateau_min_delta_patience"
-    assert summary["gpu"]["actual_device"] == "cuda:0"
-    assert summary["gpu"]["dtype"] == "torch.float32"
-    assert summary["synthetic_smoke"]
-    assert not summary["scientific_result"]
-    history = [json.loads(line) for line in (tmp_path / "run1" / "seed_11" / "history.jsonl").read_text().splitlines()]
-    assert len(history) == 2
-    assert all({"train_loss", "dev_loss", "epoch_seconds"} <= set(item) for item in history)
+    initial = run_synthetic_parallel_training(config_for(manifest, tmp_path / "run1"))
+    assert {item["seed"] for item in initial} == {11, 23, 37}
+    assert all(item["status"] == "completed" for item in initial)
+    assert all(item["total_epochs"] == 2 for item in initial)
+    assert all(item["synthetic_smoke"] and not item["scientific_result"] for item in initial)
+    for summary in initial:
+        run_dir = tmp_path / "run1" / f"seed_{summary['seed']}"
+        history = [json.loads(line) for line in (run_dir / "history.jsonl").read_text().splitlines()]
+        assert len(history) == 2
+        for record in history:
+            assert {"train_online_loss", "train_eval_loss", "dev_eval_loss"} <= set(record)
+            assert record["pack_sha256"] == summary["data_pack_sha256"]
+            assert record["row_order_sha256"] == summary["row_order_sha256"]
+            assert record["config_sha256"] == summary["effective_config_sha256"]
+            assert record["shuffle_seed"] == summary["seed"] + record["epoch"]
+            assert len(record["model_state_sha256"]) == 64
+        latest = load_checkpoint(run_dir / "latest.pt", torch.device("cpu"))
+        assert latest["status"] == "completed"
+        assert latest["model_state_sha256"] == history[-1]["model_state_sha256"]
 
     resumed_config = TrainerConfig.from_dict({
         "data_manifest": str(manifest),
@@ -111,16 +124,109 @@ def test_zero_loss_training_history_best_restore_and_resume(tmp_path):
         "batch_size": 4,
         "patience": 1,
         "min_delta": 0.0,
-        "resume_from": {
-            "11": str(tmp_path / "run1" / "seed_11" / "latest.pt"),
-            "23": str(tmp_path / "run1" / "seed_11" / "latest.pt"),
-            "37": str(tmp_path / "run1" / "seed_11" / "latest.pt"),
-        },
+        "resume_from": resume_references(tmp_path / "run1"),
     })
-    resumed = train_one(resumed_config, 11, 0.1, report, model_factory=ZeroModel)
-    assert resumed["total_epochs"] == 3
-    assert resumed["history_records"] == 3
-    assert resumed["resumed_from"].endswith("latest.pt")
-    assert resumed["resume_checkpoint_sha256"] == summary["latest_checkpoint_sha256"]
-    resumed_history = (tmp_path / "run2" / "seed_11" / "history.jsonl").read_text().splitlines()
-    assert len(resumed_history) == 3
+    resumed = run_synthetic_parallel_training(resumed_config)
+    assert len(resumed) == 3
+    initial_by_seed = {item["seed"]: item for item in initial}
+    for summary in resumed:
+        assert summary["total_epochs"] == 2
+        assert summary["history_records"] == 2
+        assert summary["initial_model_hash"] == initial_by_seed[summary["seed"]]["initial_model_hash"]
+        assert summary["resume_checkpoint_sha256"] == initial_by_seed[summary["seed"]]["best_checkpoint_sha256"]
+        history = (tmp_path / "run2" / f"seed_{summary['seed']}" / "history.jsonl").read_text().splitlines()
+        assert len(history) == 2
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is required for resume validation")
+def test_completed_checkpoint_and_expected_hash_are_enforced(tmp_path):
+    manifest = make_synthetic_pack(tmp_path / "pack")
+    report = preflight(manifest)
+    summary = train_one(config_for(manifest, tmp_path / "run1"), 11, 0.1, report, ZeroParameterModel)
+    latest = tmp_path / "run1" / "seed_11" / "latest.pt"
+    with pytest.raises(ValueError, match="completed checkpoint"):
+        train_one(
+            config_for(manifest, tmp_path / "run2"),
+            11,
+            0.1,
+            report,
+            ZeroParameterModel,
+            resume_from=(latest, summary["latest_checkpoint_sha256"]),
+        )
+    best = tmp_path / "run1" / "seed_11" / "best.pt"
+    with pytest.raises(ValueError, match="SHA256 mismatch"):
+        train_one(
+            config_for(manifest, tmp_path / "run3"),
+            11,
+            0.1,
+            report,
+            ZeroParameterModel,
+            resume_from=(best, "0" * 64),
+        )
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is required for resume identity checks")
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("code_identity", {"sha256": "bad", "files": {}}),
+        ("effective_config_sha256", "bad"),
+        ("scaler", {"mean": 99}),
+        ("data_pack_sha256", "bad"),
+        ("row_order_sha256", {"train": "bad"}),
+        ("source_sha256", {"train": "bad"}),
+        ("split_manifest_sha256", "bad"),
+        ("learner_allowlist_sha256", "bad"),
+    ],
+)
+def test_resume_rejects_tampered_checkpoint_identities(tmp_path, field, value):
+    manifest = make_synthetic_pack(tmp_path / "pack")
+    report = preflight(manifest)
+    train_one(config_for(manifest, tmp_path / "run1"), 11, 0.1, report, ZeroParameterModel)
+    path = tmp_path / "run1" / "seed_11" / "best.pt"
+    checkpoint = load_checkpoint(path, torch.device("cpu"))
+    checkpoint[field] = value
+    atomic_torch_save(checkpoint, path)
+    with pytest.raises(ValueError, match=f"resume identity mismatch: {field}"):
+        train_one(
+            config_for(manifest, tmp_path / "run2"),
+            11,
+            0.1,
+            report,
+            ZeroParameterModel,
+            resume_from=(path, sha256_file(path)),
+        )
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is required for model identity check")
+def test_resume_rejects_different_model_definition(tmp_path):
+    manifest = make_synthetic_pack(tmp_path / "pack")
+    report = preflight(manifest)
+    train_one(config_for(manifest, tmp_path / "run1"), 11, 0.1, report, ZeroParameterModel)
+    path = tmp_path / "run1" / "seed_11" / "best.pt"
+    with pytest.raises(ValueError, match="model_definition_sha256"):
+        train_one(
+            config_for(manifest, tmp_path / "run2"),
+            11,
+            0.1,
+            report,
+            FreshSampleCNN,
+            resume_from=(path, sha256_file(path)),
+        )
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is required for config identity check")
+def test_resume_rejects_changed_effective_configuration(tmp_path):
+    manifest = make_synthetic_pack(tmp_path / "pack")
+    report = preflight(manifest)
+    train_one(config_for(manifest, tmp_path / "run1"), 11, 0.1, report, ZeroParameterModel)
+    path = tmp_path / "run1" / "seed_11" / "best.pt"
+    with pytest.raises(ValueError, match="effective_config_sha256"):
+        train_one(
+            config_for(manifest, tmp_path / "run2", patience=2),
+            11,
+            0.1,
+            report,
+            ZeroParameterModel,
+            resume_from=(path, sha256_file(path)),
+        )

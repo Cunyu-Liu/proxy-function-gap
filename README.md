@@ -34,7 +34,7 @@ export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
 split-v2 来源提交 `05eb96b5e730c9dd6cebc96486220bd6266c30d9` 通过 subtree merge `56d3e3b` 保留；独立 Sample runtime 来源提交 `3c8d047816a4a216a3954c66112c1e858c7dc2c7` 通过 subtree merge `981a3de` 保留。官方 GPL Python 代码和 HDF5 权重未复制进 Git，详见 `runtime/PROVENANCE.md`。
 
-fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同一显式 CUDA 设备并行，train-only scaler、双 loss plateau、无 epoch/step 上限、原子 checkpoint 和完整 history 均有测试。正式训练未启动；`preflight`、`cuda-self-check` 与 `train --execute-training` 分离，synthetic smoke 不是科学结果。
+fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同一显式 CUDA 设备并行，生产 NPZ 与 fresh TSV 逐角色 row_id/source/order hash 强校验，train-only scaler、同一 eval 模型的 full-train/dev 停止、dev absolute best 重置、无 epoch/step 上限、原子 checkpoint 和完整 history 均有测试。完成态 checkpoint 拒绝续训，resume 校验 expected SHA256 及代码/模型/配置/scaler/data/order 身份。正式训练未启动；`preflight`、`cuda-self-check`、`synthetic-train-smoke` 与 `train --execute-training` 分离，smoke 不是科学结果。
 
 ## Gate 0 集成
 

@@ -20,7 +20,7 @@ RUNTIME_IMPORTS = {
     "os", "pathlib", "platform", "shutil", "subprocess", "sys", "tempfile", "torch",
 }
 TRAINER_IMPORTS = {
-    "argparse", "concurrent", "copy", "dataclasses", "hashlib", "json", "math",
+    "argparse", "concurrent", "copy", "csv", "dataclasses", "gzip", "hashlib", "json", "math",
     "multiprocessing", "numpy", "os", "pathlib", "tempfile", "time", "torch", "typing",
 }
 SOURCE_COMMITS = {
@@ -94,6 +94,12 @@ def main():
         "class DualPlateau",
         "while True",
         "os.replace",
+        "train_eval_loss",
+        "dev_eval_loss",
+        "canonical_row_order_hash",
+        "completed checkpoint cannot be resumed",
+        "model_definition_sha256",
+        "initial_model_hash",
     ):
         assert required in trainer_runtime, required
     for forbidden in ("max_epochs", "max_steps", 'torch.device("cpu")', "shell=True"):

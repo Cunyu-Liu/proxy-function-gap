@@ -3,14 +3,14 @@ import json
 
 from .config import TrainerConfig
 from .data import preflight
-from .engine import run_parallel_cuda_self_checks, run_parallel_training
+from .engine import run_parallel_cuda_self_checks, run_parallel_training, run_synthetic_parallel_training
 from .synthetic import make_synthetic_pack
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Fresh Sample-like CUDA trainer with fail-closed preflight")
     subparsers = parser.add_subparsers(dest="command", required=True)
-    for name in ("preflight", "cuda-self-check", "train"):
+    for name in ("preflight", "cuda-self-check", "train", "synthetic-train-smoke"):
         command = subparsers.add_parser(name)
         command.add_argument("--config", required=True)
         if name == "train":
@@ -28,6 +28,9 @@ def main(argv=None):
         return 0
     if args.command == "cuda-self-check":
         print(json.dumps(run_parallel_cuda_self_checks(config), indent=2, sort_keys=True))
+        return 0
+    if args.command == "synthetic-train-smoke":
+        print(json.dumps(run_synthetic_parallel_training(config), indent=2, sort_keys=True))
         return 0
     if not args.execute_training:
         raise PermissionError("train requires explicit --execute-training")
