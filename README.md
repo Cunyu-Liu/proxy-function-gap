@@ -80,3 +80,17 @@ Control assignment takes precedence over official train/test/boundary roles for 
 /root/miniconda3/bin/python -m gate0_sample2019.finalize_fresh_proxy --config configs/fresh_proxy_v1.json
 /root/miniconda3/bin/python -m gate0_sample2019.validate_fresh_proxy_delivery --config configs/fresh_proxy_v1.json
 ```
+
+## fresh_proxy_cnn_v1 conditional child manifest
+
+`configs/fresh_cnn_v1.json` builds an immutable fresh-proxy child lineage without official weights or distillation. Train/dev/calibration/query come only from the frozen fresh pack. Outer strata are independently reviewed from v1 random outer and the v2 original 3163 designed candidates; unmodified rep1 random, target/step designed=True, official-seen, control and quarantine are not relaxed into fresh outer. Random outer is external-context only and never enters the main E1 pool.
+
+```bash
+/root/miniconda3/bin/python -m gate0_sample2019.fresh_cnn_child --config configs/fresh_cnn_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.verify_fresh_cnn --config configs/fresh_cnn_v1.json
+# After all three rounds pass, commit staging and run:
+/root/miniconda3/bin/python -m gate0_sample2019.finalize_fresh_cnn --config configs/fresh_cnn_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.validate_fresh_cnn_delivery --config configs/fresh_cnn_v1.json
+```
+
+A verified child can authorize training start, but `E1_enabled` remains false. Model hash, epoch, convergence, V/Q calibration and configuration freeze are null until real evidence exists. Outer is always historical measured-state, never never-evaluated.
