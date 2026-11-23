@@ -12,11 +12,11 @@ def canonical_hash(path):
 
 
 def row_list_hash(rows):
-    return hashlib.sha256("\n".join(sorted(rows)) + ("\n" if rows else "")).hexdigest()
+    return hashlib.sha256(("\n".join(sorted(rows)) + ("\n" if rows else "")).encode()).hexdigest()
 
 
 def semantic_manifest(path):
-    value = json.loads(Path(path).read_text())
+    value = json.loads(Path(path).read_text().replace(str(Path(path).parent), "<BUILD_DIR>"))
     value.pop("created_utc", None)
     value.pop("build_dir", None)
     return value

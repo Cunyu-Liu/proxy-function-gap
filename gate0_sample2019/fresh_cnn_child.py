@@ -22,7 +22,7 @@ def build(config, output):
     (output / "learner").mkdir()
     (output / "evaluator").mkdir()
     pack = Path(config["parent_pack_dir"])
-    pack_manifest = json.loads((pack / "pack_manifest.json").read_text())
+    pack_manifest = json.loads((pack.parent / "pack_manifest.json").read_text())
     if pack_manifest["git_commit"] != config["parent_pack_commit"]:
         raise ValueError("Fresh pack commit mismatch")
     role_rows = {role: {} for role in ["train", "dev", "calibration", "query"]}

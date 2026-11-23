@@ -4,6 +4,9 @@ from gate0_sample2019.training_gate import TrainingGate
 
 
 class TrainingGateTests(unittest.TestCase):
+    def test_row_list_hash(self):
+        from gate0_sample2019.fresh_cnn_common import row_list_hash
+        self.assertEqual(row_list_hash(["b", "a"]), row_list_hash(["a", "b"]))
     def test_fresh_training_start(self):
         manifest = {"formal_training_start_authorized": True, "initialization": "fresh_random", "official_weights": False, "distillation": False}
         self.assertTrue(TrainingGate.training_start_permission(manifest))

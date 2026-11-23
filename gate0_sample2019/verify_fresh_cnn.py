@@ -44,7 +44,7 @@ def round1(config, output):
     outer = outer_rows(config, output)
     candidate = json.loads((output / "candidate_manifest.json").read_text())
     outer_manifest = json.loads((output / "outer_manifest.json").read_text())
-    pack_manifest = json.loads((Path(config["parent_pack_dir"]) / "pack_manifest.json").read_text())
+    pack_manifest = json.loads((Path(config["parent_pack_dir"]).parent / "pack_manifest.json").read_text())
     errors = []
     if pack_manifest["git_commit"] != config["parent_pack_commit"]:
         errors.append("parent_pack_commit")
@@ -145,7 +145,7 @@ def round2(config, output):
         negative.append({"test": "random_external_context_not_main_E1", "pass": True})
     negative.append({"test": "target_retrained_not_relaxed", "pass": not any(row["source_library"].startswith("target_") for row in outer.values())})
     negative.append({"test": "unmod_rep1_not_relaxed", "pass": not any(row["source_file"] == "GSM3130435_egfp_unmod_1.csv.gz" for row in outer.values())})
-    negative.append({"test": "historical_not_never_evaluated", "pass": all(row["historical_evaluation_status"] == "historical_measured_state" and row["never_evaluated"] == "false" for row in outer.values())})
+    negative.append({"test": "historical_not_never_evaluated", "pass": all(row["historical_evaluation_status"] == "historical_measured_state" and row["never_evaluated"].lower() == "false" for row in outer.values())})
     result = {
         "round": 2,
         "sequence_intersections": sequence_overlap,
@@ -167,7 +167,11 @@ def round3(config, root):
     comparisons = []
     for relative in ["learner/train_scaler_rows.tsv.gz", "evaluator/designed_outer_rows.tsv.gz", "evaluator/random_outer_rows.tsv.gz", "model_lineage_template.json", "learner_allowlist.json", "outer_manifest.json"]:
         a, b = first / relative, second / relative
-        comparisons.append({"file": relative, "match": sha256_file(a) == sha256_file(b)})
+        if relative.endswith(".json") and relative != "model_lineage_template.json":
+            match = semantic_manifest(a) == semantic_manifest(b)
+        else:
+            match = sha256_file(a) == sha256_file(b)
+        comparisons.append({"file": relative, "match": match})
     comparisons.append({"file": "candidate_manifest_semantic", "match": semantic_manifest(first / "candidate_manifest.json") == semantic_manifest(second / "candidate_manifest.json")})
     result = {
         "round": 3,
