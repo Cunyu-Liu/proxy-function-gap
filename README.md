@@ -104,3 +104,15 @@ A verified child can authorize training start, but `E1_enabled` remains false. M
 ## Immutable fixed candidate pools
 
 `configs/fixed_pools_v1.json` builds one fixed pool per role: dev=64, calibration=64, outer random=256, outer designed=64. Each complete allocation unit is an independent cluster; sequence/context deduplication, q=1/N unique feasible sequences, cluster assignments, source split hash and paired proposal seed plan are explicit. Outer learner views contain no labels and Evaluator vaults are references only. Small pools are protocol fixtures, not independent replication series; no variance or outer score is computed.
+
+## Disjoint multi-pool v2
+
+`configs/fixed_pools_v2.json` creates immutable `fresh-proxy-fixed-pools-v2` without modifying v1. It builds 32 dev, 16 calibration, 4 outer-random and 16 outer-designed pools. Every pool retains its configured unique-sequence size; sequence, Hamming-1 component, allocation-unit and trajectory conflicts are blocked both across roles and across pools within a role. These are disjoint same-study protocol units, not independent studies or external replications. Outer scoring remains disabled.
+
+```bash
+/root/miniconda3/bin/python -m gate0_sample2019.fixed_pools --config configs/fixed_pools_v2.json
+/root/miniconda3/bin/python -m gate0_sample2019.verify_fixed_pools --config configs/fixed_pools_v2.json
+# Run verification in three logged rounds, commit staging, then finalize and validate:
+/root/miniconda3/bin/python -m gate0_sample2019.finalize_fixed_pools --config configs/fixed_pools_v2.json
+/root/miniconda3/bin/python -m gate0_sample2019.validate_fixed_pools_delivery --config configs/fixed_pools_v2.json
+```

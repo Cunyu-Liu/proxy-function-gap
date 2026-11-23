@@ -62,13 +62,19 @@ def round1(config, output, exclusions=None):
             expected_paired = row["replicate_count"] > 1
             if row["paired_repeat"] != expected_paired or row["independent_evidence"] == expected_paired:
                 errors.append("within_pool_repeat_flag:" + role)
-        if len(rows) != config["pool_sizes"][role]:
+        expected_count = config.get("pool_counts", {}).get(role, 1)
+        if len(rows) != config["pool_sizes"][role] * expected_count:
             errors.append("pool_size:" + role)
         if len({row["sequence_id"] for row in rows}) != len(rows):
             errors.append("unique_sequence_q_support:" + role)
-        if abs(sum(row["q_value"] for row in rows) - 1) > 1e-12:
-            errors.append("q_sum:" + role)
-    if len(members) != sum(config["pool_sizes"].values()):
+        pool_ids = {row["pool_id"] for row in rows}
+        if pool_ids != {role + f"_{index:03d}" for index in range(expected_count)}:
+            errors.append("pool_ids:" + role)
+        for pool_id in pool_ids:
+            pool_rows = [row for row in rows if row["pool_id"] == pool_id]
+            if len(pool_rows) != config["pool_sizes"][role] or abs(sum(row["q_value"] for row in pool_rows) - 1) > 1e-12:
+                errors.append("pool_size_or_q_sum:" + pool_id)
+    if len(members) != sum(config["pool_sizes"][role] * config.get("pool_counts", {}).get(role, 1) for role in ROLES):
         errors.append("total_members")
     actual_repeat_counts = {
         "paired_repeat_members": sum(row["paired_repeat"] for row in members),
@@ -77,7 +83,10 @@ def round1(config, output, exclusions=None):
     }
     if manifest["paired_repeat_counts"] != actual_repeat_counts:
         errors.append("paired_repeat_counts")
-    expected_hash = {role + "_000": compute_pool_hash(config, role + "_000", split["split_hash"], by_role[role]) for role in ROLES}
+    expected_hash = {
+        pool_id: compute_pool_hash(config, pool_id, split["split_hash"], [row for row in by_role[role] if row["pool_id"] == pool_id])
+        for role in ROLES for pool_id in {row["pool_id"] for row in by_role[role]}
+    }
     if manifest["pool_hashes"] != expected_hash:
         errors.append("pool_hash")
     for role, rows in by_role.items():
@@ -110,10 +119,14 @@ def round1(config, output, exclusions=None):
             expected = expected_by_sequence.get(row["sequence_id"])
             if expected is None or row["source_row_ids"] != expected["source_row_ids"] or row["context_sources"] != expected["context_sources"]:
                 errors.append("source_or_context_dedup:" + role + ":" + row["sequence_id"])
-        pool_id = role + "_000"
         for unit_id, sequences in actual_units.items():
-            cluster = cluster_by_pool_unit.get((pool_id, unit_id))
             actual_rows = [row for row in by_role[role] if row["allocation_unit_id"] == unit_id]
+            pool_ids = {row["pool_id"] for row in actual_rows}
+            if len(pool_ids) != 1:
+                errors.append("unit_split_across_pools:" + role + ":" + unit_id)
+                continue
+            pool_id = next(iter(pool_ids))
+            cluster = cluster_by_pool_unit.get((pool_id, unit_id))
             if cluster is None:
                 errors.append("missing_cluster:" + pool_id + ":" + unit_id)
             elif cluster["member_sequence_count"] != len(sequences) or cluster["row_count"] != sum(row["replicate_count"] for row in actual_rows):
@@ -154,6 +167,12 @@ def round2(config, output):
     near_overlap = role_intersections(near)
     unit_overlap = role_intersections(units)
     trajectory_overlap = role_intersections(trajectories)
+    pool_ids = sorted({row["pool_id"] for rows in members.values() for row in rows})
+    pool_members = {pool_id: [row for rows in members.values() for row in rows if row["pool_id"] == pool_id] for pool_id in pool_ids}
+    pool_sequence_overlap = role_intersections({pool_id: {row["sequence_id"] for row in rows} for pool_id, rows in pool_members.items()})
+    pool_near_overlap = role_intersections({pool_id: {row["near_group_id"] for row in rows if row["near_group_id"]} for pool_id, rows in pool_members.items()})
+    pool_unit_overlap = role_intersections({pool_id: {row["allocation_unit_id"] for row in rows} for pool_id, rows in pool_members.items()})
+    pool_trajectory_overlap = role_intersections({pool_id: {row["trajectory_id"] for row in rows if row["trajectory_id"]} for pool_id, rows in pool_members.items()})
     negative = []
     for role in ROLES:
         other = "outer_random" if role != "outer_random" else "dev"
@@ -178,8 +197,12 @@ def round2(config, output):
         "near_component_intersections": near_overlap,
         "allocation_unit_intersections": unit_overlap,
         "trajectory_intersections": trajectory_overlap,
+        "pool_sequence_intersections": pool_sequence_overlap,
+        "pool_near_component_intersections": pool_near_overlap,
+        "pool_allocation_unit_intersections": pool_unit_overlap,
+        "pool_trajectory_intersections": pool_trajectory_overlap,
         "negative_tests": negative,
-        "pass": not any(item["count"] for item in sequence_overlap + near_overlap + unit_overlap + trajectory_overlap) and all(test["pass"] for test in negative),
+        "pass": not any(item["count"] for item in sequence_overlap + near_overlap + unit_overlap + trajectory_overlap + pool_sequence_overlap + pool_near_overlap + pool_unit_overlap + pool_trajectory_overlap) and all(test["pass"] for test in negative),
     }
     write_json(output / "verification_round2_leakage.json", result)
     if not result["pass"]:

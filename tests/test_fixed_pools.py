@@ -75,3 +75,20 @@ class SequenceContextDedupTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DisjointMultiPoolTests(unittest.TestCase):
+    def test_repeated_selection_blocks_sequences_near_units_and_trajectories(self):
+        config = {
+            "pool_version": "test-v2",
+            "pool_sizes": {"dev": 1},
+            "selection_rule": "test-selection",
+            "q_rule": "uniform",
+        }
+        rows = [record("a", "ua", trajectory="ta"), record("b", "ub", trajectory="tb")]
+        blocked = {key: set() for key in ["sequences", "near", "units", "trajectories"]}
+        first, _ = select_complete_units(config, "dev", rows, blocked)
+        second, _ = select_complete_units(config, "dev", rows, blocked)
+        self.assertNotEqual(first[0]["sequence_id"], second[0]["sequence_id"])
+        with self.assertRaisesRegex(ValueError, "No exact complete-allocation-unit pool"):
+            select_complete_units(config, "dev", rows, blocked)

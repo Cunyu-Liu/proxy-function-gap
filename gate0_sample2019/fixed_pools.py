@@ -187,63 +187,72 @@ def build(config, output, exclusions=None):
     all_members = []
     all_clusters = []
     blocked = {key: set() for key in ["sequences", "near", "units", "trajectories"]}
+    pool_counts = {role: int(config.get("pool_counts", {}).get(role, 1)) for role in ROLES}
+    if any(count < 1 for count in pool_counts.values()):
+        raise ValueError("every fixed-pool role requires at least one pool")
     for role in ROLES:
         records = dedup_rows(config, role, source_rows(config, role), *exclusions)
-        chosen, selection_stats[role] = select_complete_units(config, role, records, blocked)
-        size = config["pool_sizes"][role]
-        pool_id = role + "_000"
-        pool_hash = compute_pool_hash(config, pool_id, split_hash, chosen)
-        pool_hashes[pool_id] = pool_hash
-        for index, row in enumerate(chosen):
-            member = {
-                "pool_id": pool_id,
-                "pool_role": role,
-                "pool_index": index,
-                "pool_size": size,
-                "pool_hash": pool_hash,
-                "cluster_id": row["allocation_unit_id"],
-                "allocation_unit_id": row["allocation_unit_id"],
-                "near_group_id": row["near_group_id"],
-                "trajectory_id": row["trajectory_id"],
-                "sequence_id": row["sequence_id"],
-                "row_id": row["source_row_ids"][0],
-                "source_row_ids": row["source_row_ids"],
-                "utr50": row["utr50"],
-                "context": row["context"],
-                "context_sources": row["context_sources"],
-                "outer_stratum": row["outer_stratum"],
-                "source_library": row["source_library"],
-                "source_file": row["source_file"],
-                "source_file_sha256": row["source_file_sha256"],
-                "raw_row_sha256": row["raw_row_sha256"],
-                "replicate_ids": row["replicate_ids"],
-                "replicate_count": row["replicate_count"],
-                "paired_repeat_group_id": "paired_" + sha256_text(row["sequence_id"])[:24],
-                "paired_repeat": row["replicate_count"] > 1,
-                "independent_evidence": row["replicate_count"] == 1,
-                "q_rule": config["q_rule"],
-                "q_value": 1.0 / size,
-                "q_expression": f"1/{size}",
-                "source_split_hash": split_hash,
-                "source_split_manifest_sha256": split_manifest_hash,
-                "synthetic": False,
-            }
-            all_members.append(member)
-        cluster_groups = defaultdict(list)
-        for row in chosen:
-            cluster_groups[row["allocation_unit_id"]].append(row)
-        for cluster_id, members in sorted(cluster_groups.items()):
-            all_clusters.append({
-                "pool_id": pool_id,
-                "cluster_id": cluster_id,
-                "allocation_unit_id": cluster_id,
-                "near_group_ids": sorted({row["near_group_id"] for row in members}),
-                "trajectory_ids": sorted({row["trajectory_id"] for row in members if row["trajectory_id"]}),
-                "member_sequence_count": len(members),
-                "row_count": sum(row["replicate_count"] for row in members),
-                "context": sorted({source["context"] for row in members for source in row["context_sources"]}),
-                "independent_evidence_unit": "complete allocation unit including applicable near-component and trajectory constraints",
-            })
+        selection_stats[role] = {"eligible_allocation_units": 0, "cross_role_blocked_allocation_units": 0, "selected_allocation_units": 0, "per_pool": []}
+        for pool_index in range(pool_counts[role]):
+            chosen, stats = select_complete_units(config, role, records, blocked)
+            stats["pool_id"] = role + f"_{pool_index:03d}"
+            selection_stats[role]["per_pool"].append(stats)
+            for key in ["eligible_allocation_units", "cross_role_blocked_allocation_units", "selected_allocation_units"]:
+                selection_stats[role][key] += stats[key]
+            size = config["pool_sizes"][role]
+            pool_id = role + f"_{pool_index:03d}"
+            pool_hash = compute_pool_hash(config, pool_id, split_hash, chosen)
+            pool_hashes[pool_id] = pool_hash
+            for index, row in enumerate(chosen):
+                member = {
+                    "pool_id": pool_id,
+                    "pool_role": role,
+                    "pool_index": index,
+                    "pool_size": size,
+                    "pool_hash": pool_hash,
+                    "cluster_id": row["allocation_unit_id"],
+                    "allocation_unit_id": row["allocation_unit_id"],
+                    "near_group_id": row["near_group_id"],
+                    "trajectory_id": row["trajectory_id"],
+                    "sequence_id": row["sequence_id"],
+                    "row_id": row["source_row_ids"][0],
+                    "source_row_ids": row["source_row_ids"],
+                    "utr50": row["utr50"],
+                    "context": row["context"],
+                    "context_sources": row["context_sources"],
+                    "outer_stratum": row["outer_stratum"],
+                    "source_library": row["source_library"],
+                    "source_file": row["source_file"],
+                    "source_file_sha256": row["source_file_sha256"],
+                    "raw_row_sha256": row["raw_row_sha256"],
+                    "replicate_ids": row["replicate_ids"],
+                    "replicate_count": row["replicate_count"],
+                    "paired_repeat_group_id": "paired_" + sha256_text(row["sequence_id"])[:24],
+                    "paired_repeat": row["replicate_count"] > 1,
+                    "independent_evidence": row["replicate_count"] == 1,
+                    "q_rule": config["q_rule"],
+                    "q_value": 1.0 / size,
+                    "q_expression": f"1/{size}",
+                    "source_split_hash": split_hash,
+                    "source_split_manifest_sha256": split_manifest_hash,
+                    "synthetic": False,
+                }
+                all_members.append(member)
+            cluster_groups = defaultdict(list)
+            for row in chosen:
+                cluster_groups[row["allocation_unit_id"]].append(row)
+            for cluster_id, members in sorted(cluster_groups.items()):
+                all_clusters.append({
+                    "pool_id": pool_id,
+                    "cluster_id": cluster_id,
+                    "allocation_unit_id": cluster_id,
+                    "near_group_ids": sorted({row["near_group_id"] for row in members}),
+                    "trajectory_ids": sorted({row["trajectory_id"] for row in members if row["trajectory_id"]}),
+                    "member_sequence_count": len(members),
+                    "row_count": sum(row["replicate_count"] for row in members),
+                    "context": sorted({source["context"] for row in members for source in row["context_sources"]}),
+                    "independent_evidence_unit": "complete allocation unit including applicable near-component and trajectory constraints",
+                })
     sequence_roles = defaultdict(set)
     for member in all_members:
         sequence_roles[member["sequence_id"]].add(member["pool_role"])
@@ -287,7 +296,7 @@ def build(config, output, exclusions=None):
         "selection_rule": config["selection_rule"],
         "selection_stats": selection_stats,
         "pool_hashes": pool_hashes,
-        "pool_counts": {role: 1 for role in ROLES},
+        "pool_counts": pool_counts,
         "pool_sizes": dict(config["pool_sizes"]),
         "pool_members": len(all_members),
         "pool_clusters": len(all_clusters),
@@ -310,7 +319,7 @@ def build(config, output, exclusions=None):
         "E1_enabled": False,
         "synthetic": False,
         "statistical_limitations": [
-            "One fixed pool per role; this is a protocol fixture, not an independent replication series.",
+            "Pools are disjoint complete allocation units within the same study; they are not independent studies or external replications.",
             "No variance, confidence interval or generalization claim is authorized from these pool sizes.",
             "Paired repeats, if present, are not independent biological evidence.",
             "External random contexts are outside the main E1 context.",

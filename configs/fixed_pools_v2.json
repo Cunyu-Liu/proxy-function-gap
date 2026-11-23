@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "pool_version": "fresh-proxy-fixed-pools-v2",
+  "parent_child_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/fresh_proxy_cnn_v2/build_a",
+  "parent_pack_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a",
+  "parent_split_v1_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v1",
+  "parent_split_v2_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v2",
+  "input_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/fresh_proxy_fixed_pools_v2",
+  "build_names": ["build_a", "build_b"],
+  "pool_sizes": {
+    "dev": 64,
+    "calibration": 64,
+    "outer_random": 256,
+    "outer_designed": 64
+  },
+  "pool_counts": {
+    "dev": 32,
+    "calibration": 16,
+    "outer_random": 4,
+    "outer_designed": 16
+  },
+  "designed_context": "eGFP|unmod|designed_single_assay",
+  "main_random_stratum": "random_main|eGFP_unmod_rep1",
+  "replicate_summary_rule": "Deduplicate by normalized sequence_id within sequence/context. Preserve all source row IDs and replicate IDs. If a future role uses multiple measured replicates, Evaluator summarizes measured MRL by median within sequence/context, excludes missing values from the median and retains replicate count/missingness. Replicate rows and paired repeats are not independent biological evidence.",
+  "q_rule": "Uniform over unique feasible sequence_id values within each fixed pool, q=1/N. q is not an independent-evidence weight and does not remove paired-repeat dependence.",
+  "E1_enabled": false,
+  "outer_scoring_enabled": false,
+  "synthetic": false,
+  "selection_rule": "Within each role, build the declared number of disjoint pools; exclude control IDs/units and all cross-role/cross-pool sequence/near/allocation/trajectory conflicts. Aggregate contexts by sequence; sort complete allocation units by unique-sequence count, context count, source-row count, then SHA256(pool_version|role|unit_id); use deterministic exact subset-sum for each configured pool size without splitting a unit. No labels or scores are used."
+}
