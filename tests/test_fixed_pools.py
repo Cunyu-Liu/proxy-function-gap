@@ -92,3 +92,11 @@ class DisjointMultiPoolTests(unittest.TestCase):
         self.assertNotEqual(first[0]["sequence_id"], second[0]["sequence_id"])
         with self.assertRaisesRegex(ValueError, "No exact complete-allocation-unit pool"):
             select_complete_units(config, "dev", rows, blocked)
+
+
+class LabelCompletenessTests(unittest.TestCase):
+    def test_outer_missing_or_nonfinite_labels_are_excluded_without_using_values(self):
+        from gate0_sample2019.fixed_pools import label_complete_rows
+        rows = [{"sequence_id": "a", "measured_rl": "1.0"}, {"sequence_id": "b", "measured_rl": ""}, {"sequence_id": "c", "measured_rl": "nan"}]
+        self.assertEqual([row["sequence_id"] for row in label_complete_rows(rows, "outer_random")], ["a"])
+        self.assertEqual(len(label_complete_rows(rows, "dev")), 3)

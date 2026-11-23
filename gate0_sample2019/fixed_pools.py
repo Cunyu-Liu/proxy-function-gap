@@ -1,6 +1,7 @@
 import argparse
 import gzip
 import json
+import math
 from collections import defaultdict
 from pathlib import Path
 
@@ -30,13 +31,20 @@ def write_jsonl(path, rows):
     raw.close()
 
 
+def label_complete_rows(rows, role):
+    if role not in {"outer_random", "outer_designed"}:
+        return list(rows)
+    return [row for row in rows if row.get("measured_rl") and math.isfinite(float(row["measured_rl"]))]
+
+
 def source_rows(config, role):
     if role in {"dev", "calibration"}:
         path = Path(config["parent_pack_dir"]) / "learner" / (role + ".tsv.gz")
     else:
         filename = "random_outer_rows.tsv.gz" if role == "outer_random" else "designed_outer_rows.tsv.gz"
         path = Path(config["parent_child_dir"]) / "evaluator" / filename
-    return [{key: value for key, value in row.items() if key in METADATA_FIELDS} for row in read_tsv(path)]
+    rows = label_complete_rows(read_tsv(path), role)
+    return [{key: value for key, value in row.items() if key in METADATA_FIELDS} for row in rows]
 
 
 def control_exclusions(config):
