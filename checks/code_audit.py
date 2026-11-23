@@ -91,6 +91,12 @@ def main():
     assert gate0_runtime.count('subprocess.check_output(["git"') == 4
     provenance = (ROOT / "gate0" / "PROVENANCE.md").read_text(encoding="utf-8")
     assert SOURCE_COMMIT in provenance
+    for excluded in (
+        "gate0/configs/split_v1.json",
+        "gate0/gate0_sample2019/freeze_split.py",
+        "gate0/gate0_sample2019/protocol.py",
+    ):
+        assert not (ROOT / excluded).exists(), excluded
     subprocess.check_call(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", SOURCE_COMMIT, "HEAD"])
 
     tracked = [
