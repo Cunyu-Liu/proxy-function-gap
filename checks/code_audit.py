@@ -10,7 +10,7 @@ E0_SOURCE = ROOT / "src" / "proxy_function_gap"
 TRAINER_SOURCE = E0_SOURCE / "trainer"
 GATE0_SOURCE = ROOT / "gate0" / "gate0_sample2019"
 RUNTIME_SOURCE = ROOT / "runtime" / "src" / "sample_runtime"
-E0_IMPORTS = {"argparse", "dataclasses", "enum", "hashlib", "json", "math", "pathlib", "random", "typing"}
+E0_IMPORTS = {"argparse", "copy", "csv", "dataclasses", "enum", "gzip", "hashlib", "io", "json", "math", "numpy", "pathlib", "random", "torch", "typing"}
 GATE0_IMPORTS = {
     "argparse", "ast", "csv", "datetime", "fcntl", "gzip", "hashlib", "io", "itertools", "json",
     "collections", "math", "numpy", "os", "pathlib", "platform", "re", "struct", "subprocess", "sys", "zipfile",

@@ -1,6 +1,6 @@
 # Proxy–Function Gap：E0 + Gate 0
 
-本仓库包含 E0 固定完整序列候选池的合成验证，以及保留来源历史的 Sample 2019 Gate 0 可复现处理代码。E0 主方法是 **FP-REJ**（有界拒绝采样），**FP-TILT** 是解析 V 倾斜对照；另有 Random、BoN、按序列身份加权投票的 WSC 和 verifier reward argmax 的 greedy。Gate 0 只提供 proposed/unfrozen 的 split-ready groups；本整合不实现 split/vault，不做真实模型推理或训练，不进入 E1。
+本仓库包含 E0 固定完整序列候选池合成验证、Sample 2019 Gate 0/split-vault、三种子 fresh CUDA proxy、三成员推理、V/Q 校准与固定池选择。E0 主方法是 **FP-REJ**（有界拒绝采样），**FP-TILT** 是解析 V 倾斜对照；另有 Random、BoN、LCB、按序列身份加权投票的 WSC 和 verifier reward argmax 的 greedy。生产分析只使用冻结的 dev/calibration Learner 角色；outer 标签和 E1 评分仍关闭。
 
 ## 协议边界
 
@@ -34,7 +34,9 @@ export CUBLAS_WORKSPACE_CONFIG=:4096:8
 
 split-v2 来源提交 `05eb96b5e730c9dd6cebc96486220bd6266c30d9` 通过 subtree merge `56d3e3b` 保留；独立 Sample runtime 来源提交 `3c8d047816a4a216a3954c66112c1e858c7dc2c7` 通过 subtree merge `981a3de` 保留。官方 GPL Python 代码和 HDF5 权重未复制进 Git，详见 `runtime/PROVENANCE.md`。
 
-fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同一显式 CUDA 设备并行，生产 NPZ 与 fresh TSV 逐角色 row_id/source/order hash 强校验，train-only scaler、同一 eval 模型的 full-train/dev 停止、dev absolute best 重置、无 epoch/step 上限、原子 checkpoint 和完整 history 均有测试。完成态 checkpoint 拒绝续训，resume 校验 expected SHA256 及代码/模型/配置/scaler/data/order 身份。正式训练未启动；`preflight`、`cuda-self-check`、`synthetic-train-smoke` 与 `train --execute-training` 分离，smoke 不是科学结果。
+fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同一显式 CUDA 设备并行，生产 NPZ 与 fresh TSV 逐角色 row_id/source/order hash 强校验，train-only scaler、同一 eval 模型的 full-train/dev 停止、dev absolute best 重置、无 epoch/step 上限、原子 checkpoint 和完整 history 均有测试。完成态 checkpoint 拒绝续训，resume 校验 expected SHA256 及代码/模型/配置/scaler/data/order 身份。三种子正式训练已完成收敛，详见 `docs/FRESH_CNN_FORMAL_RUN1.md`；smoke 与训练收敛均不是科学功能结论。
+
+生产推理与 V/Q/固定池协议见 `docs/ENSEMBLE_INFERENCE_RUN.md`、`docs/V_Q_SELECTION_PROTOCOL.md` 和 `docs/POOL_MANIFEST_SCHEMA.md`。唯一有效的 MRL 推理来源是 ensemble-v2；ensemble-v1 及其派生结果因缺少标签逆变换而作废。生产池严格绑定固定池来源、Learner 标签许可和推理 lineage，生产选择执行真实 CUDA forward 并记录实际成本。
 
 ## Gate 0 集成
 

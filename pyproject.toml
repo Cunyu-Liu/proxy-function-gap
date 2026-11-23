@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "proxy-function-gap"
-version = "0.4.3"
+version = "0.5.0"
 description = "E0, Gate 0, Sample runtime, and fresh CUDA proxy training checks"
 requires-python = ">=3.10"
 dependencies = ["numpy>=2.2,<3", "torch>=2.7,<3", "h5py>=3.14,<4"]
@@ -20,6 +20,7 @@ proxy-gap-gate0-verify = "gate0_sample2019.verify:main"
 proxy-gap-gate0-finalize = "gate0_sample2019.finalize:main"
 proxy-gap-gate0-validate = "gate0_sample2019.validate_delivery:main"
 proxy-gap-trainer = "proxy_function_gap.trainer.cli:main"
+proxy-gap-pool = "proxy_function_gap.pool_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "gate0", "runtime/src"]
