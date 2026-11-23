@@ -38,6 +38,8 @@ fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同
 
 生产推理与 V/Q/固定池协议见 `docs/ENSEMBLE_INFERENCE_RUN.md`、`docs/V_Q_SELECTION_PROTOCOL.md` 和 `docs/POOL_MANIFEST_SCHEMA.md`。唯一有效的 MRL 推理来源是 ensemble-v2；ensemble-v1 及其派生结果因缺少标签逆变换而作废。生产池严格绑定固定池来源、Learner 标签许可和推理 lineage，生产选择执行真实 CUDA forward 并记录实际成本。
 
+VGSC 固定池 pilot 的已复核负结果与门禁决定见 `docs/PILOT_V3_RESULT.md`；outer 协议见 `docs/E1_OUTER_PROTOCOL.md`。FP-REJ/Q 未通过主线门禁，当前不声称预印本完成。
+
 ## Gate 0 集成
 
 Gate 0 代码位于 `gate0/gate0_sample2019/`，来源为 `/home/proxy-function-gap-data` 的提交 `25d6fd4a8133aadde85f6cc4718503c0efe21249`。通过 Git subtree ancestry 和 `gate0/PROVENANCE.md` 保留 provenance；staging 未修改。打包、命令和数据边界见 `docs/GATE0_INTEGRATION.md`。原始与派生数据继续放在 `/teams`，不进入 Git。

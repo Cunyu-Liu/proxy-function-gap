@@ -45,10 +45,13 @@ class FreshMemberScorer:
             raise ValueError("selection model hash mismatch")
         self.model = model
 
-    def __call__(self, candidate):
-        values = encode_utr50(self.pool.utr50[candidate.index])
+    def score_index(self, index):
+        values = encode_utr50(self.pool.utr50[index])
         normalized = predict_array(self.model, values, 1, self.device, self.dtype)
         return float(inverse_target_transform(normalized, self.scaler)[0])
+
+    def __call__(self, candidate):
+        return self.score_index(candidate.index)
 
 
 class ProductionVScorer:

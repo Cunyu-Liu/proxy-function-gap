@@ -7,6 +7,8 @@ from .inference import EnsembleInferenceConfig, run_ensemble_inference
 from .pool_manifest import combine_pools, load_pool_manifest
 from .production_pool import build_production_pool
 from .production_selection import run_production_grid
+from .outer_learner import load_outer_pool, run_outer_grid
+from .outer_evaluator import evaluate_outer_pool
 from .q_head import QHeadConfig, fit_q_head, save_q_head_artifacts
 from .selection_eval import SelectionRecord, run_budget_grid, selection_config_hash, write_selection_records
 from .v_head import VHeadConfig, fit_v_head, save_v_head_artifacts
@@ -49,6 +51,20 @@ def main(argv=None):
     production_grid.add_argument("--inference-config", required=True)
     production_grid.add_argument("--v-artifacts", required=True)
     production_grid.add_argument("--output", required=True)
+    outer_grid = commands.add_parser("outer-grid")
+    outer_grid.add_argument("--source-pool-manifest", required=True)
+    outer_grid.add_argument("--pool-id", required=True)
+    outer_grid.add_argument("--inference-config", required=True)
+    outer_grid.add_argument("--v-artifacts", required=True)
+    outer_grid.add_argument("--q-artifacts", required=True)
+    outer_grid.add_argument("--frozen-config", required=True)
+    outer_grid.add_argument("--output", required=True)
+    evaluate_outer = commands.add_parser("evaluate-outer")
+    evaluate_outer.add_argument("--source-pool-manifest", required=True)
+    evaluate_outer.add_argument("--pool-id", required=True)
+    evaluate_outer.add_argument("--selection", required=True)
+    evaluate_outer.add_argument("--q-decisions", required=True)
+    evaluate_outer.add_argument("--output", required=True)
     grid = commands.add_parser("synthetic-grid")
     grid.add_argument("--manifest", required=True)
     grid.add_argument("--output", required=True)
@@ -64,7 +80,7 @@ def main(argv=None):
     fit_q.add_argument("--strategy", default="fp-rej")
     fit_q.add_argument("--alpha", type=float, default=5)
     fit_q.add_argument("--proposal-cap", type=int, default=4)
-    fit_q.add_argument("--seed", type=int, default=101)
+    fit_q.add_argument("--seeds", type=int, nargs="+", default=[101, 202, 303, 404, 505])
     args = parser.parse_args(argv)
     if args.command == "ensemble-inference":
         print(json.dumps(run_ensemble_inference(EnsembleInferenceConfig.from_json(args.config)), indent=2, sort_keys=True))
@@ -82,6 +98,16 @@ def main(argv=None):
         inference = EnsembleInferenceConfig.from_json(args.inference_config)
         config_hash = run_production_grid(pool, inference, args.v_artifacts, args.output)
         print(json.dumps({"selection_config_sha256": config_hash, "pool_id": pool.pool_id, "actual_cuda_inference": True, "scientific_result": False}))
+        return 0
+    if args.command == "outer-grid":
+        pool = load_outer_pool(args.source_pool_manifest, args.pool_id)
+        inference = EnsembleInferenceConfig.from_json(args.inference_config)
+        config_hash = run_outer_grid(pool, inference, args.v_artifacts, args.q_artifacts, args.frozen_config, args.output)
+        print(json.dumps({"selection_config_sha256": config_hash, "pool_id": pool.pool_id, "outer_labels_read": False}))
+        return 0
+    if args.command == "evaluate-outer":
+        result = evaluate_outer_pool(args.source_pool_manifest, args.pool_id, args.selection, args.q_decisions, args.output)
+        print(json.dumps(result))
         return 0
     if args.command == "synthetic-grid":
         pool = load_pool_manifest(args.manifest)
@@ -128,11 +154,11 @@ def main(argv=None):
                 and record.strategy == args.strategy
                 and record.alpha == args.alpha
                 and record.proposal_cap == args.proposal_cap
-                and record.seed == args.seed
+                and record.seed in args.seeds
             ]
-            if len(matching) != 1:
-                raise ValueError(f"expected one frozen selection for {pool.pool_id}")
-            output.append((pool, matching[0]))
+            if len(matching) != len(args.seeds):
+                raise ValueError(f"expected the frozen seed set for {pool.pool_id}")
+            output.extend((pool, record) for record in matching)
         return output
     result = fit_q_head(examples(args.dev), examples(args.calibration), QHeadConfig(), frozen_selection_hash)
     result["selection_sources"] = selection_sources

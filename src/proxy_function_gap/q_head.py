@@ -114,7 +114,7 @@ def fit_q_head(dev_examples, calibration_examples, config: QHeadConfig, selectio
         "calibration_groups": cal_groups,
         "calibrated": calibrated,
         "platt": platt,
-        "input_pools": tuple(source for pool, _ in dev_examples + calibration_examples for source in pool.source_manifests),
+        "input_pools": tuple(dict.fromkeys(source for pool, _ in dev_examples + calibration_examples for source in pool.source_manifests)),
     }
 
 

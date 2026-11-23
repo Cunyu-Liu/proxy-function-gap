@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
+from .constraints import UTRConstraints, utr_constraint_mask
 from .pool import CandidatePool
 from .pool_manifest import PoolData
 from .selection import Budget, select
@@ -115,7 +116,8 @@ class SelectionRecord:
 
 
 def evaluate_strategy(pool: PoolData, member_scorers, verifier_values, strategy, alpha, proposal_cap, seed, lambda_=1.0, v_model=None):
-    candidate_pool = CandidatePool(pool.sequence_ids, pool.sequence_ids, pool.proposal_probs)
+    feasible = utr_constraint_mask(tuple(value.replace("T", "U") for value in pool.utr50), UTRConstraints(min_length=50, max_length=50))
+    candidate_pool = CandidatePool(pool.sequence_ids, pool.utr50, pool.proposal_probs, feasible=feasible)
     provider = EnsembleScoreProvider(pool, member_scorers, verifier_values, v_model)
     selected_index = None
     proxy_calls = 0
@@ -140,7 +142,7 @@ def evaluate_strategy(pool: PoolData, member_scorers, verifier_values, strategy,
         proxy_calls = result.calls["proxy_item_forwards"]
         verifier_calls = result.calls["verifier_item_forwards"]
         proposals = result.calls["proposals"]
-    regret = None if selected_index is None else float(np.max(pool.measured) - pool.measured[selected_index])
+    regret = None if selected_index is None or pool.measured is None else float(np.max(pool.measured) - pool.measured[selected_index])
     return SelectionRecord(
         pool_id=pool.pool_id,
         strategy=strategy,

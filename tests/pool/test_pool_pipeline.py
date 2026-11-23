@@ -263,3 +263,26 @@ def test_inverse_target_transform_restores_measured_units():
     assert np.allclose(restored, [4.5, 6.5, 10.5])
     with pytest.raises(ValueError, match="train-only"):
         inverse_target_transform(values, {"mean": 6.5, "scale": 2.0, "fit_role": "dev"})
+
+
+def test_unlabeled_outer_selection_never_computes_regret(pool_factory, member_scorers):
+    import dataclasses
+    pool, _, _ = pool_factory("unlabeled")
+    pool = dataclasses.replace(pool, measured=None)
+    from proxy_function_gap.selection_eval import evaluate_strategy
+    record = evaluate_strategy(pool, member_scorers(pool), np.zeros(len(pool)), "bon", 0, 2, 101)
+    assert record.regret is None
+    assert record.ensemble_member_item_forwards == 6
+
+
+def test_production_candidates_use_utr50_and_length_mask(pool_factory, member_scorers):
+    import dataclasses
+    pool, _, _ = pool_factory("constraint")
+    sequences = list(pool.utr50)
+    sequences[0] = "A"
+    members = pool.member_predictions.copy()
+    members[:, 0] = 100.0
+    pool = dataclasses.replace(pool, utr50=tuple(sequences), member_predictions=members)
+    from proxy_function_gap.selection_eval import evaluate_strategy
+    record = evaluate_strategy(pool, member_scorers(pool), np.zeros(len(pool)), "bon", 0, 16, 101)
+    assert record.selected_index != 0

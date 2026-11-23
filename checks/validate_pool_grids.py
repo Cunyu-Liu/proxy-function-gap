@@ -14,12 +14,13 @@ def main():
     parser.add_argument("--pool-root", required=True)
     parser.add_argument("--selection-dir", required=True)
     parser.add_argument("--count", type=int, required=True)
+    parser.add_argument("--role", choices=["dev", "calibration"], default="dev")
     args = parser.parse_args()
     root = Path(args.selection_dir)
     summaries = []
     errors = []
     for index in range(args.count):
-        pool_id = f"dev_{index:03d}"
+        pool_id = f"{args.role}_{index:03d}"
         path = root / f"{pool_id}.json"
         pool = load_pool_manifest(Path(args.pool_root) / pool_id / "pool_manifest.json")
         payload = json.loads(path.read_text())
