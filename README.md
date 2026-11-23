@@ -68,3 +68,15 @@ For main-repository integration, use `integration_manifest.json` in the split ou
 Target/step `designed=False` observations and their full allocation units are control-only. The first 40,000 scaler rows and linked components, official train/test/boundary rows and all near-duplicate components remain isolated. Replicate 2, modified RNA and mCherry are independent contexts and are not pooled with eGFP unmodified replicate 1.
 
 Control assignment takes precedence over official train/test/boundary roles for any allocation unit containing target/step `designed=False`; official exposure remains recorded in `official_model_role` and `exposure_flags`, and the unit still cannot become outer. If all step trajectories are excluded by training/scaler/control lineage, `original_Paper1_historical_replay_authorized` is false rather than inventing a historical outer pool.
+
+## Fresh proxy data packs
+
+`configs/fresh_proxy_v1.json` builds deterministic train/dev/calibration/query packages without opening outer label vaults or the label-bearing total sequence index. Only eGFP unmodified replicate 1 and the designed single assay are included. Rep2, modified RNA and mCherry remain separate and are not packed. Query has no measured-label column and no outer Learner package is produced. Train-only scaling statistics are deferred to the trainer.
+
+```bash
+/root/miniconda3/bin/python -m gate0_sample2019.fresh_proxy_pack --config configs/fresh_proxy_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.verify_fresh_proxy --config configs/fresh_proxy_v1.json
+# After all three rounds pass, commit staging and run:
+/root/miniconda3/bin/python -m gate0_sample2019.finalize_fresh_proxy --config configs/fresh_proxy_v1.json
+/root/miniconda3/bin/python -m gate0_sample2019.validate_fresh_proxy_delivery --config configs/fresh_proxy_v1.json
+```
