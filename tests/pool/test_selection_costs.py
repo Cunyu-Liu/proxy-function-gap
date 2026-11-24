@@ -180,3 +180,71 @@ def test_production_grid_records_cost_budget_and_rerun_requirement(pool_factory,
     assert metadata["cost_ledger_schema_version"] == "2.0"
     assert metadata["pre_cost_ledger_results_require_rerun"] is True
     assert payload["records"][0]["total_model_item_forwards"] == 14
+
+
+
+def test_production_grid_cli_passes_actual_cost_budget(pool_factory, tmp_path, monkeypatch):
+    import proxy_function_gap.pool_cli as cli
+
+    pool, manifest_path, _ = pool_factory("cost-cli")
+    captured = {}
+
+    def fake_grid(pool, inference, v_artifacts, output, actual_cost_budget=None):
+        captured.update(output=output, actual_cost_budget=actual_cost_budget)
+        return "a" * 64
+
+    monkeypatch.setattr(cli, "load_pool_manifest", lambda path: pool)
+    monkeypatch.setattr(cli.EnsembleInferenceConfig, "from_json", lambda path: object())
+    monkeypatch.setattr(cli, "run_production_grid", fake_grid)
+    output = tmp_path / "selection.json"
+    cli.main([
+        "production-grid", "--manifest", str(manifest_path), "--inference-config", "inference.json",
+        "--v-artifacts", "v", "--output", str(output), "--actual-cost-budget", "48",
+    ])
+    assert captured == {"output": str(output), "actual_cost_budget": 48}
+
+
+def test_record_loader_preserves_split_and_q_costs(pool_factory):
+    from proxy_function_gap.pool_cli import _record
+
+    pool, _, _ = pool_factory("cost-record")
+    original = make_record(pool, proxy_item_forwards=1, proxy_member_item_forwards=3, q_model_item_forwards=4)
+    restored = _record(original.to_dict())
+    assert restored.proxy_member_item_forwards == 3
+    assert restored.verifier_member_item_forwards == 6
+    assert restored.q_model_item_forwards == 4
+    assert restored.total_model_item_forwards == original.total_model_item_forwards
+
+
+def test_dev_q_decisions_write_raw_calibrated_domain_and_cost(pool_factory, tmp_path, monkeypatch):
+    from proxy_function_gap.outer_learner import run_q_decisions
+
+    pool, _, _ = pool_factory("q-decisions")
+    records = [make_record(pool, strategy="fp-rej", alpha=20, proposal_cap=16, seed=seed) for seed in (101, 202, 303, 404, 505)]
+    selection = tmp_path / "selection.json"
+    write_selection_records(records, selection, metadata={"actual_cuda_inference": True, "outer_labels_read": False})
+    artifacts = tmp_path / "q"
+    artifacts.mkdir()
+    (artifacts / "q_manifest.json").write_text("{}\n")
+
+    class FakeQ:
+        manifest = {"threshold_domain": "platt_calibrated_probability"}
+        threshold = 0.75
+
+        def __init__(self, artifacts):
+            pass
+
+        def predict(self, pool, record):
+            return {"pool_id": pool.pool_id, "seed": record.seed, "raw_q_probability": 0.4, "q_probability": 0.8, "threshold": 0.75, "threshold_domain": self.manifest["threshold_domain"], "abstain": True, "q_model_item_forwards": 4}
+
+    monkeypatch.setattr("proxy_function_gap.outer_learner.ProductionQScorer", FakeQ)
+    output = tmp_path / "q.json"
+    result = run_q_decisions(pool, selection, artifacts, output)
+    payload = json.loads(output.read_text())
+    assert result["actual_cuda_inference"] is True
+    assert payload["q_feature_member_item_forwards"] == 0
+    assert payload["q_model_item_forwards"] == 20
+    assert payload["threshold_domain"] == "platt_calibrated_probability"
+    assert len(payload["decisions"]) == 5
+    assert payload["decisions"][0]["raw_q_probability"] == 0.4
+    assert payload["decisions"][0]["q_probability"] == 0.8

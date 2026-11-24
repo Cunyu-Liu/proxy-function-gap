@@ -123,6 +123,7 @@ def test_production_q_scorer_compares_calibrated_probability_in_declared_domain(
     decision = scorer.predict(pool, SimpleNamespace(seed=101, ensemble_member_item_forwards=6))
 
     assert np.allclose(platt_inputs, [[[0.3]]])
+    assert decision["raw_q_probability"] == pytest.approx(0.3)
     assert decision["q_probability"] == 0.8
     assert decision["threshold"] == 0.75
     assert decision["threshold_domain"] == Q_THRESHOLD_DOMAIN

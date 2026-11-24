@@ -56,7 +56,7 @@ def main():
         assert np.isclose(float(1 - abstain.mean()), row["coverage"], rtol=0, atol=1e-12)
         mean_regret = float(expected_oof["regret"][~abstain].mean())
         assert np.isclose(mean_regret, row["mean_regret"], rtol=0, atol=1e-12)
-    report = {"round": args.round, "pass": True, "calibration_pools": args.count, "calibration_selection_rows": len(records), "raw_log_loss": log_loss(expected["target"], raw), "calibrated_log_loss": log_loss(expected["target"], calibrated), "cuda_recomputed": True, "outer_labels_read": False, "scientific_result": False}
+    report = {"round": args.round, "pass": True, "calibration_pools": args.count, "calibration_selection_rows": len(records), "threshold_domain": manifest["threshold_domain"], "selected_threshold": manifest["selected_threshold"], "raw_log_loss": log_loss(expected["target"], raw), "calibrated_log_loss": log_loss(expected["target"], calibrated), "oof_raw_log_loss": log_loss(expected_oof["target"], expected_oof["raw_q"]), "oof_calibrated_log_loss": log_loss(expected_oof["target"], calibrated_oof), "cuda_recomputed": True, "outer_labels_read": False, "scientific_result": False}
     output = root / f"verification_round{args.round}.json"
     output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report))

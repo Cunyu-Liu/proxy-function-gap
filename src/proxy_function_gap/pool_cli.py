@@ -7,7 +7,7 @@ from .inference import EnsembleInferenceConfig, run_ensemble_inference
 from .pool_manifest import combine_pools, load_pool_manifest
 from .production_pool import build_production_pool
 from .production_selection import run_production_grid
-from .outer_learner import load_outer_pool, run_outer_grid
+from .outer_learner import load_outer_pool, run_outer_grid, run_q_decisions
 from .outer_evaluator import evaluate_outer_pool
 from .castillo import build_castillo_context, evaluate_castillo_pool, load_castillo_pool, run_castillo_grid
 from .proxy_noise import run_noise_grid
@@ -33,6 +33,9 @@ def _record(value):
         abstain=value["abstain"],
         verifier_item_forwards=value.get("verifier_item_forwards", 0),
         v_model_item_forwards=value.get("v_model_item_forwards", 0),
+        proxy_member_item_forwards=value.get("proxy_member_item_forwards"),
+        verifier_member_item_forwards=value.get("verifier_member_item_forwards"),
+        q_model_item_forwards=value.get("q_model_item_forwards", 0),
     )
 
 
@@ -53,6 +56,12 @@ def main(argv=None):
     production_grid.add_argument("--inference-config", required=True)
     production_grid.add_argument("--v-artifacts", required=True)
     production_grid.add_argument("--output", required=True)
+    production_grid.add_argument("--actual-cost-budget", type=int)
+    q_decisions = commands.add_parser("q-decisions")
+    q_decisions.add_argument("--manifest", required=True)
+    q_decisions.add_argument("--selection", required=True)
+    q_decisions.add_argument("--q-artifacts", required=True)
+    q_decisions.add_argument("--output", required=True)
     outer_grid = commands.add_parser("outer-grid")
     outer_grid.add_argument("--source-pool-manifest", required=True)
     outer_grid.add_argument("--pool-id", required=True)
@@ -121,8 +130,13 @@ def main(argv=None):
     if args.command == "production-grid":
         pool = load_pool_manifest(args.manifest)
         inference = EnsembleInferenceConfig.from_json(args.inference_config)
-        config_hash = run_production_grid(pool, inference, args.v_artifacts, args.output)
-        print(json.dumps({"selection_config_sha256": config_hash, "pool_id": pool.pool_id, "actual_cuda_inference": True, "scientific_result": False}))
+        config_hash = run_production_grid(pool, inference, args.v_artifacts, args.output, actual_cost_budget=args.actual_cost_budget)
+        print(json.dumps({"selection_config_sha256": config_hash, "pool_id": pool.pool_id, "actual_cost_budget": args.actual_cost_budget, "actual_cuda_inference": True, "scientific_result": False}))
+        return 0
+    if args.command == "q-decisions":
+        pool = load_pool_manifest(args.manifest)
+        result = run_q_decisions(pool, args.selection, args.q_artifacts, args.output)
+        print(json.dumps(result))
         return 0
     if args.command == "outer-grid":
         pool = load_outer_pool(args.source_pool_manifest, args.pool_id)

@@ -9,7 +9,7 @@ from .pool_manifest import load_pool_manifest
 from .production_pool import SUPPORT_DEFINITION, train_support
 from .production_selection import FreshMemberScorer, ProductionVScorer
 from .q_head import pool_features, require_q_threshold_domain
-from .selection_eval import SelectionRecord, run_budget_grid, write_selection_records
+from .selection_eval import SelectionRecord, run_budget_grid, selection_config_hash, write_selection_records
 from .small_model import build_classifier, predict_model
 from .trainer.cuda import configure_cuda
 from .trainer.data import canonical_row_order_hash, sha256_file
@@ -105,7 +105,7 @@ class ProductionQScorer:
         values = pool_features(pool, record).reshape(1, -1)
         raw = np.mean([predict_model(model, scaler, values, self.device, self.dtype)[0] for model, scaler in self.folds])
         probability = float(predict_model(self.platt[0], self.platt[1], np.asarray([[raw]]), self.device, self.dtype)[0])
-        return {"pool_id": pool.pool_id, "seed": record.seed, "q_probability": probability, "threshold": self.threshold, "threshold_domain": self.manifest["threshold_domain"], "abstain": probability >= self.threshold, "q_model_item_forwards": len(self.folds) + 1}
+        return {"pool_id": pool.pool_id, "seed": record.seed, "raw_q_probability": float(raw), "q_probability": probability, "threshold": self.threshold, "threshold_domain": self.manifest["threshold_domain"], "abstain": probability >= self.threshold, "q_model_item_forwards": len(self.folds) + 1}
 
 
 def _require_verified(root):
@@ -118,6 +118,45 @@ def _require_verified(root):
         report = json.loads(paths[0].read_text())
         if report.get("pass") is not True or report.get("outer_labels_read") is not False:
             raise PermissionError("pre-E1 verification is incomplete")
+
+
+def _write_q_decisions(pool, records, config_hash, q_artifacts, output, q_feature_member_item_forwards):
+    q_model = ProductionQScorer(q_artifacts)
+    decisions = [
+        q_model.predict(pool, record)
+        for record in records
+        if record.strategy == "fp-rej" and record.alpha == 20 and record.proposal_cap == 16
+    ]
+    if len(decisions) != 5:
+        raise ValueError("expected five frozen FP-REJ decisions per pool")
+    payload = {
+        "selection_config_sha256": config_hash,
+        "q_manifest_sha256": sha256_file(Path(q_artifacts) / "q_manifest.json"),
+        "threshold_domain": q_model.manifest["threshold_domain"],
+        "selected_threshold": q_model.threshold,
+        "q_feature_member_item_forwards": q_feature_member_item_forwards,
+        "q_feature_cost_basis": "actual_full_pool_member_forwards" if q_feature_member_item_forwards else "precomputed_pool_manifest_predictions",
+        "q_model_item_forwards": sum(row["q_model_item_forwards"] for row in decisions),
+        "decisions": decisions,
+        "outer_labels_read": False,
+    }
+    Path(output).write_text(json.dumps(payload, indent=2) + "\n")
+    return payload
+
+
+def run_q_decisions(pool, selection_path, q_artifacts, output):
+    if pool.pool_role not in ("dev", "calibration"):
+        raise PermissionError("q-decisions is restricted to dev/calibration pools")
+    payload = json.loads(Path(selection_path).read_text())
+    records = [SelectionRecord(**{key: value for key, value in row.items() if key in SelectionRecord.__dataclass_fields__}) for row in payload["records"]]
+    config_hash = selection_config_hash(records)
+    if config_hash != payload["selection_config_sha256"] or any(record.pool_id != pool.pool_id for record in records):
+        raise ValueError("Q decision selection identity mismatch")
+    metadata = payload["execution_metadata"]
+    if not metadata.get("actual_cuda_inference") or metadata.get("outer_labels_read"):
+        raise PermissionError("Q decisions require verified non-outer CUDA selections")
+    result = _write_q_decisions(pool, records, config_hash, q_artifacts, output, 0)
+    return {"pool_id": pool.pool_id, "decisions": len(result["decisions"]), "threshold_domain": result["threshold_domain"], "q_model_item_forwards": result["q_model_item_forwards"], "actual_cuda_inference": True}
 
 
 def run_outer_grid(pool, inference_config, v_artifacts, q_artifacts, frozen_config, output):
@@ -157,11 +196,6 @@ def run_outer_grid(pool, inference_config, v_artifacts, q_artifacts, frozen_conf
     )
     metadata["q_feature_member_item_forwards"] = int(member_values.size)
     config_hash = write_selection_records(records, output, metadata=metadata)
-    q_model = ProductionQScorer(q_artifacts)
-    decisions = []
-    for record in records:
-        if record.strategy == "fp-rej" and record.alpha == 20 and record.proposal_cap == 16:
-            decisions.append(q_model.predict(pool, record))
     q_path = output.with_name(output.stem + "_q.json")
-    q_path.write_text(json.dumps({"selection_config_sha256": config_hash, "decisions": decisions, "outer_labels_read": False}, indent=2) + "\n")
+    _write_q_decisions(pool, records, config_hash, q_artifacts, q_path, metadata["q_feature_member_item_forwards"])
     return config_hash

@@ -33,9 +33,15 @@ def main():
         metadata = payload["execution_metadata"]
         if metadata["pool_manifest_sha256"] != pool.manifest_sha256 or metadata["outer_labels_read"] or metadata["outer_metrics_computed"] or not metadata["actual_cuda_inference"]:
             errors.append(f"metadata_boundary:{pool_id}")
+        if metadata.get("cost_ledger_schema_version") != "2.0" or metadata.get("actual_cost_spent") != sum(row.total_model_item_forwards for row in records):
+            errors.append(f"cost_ledger_metadata:{pool_id}")
         for row in records:
             if row.ensemble_member_item_forwards != 3 * (row.proxy_item_forwards + row.verifier_item_forwards):
                 errors.append(f"member_forward_count:{pool_id}")
+            if row.proxy_member_item_forwards != 3 * row.proxy_item_forwards or row.verifier_member_item_forwards != 3 * row.verifier_item_forwards:
+                errors.append(f"split_member_forward_count:{pool_id}")
+            if row.total_model_item_forwards != row.ensemble_member_item_forwards + row.v_model_item_forwards + row.q_model_item_forwards:
+                errors.append(f"total_forward_count:{pool_id}")
             if row.v_model_item_forwards != 4 * row.verifier_item_forwards:
                 errors.append(f"v_forward_count:{pool_id}")
             if row.abstain:

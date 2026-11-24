@@ -27,8 +27,11 @@ def main():
         q_path = root / f"{pool_id}_q.json"
         decisions = json.loads(q_path.read_text())
         assert decisions["selection_config_sha256"] == payload["selection_config_sha256"] and not decisions["outer_labels_read"]
+        assert decisions["threshold_domain"] == "platt_calibrated_probability"
+        assert decisions["q_feature_member_item_forwards"] == metadata["q_feature_member_item_forwards"]
         assert len(decisions["decisions"]) == 5
-        assert all(0 <= row["q_probability"] <= 1 for row in decisions["decisions"])
+        assert all(0 <= row["raw_q_probability"] <= 1 and 0 <= row["q_probability"] <= 1 for row in decisions["decisions"])
+        assert decisions["q_model_item_forwards"] == sum(row["q_model_item_forwards"] for row in decisions["decisions"])
         reports.append({"pool_id": pool_id, "selection_sha256": sha256_file(path), "q_sha256": sha256_file(q_path), "records": len(records)})
     report = {"pass": True, "pools": reports, "records": sum(row["records"] for row in reports), "outer_labels_read": False, "outer_metrics_computed": False}
     (root / "learner_validation.json").write_text(json.dumps(report, indent=2) + "\n")
