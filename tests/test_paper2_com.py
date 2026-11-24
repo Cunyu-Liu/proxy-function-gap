@@ -39,6 +39,8 @@ class Paper2COMTest(unittest.TestCase):
         self.assertIsNotNone(log_alpha.grad)
         self.assertTrue(torch.isfinite(loss))
         self.assertGreaterEqual(float(alpha), 0)
+        expected_alpha_gradient = torch.sigmoid(log_alpha.detach()) * (config.overestimation_limit - conservatism)
+        self.assertTrue(torch.allclose(log_alpha.grad, expected_alpha_gradient, rtol=1e-5, atol=1e-5))
 
 
 if __name__ == "__main__":
