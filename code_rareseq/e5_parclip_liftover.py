@@ -41,10 +41,9 @@ def main():
                                     capture_output=True, text=True, env=env)
             if result.returncode:
                 raise RuntimeError(f"{experiment}: {result.stderr[-2000:]}")
-            original = pd.read_csv(source, sep="\t", header=None, usecols=[0, 1, 2, 5],
-                                   names=["chrom", "start", "end", "strand"])
-            lifted = pd.read_csv(target, sep="\t", header=None, usecols=[0, 1, 2, 5],
-                                 names=["chrom", "start", "end", "strand"])
+            columns = ["chrom", "start", "end", "name", "score", "strand"]
+            original = pd.read_csv(source, sep="\t", header=None, names=columns)
+            lifted = pd.read_csv(target, sep="\t", header=None, names=columns)
             if ((lifted.end - lifted.start) != 1).any():
                 raise ValueError(f"{experiment}: lifted non-point crosslink")
             before, after = len(original), len(lifted)
