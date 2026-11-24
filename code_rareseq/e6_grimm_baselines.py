@@ -150,7 +150,9 @@ def main():
     ap.add_argument("--emb-dir", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--seeds", default="0,1,2")
-    ap.add_argument("--epochs", type=int, default=5)
+    ap.add_argument("--epochs", type=int, default=1000)
+    ap.add_argument("--patience", type=int, default=20)
+    ap.add_argument("--min-delta", type=float, default=1e-4)
     ap.add_argument("--batch", type=int, default=512)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
@@ -200,6 +202,7 @@ def main():
             optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
             generator = torch.Generator(device="cuda").manual_seed(seed)
             best_score, best_state, best_epoch = -np.inf, None, None
+            stale = 0
             for epoch in range(1, args.epochs + 1):
                 model.train()
                 order = torch.randperm(len(train_x), device="cuda", generator=generator)
@@ -218,11 +221,15 @@ def main():
                 table = per_label(y["validation"], expit(val_logits), frequency, labels)
                 score = macro_ap(table[table.n_train < 100])
                 history.append({"seed": seed, "epoch": epoch, "train_loss": total / len(order),
-                                "val_tail100_macro_auprc": score})
-                if score > best_score:
-                    best_score, best_epoch = score, epoch
+                                "val_tail100_macro_auprc": score, "stale_epochs": stale})
+                if score > best_score + args.min_delta:
+                    best_score, best_epoch, stale = score, epoch, 0
                     best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
-                print("EPOCH", seed, epoch, score, flush=True)
+                else:
+                    stale += 1
+                print("EPOCH", seed, epoch, score, "stale", stale, flush=True)
+                if stale >= args.patience:
+                    break
             model.load_state_dict(best_state)
             model.eval()
             logits = {}
