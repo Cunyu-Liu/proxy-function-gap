@@ -27,27 +27,33 @@ class EnsembleScoreProvider:
         self.verifier_values = verifier_values
         self.v_model = v_model
         self.member_item_forwards = {seed: 0 for seed in (11, 23, 37)}
+        self.proxy_member_item_forwards = 0
+        self.verifier_member_item_forwards = 0
         self.v_model_item_forwards = 0
 
-    def _features(self, candidate):
+    def _features(self, candidate, kind):
         values = []
         for seed, scorer in zip((11, 23, 37), self.member_scorers):
             values.append(float(scorer(candidate)))
             self.member_item_forwards[seed] += 1
+            if kind == "proxy":
+                self.proxy_member_item_forwards += 1
+            else:
+                self.verifier_member_item_forwards += 1
         mean = float(np.mean(values))
         std = float(np.std(values, ddof=1))
         value_range = float(np.max(values) - np.min(values))
         return mean, std, value_range
 
     def proxy_mean(self, candidate):
-        return self._features(candidate)[0]
+        return self._features(candidate, "proxy")[0]
 
     def lcb(self, candidate):
-        mean, std, _ = self._features(candidate)
+        mean, std, _ = self._features(candidate, "proxy")
         return mean, std
 
     def verifier(self, candidate):
-        mean, std, value_range = self._features(candidate)
+        mean, std, value_range = self._features(candidate, "verifier")
         if self.v_model is not None:
             value = self.v_model(mean, std, value_range, self.pool.support[candidate.index], candidate.index)
             self.v_model_item_forwards += getattr(self.v_model, "last_item_forwards", 1)
@@ -95,6 +101,21 @@ class SelectionRecord:
     verifier_item_forwards: int = 0
     v_model_item_forwards: int = 0
     noise_sigma: float = 0.0
+    proxy_member_item_forwards: int = None
+    verifier_member_item_forwards: int = None
+    q_model_item_forwards: int = 0
+    total_model_item_forwards: int = None
+
+    def __post_init__(self):
+        if self.proxy_member_item_forwards is None:
+            object.__setattr__(self, "proxy_member_item_forwards", 3 * self.proxy_item_forwards)
+        if self.verifier_member_item_forwards is None:
+            object.__setattr__(self, "verifier_member_item_forwards", 3 * self.verifier_item_forwards)
+        object.__setattr__(
+            self,
+            "total_model_item_forwards",
+            self.ensemble_member_item_forwards + self.v_model_item_forwards + self.q_model_item_forwards,
+        )
 
     def to_dict(self):
         value = {
@@ -113,6 +134,10 @@ class SelectionRecord:
             "abstain": self.abstain,
             "verifier_item_forwards": self.verifier_item_forwards,
             "v_model_item_forwards": self.v_model_item_forwards,
+            "proxy_member_item_forwards": self.proxy_member_item_forwards,
+            "verifier_member_item_forwards": self.verifier_member_item_forwards,
+            "q_model_item_forwards": self.q_model_item_forwards,
+            "total_model_item_forwards": self.total_model_item_forwards,
         }
         if self.noise_sigma > 0:
             value["noise_sigma"] = self.noise_sigma
@@ -163,18 +188,25 @@ def evaluate_strategy(pool: PoolData, member_scorers, verifier_values, strategy,
         abstain=selected_index is None,
         verifier_item_forwards=verifier_calls,
         v_model_item_forwards=provider.v_model_item_forwards,
+        proxy_member_item_forwards=provider.proxy_member_item_forwards,
+        verifier_member_item_forwards=provider.verifier_member_item_forwards,
     )
 
 
-def run_budget_grid(pool: PoolData, member_scorers, verifier_values, alphas=ALPHAS, budgets=BUDGETS, seeds=PAIRED_SEEDS, lambda_=1.0, v_model=None):
+def run_budget_grid(pool: PoolData, member_scorers, verifier_values, alphas=ALPHAS, budgets=BUDGETS, seeds=PAIRED_SEEDS, lambda_=1.0, v_model=None, actual_cost_budget=None):
+    if actual_cost_budget is not None and (isinstance(actual_cost_budget, bool) or not isinstance(actual_cost_budget, int) or actual_cost_budget <= 0):
+        raise ValueError("actual_cost_budget must be a positive integer or None")
     records = []
+    actual_cost = 0
     for alpha in alphas:
         for proposal_cap in budgets:
             for seed in seeds:
                 for strategy in STRATEGIES:
-                    records.append(
-                        evaluate_strategy(pool, member_scorers, verifier_values, strategy, alpha, proposal_cap, seed, lambda_, v_model)
-                    )
+                    record = evaluate_strategy(pool, member_scorers, verifier_values, strategy, alpha, proposal_cap, seed, lambda_, v_model)
+                    records.append(record)
+                    actual_cost += record.total_model_item_forwards
+                    if actual_cost_budget is not None and actual_cost >= actual_cost_budget:
+                        return records
     return records
 
 
@@ -185,12 +217,15 @@ def selection_config_hash(records):
 
 def write_selection_records(records, path, metadata=None):
     config_hash = selection_config_hash(records)
+    execution_metadata = dict(metadata or {})
+    execution_metadata.setdefault("cost_ledger_schema_version", "2.0")
+    execution_metadata.setdefault("pre_cost_ledger_results_require_rerun", True)
     atomic_json_write(
         {
             "schema_version": "1.0",
             "selection_config_sha256": config_hash,
             "q_used_in_candidate_ranking": False,
-            "execution_metadata": metadata or {},
+            "execution_metadata": execution_metadata,
             "records": [record.to_dict() for record in records],
         },
         path,

@@ -5,7 +5,7 @@ import numpy as np
 import torch
 
 from .inference import EnsembleInferenceConfig, inverse_target_transform, predict_array
-from .selection_eval import run_budget_grid, write_selection_records
+from .selection_eval import ALPHAS, BUDGETS, PAIRED_SEEDS, STRATEGIES, run_budget_grid, write_selection_records
 from .small_model import build_classifier, predict_model
 from .trainer.checkpoint import load_checkpoint
 from .trainer.cuda import configure_cuda
@@ -98,7 +98,7 @@ class ProductionVScorer:
         return float(1 - calibrated)
 
 
-def run_production_grid(pool, inference_config, v_artifacts, output):
+def run_production_grid(pool, inference_config, v_artifacts, output, actual_cost_budget=None):
     if pool.synthetic or pool.manifest_path is None:
         raise PermissionError("production grid requires one non-synthetic manifest-backed pool")
     pool_manifest = json.loads(pool.manifest_path.read_text())
@@ -109,7 +109,7 @@ def run_production_grid(pool, inference_config, v_artifacts, output):
     members = [FreshMemberScorer(member, pool, inference_config) for member in inference_config.members]
     v_model = ProductionVScorer(v_artifacts)
     verifier_values = np.zeros(len(pool), dtype=np.float64)
-    records = run_budget_grid(pool, members, verifier_values, v_model=v_model)
+    records = run_budget_grid(pool, members, verifier_values, v_model=v_model, actual_cost_budget=actual_cost_budget)
     metadata = {
         "pool_manifest_sha256": pool.manifest_sha256,
         "source_pools": [{"path": str(path), "sha256": sha256} for path, sha256 in pool.source_manifests],
@@ -121,5 +121,8 @@ def run_production_grid(pool, inference_config, v_artifacts, output):
         "outer_labels_read": False,
         "outer_metrics_computed": False,
         "E1_enabled": False,
+        "actual_cost_budget": actual_cost_budget,
+        "actual_cost_spent": sum(record.total_model_item_forwards for record in records),
+        "grid_truncated_by_actual_cost": actual_cost_budget is not None and len(records) < len(ALPHAS) * len(BUDGETS) * len(PAIRED_SEEDS) * len(STRATEGIES),
     }
     return write_selection_records(records, output, metadata=metadata)

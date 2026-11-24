@@ -59,29 +59,37 @@ def build_castillo_context(raw_file, context, sample_role_paths, train_reference
     raw_file = Path(raw_file)
     output = Path(output)
     excluded = set()
+    sample_half_index = defaultdict(list)
     sample_hashes = {}
     for path in sample_role_paths:
         path = Path(path)
         sample_hashes[str(path)] = sha256_file(path)
         with gzip.open(path, "rt", newline="") as handle:
             for row in csv.DictReader(handle, delimiter="\t"):
-                excluded.add(row["utr50"])
+                sequence = row["utr50"]
+                if sequence not in excluded:
+                    _add_half_index(sequence, sample_half_index)
+                    excluded.add(sequence)
     candidate_limit = pool_count * pool_size * 20
-    heap = []
+    labels = defaultdict(list)
     with gzip.open(raw_file, "rt", newline="") as handle:
         for row in csv.DictReader(handle):
             sequence = _sequence(row)
             if len(sequence) != 50 or set(sequence) - set("ACGT") or sequence in excluded or not row["rl"]:
                 continue
             value = float(row["rl"])
-            if not np.isfinite(value):
-                continue
-            digest = int.from_bytes(hashlib.sha256(f"{context}|{sequence}".encode()).digest(), "big")
-            item = (-digest, sequence)
-            if len(heap) < candidate_limit:
-                heapq.heappush(heap, item)
-            elif digest < -heap[0][0]:
-                heapq.heapreplace(heap, item)
+            if np.isfinite(value):
+                labels[sequence].append(value)
+    heap = []
+    for sequence in labels:
+        if _near_existing(sequence, sample_half_index):
+            continue
+        digest = int.from_bytes(hashlib.sha256(f"{context}|{sequence}".encode()).digest(), "big")
+        item = (-digest, sequence)
+        if len(heap) < candidate_limit:
+            heapq.heappush(heap, item)
+        elif digest < -heap[0][0]:
+            heapq.heapreplace(heap, item)
     ordered = sorted((sequence for _, sequence in heap), key=lambda sequence: hashlib.sha256(f"{context}|{sequence}".encode()).hexdigest())
     half_index = defaultdict(list)
     selected = []
@@ -94,12 +102,8 @@ def build_castillo_context(raw_file, context, sample_role_paths, train_reference
     if len(selected) != pool_count * pool_size:
         raise ValueError(f"not enough independent 50nt sequences for {context}")
     selected_set = set(selected)
-    labels = defaultdict(list)
-    with gzip.open(raw_file, "rt", newline="") as handle:
-        for row in csv.DictReader(handle):
-            sequence = _sequence(row)
-            if sequence in selected_set:
-                labels[sequence].append(float(row["rl"]))
+    if len(selected_set) != len(selected):
+        raise ValueError(f"exact duplicate sequences selected for {context}")
     output.mkdir(parents=True, exist_ok=False)
     (output / "learner").mkdir()
     (output / "evaluator").mkdir()
@@ -159,7 +163,7 @@ def evaluate_castillo_pool(pool_dir, pool_id, selection_path, output):
     payload = json.loads(selection_path.read_text())
     if payload["execution_metadata"]["outer_labels_read"]:
         raise PermissionError("Castillo Learner boundary mismatch")
-    frozen = [SelectionRecord(**row) for row in payload["records"]]
+    frozen = [SelectionRecord(**{key: value for key, value in row.items() if key != "total_model_item_forwards"}) for row in payload["records"]]
     if selection_config_hash(frozen) != payload["selection_config_sha256"]:
         raise ValueError("Castillo selection hash mismatch")
     labels = {}

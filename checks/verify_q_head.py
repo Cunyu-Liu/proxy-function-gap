@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 from proxy_function_gap.pool_manifest import load_pool_manifest
-from proxy_function_gap.q_head import pool_features
+from proxy_function_gap.q_head import pool_features, require_q_threshold_domain
 from proxy_function_gap.selection_eval import SelectionRecord
 from proxy_function_gap.small_model import SmallModelConfig, apply_platt, log_loss, predict_with_folds
 from proxy_function_gap.trainer.data import sha256_file
@@ -22,6 +22,7 @@ def main():
     args = parser.parse_args()
     root = Path(args.artifacts)
     manifest = json.loads((root / "q_manifest.json").read_text())
+    require_q_threshold_domain(manifest)
     for name, expected in manifest["files"].items():
         assert sha256_file(root / name) == expected
     unique_pools = {(item["path"], item["sha256"]) for item in manifest["input_pools"]}
@@ -47,6 +48,14 @@ def main():
     expected = np.load(root / "q_calibration_predictions.npz")
     assert np.allclose(raw, expected["raw_q"], rtol=0, atol=1e-6)
     assert np.allclose(calibrated, expected["calibrated_q"], rtol=0, atol=1e-6)
+    expected_oof = np.load(root / "q_oof_predictions.npz")
+    calibrated_oof = apply_platt(platt, expected_oof["raw_q"], config)
+    assert np.allclose(calibrated_oof, expected_oof["calibrated_q"], rtol=0, atol=1e-6)
+    for row in manifest["threshold_rows"]:
+        abstain = calibrated_oof >= row["threshold"]
+        assert np.isclose(float(1 - abstain.mean()), row["coverage"], rtol=0, atol=1e-12)
+        mean_regret = float(expected_oof["regret"][~abstain].mean())
+        assert np.isclose(mean_regret, row["mean_regret"], rtol=0, atol=1e-12)
     report = {"round": args.round, "pass": True, "calibration_pools": args.count, "calibration_selection_rows": len(records), "raw_log_loss": log_loss(expected["target"], raw), "calibrated_log_loss": log_loss(expected["target"], calibrated), "cuda_recomputed": True, "outer_labels_read": False, "scientific_result": False}
     output = root / f"verification_round{args.round}.json"
     output.write_text(json.dumps(report, indent=2) + "\n")

@@ -8,7 +8,7 @@ import torch
 from .pool_manifest import load_pool_manifest
 from .production_pool import SUPPORT_DEFINITION, train_support
 from .production_selection import FreshMemberScorer, ProductionVScorer
-from .q_head import pool_features
+from .q_head import pool_features, require_q_threshold_domain
 from .selection_eval import SelectionRecord, run_budget_grid, write_selection_records
 from .small_model import build_classifier, predict_model
 from .trainer.cuda import configure_cuda
@@ -78,6 +78,7 @@ class ProductionQScorer:
     def __init__(self, artifacts, memory_fraction=0.02):
         self.root = Path(artifacts)
         self.manifest = json.loads((self.root / "q_manifest.json").read_text())
+        require_q_threshold_domain(self.manifest)
         if self.manifest.get("calibrator_loss_type") != "log_loss" or self.manifest["E1_enabled"]:
             raise PermissionError("Q artifact is not a finalized pre-E1 calibrator")
         for name, expected in self.manifest["files"].items():
@@ -104,7 +105,7 @@ class ProductionQScorer:
         values = pool_features(pool, record).reshape(1, -1)
         raw = np.mean([predict_model(model, scaler, values, self.device, self.dtype)[0] for model, scaler in self.folds])
         probability = float(predict_model(self.platt[0], self.platt[1], np.asarray([[raw]]), self.device, self.dtype)[0])
-        return {"pool_id": pool.pool_id, "seed": record.seed, "q_probability": probability, "threshold": self.threshold, "abstain": probability >= self.threshold, "q_model_item_forwards": len(self.folds) + 1}
+        return {"pool_id": pool.pool_id, "seed": record.seed, "q_probability": probability, "threshold": self.threshold, "threshold_domain": self.manifest["threshold_domain"], "abstain": probability >= self.threshold, "q_model_item_forwards": len(self.folds) + 1}
 
 
 def _require_verified(root):

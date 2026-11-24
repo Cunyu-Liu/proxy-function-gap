@@ -12,6 +12,17 @@ from .trainer.checkpoint import atomic_json_write, atomic_torch_save
 from .trainer.data import sha256_file
 
 
+Q_THRESHOLD_DOMAIN = "platt_calibrated_probability"
+
+
+def require_q_threshold_domain(manifest):
+    if manifest.get("threshold_domain") != Q_THRESHOLD_DOMAIN:
+        raise PermissionError(
+            f"Q manifest threshold_domain must be {Q_THRESHOLD_DOMAIN!r}; "
+            "missing or raw-OOF threshold domains are unsafe"
+        )
+
+
 @dataclass(frozen=True)
 class QHeadConfig:
     delta_regret: float = 0.1
@@ -77,10 +88,16 @@ def fit_q_head(dev_examples, calibration_examples, config: QHeadConfig, selectio
     x_dev, dev_regret, dev_groups = _examples(dev_examples, selection_config_sha256)
     y_dev = (dev_regret > config.delta_regret).astype(np.float64)
     oof, folds, assignments = fit_oof_classifier(x_dev, y_dev, dev_groups, small)
+    x_cal, cal_regret, cal_groups = _examples(calibration_examples, selection_config_sha256)
+    y_cal = (cal_regret > config.delta_regret).astype(np.float64)
+    raw_cal = predict_with_folds(folds, x_cal, small)
+    platt = fit_platt(raw_cal, y_cal, cal_groups, small)
+    calibrated = apply_platt(platt, raw_cal, small)
+    calibrated_oof = apply_platt(platt, oof, small)
     threshold_rows = []
     selected = None
     for threshold in config.thresholds:
-        abstain = oof >= threshold
+        abstain = calibrated_oof >= threshold
         coverage = float(1 - abstain.mean())
         if coverage < config.min_coverage:
             continue
@@ -91,11 +108,6 @@ def fit_q_head(dev_examples, calibration_examples, config: QHeadConfig, selectio
             selected = (mean_regret, coverage, threshold)
     if selected is None:
         raise ValueError("no Q threshold satisfies minimum coverage")
-    x_cal, cal_regret, cal_groups = _examples(calibration_examples, selection_config_sha256)
-    y_cal = (cal_regret > config.delta_regret).astype(np.float64)
-    raw_cal = predict_with_folds(folds, x_cal, small)
-    platt = fit_platt(raw_cal, y_cal, cal_groups, small)
-    calibrated = apply_platt(platt, raw_cal, small)
     return {
         "config": config,
         "small_config": small,
@@ -103,6 +115,7 @@ def fit_q_head(dev_examples, calibration_examples, config: QHeadConfig, selectio
         "folds": folds,
         "assignments": assignments,
         "oof": oof,
+        "calibrated_oof": calibrated_oof,
         "oof_targets": y_dev,
         "oof_regret": dev_regret,
         "dev_groups": dev_groups,
@@ -122,7 +135,7 @@ def save_q_head_artifacts(result, output_dir):
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=False)
     oof_path = output / "q_oof_predictions.npz"
-    np.savez(oof_path, raw_q=result["oof"], target=result["oof_targets"], regret=result["oof_regret"], pool_id=np.asarray(result["dev_groups"]))
+    np.savez(oof_path, raw_q=result["oof"], calibrated_q=result["calibrated_oof"], target=result["oof_targets"], regret=result["oof_regret"], pool_id=np.asarray(result["dev_groups"]))
     calibration_path = output / "q_calibration_predictions.npz"
     np.savez(calibration_path, raw_q=result["calibration_raw"], calibrated_q=result["calibrated"], target=result["calibration_targets"], regret=result["calibration_regret"], pool_id=np.asarray(result["calibration_groups"]))
     folds_path = output / "q_fold_models.pt"
@@ -138,6 +151,7 @@ def save_q_head_artifacts(result, output_dir):
         "selector_frozen_before_q": True,
         "q_usage": "abstain/risk-coverage only; never candidate ranking",
         "delta_regret": result["config"].delta_regret,
+        "threshold_domain": Q_THRESHOLD_DOMAIN,
         "selected_threshold": result["selected_threshold"],
         "threshold_rows": result["threshold_rows"],
         "fold_models": [
