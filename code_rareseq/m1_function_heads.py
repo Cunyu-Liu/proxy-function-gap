@@ -98,12 +98,23 @@ def load_track(loader, args, track, device):
                                   torch.from_numpy(y.astype(np.float32)).to(device)))
         loaded.append({"task": task, "arrays": split_tensors,
                        "model_index": int(permutation[identity_index[task[identity_key]]])})
-    x_train = torch.cat([v["arrays"][0][1] for v in loaded])
-    mean = x_train.mean(0, keepdim=True)
-    std = x_train.std(0, keepdim=True).clamp_min(1e-5)
-    for value in loaded:
-        value["arrays"] = [(ids, (x - mean) / std, y) for ids, x, y in value["arrays"]]
-    return loaded, {"mean": mean.cpu(), "std": std.cpu(), "identity_permutation": permutation.tolist()}
+    if args.normalization == "global":
+        x_train = torch.cat([v["arrays"][0][1] for v in loaded])
+        mean = x_train.mean(0, keepdim=True)
+        std = x_train.std(0, keepdim=True).clamp_min(1e-5)
+        for value in loaded:
+            value["arrays"] = [(ids, (x - mean) / std, y) for ids, x, y in value["arrays"]]
+        normalization = {"mode": "global", "mean": mean.cpu(), "std": std.cpu()}
+    else:
+        normalization = {"mode": "per_task", "tasks": {}}
+        for value in loaded:
+            x_train = value["arrays"][0][1]
+            mean = x_train.mean(0, keepdim=True)
+            std = x_train.std(0, keepdim=True).clamp_min(1e-5)
+            value["arrays"] = [(ids, (x - mean) / std, y) for ids, x, y in value["arrays"]]
+            normalization["tasks"][value["task"]["experiment"]] = {"mean": mean.cpu(), "std": std.cpu()}
+    normalization["identity_permutation"] = permutation.tolist()
+    return loaded, normalization
 
 
 def evaluate(model, arch, loaded, batch, split_index, collect=False):
@@ -225,6 +236,7 @@ def main():
     ap.add_argument("--permute-identity", action="store_true")
     ap.add_argument("--hidden", type=int, default=256)
     ap.add_argument("--dropout", type=float, default=0.1)
+    ap.add_argument("--normalization", choices=["global", "per_task"], default="global")
     ap.add_argument("--batch", type=int, default=512)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
