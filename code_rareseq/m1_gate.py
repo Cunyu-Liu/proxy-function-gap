@@ -12,20 +12,23 @@ from m1_evaluate import read_predictions
 
 def validation_table(configs):
     rows = []
-    for name, path in configs.items():
-        val = read_predictions(path, "val")
-        for (track, seed), part in val.groupby(["track", "seed"]):
-            tail = part[part.tier == "tail"]
-            for experiment, group in tail.groupby("experiment"):
-                if group.label.nunique() == 2:
-                    from sklearn.metrics import average_precision_score, roc_auc_score
-                    rows.append({"config": name, "track": track, "seed": int(seed),
-                                 "experiment": experiment,
-                                 "auprc": average_precision_score(group.label, group.score),
-                                 "auroc": roc_auc_score(group.label, group.score)})
+    for name, paths in configs.items():
+        for path in paths:
+            val = read_predictions(path, "val")
+            for (track, seed), part in val.groupby(["track", "seed"]):
+                tail = part[part.tier == "tail"]
+                for experiment, group in tail.groupby("experiment"):
+                    if group.label.nunique() == 2:
+                        from sklearn.metrics import average_precision_score, roc_auc_score
+                        rows.append({"config": name, "track": track, "seed": int(seed),
+                                     "experiment": experiment,
+                                     "auprc": average_precision_score(group.label, group.score),
+                                     "auroc": roc_auc_score(group.label, group.score)})
     result = pd.DataFrame(rows)
     if result.empty:
         raise ValueError("No evaluable tail-RBP validation rows")
+    if result.duplicated(["config", "track", "seed", "experiment"]).any():
+        raise ValueError("Duplicate seed predictions within a configuration group")
     return result
 
 
@@ -52,9 +55,9 @@ def main():
     configs = {}
     for item in args.config:
         name, sep, path = item.partition("=")
-        if not sep or not name or name in configs or not os.path.isdir(path):
-            raise ValueError(f"Invalid or duplicate --config: {item}")
-        configs[name] = path
+        if not sep or not name or not os.path.isdir(path):
+            raise ValueError(f"Invalid --config: {item}")
+        configs.setdefault(name, []).append(path)
     for name in [args.reference] + args.candidate:
         if name not in configs:
             raise ValueError(f"Missing configuration: {name}")
