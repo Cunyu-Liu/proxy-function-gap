@@ -5,6 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
+
 from proxy_function_gap.mechanism import evaluate_mechanism
 from proxy_function_gap.trainer.data import sha256_file
 
@@ -32,6 +34,9 @@ def main():
     config_path = Path(args.config)
     config = json.loads(config_path.read_text())
     context = args.context
+    with np.load(config["train_reference"], allow_pickle=False) as reference:
+        if "utr50" not in reference:
+            raise ValueError("train reference must contain utr50 sequences")
     pool_dir = Path(config["pool_root"]) / context
     validation = json.loads((pool_dir / "validation.json").read_text())
     if not validation["pass"]:

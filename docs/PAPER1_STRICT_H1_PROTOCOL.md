@@ -11,7 +11,7 @@ This is a retrospective reconstruction and protocol-sensitivity analysis of Cast
 - Sample train, dev and calibration sequences are combined for exact and Hamming-1 exclusion before deterministic candidate ranking. Exact and Hamming-1 conflicts are hard failures both within/across selected pools and against Sample.
 - Hamming-2 counts are a predeclared sensitivity diagnostic only. They are not used for candidate selection, exclusion, pass/fail, model selection or interpretation-driven threshold changes.
 - Three separately written checks cover (1) pool exact/H1 isolation, (2) cross-Sample exact/H1 isolation and (3) double-build learner/label/manifest hashes plus raw, Sample, train-reference and per-pool hashes.
-- Existing pool, selection and evaluation directories are not overwritten. New outputs are rooted at `castillo_fixed_pools_v3_strict_h1` and `paper1_v3_strict_h1`.
+- Existing pool, selection and evaluation directories are not overwritten. New outputs are rooted at `castillo_fixed_pools_v3_strict_h1_retry1` and `paper1_v3_strict_h1_retry1`.
 
 ## Frozen analysis
 

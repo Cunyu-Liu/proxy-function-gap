@@ -7,6 +7,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
+
 from proxy_function_gap.trainer.data import sha256_file
 
 
@@ -24,6 +26,9 @@ def main():
     config = json.loads(config_path.read_text())
     if config["protocol"] != "strict_h1_retrospective_protocol_sensitivity" or config["sample_exclusion"]["hamming2"] != "predeclared_sensitivity_diagnostic_only_not_a_gate":
         raise ValueError("strict H1 protocol contract mismatch")
+    with np.load(config["train_reference"], allow_pickle=False) as reference:
+        if "utr50" not in reference:
+            raise ValueError("train reference must contain utr50 sequences")
     root = Path(config["pool_root"])
     root.mkdir(parents=True, exist_ok=False)
     frozen = root / "frozen_config.json"

@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "protocol": "strict_h1_retrospective_protocol_sensitivity",
   "evidence_boundary": "All outer contexts were previously inspected; this rerun is retrospective/protocol-sensitivity evidence, not a new blind test.",
-  "pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1",
-  "analysis_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_v3_strict_h1",
+  "pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1_retry1",
+  "analysis_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_v3_strict_h1_retry1",
   "pool_count": 16,
   "pool_size": 64,
   "candidate_limit_multiplier": 20,
@@ -24,7 +24,7 @@
     "seed": 20261124,
     "interval_percentiles": [2.5, 97.5]
   },
-  "train_reference": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1/input_v2/training_pack.npz",
+  "train_reference": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/fresh_proxy_cnn_v2/build_a/production/train.npz",
   "inference_config": "/home/proxy-function-gap/configs/ensemble_inference_v2.json",
   "sample_roles": [
     "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
