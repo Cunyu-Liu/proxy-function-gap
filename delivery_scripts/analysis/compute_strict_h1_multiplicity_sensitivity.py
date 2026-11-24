@@ -41,8 +41,8 @@ def excludes_zero(bounds: list[float]) -> bool:
     return bounds[0] > 0 or bounds[1] < 0
 
 
-def build() -> dict:
-    source = json.loads(SUMMARY.read_text())
+def build(summary_path: Path = SUMMARY) -> dict:
+    source = json.loads(summary_path.read_text())
     assert source["new_blind_test"] is False
     assert source["bootstrap"]["replicates"] == REPLICATES
     assert source["bootstrap"]["seed"] == BASE_SEED
@@ -98,8 +98,8 @@ def build() -> dict:
         "analysis": "strict_h1_multiplicity_sensitivity",
         "status": "PASS",
         "source": {
-            "path": SUMMARY.name,
-            "sha256": digest(SUMMARY),
+            "path": summary_path.name,
+            "sha256": digest(summary_path),
             "protocol": source["protocol"],
             "new_blind_test": False,
         },
@@ -143,10 +143,11 @@ def build() -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--summary", type=Path, default=SUMMARY)
     parser.add_argument("--output", type=Path, default=OUTPUT)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    payload = build()
+    payload = build(args.summary)
     encoded = json.dumps(payload, indent=2) + "\n"
     if args.check:
         assert args.output.read_text() == encoded
