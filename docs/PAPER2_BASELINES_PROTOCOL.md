@@ -9,7 +9,7 @@ The source for COM is Trabucco et al. (2021), arXiv:2107.06882, and the authors'
 ## COM adaptation
 
 - Same `FreshSampleCNN`, train/dev/calibration pack, train-only target scaler, seeds 11/23/37, Adam model learning rate 0.001, batch size 1024 and dual train/dev patience rule as the fresh CNN comparator.
-- Every training batch starts from the observed one-hot sequence and performs 50 gradient-ascent steps in the authors' three-log-ratio discrete relaxation, with zero reference logit, `soft_interpolation=0.6` (the official UTR dataset default) and `particle_lr=2*sqrt(200)`. The relaxed negative is detached before the conservative model update.
+- Every training batch starts from the observed one-hot sequence and performs 50 gradient-ascent steps in the authors' three-log-ratio discrete relaxation, with zero reference logit, `soft_interpolation=0.6` (the official UTR dataset default) and `particle_lr=2*sqrt(150)` (the 3x50 log-ratio design dimensions). The relaxed negative is detached before the conservative model update.
 - The optimized loss is normalized MSE plus `alpha*(mean(f(x_negative))-mean(f(x_positive)))`. A separate Adam optimizer updates `log_alpha` at 0.01 using `alpha*(2-conservatism)` and `alpha=softplus(log_alpha)`, initialized from 0.1. These are the official discrete-task `tau=2`, alpha initialization and alpha learning rate.
 - No maximum epoch or small fixed-step stopping rule is imposed. Every epoch stores online COM/regression/conservatism/alpha and full train/dev normalized MSE. The best-dev checkpoint is restored. Three independent spawned CUDA workers share the RTX 5090; CPU fallback is forbidden.
 

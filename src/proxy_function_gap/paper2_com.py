@@ -94,7 +94,7 @@ def adversarial_negatives(model, inputs, particle_lr, steps, clip):
     initial_logits = torch.log(clip * inputs + (1.0 - clip) / inputs.shape[1])
     reference = initial_logits[:, :1]
     logits = (initial_logits[:, 1:] - reference).detach()
-    scaled_lr = particle_lr * math.sqrt(inputs.shape[1] * inputs.shape[2])
+    scaled_lr = particle_lr * math.sqrt(logits.shape[1] * logits.shape[2])
     for _ in range(steps):
         logits.requires_grad_(True)
         relaxed = torch.softmax(torch.cat((torch.zeros_like(reference), logits), dim=1), dim=1)
