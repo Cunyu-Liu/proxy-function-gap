@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "dataset": "schlusser2024-hepg2-te-confirmatory-v1",
+  "protocol_document": "/home/proxy-function-gap/docs/SCHLUSSER2024_HEPG2_TE_PROTOCOL.md",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_hepg2_te_confirmatory_v1",
+  "gate0_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_gate0/derived/schlusser2024_gate0_v1",
+  "learner": {
+    "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_gate0/derived/schlusser2024_gate0_v1/learner/hepg2_te_sequences_isolated.tsv.gz",
+    "sha256": "82a48e80053e7054d082278ce2c75bbf517633afb650634340ecbcb3b4354625"
+  },
+  "evaluator_vault": {
+    "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_gate0/derived/schlusser2024_gate0_v1/evaluator/hepg2_te_labels.tsv.gz",
+    "sha256": "b1b3056199141a96604d04af45d9255e4970a388f8a519aec6500dfad7799b40",
+    "holder": "Evaluator"
+  },
+  "authorized_model_execution": true,
+  "authorization_scope": "User-authorized one-time Schlusser HepG2 TE confirmatory evaluation only; Gate 0 historical authorized_model_execution=false remains unchanged",
+  "proxy_endpoint": "MRL",
+  "deployment_endpoint": "TE",
+  "deployment_mismatch": "cross_endpoint_MRL_proxy_to_endogenous_HepG2_TE_not_same_endpoint_MRL_replication",
+  "models": {
+    "cnn": [
+      {
+        "seed": 11,
+        "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1_retry1/seed_11/best.pt",
+        "sha256": "77b0539b72e5dfd5b893749107d9f24b03df04a6353badfd09ec0a313f2a9212",
+        "model_hash": "13eca7c6a3282f1a1f5c00a3f34cb50d8047d5a16bf146da50fb8f22722b4173"
+      },
+      {
+        "seed": 23,
+        "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1_retry1/seed_23/best.pt",
+        "sha256": "e92a9cf2815f8023fb9ec6617f1d680b223f47b767c564e71224997edec734b7",
+        "model_hash": "2f439c3836426aee7ed21e8b35a22d17673e04d78e78c85f58f74cd53c70b6b6"
+      },
+      {
+        "seed": 37,
+        "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1_retry1/seed_37/best.pt",
+        "sha256": "0a6647c4a6661e627555ffd0a055e59ab7b1d1eb7abb81bc2677774173cc55a6",
+        "model_hash": "967707e04bbb1fc0d8e210d0855817eb480afd0108e7a7eb47490c8924205a75"
+      }
+    ],
+    "kmer": [
+      {
+        "seed": 101,
+        "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_101/best.pt",
+        "sha256": "147a86970d37cd58f0b8810b661d18c4c8eb1d8ac2a3cdd7c91b54af0654fcba",
+        "model_hash": "b830b6a01126001968e437af28617a252a57529e2cf3342fb04abcf180942a47"
+      },
+      {
+        "seed": 202,
+        "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_202/best.pt",
+        "sha256": "9c1c1cbbff726b985a5a1bdbcf55b8f65458165c30bf8b9f634b35f048864a28",
+        "model_hash": "0519824f352de2153a034ba27b1b9089dc0dbe81cb9a30e3304ba60de7655b2f"
+      },
+      {
+        "seed": 303,
+        "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_303/best.pt",
+        "sha256": "0b09912e887ce490089645512d742628f4df28dc347b90886486b00f241214f3",
+        "model_hash": "204e25d62fec471b3d7e5fe12811ea85bee000dbb9e39ef04ce66676acbc7b35"
+      }
+    ]
+  },
+  "model_output_units": "measured MRL after each member train-only inverse target transform",
+  "caps": [1, 2, 4, 8, 16],
+  "paired_seeds": {
+    "start": 101,
+    "step": 101,
+    "count": 100,
+    "note": "101,202,...,10100; same proposals across methods and caps use nested prefixes"
+  },
+  "proposal_distribution": "uniform row sampling with replacement from all 6340 isolated Learner rows",
+  "methods": ["random", "bon_cnn", "bon_kmer", "lcb_cnn"],
+  "method_rules": {
+    "random": "select first proposal; zero selection-model forwards; identical across caps for a seed",
+    "bon_cnn": "argmax three-member CNN MRL mean among cap proposals; first proposal wins exact ties",
+    "bon_kmer": "argmax three-member 4-mer MLP MRL mean among identical cap proposals; first proposal wins exact ties",
+    "lcb_cnn": "argmax CNN MRL mean - 1.0 * sample std among identical cap proposals; lambda fixed a priori, not tuned"
+  },
+  "primary": {
+    "method": "bon_cnn",
+    "reference": "random",
+    "proposal_cap": 16,
+    "endpoint": "true measured-derived TE",
+    "estimand": "mean sample-oracle TE regret over 100 paired algorithmic seeds and paired BoN-CNN minus Random regret",
+    "regret": "max TE over the frozen 6340 candidate rows minus selected-row TE; lower is better",
+    "paired_effect_sign": "BoN-CNN minus Random regret: negative favors BoN-CNN, positive favors Random; selected TE difference has opposite sign",
+    "no_cap_or_method_selection_from_results": true
+  },
+  "secondary_comparisons": [
+    "bon_kmer-random",
+    "lcb_cnn-random",
+    "bon_cnn-bon_kmer"
+  ],
+  "score_matching": {
+    "methods": ["bon_cnn", "bon_kmer"],
+    "proposal_cap": 16,
+    "frozen_before_unblinding": true,
+    "match_rule": "nearest absolute architecture-specific MRL ensemble mean among different rows with different utr50; SHA256 of decimal row index then row index as deterministic tie break",
+    "outcomes": "selected TE minus matched TE and selected regret minus matched regret; no MRL-minus-TE absolute error because units differ",
+    "sign": "TE difference positive favors optimized; regret difference negative favors optimized",
+    "bootstrap_conditioning": "cluster bootstrap reruns selections and uses the frozen full-pool match map conditionally"
+  },
+  "bootstrap": {
+    "primary_unit": "gene_ID",
+    "sensitivity_unit": "transcript_ID",
+    "replicates": 2000,
+    "seed": 20261124,
+    "percentile_interval": [2.5, 97.5],
+    "procedure": "resample biological clusters with replacement, rebuild the candidate pool, rerun all 100 paired proposal seeds and selections, recompute sample oracle and every method/cap effect; score matching is conditional on the frozen full-pool match map",
+    "boundary": "candidate-pool biological-cluster uncertainty plus algorithmic draws; not independent-study replication"
+  },
+  "execution": {
+    "rounds": 3,
+    "expected_rows": 6340,
+    "expected_genes": 6309,
+    "expected_transcripts": 6340,
+    "all_learner_rounds_before_first_evaluator": true,
+    "single_unblinding_without_result_driven_revision": true,
+    "full_pool_scores_shared_across_methods_and_seeds": true,
+    "labels_returned_to_learner": false,
+    "per_sequence_TE_local_sync": false,
+    "outer_tuning_allowed": false
+  },
+  "gpu": {
+    "gpu_index": 0,
+    "memory_fraction": 0.08,
+    "batch_size": 1024,
+    "dtype": "float32",
+    "require_CUDA": true,
+    "cpu_fallback": false,
+    "deterministic_algorithms": true,
+    "tf32": false
+  },
+  "reporting": {
+    "all_caps_methods_and_directions": true,
+    "positive_negative_and_unidentifiable_boundaries": true,
+    "cross_endpoint_absolute_error_forbidden": true,
+    "single_study_generalization_forbidden": true,
+    "same_training_labels_4mer_not_independent_validation": true
+  }
+}

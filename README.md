@@ -44,7 +44,7 @@ Paper 1 固定池外部压力结果见 `docs/PAPER1_EXTERNAL_RESULT.md` 和 `doc
 
 ## Gate 0 集成
 
-Schlusser 2024 多研究数据与 benchmark 见 `docs/SCHLUSSER2024_GATE0.md`。该包固定 Zenodo/ENA/GitLab 谱系、实测与预测字段、研究级角色及三轮验证；HepG2 endogenous TE 整研究冻结为后续确认性 OOD，Learner 不含 TE/预测列，当前未运行训练、推理或 outer 评分。其他研究的训练资源不冒充独立 outer。
+Schlusser 2024 多研究数据与 benchmark 见 `docs/SCHLUSSER2024_GATE0.md`。该包固定 Zenodo/ENA/GitLab 谱系、实测与预测字段、研究级角色及三轮验证；HepG2 endogenous TE 整研究冻结为后续确认性 OOD，Learner 不含 TE/预测列，Gate 0 包本身未运行训练、推理或 outer 评分。其他研究的训练资源不冒充独立 outer。另行授权的一次性 MRL→TE 跨终点确认性协议见 `docs/SCHLUSSER2024_HEPG2_TE_PROTOCOL.md`；该协议固定双架构模型哈希、cap/基线、簇 bootstrap、score-matching 和三轮 CUDA 揭盲边界，不属于 MRL 同终点复验。
 
 Gate 0 代码位于 `gate0/gate0_sample2019/`，来源为 `/home/proxy-function-gap-data` 的提交 `25d6fd4a8133aadde85f6cc4718503c0efe21249`。通过 Git subtree ancestry 和 `gate0/PROVENANCE.md` 保留 provenance；staging 未修改。打包、命令和数据边界见 `docs/GATE0_INTEGRATION.md`。原始与派生数据继续放在 `/teams`，不进入 Git。
 
