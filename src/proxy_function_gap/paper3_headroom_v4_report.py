@@ -111,7 +111,7 @@ def main(argv=None):
         "",
         table(
             ["表示", "正门禁/16", "headroom 均值", "中位数", "最小–最大", "zero regret 均值", "full-Q regret 均值"],
-            [[representation, f"{item['headroom_present_count']}/16", f"{item['headroom_mean']:.6f}", f"{item['headroom_median']:.6f}", f"{item['headroom_min']:.3f}–{item['headroom_max']:.3f}", f"{item['zero_regret_mean']:.6f}", f"{item['full_q_regret']:.6f}"] for representation, item in sorted(representations.items())],
+            [[representation, f"{item['headroom_present_count']}/16", f"{item['headroom_mean']:.6f}", f"{item['headroom_median']:.6f}", f"{item['headroom_min']:.3f}–{item['headroom_max']:.3f}", f"{item['zero_regret_mean']:.6f}", f"{item['full_q_regret_mean']:.6f}"] for representation, item in sorted(representations.items())],
         ),
         "",
         "## 固定队列 pooled 曲线",
