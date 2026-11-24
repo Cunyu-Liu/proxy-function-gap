@@ -131,7 +131,7 @@ def main():
                 decision = decisions.get((pool_id, record.seed))
                 if decision is None:
                     raise ValueError(f"missing Q decision: {pool_id}/{record.seed}")
-                final_abstain = scored["abstain"] if scored is not None else decision["abstain"]
+                final_abstain = scored["abstain"] if scored is not None else selector_abstain or decision["abstain"]
                 final_regret = scored["regret"] if scored is not None else None if final_abstain else selector_regret
                 groups[record.strategy][index]["v_plus_q"].append(final_regret)
                 decision_values.append((decision["raw_q_probability"], decision["q_probability"], selector_regret))

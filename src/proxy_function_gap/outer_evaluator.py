@@ -46,7 +46,7 @@ def evaluate_outer_pool(source_pool_manifest, pool_id, selection_path, q_path, o
             decision = decisions.get((pool_id, record.seed))
             if decision is None:
                 raise ValueError("missing frozen Q decision")
-            abstain = decision["abstain"]
+            abstain = record.abstain or decision["abstain"]
         if record.abstain:
             selector_regret = None
         else:

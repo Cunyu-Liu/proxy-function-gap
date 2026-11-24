@@ -1,6 +1,7 @@
 import csv
 import gzip
 import json
+from dataclasses import replace
 
 from proxy_function_gap.outer_evaluator import evaluate_outer_pool
 from proxy_function_gap.selection_eval import SelectionRecord, selection_config_hash
@@ -36,13 +37,15 @@ def test_outer_evaluator_separates_selector_and_q_regret(tmp_path):
     (evaluator / "vault_references.json").write_text(json.dumps({"outer_designed": {"holder": "Evaluator", "path": str(labels), "sha256": sha256_file(labels)}}))
     source = build / "pool_manifest.json"
     source.write_text(json.dumps({"files": {"outer_designed": "learner/outer.jsonl.gz"}}))
-    records = [record("fp-rej", 101), record("fp-rej", 102), record("bon", 101)]
+    records = [record("fp-rej", 101), record("fp-rej", 102), record("bon", 101), replace(record("fp-rej", 103), abstain=True, selected_index=-1, selected_id="ABSTAIN")]
     selection = tmp_path / "selection.json"
     selection.write_text(json.dumps({"selection_config_sha256": selection_config_hash(records), "execution_metadata": {"outer_labels_read": False}, "records": [row.to_dict() for row in records]}))
     decisions = tmp_path / "q.json"
-    decisions.write_text(json.dumps({"selection_config_sha256": selection_config_hash(records), "decisions": [{"pool_id": "outer_designed_000", "seed": 101, "abstain": True}, {"pool_id": "outer_designed_000", "seed": 102, "abstain": False}]}))
+    decisions.write_text(json.dumps({"selection_config_sha256": selection_config_hash(records), "decisions": [{"pool_id": "outer_designed_000", "seed": 101, "abstain": True}, {"pool_id": "outer_designed_000", "seed": 102, "abstain": False}, {"pool_id": "outer_designed_000", "seed": 103, "abstain": False}]}))
     result = evaluate_outer_pool(source, "outer_designed_000", selection, decisions, tmp_path / "scored.json")
     assert result["labels_returned_to_learner"] is False
     scored = json.loads((tmp_path / "scored.json").read_text())["records"]
     assert scored[0]["regret"] is None and scored[0]["selector_regret"] == 2
     assert scored[1]["regret"] == 2 and scored[2]["regret"] == 2
+    assert scored[3]["selector_abstain"] is True and scored[3]["abstain"] is True
+    assert scored[3]["selector_regret"] is None and scored[3]["regret"] is None
