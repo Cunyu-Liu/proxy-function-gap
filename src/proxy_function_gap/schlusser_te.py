@@ -645,6 +645,17 @@ def render_result(config, validation):
             ["BoN-CNN−Random TE", _number(comparison["mean_TE_difference_left_minus_right"]), "方向与 regret 差相反", "方向与 regret 差相反"],
         ]),
         "",
+        "**确认性结论：没有观察到 BoN-CNN 改善真实 TE 的证据。** 主配对 regret 差点估计大于 0、selected TE 差点估计小于 0，观察方向反而有利于 Random；但基因和转录本簇区间均跨 0，因此也不能声称已精确识别 Random 的优势。区间跨 0 不被改写为正向结果。",
+        "",
+        "### TE 分布与 oracle 可识别性",
+        "",
+        _markdown_table(["min", "Q1", "median", "Q3", "mean", "std", "max"], [[
+            _number(summary["TE_distribution_after_frozen_unblinding"][key])
+            for key in ("min", "q1", "median", "q3", "mean", "std", "max")
+        ]]),
+        "",
+        "TE 呈极端右偏，绝对 regret 主要由固定候选池的样本内最大 TE 决定；其簇区间的宽度不能解释为方法效果很大。配对差会消去共同 oracle，但本次配对区间同样跨 0。这里只展示冻结汇总中已有的分布量，不新增稳健终点或事后变换。",
+        "",
         "## 全 cap 网格与必要基线",
         "",
         "Random 使用每个配对种子第一个提案；BoN 在同一提案集内最大化对应架构的 MRL 均值；LCB-CNN 固定为 mean−1×std。所有方法共享同一份实际 CUDA 全池分数，推理成本与选择分配成本均保存在 manifest/records。",
