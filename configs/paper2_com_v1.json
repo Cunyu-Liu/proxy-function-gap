@@ -1,0 +1,18 @@
+{
+  "data_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1/input_v2/data_manifest.json",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper2_baselines_v1/com_training",
+  "seeds": [11, 23, 37],
+  "memory_fractions": [0.20, 0.20, 0.20],
+  "gpu_index": 0,
+  "dtype": "float32",
+  "batch_size": 1024,
+  "learning_rate": 0.001,
+  "min_delta": 0.0001,
+  "patience": 5,
+  "particle_lr": 2.0,
+  "particle_steps": 50,
+  "soft_interpolation": 0.6,
+  "initial_alpha": 0.1,
+  "alpha_lr": 0.01,
+  "overestimation_limit": 2.0
+}
