@@ -1,0 +1,14 @@
+{
+  "development_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/pool_validation/production_v3/dev_000/pool_manifest.json",
+  "query_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/pool_validation/production_v3/calibration_000/pool_manifest.json",
+  "output_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper3/repair_headroom_v1",
+  "query_budget": 64,
+  "random_seed": 20261124,
+  "top_k": 1,
+  "noise_variance": 0.04,
+  "prior_variance": 1.0,
+  "min_repair_margin": 0.0,
+  "gpu_index": 0,
+  "memory_fraction": 0.05,
+  "dtype": "float64"
+}
