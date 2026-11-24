@@ -12,17 +12,18 @@ from log_run import RunLogger, sha256_file
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--split", type=int, default=1)
+    ap.add_argument("--base-url", default="https://hf-mirror.com")
     ap.add_argument("--out", required=True)
     ap.add_argument("--log", default="/root/rareseq/logs/experiments.jsonl")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     lg = RunLogger(args.log, stage="E6", kind="grimm-download")
     lg.start(config={"split": args.split, "release": "EC_v2", "modality": "amino_acids",
-                     "mirror": "https://hf-mirror.com"}, data_version="GRIMM-EC_v2")
+                     "base_url": args.base_url}, data_version="GRIMM-EC_v2")
     metrics = {}
     for split in ("train", "validation", "test1", "test2"):
         name = f"{split}.tsv"
-        url = f"https://hf-mirror.com/datasets/HoarfrostLab/GRIMM/resolve/main/EC_v2/amino_acids/split_{args.split}/{name}"
+        url = f"{args.base_url}/datasets/HoarfrostLab/GRIMM/resolve/main/EC_v2/amino_acids/split_{args.split}/{name}"
         dst = os.path.join(args.out, name)
         expected_size = None
         try:
