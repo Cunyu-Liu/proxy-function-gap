@@ -67,7 +67,7 @@ def main():
         "|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in com["seeds"]:
-        lines.append(f"| {row['seed']} | {row['epochs']} | {row['best_epoch']} | {_number(row['best_train_eval_loss'])} | {_number(row['best_dev_eval_loss'])} | {_number(row['best_alpha'])} | {_number(row['training_seconds'], 2)} | {row['max_memory_allocated_bytes']} |")
+        lines.append(f"| {row['seed']} | {row['epochs']} | {row['best_epoch']} | {_number(row['best_train_eval_loss'])} | {_number(row['best_dev_eval_loss'])} | {row['best_alpha']:.3e} | {_number(row['training_seconds'], 2)} | {row['max_memory_allocated_bytes']} |")
     lines += [
         "",
         f"Training code commit: `{com['seeds'][0]['code_commit']}`. Config SHA256: `{com['config_sha256']}`. Histories, checkpoints, per-epoch hashes and three independent CUDA reload/recompute reports are stored with the artifacts.",
@@ -114,11 +114,13 @@ def main():
         "",
         "## Conclusion",
         "",
+        "Designed COM and diversity-LCB top-1 intervals cross zero, so neither demonstrates a regret advantage. Random outer COM is worse, and diversity-LCB is also numerically worse with an interval crossing zero; there is no context-general benefit. Because dev selected zero LCB/distance penalties, those methods equal BoN and their feature permutations are trivial negative controls.",
+        "",
         "These are baseline and sensitivity results only. No claim of biological improvement, prospective validation, independent-study replication or official COM reproduction is made. Any unfavorable or interval-crossing result remains evidence against a method advantage; the preserved FP-REJ/Q gate failure is not reversed.",
         "",
         "## Verification",
         "",
-        "Three complete software rounds passed (291 tests plus 106 subtests each). COM checkpoints and every outer evaluation were independently checked in three rounds, including CUDA reload/dev-loss recomputation, raw regret/top-k recomputation, record completeness, frozen hyperparameters, permutation counts and source hashes.",
+        "Three complete software rounds passed (291 tests plus 106 subtests each); the final expanded delivery suite also passed (296 tests plus 106 subtests). COM checkpoints and every outer evaluation were independently checked in three rounds, including CUDA reload/dev-loss recomputation, raw regret/top-k recomputation, record completeness, frozen hyperparameters, permutation counts and source hashes.",
     ]
     Path(args.output).write_text("\n".join(lines) + "\n")
     print(json.dumps({"output": args.output, "designed_pools": designed["pools"], "random_pools": random["pools"]}))
