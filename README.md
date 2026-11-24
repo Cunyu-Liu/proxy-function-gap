@@ -38,7 +38,7 @@ fresh trainer 协议见 `docs/TRAINER_PROTOCOL.md`。默认至少 3 seeds 在同
 
 生产推理与 V/Q/固定池协议见 `docs/ENSEMBLE_INFERENCE_RUN.md`、`docs/V_Q_SELECTION_PROTOCOL.md` 和 `docs/POOL_MANIFEST_SCHEMA.md`。唯一有效的 MRL 推理来源是 ensemble-v2；ensemble-v1 及其派生结果因缺少标签逆变换而作废。生产池严格绑定固定池来源、Learner 标签许可和推理 lineage，生产选择执行真实 CUDA forward 并记录实际成本。
 
-VGSC 固定池 pilot 的已复核负结果与门禁决定见 `docs/PILOT_V3_RESULT.md`；outer 协议见 `docs/E1_OUTER_PROTOCOL.md`。FP-REJ/Q 未通过主线门禁，当前不声称预印本完成。
+VGSC 固定池 pilot 的已复核负结果与门禁决定见 `docs/PILOT_V3_RESULT.md`；outer 协议见 `docs/E1_OUTER_PROTOCOL.md`。FP-REJ/Q 未通过主线门禁，保留为基线与协议，不作为有效方法主张。三个嵌入点的执行与停止记录见 `docs/VGSC_THREE_PAPER_EXECUTION.md`。Paper 1 回顾性固定池证据包、预印本草稿和 PDF 已形成；投稿前仍须作者终审，且不声称同行评审或前瞻湿实验验证。
 
 Paper 1 固定池外部压力结果见 `docs/PAPER1_EXTERNAL_RESULT.md` 和 `docs/PAPER1_EXTERNAL_PROTOCOL.md`。Castillo-Hair 的四个外部情境均未复现 Sample designed 的持续单调收益，支持压力效应的情境边界。分数匹配与共同 proxy 审计见 `docs/PAPER1_MECHANISM_RESULT.md`：差值区间均跨 0，当前更支持高分外推而非优化器特异失真。异构 4-mer MLP 对照见 `docs/PAPER1_CROSS_ARCH_RESULT.md`：四个上下文的误差相关性为 0.931–0.965，共同 proxy 风险跨越模型架构。替代池与输出噪声敏感性见 `docs/PAPER1_SENSITIVITY_NOISE_RESULT.md`：替代池仍非单调，BoN 不必然放大高斯输出噪声。
 

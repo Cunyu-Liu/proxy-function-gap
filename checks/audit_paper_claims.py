@@ -12,6 +12,7 @@ def main():
     checks['retrospective_boundary'] = 'retrospective historical replay' in text and 'not prospective wet-lab validation' in text
     checks['negative_vgsc_retained'] = 'Q rejects every selection' in text and 'not as evidence of VGSC superiority' in text
     checks['score_matching_boundary'] = 'All intervals include zero' in text
+    checks['github_availability_current'] = 'https://github.com/Cunyu-Liu/proxy-function-gap' in text and 'GitHub upload remains pending' not in text
     forbidden = ['first-ever', 'proves that', 'wet-lab validated', 'universally superior', 'completed preprint']
     checks['no_overclaim'] = not any(value in text.lower() for value in forbidden)
     expected = {

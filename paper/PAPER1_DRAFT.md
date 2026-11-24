@@ -153,7 +153,7 @@ Fixed-pool historical evaluation shows that proxy-selection pressure has context
 
 ## Data and code availability
 
-Code is maintained under `/home/proxy-function-gap` and `/home/proxy-function-gap-data`. Data, weights, and artifacts are under `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/`. Result documents include `PAPER1_EXTERNAL_RESULT.md`, `PAPER1_MECHANISM_RESULT.md`, `PAPER1_CROSS_ARCH_RESULT.md`, and `PAPER1_SENSITIVITY_NOISE_RESULT.md`. GitHub upload remains pending because no remote or `gh` configuration is available on the server.
+Source code and result documents are available at https://github.com/Cunyu-Liu/proxy-function-gap. The analysis environment maintains code under `/home/proxy-function-gap` and `/home/proxy-function-gap-data`; large data, weights, and artifacts are under `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/`. Result documents include `PAPER1_EXTERNAL_RESULT.md`, `PAPER1_MECHANISM_RESULT.md`, `PAPER1_CROSS_ARCH_RESULT.md`, and `PAPER1_SENSITIVITY_NOISE_RESULT.md`.
 
 ## References
 
