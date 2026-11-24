@@ -118,7 +118,7 @@ def build_castillo_context(raw_file, context, sample_role_paths, train_reference
         all_rows.extend(rows)
         _write_jsonl(output / "learner" / f"{pool_id}.jsonl.gz", rows)
     _write_labels(output / "evaluator" / "labels.tsv.gz", [{"row_id": row["row_id"], "sequence_id": row["sequence_id"], "utr50": row["utr50"], "measured_rl": repr(float(np.median(labels[row["utr50"]])))} for row in all_rows])
-    manifest = {"schema_version": "1.0", "context": context, "raw_file": str(raw_file), "raw_file_sha256": sha256_file(raw_file), "sample_role_hashes": sample_hashes, "pool_count": pool_count, "pool_size": pool_size, "pool_hashes": pool_hashes, "selected_rows": len(all_rows), "labels_median_within_sequence": True, "exact_sample_overlap_excluded": True, "hamming1_excluded": True, "train_reference_sha256": sha256_file(train_reference), "outer_metrics_computed": False, "labels_returned_to_learner": False}
+    manifest = {"schema_version": "1.1", "context": context, "selection_policy": "strict_h1", "h2_policy": "predeclared_sensitivity_diagnostic_only", "evidence_boundary": "retrospective_protocol_sensitivity_not_new_blind_test", "raw_file": str(raw_file), "raw_file_sha256": sha256_file(raw_file), "sample_role_hashes": sample_hashes, "pool_count": pool_count, "pool_size": pool_size, "pool_hashes": pool_hashes, "selected_rows": len(all_rows), "labels_median_within_sequence": True, "exact_sample_overlap_excluded": True, "hamming1_excluded": True, "train_reference": str(train_reference), "train_reference_sha256": sha256_file(train_reference), "outer_metrics_computed": False, "labels_returned_to_learner": False}
     atomic_json_write(manifest, output / "pool_manifest.json")
     return manifest
 

@@ -137,3 +137,25 @@ def test_validator_rejects_cross_study_hamming_one(tmp_path):
     report = validate_castillo_pools(first, second, "test", [sample], count=1, pool_size=2)
     assert not report["pass"]
     assert "cross_study_hamming1" in report["errors"]
+
+
+def test_strict_h1_allows_h2_only_as_predeclared_diagnostic(tmp_path):
+    raw = tmp_path / "raw.csv.gz"
+    sample_sequence = "A" * 50
+    distance_two = "A" * 48 + "CC"
+    _write_raw_rows(raw, [{"UTR": distance_two, "rl": 1}])
+    sample = tmp_path / "sample.tsv.gz"
+    _write_sample_sequences(sample, [sample_sequence])
+    train = tmp_path / "train.npz"
+    np.savez(train, utr50=np.asarray([sample_sequence]))
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    build_castillo_context(raw, "test", [sample], train, first, pool_count=1, pool_size=1)
+    build_castillo_context(raw, "test", [sample], train, second, pool_count=1, pool_size=1)
+    report = validate_castillo_pools(first, second, "test", [sample], count=1, pool_size=1)
+    assert report["pass"]
+    assert report["independent_checks"]["check1_pool_isolation"]["pass"]
+    assert report["independent_checks"]["check2_sample_isolation"]["pass"]
+    assert report["independent_checks"]["check3_double_build"]["pass"]
+    assert report["h2_sensitivity_diagnostic"]["cross_sample_pairs"] == 1
+    assert report["h2_sensitivity_diagnostic"]["used_for_pass_gate"] is False

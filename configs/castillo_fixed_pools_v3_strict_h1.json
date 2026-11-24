@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "protocol": "strict_h1_retrospective_protocol_sensitivity",
+  "evidence_boundary": "All outer contexts were previously inspected; this rerun is retrospective/protocol-sensitivity evidence, not a new blind test.",
+  "pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1",
+  "analysis_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_v3_strict_h1",
+  "pool_count": 16,
+  "pool_size": 64,
+  "candidate_limit_multiplier": 20,
+  "sample_exclusion": {
+    "exact": true,
+    "hamming1": true,
+    "hamming2": "predeclared_sensitivity_diagnostic_only_not_a_gate"
+  },
+  "selection": {
+    "strategies": ["random", "bon"],
+    "proposal_caps": [1, 2, 4, 8, 16],
+    "seeds": [101, 202, 303, 404, 505],
+    "score_match_cap": 16
+  },
+  "bootstrap": {
+    "cluster": "pool",
+    "replicates": 10000,
+    "seed": 20261124,
+    "interval_percentiles": [2.5, 97.5]
+  },
+  "train_reference": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1/input_v2/training_pack.npz",
+  "inference_config": "/home/proxy-function-gap/configs/ensemble_inference_v2.json",
+  "sample_roles": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+  ],
+  "kmer_checkpoints": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_101/best.pt",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_202/best.pt",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_303/best.pt"
+  ],
+  "contexts": {
+    "n50_hek293t_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_random_end_hek293t_N50_r1.csv.gz",
+    "defined_hepg2_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_hepg2_r1.csv.gz",
+    "defined_tcell_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r1.csv.gz",
+    "defined_tcell_r2": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r2.csv.gz"
+  },
+  "cuda": {
+    "required": true,
+    "device": 0,
+    "dtype": "float32",
+    "deterministic": true,
+    "cublas_workspace_config": ":4096:8",
+    "cpu_fallback_forbidden": true,
+    "context_workers": 4,
+    "pool_workers_per_context": 2
+  }
+}
