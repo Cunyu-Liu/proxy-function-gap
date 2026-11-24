@@ -110,7 +110,7 @@ def conservative_loss(model, inputs, labels, log_alpha, config):
     regression = torch.mean((positive - labels) ** 2)
     negatives = adversarial_negatives(model, inputs, config.particle_lr, config.particle_steps, config.soft_interpolation)
     negative = model(negatives)
-    conservatism = negative - positive.detach()
+    conservatism = negative - positive
     alpha = torch.nn.functional.softplus(log_alpha)
     model_loss = regression + alpha.detach() * conservatism.mean()
     alpha_loss = alpha * (config.overestimation_limit - conservatism.detach().mean())
