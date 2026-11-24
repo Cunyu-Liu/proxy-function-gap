@@ -14,7 +14,7 @@ def test_gate0_package_and_pyproject_paths_are_integrated():
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     pytest_ini = (ROOT / "pytest.ini").read_text(encoding="utf-8")
     assert 'where = ["src", "gate0", "runtime/src"]' in pyproject
-    assert 'include = ["proxy_function_gap*", "gate0_sample2019*", "gate0_leppek2022*", "sample_runtime*"]' in pyproject
+    assert 'include = ["proxy_function_gap*", "gate0_sample2019*", "gate0_leppek2022*", "gate0_schlusser2024*", "sample_runtime*"]' in pyproject
     assert "namespaces = false" in pyproject
     assert 'pythonpath = ["src", "gate0", "runtime/src"]' in pyproject
     assert 'testpaths = ["tests", "gate0/tests", "runtime/tests"]' in pyproject

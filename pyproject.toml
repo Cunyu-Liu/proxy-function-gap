@@ -22,12 +22,15 @@ proxy-gap-gate0-validate = "gate0_sample2019.validate_delivery:main"
 proxy-gap-leppek-acquire = "gate0_leppek2022.acquire:main"
 proxy-gap-leppek-build = "gate0_leppek2022.build:main"
 proxy-gap-leppek-verify = "gate0_leppek2022.verify:main"
+proxy-gap-schlusser-acquire = "gate0_schlusser2024.acquire:main"
+proxy-gap-schlusser-build = "gate0_schlusser2024.build:main"
+proxy-gap-schlusser-verify = "gate0_schlusser2024.verify:main"
 proxy-gap-trainer = "proxy_function_gap.trainer.cli:main"
 proxy-gap-pool = "proxy_function_gap.pool_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "gate0", "runtime/src"]
-include = ["proxy_function_gap*", "gate0_sample2019*", "gate0_leppek2022*", "sample_runtime*"]
+include = ["proxy_function_gap*", "gate0_sample2019*", "gate0_leppek2022*", "gate0_schlusser2024*", "sample_runtime*"]
 namespaces = false
 
 [tool.pytest.ini_options]

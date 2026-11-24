@@ -1,4 +1,8 @@
-# Sample 2019 and Leppek 2022 Gate 0 data builders
+# Sample 2019, Leppek 2022 and Schlusser 2024 Gate 0 data builders
+
+## Schlusser 2024 multi-study audit and HepG2 OOD freeze
+
+`gate0_schlusser2024` is a CPU-only acquisition and qualification pipeline. It pins Zenodo `10463061` sequence-level tables by byte size and MD5, upstream code commit `3bd1f03579b662b0b0bc9c266ae92f457258727c`, ENA run metadata and article/code/data licenses. Sample/Optimus, Yeast50, DART and endogenous HEK293/yeast training resources remain source benchmarks, not independent outer evidence. The new HepG2 endogenous TE study is frozen as one complete confirmatory OOD unit before label inspection or model execution. Learner views contain no TE or prediction fields; exact/Hamming-1 isolation from Sample train/dev/calibration is sequence-only. See `configs/schlusser2024_v1.json` and `docs/SCHLUSSER2024_GATE0.md`.
 
 ## Leppek 2022 GSE173083 independent candidate
 

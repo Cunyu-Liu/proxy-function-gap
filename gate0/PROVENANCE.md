@@ -43,3 +43,11 @@ Primary public sources are GEO `GSE173083` (last update 19 April 2022 in SOFT), 
 The PMC article states CC BY 4.0, which is retained for article and publisher-supplement provenance. The retrieved GEO SOFT does not state an explicit data license; public accessibility is not relabeled as an open license. SRA RunInfo pins 70 runs (50,374 MB reported); raw FASTQ were not downloaded or used to recompute endpoints in this Gate 0 build.
 
 GEO and publisher primary-table copies are independently crosschecked. Source Data `Fig_4c` supplies exact replicate counts. Supplementary Data 5 name-value offsets and the Source Data half-life `n=2` exception are preserved in `supplementary_crosscheck.json`; no outcome-based source selection is performed.
+
+## Schlusser 2024 independent Gate 0
+
+Primary sources are the peer-reviewed article DOI `10.1186/s13059-024-03369-6` (PMC11337900, CC BY 4.0), Zenodo `10463061` (CC BY 4.0 sequence-level tables and plot scripts), Zenodo `13133725` (MIT code snapshot), and GitLab project 2850 commit `3bd1f03579b662b0b0bc9c266ae92f457258727c` (MIT). Zenodo `10463061` is the file-level predecessor of ZIP-only record `10463090`; using it avoids altering or repacking the source tables. Every downloaded table is verified against the published byte size and MD5 and then locally SHA256-recorded.
+
+HepG2 raw sequencing is BioProject PRJNA1045106 / NCBI SRP474241; HEK293 and yeast lineage are PRJNA591214 and PRJNA338918. NCBI RunInfo contains six HepG2 runs (three RNA-seq and three Ribo-seq), while the ENA portal response in this audit contained only the three RNA-seq runs; both records are retained rather than silently treating ENA coverage as complete. Available ENA metadata preserves run accessions and FASTQ MD5 values. FASTQ were not downloaded or independently reprocessed, so the build claims published-table provenance only. GEO reporter lineage is GSE114002 and GSE104252; DART lineage is Niederer 2022 Supplementary Table S2. Public accessibility without an explicit repository data license is not relabeled as CC0.
+
+Raw and derived artifacts remain under `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_gate0`. No Paper 2/3 source is changed. HepG2 is frozen before label inspection or model execution; other published training resources are not promoted to independent outer evidence.

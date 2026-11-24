@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0",
+  "dataset": "schlusser2024-gate0-v1",
+  "project_head_at_freeze": "fe7c0aad23cf074918427297872d8c8c5d0ff9d1",
+  "raw_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_gate0/raw",
+  "derived_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_gate0/derived/schlusser2024_gate0_v1",
+  "upstream_commit": "3bd1f03579b662b0b0bc9c266ae92f457258727c",
+  "article_doi": "10.1186/s13059-024-03369-6",
+  "article_pmcid": "PMC11337900",
+  "zenodo_code_doi": "10.5281/zenodo.13133725",
+  "zenodo_data_doi": "10.5281/zenodo.10463061",
+  "chunk_bytes": 1048576,
+  "download_workers": 16,
+  "licenses": {
+    "article": "CC-BY-4.0",
+    "zenodo_10463061": "CC-BY-4.0",
+    "upstream_code": "MIT",
+    "ENA_metadata": "public metadata; no explicit license asserted",
+    "GEO_source_data": "public download; no explicit license asserted beyond the article license"
+  },
+  "zenodo_files": [
+    {"name": "HepG2_TE.tsv", "study": "hepg2_te", "bytes": 36458556, "md5": "f92edf237f0bdea4447ee32b12398d89", "url": "https://zenodo.org/api/records/10463061/files/HepG2_TE.tsv/content"},
+    {"name": "HEK293_TE.tsv", "study": "hek293_te", "bytes": 26210625, "md5": "8b82456fb1211ecfb1f7c106f747f584", "url": "https://zenodo.org/api/records/10463061/files/HEK293_TE.tsv/content"},
+    {"name": "yeast_TE.tsv", "study": "yeast_te", "bytes": 7413728, "md5": "a429feda010176202bc3e43b9f40a793", "url": "https://zenodo.org/api/records/10463061/files/yeast_TE.tsv/content"},
+    {"name": "DART.tsv", "study": "dart", "bytes": 1695643, "md5": "decff66b92effb88c1115ef38d7a08f7", "url": "https://zenodo.org/api/records/10463061/files/DART.tsv/content"},
+    {"name": "opt50.tsv", "study": "optimus50", "bytes": 34071971, "md5": "b07f71e1379953a39690a8a985969913", "url": "https://zenodo.org/api/records/10463061/files/opt50.tsv/content"},
+    {"name": "opt100.tsv", "study": "optimus100", "bytes": 15134429, "md5": "5bd27b601e6a6634cffc19e8a8338159", "url": "https://zenodo.org/api/records/10463061/files/opt100.tsv/content"},
+    {"name": "yeast50.tsv", "study": "yeast50", "bytes": 57381309, "md5": "23ed638e4228eebb76f80d1e4440b34d", "url": "https://zenodo.org/api/records/10463061/files/yeast50.tsv/content"},
+    {"name": "test_data_optimus5p_opt100_rl.tsv", "study": "optimus100_predictions", "bytes": 1837387, "md5": "b4b06f35391d81cf3112d9386605aea4", "url": "https://zenodo.org/api/records/10463061/files/test_data_optimus5p_opt100_rl.tsv/content"},
+    {"name": "test_data_MTtrans_opt100_DS_rl.tsv", "study": "optimus100_predictions", "bytes": 1738764, "md5": "31b6a6ce6bbf0b2c360a5784d2b96c70", "url": "https://zenodo.org/api/records/10463061/files/test_data_MTtrans_opt100_DS_rl.tsv/content"},
+    {"name": "test_data_fp100_opt100_DS_rl.tsv", "study": "optimus100_predictions", "bytes": 1738789, "md5": "1ea2b0da0ae97c323ed746aaf6827247", "url": "https://zenodo.org/api/records/10463061/files/test_data_fp100_opt100_DS_rl.tsv/content"},
+    {"name": "test_data_TranslateLLM_opt100_rl.tsv", "study": "optimus100_predictions", "bytes": 569033, "md5": "aca3ceacb49f8cb709a2fc1d9eb9229e", "url": "https://zenodo.org/api/records/10463061/files/test_data_TranslateLLM_opt100_rl.tsv/content"},
+    {"name": "TIN_scores_replicates.tsv", "study": "quality_metadata", "bytes": 4729138, "md5": "9a2fd0ea229c3c0e4c5b4604813d75b6", "url": "https://zenodo.org/api/records/10463061/files/TIN_scores_replicates.tsv/content"},
+    {"name": "TIN_score.tsv", "study": "quality_metadata", "bytes": 2506849, "md5": "9dfdc32d58903413d7690623cc3c2d7e", "url": "https://zenodo.org/api/records/10463061/files/TIN_score.tsv/content"}
+  ],
+  "metadata_downloads": [
+    {"name": "zenodo_10463061.json", "role": "versioned file inventory and license", "url": "https://zenodo.org/api/records/10463061"},
+    {"name": "zenodo_13133725.json", "role": "code snapshot inventory and license", "url": "https://zenodo.org/api/records/13133725"},
+    {"name": "PRJNA1045106_ENA.json", "role": "HepG2 ENA run metadata and RNA-seq FASTQ MD5; portal returned only three RNA-seq runs; no FASTQ downloaded", "url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA1045106&result=read_run&fields=run_accession,sample_accession,experiment_title,library_strategy,library_selection,library_source,instrument_model,read_count,base_count,fastq_bytes,fastq_md5,fastq_ftp&format=json&download=false"},
+    {"name": "PRJNA1045106_NCBI_runinfo.csv", "role": "NCBI SRP474241 complete six-run lineage: three RNA-seq and three Ribo-seq; preserves ENA/NCBI coverage discrepancy", "url": "https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=PRJNA1045106"},
+    {"name": "PRJNA591214_ENA.json", "role": "HEK293 run metadata and FASTQ MD5; no FASTQ downloaded", "url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA591214&result=read_run&fields=run_accession,sample_accession,experiment_title,library_strategy,fastq_bytes,fastq_md5,fastq_ftp&format=json&download=false"},
+    {"name": "PRJNA338918_ENA.json", "role": "yeast run metadata and FASTQ MD5; no FASTQ downloaded", "url": "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=PRJNA338918&result=read_run&fields=run_accession,sample_accession,experiment_title,library_strategy,fastq_bytes,fastq_md5,fastq_ftp&format=json&download=false"}
+  ],
+  "gitlab_files": [
+    {"name": "LICENSE", "url": "https://git.scicore.unibas.ch/api/v4/projects/2850/repository/files/LICENSE/raw?ref=3bd1f03579b662b0b0bc9c266ae92f457258727c"},
+    {"name": "README.md", "url": "https://git.scicore.unibas.ch/api/v4/projects/2850/repository/files/README.md/raw?ref=3bd1f03579b662b0b0bc9c266ae92f457258727c"},
+    {"name": "calc_TE.py", "url": "https://git.scicore.unibas.ch/api/v4/projects/2850/repository/files/training_data_preprocessing%2Fendogenous_data%2Fcalc_TE.py/raw?ref=3bd1f03579b662b0b0bc9c266ae92f457258727c"},
+    {"name": "combine.py", "url": "https://git.scicore.unibas.ch/api/v4/projects/2850/repository/files/training_data_preprocessing%2Fendogenous_data%2Fcombine.py/raw?ref=3bd1f03579b662b0b0bc9c266ae92f457258727c"},
+    {"name": "prep_data.sh", "url": "https://git.scicore.unibas.ch/api/v4/projects/2850/repository/files/training_data_preprocessing%2Fendogenous_data%2Fprep_data.sh/raw?ref=3bd1f03579b662b0b0bc9c266ae92f457258727c"}
+  ],
+  "studies": {
+    "optimus50": {"file": "opt50.tsv", "system": "synthetic_reporter", "sequence_origin": "random_50nt", "organism": "human", "cell": "HEK293", "construct": "50nt random 5UTR-eGFP IVT mRNA", "endpoint": "MRL", "endpoint_status": "measured", "source_accession": "GSE114002", "role": "source_benchmark_only_not_independent_outer", "reason": "Sample 2019 is already used for proxy training/development in this project."},
+    "optimus100": {"file": "opt100.tsv", "system": "mixed_reporter", "sequence_origin": "random_and_natural_5UTR_fragments_and_SNPs", "organism": "human", "cell": "HEK293", "construct": "25-100nt 5UTR-eGFP IVT mRNA", "endpoint": "MRL", "endpoint_status": "measured", "source_accession": "GSE114002", "role": "source_benchmark_only_not_independent_outer", "reason": "Same Sample 2019 study and model-training lineage; not independent outer evidence."},
+    "yeast50": {"file": "yeast50.tsv", "system": "synthetic_reporter", "sequence_origin": "random_50nt", "organism": "yeast", "cell": "HIS3 auxotroph", "construct": "plasmid 50nt random 5UTR-HIS3", "endpoint": "growth_rate", "endpoint_status": "measured", "source_accession": "GSE104252", "role": "source_benchmark_only_not_independent_outer", "reason": "Cuperus 2017 training resource; different endpoint and organism, not promoted to confirmatory outer."},
+    "dart": {"file": "DART.tsv", "system": "natural_sequence_reporter", "sequence_origin": "natural_yeast_5UTRs_with_uAUG_to_AGU_mutations", "organism": "yeast", "cell": "yeast_extract", "construct": "natural 5UTR with 24nt reporter CDS", "endpoint": "RRS", "endpoint_status": "measured", "source_accession": "Niederer2022_Supplementary_Table_S2", "role": "source_benchmark_only_not_independent_outer", "reason": "Natural sequence does not mean endogenous mRNA; DART remains a reporter RRS assay and a published model-training resource."},
+    "yeast_te": {"file": "yeast_TE.tsv", "system": "endogenous_mRNA", "sequence_origin": "annotated_yeast_transcript_isoforms", "organism": "yeast", "cell": "wild_type_control", "construct": "native mRNA", "endpoint": "TE", "endpoint_status": "measured_derived_from_RPF_and_RNAseq_CDS_counts", "source_accession": "PRJNA338918", "role": "source_benchmark_only_not_independent_outer", "reason": "Weinberg/Mittal endogenous training resource in Schlusser; retained for coverage, not selected as new outer."},
+    "hek293_te": {"file": "HEK293_TE.tsv", "system": "endogenous_mRNA", "sequence_origin": "GRCh38_105_dominant_transcript_isoforms", "organism": "human", "cell": "HEK293", "construct": "native mRNA", "endpoint": "TE", "endpoint_status": "measured_derived_from_RPF_and_RNAseq_CDS_counts", "source_accession": "PRJNA591214", "role": "source_benchmark_only_not_independent_outer", "reason": "Alexaki endogenous training resource in Schlusser; not represented as untouched outer."},
+    "hepg2_te": {"file": "HepG2_TE.tsv", "system": "endogenous_mRNA", "sequence_origin": "GRCh38_105_dominant_transcript_isoforms", "organism": "human", "cell": "HepG2", "construct": "native mRNA", "endpoint": "TE", "endpoint_status": "measured_derived_from_RPF_and_RNAseq_CDS_counts", "source_accession": "PRJNA1045106", "role": "frozen_confirmatory_study_level_OOD", "reason": "New Schlusser HepG2 experiment, absent from this project history and not a training set for the current Sample proxy; frozen before sequence-label inspection or model execution."}
+  },
+  "frozen_outer": {
+    "study": "hepg2_te",
+    "allocation_unit": "entire_study",
+    "frozen_before_label_inspection": true,
+    "outer_metrics_computed": false,
+    "labels_returned_to_learner": false,
+    "model_training_or_inference_run": false,
+    "selection_by_labels_or_results": false,
+    "sequence_transform": "uppercase_U_to_T_take_terminal_50nt_only_for_fixed_input_compatibility",
+    "minimum_utr_length": 50,
+    "allowed_alphabet": "ACGT",
+    "exclusion_rule": "technical_input_compatibility_only_never_TE_or_prediction",
+    "evaluation_requires": "separate future authorization after final model and evaluator protocol are frozen"
+  },
+  "sample_role_paths": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+  ],
+  "field_mapping": {
+    "optimus50": {"sequence": "utr", "measured": ["rl"], "predicted": [], "identifiers": []},
+    "optimus100": {"sequence": "utr", "measured": ["rl"], "predicted": [], "identifiers": []},
+    "yeast50": {"sequence": "UTR", "measured": ["growth_rate"], "predicted": [], "identifiers": []},
+    "dart": {"sequence": "TL_seq", "measured": ["RRS"], "predicted": [], "identifiers": ["GENE"]},
+    "yeast_te": {"sequence": "UTR", "measured": ["TE"], "predicted": [], "identifiers": ["gene_ID", "transcript_ID"]},
+    "hek293_te": {"sequence": "5' UTR", "measured": ["TE"], "predicted": [], "identifiers": ["gene_ID", "transcript_ID"]},
+    "hepg2_te": {"sequence": "5' UTR", "measured": ["TE"], "predicted": [], "identifiers": ["gene_ID", "transcript_ID"]}
+  },
+  "prediction_file_mapping": [
+    {"file": "test_data_optimus5p_opt100_rl.tsv", "measured": ["rl"], "predicted": ["predicted_rl"]},
+    {"file": "test_data_MTtrans_opt100_DS_rl.tsv", "measured": ["rl"], "predicted": ["predicted_rl"]},
+    {"file": "test_data_fp100_opt100_DS_rl.tsv", "measured": ["rl"], "predicted": ["predicted_rl"]},
+    {"file": "test_data_TranslateLLM_opt100_rl.tsv", "measured": ["rl"], "predicted": ["predicted_rl"]}
+  ],
+  "gpu": {"used": false, "reason": "Data acquisition, schema audit, and study-level freezing are CPU-only; no training or inference is authorized in this task."}
+}
