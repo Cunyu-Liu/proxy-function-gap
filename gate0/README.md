@@ -1,4 +1,10 @@
-# Sample 2019 Gate 0 data builder
+# Sample 2019 and Leppek 2022 Gate 0 data builders
+
+## Leppek 2022 GSE173083 independent candidate
+
+`gate0_leppek2022` is a separate CPU-only qualification pipeline. It does not train or infer models, read outer results, or modify Paper 2/3. It validates the 233 pooled PERSIST-seq constructs and 24 individual CDS designs, preserves measured/predicted/missing states, audits full-length exact and normalized-Levenshtein near duplicates, and freezes development/candidate/permanent-evaluation roles by sequence cluster. `Predicted expression` is never a measured protein label. The same-endpoint Sample 2019 MRL route is NO-GO; only cross-endpoint descriptive and small-sample external-mechanism candidates are eligible. See `configs/leppek2022_v2.json` and `docs/LEPPEK2022_GATE0.md`.
+
+## Sample 2019 Gate 0 data builder
 
 This integrated subtree builds file-level Gate 0 and split-v2 artifacts without model training, model inference, outer-result access, or E1 scientific evaluation. Source provenance is recorded in `PROVENANCE.md`.
 

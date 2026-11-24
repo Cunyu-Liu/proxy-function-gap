@@ -1,0 +1,186 @@
+{
+  "dataset_id": "leppek2022-gse173083-gate0-v1",
+  "raw_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/leppek2022_gate0/raw",
+  "output_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/leppek2022_gate0/derived/leppek2022_gate0_v1",
+  "near_duplicate": {
+    "metric": "full_length_normalized_DNA_Levenshtein",
+    "maximum_normalized_edit_distance": 0.01,
+    "minimum_absolute_edits": 1,
+    "component_rule": "connected_components_including_exact_duplicates"
+  },
+  "role_freeze": {
+    "seed": "leppek2022-gate0-v1-no-outcomes",
+    "targets": {
+      "development": 0.6,
+      "candidate": 0.2,
+      "permanent_evaluation": 0.2
+    },
+    "uses_endpoint_values": false
+  },
+  "inputs": {
+    "geo_soft": {
+      "relative_path": "geo/GSE173083_family.soft.gz",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE173nnn/GSE173083/soft/GSE173083_family.soft.gz",
+      "version": "GEO last update 2022-04-19",
+      "bytes": 14602,
+      "sha256": "eafe2131a0fdcffc1f102ce47dd9d8628760532175c743d1a193a8332e2e6f50",
+      "license": "Public GEO access; no explicit data license stated in retrieved SOFT"
+    },
+    "geo_filelist": {
+      "relative_path": "geo/filelist.txt",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE173nnn/GSE173083/suppl/filelist.txt",
+      "version": "GEO filelist 2021-04-24",
+      "bytes": 512,
+      "sha256": "4385102b907038d5bab6e05c90611763a990e8f842813ee1bdcc819b256f4db7",
+      "license": "Public GEO access; no explicit data license stated in filelist"
+    },
+    "pooled_attributes": {
+      "relative_path": "geo/GSE173083_Table_S1_-_Attributes_for_pooled_233_sequences.xlsx",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE173nnn/GSE173083/suppl/GSE173083_Table_S1_-_Attributes_for_pooled_233_sequences.xlsx",
+      "version": "GEO supplementary 2021-03-26",
+      "bytes": 193214,
+      "sha256": "2e11287568dd3be66cd4cc7656033335a66a76ef71d26528a300a9eae5dda7a8",
+      "license": "Public GEO access; no explicit data license stated in SOFT; original article CC BY 4.0"
+    },
+    "cds_attributes": {
+      "relative_path": "geo/GSE173083_Table_S5_-_Attributes_for_24_CDS_designs.xlsx",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE173nnn/GSE173083/suppl/GSE173083_Table_S5_-_Attributes_for_24_CDS_designs.xlsx",
+      "version": "GEO supplementary 2021-03-26",
+      "bytes": 477026,
+      "sha256": "714aa23649d8d56e8df85ffa5c815e730eb786bf88d2896c7759b98642848bb9",
+      "license": "Public GEO access; no explicit data license stated in SOFT; original article CC BY 4.0"
+    },
+    "rdat_archive": {
+      "relative_path": "geo/GSE173083_RAW.tar",
+      "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE173nnn/GSE173083/suppl/GSE173083_RAW.tar?download=1",
+      "version": "GEO RAW 2021-04-24",
+      "bytes": 41420800,
+      "sha256": "7357eadc1f81f0eac621863b8cf3ad4e488eaac6879e7d597b98ce2d7b7b54c1",
+      "license": "Public GEO access; no explicit data license stated in SOFT"
+    },
+    "sra_runinfo": {
+      "relative_path": "geo/SRP315847_runinfo.csv",
+      "url": "https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=SRP315847",
+      "version": "Retrieved 2026-11-24; per-run ReleaseDate retained",
+      "bytes": 32497,
+      "sha256": "7c6a8020c6e62d75c3cf1bd90e65bc9c1eab098734ebe59a460d2281ac0abcd4",
+      "license": "Public SRA metadata; no explicit license stated in RunInfo"
+    },
+    "article_xml": {
+      "relative_path": "article/PMC8940940_fullText.xml",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8940940/fullTextXML",
+      "version": "PMC8940940.1",
+      "bytes": 281556,
+      "sha256": "0f7cf65716d9c482455abff4bbd3a85ca006715d294df6d3bbc19bc9927db881",
+      "license": "CC BY 4.0 as stated in article XML"
+    },
+    "article_html": {
+      "relative_path": "article/PMC8940940.html",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8940940/",
+      "version": "PMC8940940.1",
+      "bytes": 400136,
+      "sha256": "6078f5ddd209f3c9a0d87c0a2bc455be1ba97de1df34363949ae37c95f689bb8",
+      "license": "CC BY 4.0 as stated in article"
+    },
+    "supplementary_information": {
+      "relative_path": "article/41467_2022_28776_MOESM1_ESM.pdf",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM1_ESM.pdf",
+      "version": "Publisher object last modified 2023-12-04",
+      "bytes": 24899120,
+      "sha256": "fe5b12b2bc07e5b7054ad56aa79f45d80cbeaaba61fb059da5d89aafd8581f19",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "peer_review": {
+      "relative_path": "article/41467_2022_28776_MOESM2_ESM.pdf",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM2_ESM.pdf",
+      "version": "Publisher object last modified 2023-12-04",
+      "bytes": 1462670,
+      "sha256": "8a797fb34581593ded7e345e1f8bff22a1cdac809cc502b31ce9e53454e962b3",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "supplementary_description": {
+      "relative_path": "article/41467_2022_28776_MOESM3_ESM.pdf",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM3_ESM.pdf",
+      "version": "Publisher object last modified 2023-12-04",
+      "bytes": 24171,
+      "sha256": "5ae4f6053c7871d515ec9ad83d01681f57eb9b6d1b5e8f45f8566e9d690f7c5b",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "publisher_zip": {
+      "relative_path": "article/41467_2022_28776_MOESM4_ESM.zip",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM4_ESM.zip",
+      "version": "Publisher object last modified 2023-12-04",
+      "bytes": 20315173,
+      "sha256": "849ed7b49198c5b97049fec8d3636deea8812db4dd45ce0bcc448297703511c2",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "reporting_summary": {
+      "relative_path": "article/41467_2022_28776_MOESM5_ESM.pdf",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM5_ESM.pdf",
+      "version": "Publisher object last modified 2023-12-04",
+      "bytes": 271240,
+      "sha256": "fc55abee1a6d1829543cd380dd31ed2176a8308c3e0820b0416653ed4378708c",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "source_data": {
+      "relative_path": "article/41467_2022_28776_MOESM6_ESM.xlsx",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM6_ESM.xlsx",
+      "version": "Publisher object last modified 2023-12-04",
+      "bytes": 6256259,
+      "sha256": "9a8b6b4314ab892aa3e4a4476993189dff1245d4ab55494723782e6afebae0e7",
+      "license": "CC BY 4.0 article Source Data"
+    },
+    "publisher_pooled_attributes": {
+      "relative_path": "article/supplementary_data/Supplementary Data 1 - Attributes for pooled 233 sequences.xlsx",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM4_ESM.zip",
+      "archive_member": "Supplementary Data 1 - Attributes for pooled 233 sequences.xlsx",
+      "version": "Member of pinned publisher ZIP",
+      "bytes": 194138,
+      "sha256": "be534d17d5ded3056d66ad9c0f554ac7eb885a0d6f2d2ca645f73ecb783b0f53",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "publisher_kmers": {
+      "relative_path": "article/supplementary_data/Supplementary Data 3 - Frequency and statistics of position-specific k-mers enriched after polysome selection.xlsx",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM4_ESM.zip",
+      "archive_member": "Supplementary Data 3 - Frequency and statistics of position-specific k-mers enriched after polysome selection.xlsx",
+      "version": "Member of pinned publisher ZIP",
+      "bytes": 20212581,
+      "sha256": "ca5617d215ae3452013d66955025c5b2c4b68f6a5512d9f1130f7335f675ff4a",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "publisher_shape": {
+      "relative_path": "article/supplementary_data/Supplementary Data 4 - SHAPE, DMS Normalized Reactivities.xlsx",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM4_ESM.zip",
+      "archive_member": "Supplementary Data 4 - SHAPE, DMS Normalized Reactivities.xlsx",
+      "version": "Member of pinned publisher ZIP",
+      "bytes": 52484,
+      "sha256": "5c3034c2dc8a38109ab6ba21e7d591dbf12129112ab0b102f832962a6c77d129",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "cds_significance": {
+      "relative_path": "article/supplementary_data/Supplementary Data 5 - Significance tests for 24 CDS designs.xlsx",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM4_ESM.zip",
+      "archive_member": "Supplementary Data 5 - Significance tests for 24 CDS designs.xlsx",
+      "version": "Member of pinned publisher ZIP",
+      "bytes": 13646,
+      "sha256": "7ee69c6ff89141c7291370eaf316603da7ebfbf2be5d29b33bb6c8834f4255c6",
+      "license": "CC BY 4.0 article supplement"
+    },
+    "publisher_cds_attributes": {
+      "relative_path": "article/supplementary_data/Supplementary Data 6 - Attributes for 24 CDS designs_hkws_update_ESM.xlsx",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-022-28776-w/MediaObjects/41467_2022_28776_MOESM4_ESM.zip",
+      "archive_member": "Supplementary Data 6 - Attributes for 24 CDS designs_hkws_update_ESM.xlsx",
+      "version": "Member of pinned publisher ZIP",
+      "bytes": 538553,
+      "sha256": "dda17ad0ea2e5c9848d885ded39a92e4a2c4b8d7ded10b471f063451248034d1",
+      "license": "CC BY 4.0 article supplement"
+    }
+  },
+  "analysis_constraints": {
+    "model_training_or_inference": false,
+    "outer_results": false,
+    "outcome_based_source_or_data_selection": false,
+    "prediction_as_measurement": false,
+    "cuda_required_for_this_cpu_only_gate": false
+  }
+}

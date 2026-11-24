@@ -35,3 +35,11 @@ Trainer preflight consumes the frozen split-v2 manifest and explicit Learner all
 - Integrated merge: `77077f8` (`Merge commit 'a2f10ee5511b5334d04fab11306a81c63647120c'`)
 
 The fresh CNN v2 production delivery was integrated with `git subtree pull --prefix=gate0`, preserving the source commit as an ancestor. Existing E0, Gate 0, split-v2, runtime, and trainer code were retained. The authorized selected build is `build_a`; its root child/integration/verification/final-validation chain authorizes fresh training while E1 and outer metrics remain disabled.
+
+## Leppek 2022 GSE173083 independent Gate 0
+
+Primary public sources are GEO `GSE173083` (last update 19 April 2022 in SOFT), SRA RunInfo `SRP315847`, Europe PMC/PMC `PMC8940940.1`, and publisher supplementary files for DOI `10.1038/s41467-022-28776-w`. Exact URLs, byte sizes and SHA256 values are pinned in `configs/leppek2022_v2.json`; raw and derived artifacts remain under `/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/leppek2022_gate0` and are not tracked by Git.
+
+The PMC article states CC BY 4.0, which is retained for article and publisher-supplement provenance. The retrieved GEO SOFT does not state an explicit data license; public accessibility is not relabeled as an open license. SRA RunInfo pins 70 runs (50,374 MB reported); raw FASTQ were not downloaded or used to recompute endpoints in this Gate 0 build.
+
+GEO and publisher primary-table copies are independently crosschecked. Source Data `Fig_4c` supplies exact replicate counts. Supplementary Data 5 name-value offsets and the Source Data half-life `n=2` exception are preserved in `supplementary_crosscheck.json`; no outcome-based source selection is performed.
