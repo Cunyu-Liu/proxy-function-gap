@@ -316,7 +316,7 @@ def verify_com_run(config):
         history = [json.loads(line) for line in (run_dir / "history.jsonl").read_text().splitlines() if line.strip()]
         if not summary["converged_dev_plateau"] or len(history) != summary["total_epochs"]:
             raise ValueError(f"invalid convergence history for seed {seed}")
-        if history[-1]["plateau_epochs"] != config.patience or summary["best_epoch"] != max(history, key=lambda row: row["dev_eval_loss"])["epoch"]:
+        if history[-1]["plateau_epochs"] != config.patience or summary["best_epoch"] != min(history, key=lambda row: row["dev_eval_loss"])["epoch"]:
             raise ValueError(f"invalid plateau or best epoch for seed {seed}")
         if sha256_file(run_dir / "history.jsonl") != summary["history_sha256"] or sha256_file(run_dir / "best.pt") != summary["best_checkpoint_sha256"]:
             raise ValueError(f"artifact hash mismatch for seed {seed}")
