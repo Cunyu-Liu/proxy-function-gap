@@ -41,7 +41,7 @@ def test_actual_cost_summary_keeps_full_support_tilt_over_budget(tmp_path, monke
     raw = np.full(len(regrets), 0.4)
     calibrated = np.tile([0.8, 0.2, 0.2, 0.2, 0.2], 2)
     np.savez(q_root / "q_oof_predictions.npz", raw_q=raw, calibrated_q=calibrated, regret=regrets, target=(regrets > 0.1).astype(float))
-    manifest = {"threshold_domain": "platt_calibrated_probability", "selected_threshold": 0.75, "delta_regret": 0.1, "threshold_rows": [{"threshold": 0.5}, {"threshold": 0.75}]}
+    manifest = {"threshold_domain": "platt_calibrated_probability", "selected_threshold": 0.75, "delta_regret": 0.1, "min_coverage": 0.5, "threshold_grid": [0.5, 0.75], "threshold_rows": [{"threshold": 0.5}, {"threshold": 0.75}]}
     (q_root / "q_manifest.json").write_text(json.dumps(manifest) + "\n")
     frozen = tmp_path / "frozen.json"
     frozen.write_text(json.dumps({"selected": {"strategy": "fp-rej", "alpha": 20, "proposal_cap": 16}}) + "\n")

@@ -63,6 +63,8 @@ def test_q_threshold_is_selected_on_platt_calibrated_oof(monkeypatch, tmp_path):
     ]
     manifest = save_q_head_artifacts(result, tmp_path / "q")
     assert manifest["threshold_domain"] == Q_THRESHOLD_DOMAIN
+    assert manifest["threshold_grid"] == [0.5, 0.75]
+    assert manifest["min_coverage"] == 0.5
     with np.load(tmp_path / "q" / "q_oof_predictions.npz", allow_pickle=False) as saved:
         assert np.allclose(saved["raw_q"], raw_oof)
         assert np.allclose(saved["calibrated_q"], result["calibrated_oof"])

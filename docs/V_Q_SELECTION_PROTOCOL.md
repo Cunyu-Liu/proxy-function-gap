@@ -30,13 +30,15 @@ Strategies: Random, BoN, LCB, WSC identity-weighted vote, greedy verifier-reward
 
 Alpha grid: `{0,1,5,10,20}`. Proposal-cap grid: `{1,2,4,8,16}`. Five paired seeds: `{101,202,303,404,505}`. Every strategy uses the same seed for each alpha/cap pair.
 
-Production selection executes the three frozen CNN members and V fold/Platt models on CUDA for every score. Repeated proposals are not cached and precomputed NPZ lookup is not counted as a production forward. Per-member, verifier and underlying V-model item-forwards are recorded separately. Random costs zero. FP-TILT scores the full support; FP-REJ can stop early. Identical N does not imply identical actual cost. LCB is `ensemble_mean - lambda * ensemble_std`.
+Production selection executes the three frozen CNN members and V fold/Platt models on CUDA for every score. Repeated proposals are not cached and precomputed NPZ lookup is not counted as a production forward. Proxy/verifier member, V and Q item-forwards are recorded separately. Random costs zero. FP-TILT scores the full support; FP-REJ can stop early. Identical N does not imply identical actual cost. LCB is `ensemble_mean - lambda * ensemble_std`.
+
+The common primary CNN budget is BoN cap16: 48 member item-forwards. V and Q costs are additional separate columns, not hidden inside that budget. Full-support FP-TILT is reported at its actual cost and marked over budget when it exceeds 48; it is never truncated to force an equal-cost comparison. `production-grid --actual-cost-budget` is a separate execution-truncation control and is not a substitute for per-strategy cost reporting.
 
 ## Q head
 
 Q is trained only after all selection manifests are hash-verified and the combined record set is frozen. It uses pool-level proxy/support/cost features and the frozen selection's dev regret. It is a high-regret probability used only for abstention/risk coverage.
 
-Threshold selection uses dev OOF risk-coverage rows and the configured minimum coverage. Calibration only fits final Platt logistic probability calibration. Q never changes candidate order, FP-TILT weights, or FP-REJ acceptance weights. All selection and pool source hashes are saved.
+Calibration fits the final Platt logistic probability calibrator first. That calibrator is then applied to grouped dev OOF predictions, and threshold selection uses calibrated-OOF risk-coverage rows with the configured minimum coverage. Both raw and calibrated OOF probabilities are saved, and the manifest declares `threshold_domain=platt_calibrated_probability`. Calibration cannot select Q features, model type or threshold. Q never changes candidate order, FP-TILT weights, or FP-REJ acceptance weights. Q can only add abstention; it cannot restore a selector-abstained record. All selection and pool source hashes are saved.
 
 ## Executable entries
 
@@ -47,7 +49,8 @@ PY=/root/miniconda3/envs/lucaone_cu128/bin/python
 $PY -m proxy_function_gap.pool_cli ensemble-inference --config configs/ensemble_inference_v2.json
 $PY -m proxy_function_gap.pool_cli build-production-pool --source-pool-manifest <fixed_pool.json> --pool-id dev_000 --prediction-manifest <ensemble_v2/prediction_manifest.json> --output-dir <output>
 $PY -m proxy_function_gap.pool_cli pool-preflight --manifest <pool_manifest.json>
-$PY -m proxy_function_gap.pool_cli production-grid --manifest <pool_manifest.json> --inference-config configs/ensemble_inference_v2.json --v-artifacts <v_artifacts> --output <selection.json>
+$PY -m proxy_function_gap.pool_cli production-grid --manifest <pool_manifest.json> --inference-config configs/ensemble_inference_v2.json --v-artifacts <v_artifacts> --output <selection.json> [--actual-cost-budget 48]
+$PY -m proxy_function_gap.pool_cli q-decisions --manifest <dev_or_calibration_pool_manifest.json> --selection <selection.json> --q-artifacts <q_artifacts> --output <q_decisions.json>
 $PY -m proxy_function_gap.pool_cli synthetic-grid --manifest <synthetic_pool_manifest.json> --output <selection.json>
 $PY -m proxy_function_gap.pool_cli fit-v --dev <dev_pool_a.json ...> --calibration <calibration_pool_a.json ...> --output-dir <v_artifacts>
 $PY -m proxy_function_gap.pool_cli fit-q --selection <selection_a.json ...> --dev <dev_pool_a.json ...> --calibration <calibration_pool_a.json ...> --output-dir <q_artifacts>

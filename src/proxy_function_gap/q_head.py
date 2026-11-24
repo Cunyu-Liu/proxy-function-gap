@@ -152,6 +152,8 @@ def save_q_head_artifacts(result, output_dir):
         "q_usage": "abstain/risk-coverage only; never candidate ranking",
         "delta_regret": result["config"].delta_regret,
         "threshold_domain": Q_THRESHOLD_DOMAIN,
+        "threshold_grid": list(result["config"].thresholds),
+        "min_coverage": result["config"].min_coverage,
         "selected_threshold": result["selected_threshold"],
         "threshold_rows": result["threshold_rows"],
         "fold_models": [

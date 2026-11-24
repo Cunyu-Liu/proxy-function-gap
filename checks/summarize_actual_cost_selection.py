@@ -202,7 +202,8 @@ def main():
         "selected_threshold": q_manifest["selected_threshold"],
         "raw_q": {"mean": float(np.mean(raw)), "min": float(np.min(raw)), "max": float(np.max(raw)), "log_loss": log_loss(targets, raw)},
         "calibrated_q": {"mean": float(np.mean(calibrated)), "min": float(np.min(calibrated)), "max": float(np.max(calibrated)), "log_loss": log_loss(targets, calibrated)},
-        "risk_coverage": _risk_coverage(calibrated, regrets, [row["threshold"] for row in q_manifest["threshold_rows"]]),
+        "min_coverage_gate": q_manifest["min_coverage"],
+        "risk_coverage": _risk_coverage(calibrated, regrets, q_manifest["threshold_grid"]),
     }
     outer = args.role.startswith("outer_")
     report = {
