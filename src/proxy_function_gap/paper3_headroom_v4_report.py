@@ -58,6 +58,7 @@ def main(argv=None):
         f"- 完成全部 **48 个 zero/full-Q 门禁**和 V2 冻结的 **6 个曲线情境**，六策略为 random、max-variance、diversity、解析 EI、top-proxy 和 regret-analytic；没有按 V4 阳性换池或删除负结果。",
         f"- V4 的 384 个获取步严格收敛 **{convergence['converged_count']}/384（{100 * convergence['converged_fraction']:.2f}%）**，最高两层首选稳定率 **{100 * convergence['last_choice_stable_fraction']:.2f}%**；V3 对应严格收敛率为 31.77%。",
         "- `regret_analytic` 消除了 posterior 和 hypothetical-label 两层 Monte Carlo，但其 closed-form normal-max 计算建立在 **fantasy 后验候选间独立（对角协方差）近似**上；不是原始相关联合后验 multivariate-max 的精确闭式解。",
+        "- **保留 random/max-variance/top-proxy 简单基线，不声称 regret-analytic 稳定优于简单基线。** kmer4 中它只在 8 标签单独最低；4 标签与 EI 并列，16 标签逊于 EI，32 标签逊于 max-variance。summary4 固定情境所有预算完全停滞。",
         "- 结果只属回顾性 development/calibration 诊断。没有使用 query/outer 标签调参，没有读取或评分永久 outer，不声称普遍 acquisition 优越性。是否优于简单基线以下述 pooled 与逐池结果为准，不利结果全部保留。",
         "",
         "## 方法、冻结实现与数值审计",
@@ -126,7 +127,22 @@ def main(argv=None):
     cohort = sorted({(item["representation"], item["query_pool_id"]) for item in per_case})
     for representation, query_id in cohort:
         lines.extend([f"### {representation}/{query_id}", "", curve_table(per_case, representation, query_id), ""])
+    best_rows = []
+    for budget in (4, 8, 16, 32):
+        selected = [item for item in pooled if item["representation"] == "kmer4" and item["budget"] == budget]
+        minimum = min(item["pool_mean_regret_mean"] for item in selected)
+        winners = [LABELS[item["strategy"]] for item in selected if abs(item["pool_mean_regret_mean"] - minimum) <= 1e-12]
+        analytic = next(item["pool_mean_regret_mean"] for item in selected if item["strategy"] == "regret_analytic")
+        best_rows.append([budget, ", ".join(winners), f"{minimum:.6f}", f"{analytic:.6f}"])
     lines.extend([
+        "## 与 V3 和简单基线的结果判断",
+        "",
+        table(["kmer4 budget", "最低 pooled regret 策略", "最低值", "Regret-analytic"], best_rows),
+        "",
+        "V3 regret-Q 在 kmer4 的 8/16 标签 pooled 均值最低；V4 只在 8 标签保持最低，16 标签不再领先 EI。这说明 V3 的部分排名确实受到 posterior Monte Carlo 影响，但消除该数值噪声并未产生稳定获取优势。V4 在 calibration_002 的 16 标签 regret 为 4.903296，而 EI 为 0；该反例不能被 pooled 结果隐藏。",
+        "",
+        "保留简单基线的理由有四点：第一，复杂策略没有跨预算或逐池支配；第二，summary4 即使 full-Q 也没有 headroom，瓶颈不是 acquisition 数值噪声；第三，对角独立近似去掉了联合 posterior 的相关耦合，确定性目标与原始相关目标并不相同；第四，表示/模型错设、top-1 离散跳变和小池组成仍可能主导真实 regret。100% 求积收敛只支持数值可重复性，不支持获取有效性或 outer 泛化。",
+        "",
         "## 求积收敛与统一约束",
         "",
         f"最高两层最大绝对分差中位数为 **{convergence['max_absolute_score_delta_median']:.6e}**，最大值为 **{convergence['max_absolute_score_delta_max']:.6e}**。未收敛步只标记，没有追加节点或替换候选。",
