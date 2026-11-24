@@ -6,7 +6,7 @@
 
 ### Abstract
 
-Computational proxies are used to train, sample, and rank biological sequences, but their scores need not remain reliable after optimization pressure changes the candidate distribution. This study examines fixed-pool best-of-N selection in 5′ untranslated region (5′ UTR) design, holding the candidate-generating process fixed while varying proxy-selection pressure. Historical measurements from Sample et al. and Castillo-Hair et al. are evaluated using a frozen convolutional ensemble trained only on Sample data. Sample-designed pools show monotone regret reduction from 1.905 to 0.681 as the proposal cap increases from 1 to 16, whereas four external Castillo contexts exhibit non-monotone behavior or later reversals. Alternative N50 pools also reverse after cap 4–8. Within-pool score matching yields no consistent optimizer-specific error increment: all four absolute-error-difference intervals include zero. In contrast, absolute errors are strongly correlated between the convolutional ensemble and an independently trained 4-mer multilayer perceptron (0.931–0.965), indicating shared proxy failure across architectures. Gaussian perturbations of normalized proxy outputs do not produce monotone degradation. A preregistered verifier-guided selection pilot is negative and is not used to support method claims. These results support context-dependent high-score extrapolation risk and common-proxy failure rather than a universal direction of optimization failure. The complete evidence is retrospective historical replay, not prospective wet-lab validation.
+Computational proxies are used to train, sample, and rank biological sequences, but their scores need not remain reliable after optimization pressure changes the candidate distribution. This study examines fixed-pool best-of-N selection in 5′ untranslated region (5′ UTR) design, holding the candidate-generating process fixed while varying proxy-selection pressure. Historical measurements from Sample et al. and Castillo-Hair et al. are evaluated using a frozen convolutional ensemble trained only on Sample data. Sample-designed pools show monotone regret reduction from 1.905 to 0.681 as the proposal cap increases from 1 to 16, whereas four external Castillo contexts exhibit non-monotone behavior or later reversals. Alternative N50 pools also reverse after cap 4–8. Within-pool score matching yields no consistent optimizer-specific error increment: all four absolute-error-difference intervals include zero. In contrast, absolute errors are strongly correlated between the convolutional ensemble and an independently trained 4-mer multilayer perceptron (0.931–0.965), indicating shared proxy failure across architectures. Gaussian perturbations of normalized proxy outputs do not produce monotone degradation. These results support context-dependent high-score extrapolation risk and common-proxy failure rather than a universal direction of optimization failure. The complete evidence is retrospective historical replay, not prospective wet-lab validation.
 
 **Keywords:** proxy–function gap; biological sequence design; 5′ UTR; model-based optimization; winner’s curse; uncertainty; external validation
 
@@ -24,7 +24,6 @@ The contributions are:
 2. Within-pool score matching to separate high-score extrapolation from optimizer-specific distortion.
 3. Same- and cross-architecture common-proxy analysis using a frozen convolutional neural network (CNN) ensemble and a separately trained 4-mer multilayer perceptron (MLP).
 4. Alternative-pool sensitivity and normalized-output noise experiments that preserve all negative and non-monotone results.
-5. A preregistered verifier-guided self-consistency (VGSC)-inspired pilot whose negative outcome restricts the method narrative.
 
 ## 2. Related work
 
@@ -55,8 +54,6 @@ Castillo-Hair GSE232927 supplies the external contexts. N50 HEK293T is the main 
 ### 3.3 Selection protocols
 
 Random and best-of-N (BoN) use proposal caps \(\{1,2,4,8,16\}\) and seeds \(\{101,202,303,404,505\}\). Each context has 16 pools of 64 unique sequences. Every score executes the three frozen members on CUDA; precomputed predictions are not counted as new forwards. The Evaluator reads historical labels only after Learner artifacts are validated.
-
-A separate FP-REJ/FP-TILT pilot uses a verifier \(V=1-r\), where \(r\) estimates proxy overestimation probability, and a pool-level risk model \(Q\) for abstention. The dev-frozen FP-REJ configuration is \(\alpha=20\) and cap 16. The pilot is included only as a falsification result, not as evidence of VGSC superiority.
 
 ### 3.4 Score matching and common-proxy analysis
 
@@ -129,17 +126,11 @@ Shared training data and endpoint definitions therefore dominate over architectu
 
 At cap 16, regrets for \(\sigma=0,0.1,0.25,0.5,1.0\) are 6.519, 6.018, 6.143, 6.205, and 6.526. Sigma-zero exactly reproduces the original grid. Moderate noise can improve selection, while the largest noise returns close to baseline. The hypothesis that BoN necessarily amplifies Gaussian output noise is not supported. These observations are descriptive and are not used to propose noise injection as a method.
 
-### 4.6 VGSC-inspired pilot fails its gate
-
-In the designed outer context, FP-REJ without Q has mean regret 1.024, compared with 0.681 for BoN at the same cap. The difference is +0.343 with a pool-cluster 95% interval of [0.225, 0.467]. Q rejects every selection, giving zero coverage and an undefined final regret. Three eligible random pools give a small FP-REJ+Q advantage of −0.055 with an interval of [−1.400, 1.051], insufficient to support a general advantage. The pilot therefore remains a baseline and protocol contribution rather than a main method claim.
-
 ## 5. Discussion
 
 The results support a conditional proxy contract rather than a universal account of proxy failure. Fixed-pool pressure can improve measured selection in one context and stall or reverse in another. Score matching does not identify a stable optimizer-specific increment, while cross-architecture error correlations demonstrate that shared errors can dominate over model diversity. Alternative pools and the negative noise experiment further constrain the mechanism narrative.
 
 These findings should not be interpreted as proof that proxies are useless. Sample-designed pools show that a frozen proxy can remain useful under increased selection pressure. Nor do they justify a claim that optimization always damages function. Instead, the results show that proxy validity must be declared by library, cell, assay, and training lineage, and then checked against an independent endpoint.
-
-The negative VGSC pilot is consequential. It shows that stochastic verifier guidance and pool-level abstention do not automatically solve proxy failure. In particular, a risk model calibrated in one context can reject every candidate in another. Reusing the same outer results to tune the threshold would invalidate the evaluation and was not done.
 
 ## 6. Limitations
 

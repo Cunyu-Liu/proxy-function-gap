@@ -23,6 +23,7 @@
 - designed 外层 16 池：FP-REJ without Q 的 regret 为 1.0242708233，BoN 为 0.6811140309；差值 +0.3431567924，池簇 bootstrap 95% 区间 [0.2250717297, 0.4670981804]，不利于 FP-REJ。
 - FP-REJ+Q 在 designed 上覆盖率为 0，regret 不定义。三个 eligible random 池的小差值区间跨 0，不能支持一般优势。
 - 停止条件已触发：匹配预算下不优于 BoN，且 Q 的覆盖失效。不得查看外层后调整阈值、α 或池构造再称同一盲测；不得将 VGSC 写成 Paper 2 有效方法。保留预算、噪声、负结果和基线价值。
+- 根据最新提交边界，VGSC 失败 pilot 不纳入 Paper 1 投稿稿件。本记录、`docs/PILOT_V3_RESULT.md`、原始产物和对应 PPT 完整保留该结果，不删除证据、不篡改结论。
 
 ## 嵌入点三：Paper 3 获取函数与部署选择器一致
 

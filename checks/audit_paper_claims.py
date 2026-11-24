@@ -10,7 +10,10 @@ def main():
     checks = {}
     checks['references_15'] = text.count('\n[') >= 15 and '[15]' in text
     checks['retrospective_boundary'] = 'retrospective historical replay' in text and 'not prospective wet-lab validation' in text
-    checks['negative_vgsc_retained'] = 'Q rejects every selection' in text and 'not as evidence of VGSC superiority' in text
+    execution_record = (repo / 'docs/VGSC_THREE_PAPER_EXECUTION.md').read_text()
+    checks['negative_vgsc_retained_internally'] = 'FP-REJ+Q 在 designed 上覆盖率为 0' in execution_record and '不得将 VGSC 写成 Paper 2 有效方法' in execution_record
+    checks['vgsc_failure_not_submitted_as_paper1_result'] = 'FP-REJ without Q' not in text and 'Q rejects every selection' not in text
+    checks['positive_main_findings'] = '0.931–0.965' in text and '1.905 to 0.681' in text
     checks['score_matching_boundary'] = 'All intervals include zero' in text
     checks['github_availability_current'] = 'https://github.com/Cunyu-Liu/proxy-function-gap' in text and 'GitHub upload remains pending' not in text
     forbidden = ['first-ever', 'proves that', 'wet-lab validated', 'universally superior', 'completed preprint']
