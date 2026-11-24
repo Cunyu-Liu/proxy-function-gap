@@ -10,9 +10,9 @@ All reported COM seeds used actual parallel CUDA workers, 50-step discrete adver
 
 | Seed | Epochs | Best epoch | Best train MSE | Best dev MSE | Best alpha | Seconds | Peak allocated bytes |
 |---:|---:|---:|---:|---:|---:|---:|---:|
-| 11 | 88 | 73 | 0.466557 | 0.671121 | 0.000000 | 4142.06 | 974468096 |
-| 23 | 82 | 61 | 0.480084 | 0.674638 | 0.000000 | 3754.42 | 974522880 |
-| 37 | 81 | 47 | 0.482091 | 0.671891 | 0.000003 | 3742.41 | 974468096 |
+| 11 | 88 | 73 | 0.466557 | 0.671121 | 7.954e-08 | 4142.06 | 974468096 |
+| 23 | 82 | 61 | 0.480084 | 0.674638 | 3.555e-07 | 3754.42 | 974522880 |
+| 37 | 81 | 47 | 0.482091 | 0.671891 | 3.134e-06 | 3742.41 | 974468096 |
 
 Training code commit: `5c9f2547efad919ffcaf4b00e05e07e70ad3493e`. Config SHA256: `a6797903f7c286a627750fe8bc1c3b34bcb7b4053f1e6caef28600b1cb92d53c`. Histories, checkpoints, per-epoch hashes and three independent CUDA reload/recompute reports are stored with the artifacts.
 
@@ -91,8 +91,10 @@ Thirty-two deterministic within-proposal permutations were retained for every me
 
 ## Conclusion
 
+Designed COM and diversity-LCB top-1 intervals cross zero, so neither demonstrates a regret advantage. Random outer COM is worse, and diversity-LCB is also numerically worse with an interval crossing zero; there is no context-general benefit. Because dev selected zero LCB/distance penalties, those methods equal BoN and their feature permutations are trivial negative controls.
+
 These are baseline and sensitivity results only. No claim of biological improvement, prospective validation, independent-study replication or official COM reproduction is made. Any unfavorable or interval-crossing result remains evidence against a method advantage; the preserved FP-REJ/Q gate failure is not reversed.
 
 ## Verification
 
-Three complete software rounds passed (291 tests plus 106 subtests each). COM checkpoints and every outer evaluation were independently checked in three rounds, including CUDA reload/dev-loss recomputation, raw regret/top-k recomputation, record completeness, frozen hyperparameters, permutation counts and source hashes.
+Three complete software rounds passed (291 tests plus 106 subtests each); the final expanded delivery suite also passed (296 tests plus 106 subtests). COM checkpoints and every outer evaluation were independently checked in three rounds, including CUDA reload/dev-loss recomputation, raw regret/top-k recomputation, record completeness, frozen hyperparameters, permutation counts and source hashes.
