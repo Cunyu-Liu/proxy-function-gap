@@ -220,6 +220,8 @@ def run_pool_baselines(pool, config, output, permutations=0):
                             "proposals": proposals,
                             "unique_proposals": len(set(proposals)),
                             "cnn_member_item_forwards": 3 * cap,
+                            "member_item_forwards": {"11": cap, "23": cap, "37": cap},
+                            "scoring_ensemble": "com" if method == "com" else "fresh_cnn",
                             "training_forward_cost_unamortized": None,
                             "abstain": False,
                             "regret": None,
