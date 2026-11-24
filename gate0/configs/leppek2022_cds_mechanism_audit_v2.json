@@ -1,0 +1,60 @@
+{
+  "dataset_id": "leppek2022-cds-cross-endpoint-audit-v2",
+  "preregistered_at": "2026-11-24T11:19:39Z",
+  "preregistration_commit": "cc706aa16c56d5e83a0e9362c873de938f673eca",
+  "supersedes": {
+    "dataset_id": "leppek2022-cds-cross-endpoint-audit-v1",
+    "reason": "technical_only_explicit_font_and_content_based_code_fingerprint_for_byte_identical_rebuild",
+    "changes_endpoints_statistics_or_population": false
+  },
+  "gate0_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/leppek2022_gate0/derived/leppek2022_gate0_v2",
+  "gate0_delivery_checksums_sha256": "5d3819f99ec28d2820d8879675b324b7e859226607aed4e6ddaba6fb5cb5eeee",
+  "source_data_path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/leppek2022_gate0/raw/article/41467_2022_28776_MOESM6_ESM.xlsx",
+  "source_data_sha256": "9a8b6b4314ab892aa3e4a4476993189dff1245d4ab55494723782e6afebae0e7",
+  "source_data_sheet": "Fig_4c",
+  "output_dir": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/leppek2022_cds_mechanism_audit/derived/leppek2022_cds_mechanism_audit_v2",
+  "analysis_population": {
+    "cds": "all_24_gate0_v2_cds_constructs_without_role_or_outcome_filtering",
+    "pooled": "all_233_gate0_v2_pooled_constructs_for_separate_mechanism_context_only"
+  },
+  "cds_primary_endpoints": [
+    "cds_in_solution_half_life",
+    "nluc_fluc_6h",
+    "nluc_fluc_24h"
+  ],
+  "pooled_context_endpoints": [
+    "ribosome_load",
+    "monosome_to_40s_60s_ratio",
+    "polysome_to_monosome_ratio",
+    "polysome_to_40s_60s_ratio",
+    "in_cell_half_life",
+    "in_solution_half_life"
+  ],
+  "pooled_correlation_pairs": [
+    ["ribosome_load", "in_cell_half_life"],
+    ["ribosome_load", "in_solution_half_life"],
+    ["in_cell_half_life", "in_solution_half_life"]
+  ],
+  "correlation_methods": ["pearson", "spearman_average_ranks"],
+  "rank_reversal": {
+    "unit": "unordered_construct_pair",
+    "discordant_definition": "opposite_strict_order_on_two_endpoints",
+    "denominator": "concordant_plus_discordant_pairs_with_ties_reported_separately",
+    "top_k": 6,
+    "top_k_rule": "highest_values_with_source_construct_id_ascending_tiebreak"
+  },
+  "missing_data": "complete_pairs_only_no_imputation",
+  "replicates": "published_construct_summaries_with_exact_n_from_Source_Data_Fig_4c_no_pseudo_replication",
+  "inferential_statistics": false,
+  "confidence_intervals_or_p_values": false,
+  "model_training_or_inference": false,
+  "outer_results": false,
+  "predicted_expression_as_measured": false,
+  "compute": "CPU_only_no_GPU_inference",
+  "figure": {
+    "formats": ["png", "pdf", "svg"],
+    "dpi": 300,
+    "panels": ["coverage", "pooled_mrl_in_cell_stability", "pooled_mrl_in_solution_stability", "cds_stability_expression_6h", "cds_stability_expression_24h", "cds_expression_rank_reversal"]
+  },
+  "verification_rounds": 3
+}
