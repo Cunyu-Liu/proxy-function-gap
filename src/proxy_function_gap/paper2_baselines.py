@@ -354,10 +354,11 @@ def summarize_evaluations(evaluation_paths, output, permutations=32):
             configurations.append({"method": method, "proposal_cap": cap, "pools": len(per_pool), "mean_regret": float(np.mean(list(per_pool.values()))), "pool_standard_error": float(np.std(list(per_pool.values()), ddof=1) / math.sqrt(len(per_pool))), "mean_cnn_member_item_forwards": float(np.mean([row["cnn_member_item_forwards"] for row in current])), "coverage": 1.0})
     comparisons = []
     for method in METHODS:
-        if method in ("bon", "lcb"):
+        if method == "bon":
             continue
         current = [row for row in actual if row["method"] == method and row["proposal_cap"] == 16]
-        for reference in ("bon", "lcb"):
+        references = ("bon",) if method == "lcb" else ("bon", "lcb")
+        for reference in references:
             reference_rows = [row for row in actual if row["method"] == reference and row["proposal_cap"] == 16]
             for metric in ("regret", "regret_at_4"):
                 value = (lambda row: row["regret"]) if metric == "regret" else (lambda row: row["top_k"]["4"]["regret_at_k"])
