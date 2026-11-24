@@ -1,4 +1,5 @@
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -64,6 +65,38 @@ def test_regret_quadrature_is_cuda_deterministic_and_has_full_ladder(tmp_path):
     assert metadata["common_random_numbers"] and metadata["antithetic_posterior_samples"]
 
 
+def test_regret_quadrature_matches_independent_two_candidate_update(tmp_path):
+    protocol = config(tmp_path)
+    cfg = protocol.runtime(1.0, 0.04)
+    development_x = np.array([[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+    development_y = np.array([0.2, -0.1, 0.3])
+    model, _ = fit_model(development_x, development_y, cfg)
+    features = np.array([[1.0, 0.2], [0.1, 1.0]])
+    scores, _ = regret_quadrature_ladder_cuda(model, features, features, protocol, 91, cfg.noise_variance)
+    nodes, weights = np.polynomial.hermite.hermgauss(32)
+    nodes = nodes * np.sqrt(2.0)
+    weights = weights / np.sqrt(np.pi)
+    expected = []
+    for index, feature in enumerate(features):
+        query_mean, query_variance = model.predict(feature[None, :], include_noise=True)
+        regrets = []
+        for node in nodes:
+            fantasy = query_mean[0] + np.sqrt(query_variance[0]) * node
+            updated = model.update(feature, fantasy)
+            means, variances = updated.predict(features, include_noise=False)
+            covariance = features @ updated.covariance @ features.T
+            choice = int(np.argmax(means))
+            other = 1 - choice
+            delta = means[choice] - means[other]
+            sigma = np.sqrt(max(covariance[other, other] + covariance[choice, choice] - 2 * covariance[choice, other], 0.0))
+            if sigma == 0:
+                regrets.append(0.0)
+            else:
+                regrets.append(sigma / np.sqrt(2 * np.pi) * np.exp(-0.5 * (delta / sigma) ** 2) - delta * 0.5 * math.erfc(delta / (np.sqrt(2) * sigma)))
+        expected.append(-float(np.dot(weights, regrets)))
+    assert scores.cpu().numpy() == pytest.approx(expected, abs=0.01)
+
+
 def test_inner_selection_uses_blocked_development_folds_and_cuda(tmp_path):
     protocol = config(tmp_path)
     rng = np.random.default_rng(4)
@@ -93,6 +126,7 @@ def test_random_curve_applies_same_within_batch_constraint(tmp_path):
         sequences, "random", protocol, runtime, 19,
     )
     assert [item["budget"] for item in result["records"]] == [0, 4, 8, 16, 32, 64]
+    json.dumps(result)
     assert len(set(result["query_order"])) == 64
     assert sum(item["within_batch_near_duplicates_excluded"] for item in result["acquisition_metadata"]) > 0
     for item in result["acquisition_metadata"]:

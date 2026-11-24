@@ -360,7 +360,7 @@ def curve_case_v3(development_features, development_labels, query_features, quer
         if not available:
             raise RuntimeError("frozen batch constraint left no feasible query")
         if strategy == "random":
-            choice = next(index for index in random_order if index in available)
+            choice = int(next(index for index in random_order if index in available))
             metadata = {"device": "not_applicable", "cpu_fallback": False}
         else:
             available_x = query_features[available]
