@@ -190,7 +190,8 @@ def run_pool_baselines(pool, config, output, permutations=0):
                 for setting in combinations:
                     lambda_ = float(setting.get("lambda", 0.0))
                     gamma = float(setting.get("gamma", 0.0))
-                    for permutation_id in range(permutations + 1):
+                    permutation_ids = range(permutations + 1) if cap == 16 else range(1)
+                    for permutation_id in permutation_ids:
                         if method in ("bon", "lcb", "distance", "diversity_lcb"):
                             mean, std = cnn_mean.copy(), cnn_std.copy()
                         else:
