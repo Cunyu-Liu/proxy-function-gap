@@ -26,7 +26,7 @@ def require_q_threshold_domain(manifest):
 @dataclass(frozen=True)
 class QHeadConfig:
     delta_regret: float = 0.1
-    thresholds: tuple = (0.1, 0.25, 0.5, 0.75, 0.9)
+    thresholds: tuple = (0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
     min_coverage: float = 0.5
     learning_rate: float = 0.05
     min_delta: float = 0.0001

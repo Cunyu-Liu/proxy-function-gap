@@ -40,6 +40,8 @@ Q is trained only after all selection manifests are hash-verified and the combin
 
 Calibration fits the final Platt logistic probability calibrator first. That calibrator is then applied to grouped dev OOF predictions, and threshold selection uses calibrated-OOF risk-coverage rows with the configured minimum coverage. Both raw and calibrated OOF probabilities are saved, and the manifest declares `threshold_domain=platt_calibrated_probability`. Calibration cannot select Q features, model type or threshold. Q never changes candidate order, FP-TILT weights, or FP-REJ acceptance weights. Q can only add abstention; it cannot restore a selector-abstained record. All selection and pool source hashes are saved.
 
+The 2026-11-24 dev-only recalibration found that the legacy probability grid ending at 0.9 had zero coverage after Platt calibration (minimum calibrated dev OOF 0.96494). Before any outer rerun, the candidate grid was extended only with stricter high-probability thresholds 0.95, 0.975 and 0.99. The minimum coverage remained 0.5, 1.0 was not added, and the original dev risk-coverage objective remained unchanged. This feasibility amendment is recorded as dev-only protocol history, not as a new blind or outer-driven choice.
+
 ## Executable entries
 
 ```bash

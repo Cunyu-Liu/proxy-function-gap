@@ -130,3 +130,10 @@ def test_production_q_scorer_compares_calibrated_probability_in_declared_domain(
     assert decision["threshold"] == 0.75
     assert decision["threshold_domain"] == Q_THRESHOLD_DOMAIN
     assert decision["abstain"] is True
+
+
+def test_default_q_grid_extends_only_to_stricter_high_probability_candidates():
+    config = QHeadConfig()
+    assert config.thresholds == (0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.975, 0.99)
+    assert config.min_coverage == 0.5
+    assert 1.0 not in config.thresholds
