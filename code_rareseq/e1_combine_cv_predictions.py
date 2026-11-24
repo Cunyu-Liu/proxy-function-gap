@@ -16,6 +16,7 @@ def main():
     ap.add_argument("--seeds", default="0,1,2")
     ap.add_argument("--log", default="/root/rareseq/logs/experiments.jsonl")
     ap.add_argument("--data-version", default="e0-v1-id90-frozen")
+    ap.add_argument("--prefix", default="pilot_", help="run 目录前缀；主集用空串")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     lg = RunLogger(args.log, stage="E1", kind="cv-prediction-combine")
@@ -27,7 +28,7 @@ def main():
     for seed in [int(x) for x in args.seeds.split(",")]:
         frames = []
         for fold in folds:
-            path = os.path.join(args.e1_root, f"pilot_f{fold}_modern_bce_s{seed}",
+            path = os.path.join(args.e1_root, f"{args.prefix}f{fold}_modern_bce_s{seed}",
                                 "modern_test_predictions.tsv.gz")
             frames.append(pd.read_csv(path, sep="\t"))
         out = os.path.join(args.out, f"modern_bce_s{seed}.tsv.gz")
@@ -36,7 +37,7 @@ def main():
         counts[f"modern_s{seed}"] = len(frame)
     frames = []
     for fold in folds:
-        path = os.path.join(args.e1_root, f"pilot_f{fold}_knn", "knn_test_predictions.tsv.gz")
+        path = os.path.join(args.e1_root, f"{args.prefix}f{fold}_knn", "knn_test_predictions.tsv.gz")
         frames.append(pd.read_csv(path, sep="\t"))
     frame = pd.concat(frames, ignore_index=True)
     frame.to_csv(os.path.join(args.out, "knn.tsv.gz"), sep="\t", index=False, compression="gzip")

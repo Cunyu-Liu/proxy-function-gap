@@ -17,6 +17,7 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--log", default="/root/rareseq/logs/experiments.jsonl")
     ap.add_argument("--data-version", default="e0-v1-id90-frozen")
+    ap.add_argument("--prefix", default="pilot_", help="run 目录前缀；主集用空串")
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     lg = RunLogger(args.log, stage="E1", kind="cv-summary")
@@ -26,11 +27,11 @@ def main():
     modern_frames, knn_frames = [], []
     for fold in [int(x) for x in args.folds.split(",")]:
         for seed in [int(x) for x in args.seeds.split(",")]:
-            path = os.path.join(args.e1_root, f"pilot_f{fold}_modern_bce_s{seed}", "modern_results.tsv")
+            path = os.path.join(args.e1_root, f"{args.prefix}f{fold}_modern_bce_s{seed}", "modern_results.tsv")
             frame = pd.read_csv(path, sep="\t")
             frame["seed"] = seed
             modern_frames.append(frame)
-        path = os.path.join(args.e1_root, f"pilot_f{fold}_knn", "knn_results.tsv")
+        path = os.path.join(args.e1_root, f"{args.prefix}f{fold}_knn", "knn_results.tsv")
         knn_frames.append(pd.read_csv(path, sep="\t"))
     modern = pd.concat(modern_frames, ignore_index=True)
     knn = pd.concat(knn_frames, ignore_index=True)
