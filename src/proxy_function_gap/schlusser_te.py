@@ -147,7 +147,7 @@ def _model_evidence(config):
 def _git_state():
     root = Path(__file__).resolve().parents[2]
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
-    dirty = subprocess.check_output(["git", "status", "porcelain"], cwd=root, text=True).strip()
+    dirty = subprocess.check_output(["git", "status", "--porcelain"], cwd=root, text=True).strip()
     return root, commit, dirty
 
 
