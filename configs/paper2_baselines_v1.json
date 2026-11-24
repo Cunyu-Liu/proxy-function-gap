@@ -1,0 +1,222 @@
+{
+  "schema_version": "1.0",
+  "pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/pool_validation/production_v3",
+  "source_pool_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/fresh_proxy_fixed_pools_v2/build_a/pool_manifest.json",
+  "cnn_members": [
+    {
+      "seed": 11,
+      "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1_retry1/seed_11/best.pt",
+      "sha256": "77b0539b72e5dfd5b893749107d9f24b03df04a6353badfd09ec0a313f2a9212",
+      "model_hash": "13eca7c6a3282f1a1f5c00a3f34cb50d8047d5a16bf146da50fb8f22722b4173"
+    },
+    {
+      "seed": 23,
+      "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1_retry1/seed_23/best.pt",
+      "sha256": "e92a9cf2815f8023fb9ec6617f1d680b223f47b767c564e71224997edec734b7",
+      "model_hash": "2f439c3836426aee7ed21e8b35a22d17673e04d78e78c85f58f74cd53c70b6b6"
+    },
+    {
+      "seed": 37,
+      "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1_retry1/seed_37/best.pt",
+      "sha256": "0a6647c4a6661e627555ffd0a055e59ab7b1d1eb7abb81bc2677774173cc55a6",
+      "model_hash": "967707e04bbb1fc0d8e210d0855817eb480afd0108e7a7eb47490c8924205a75"
+    }
+  ],
+  "com_members": [
+    {
+      "seed": 11,
+      "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper2_baselines_v1/com_training/seed_11/best.pt",
+      "sha256": "18fdf025d1f56f65c3ab1762ab96f27625e199dce1abae60b841718e53cb529d",
+      "model_hash": "1775e2b33f057b6c0ee001882ee92fbc7d6327a0917438893a24a5c8f491a650"
+    },
+    {
+      "seed": 23,
+      "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper2_baselines_v1/com_training/seed_23/best.pt",
+      "sha256": "af67e88ac0ebf89eb339ad126e39a40e7d9c2ad2dd033ec90125f39eb9b6a235",
+      "model_hash": "098ebca4e00092bf5c913d128aa735285e0b543e2fe3bf02ce37e80c74b3eef8"
+    },
+    {
+      "seed": 37,
+      "checkpoint": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper2_baselines_v1/com_training/seed_37/best.pt",
+      "sha256": "eef94690959fd11040843e43c462ce19cbd8ef843714f8eff2afbb1d33efee69",
+      "model_hash": "0e9d16f03f2b0da9f4ddd9752f82ef2679c5b139478c601b1801d082efa30db2"
+    }
+  ],
+  "caps": [
+    1,
+    2,
+    4,
+    8,
+    16
+  ],
+  "paired_seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "memory_fraction": 0.02,
+  "methods": {
+    "bon": {
+      "lambda": 0.0,
+      "gamma": 0.0
+    },
+    "lcb": [
+      {
+        "lambda": 0.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 0.0
+      }
+    ],
+    "distance": [
+      {
+        "lambda": 0.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 8.0,
+        "gamma": 0.0
+      }
+    ],
+    "com": {
+      "lambda": 0.0,
+      "gamma": 0.0
+    },
+    "diversity_lcb": [
+      {
+        "lambda": 0.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 0.0,
+        "gamma": 0.5
+      },
+      {
+        "lambda": 0.0,
+        "gamma": 1.0
+      },
+      {
+        "lambda": 0.0,
+        "gamma": 2.0
+      },
+      {
+        "lambda": 0.0,
+        "gamma": 4.0
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 0.5
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 1.0
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 2.0
+      },
+      {
+        "lambda": 0.5,
+        "gamma": 4.0
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 0.5
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 1.0
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 2.0
+      },
+      {
+        "lambda": 1.0,
+        "gamma": 4.0
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 0.5
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 1.0
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 2.0
+      },
+      {
+        "lambda": 2.0,
+        "gamma": 4.0
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 0.0
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 0.5
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 1.0
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 2.0
+      },
+      {
+        "lambda": 4.0,
+        "gamma": 4.0
+      }
+    ]
+  },
+  "source_ensemble_config_sha256": "a03b4714086f8ad11418b3194eec582eaf07215624432fc06ab97bfb178b17a8",
+  "source_com_config_sha256": "a6797903f7c286a627750fe8bc1c3b34bcb7b4053f1e6caef28600b1cb92d53c"
+}
