@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "persist_mrl_external_v1",
+  "frozen_date": "2026-11-25",
+  "evidence_boundary": "Independent-study, same-endpoint retrospective external evaluation. Leppek labels were historically inspected; this is not a blind test or prospective confirmation.",
+  "source": {
+    "study": "Leppek et al. 2022 PERSIST-seq",
+    "geo": "GSE173083",
+    "url": "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE173nnn/GSE173083/suppl/GSE173083_Table_S1_-_Attributes_for_pooled_233_sequences.xlsx",
+    "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/persist_mrl_external_v1/raw/GSE173083_Table_S1_-_Attributes_for_pooled_233_sequences.xlsx",
+    "sha256": "2e11287568dd3be66cd4cc7656033335a66a76ef71d26528a300a9eae5dda7a8",
+    "sheet": "Attributes for pooled 233 seque",
+    "construct_field": "Sequence ID",
+    "sequence_field": "Sequence 5 UTR",
+    "endpoint_field": "Ribosome load",
+    "endpoint": "Measured polysome-fraction-derived mean ribosome load (MRL), on the author-reported scale without recalibration"
+  },
+  "construct_inclusion": {
+    "group_field": "Group",
+    "group_value": "UTR (5') variants",
+    "expected_rows_before_exclusion": 59,
+    "expected_unique_utrs_before_exclusion": 49,
+    "requirements": "Unique nonmissing Sequence ID; nonmissing uppercase ACGT-only 5'UTR of length >=4; finite Ribosome load",
+    "deduplication": "None: every eligible construct remains in the fixed pool; exact 5'UTR defines its biological cluster",
+    "minimum_eligible_constructs": 20,
+    "minimum_eligible_utr_clusters": 10,
+    "below_minimum_action": "STOP before prediction-label metrics and preserve evidence"
+  },
+  "sample_exclusion": {
+    "roles": ["train", "dev", "calibration"],
+    "paths": {
+      "train": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+      "dev": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+      "calibration": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+    },
+    "sha256": {
+      "train": "3a58f2558cd1cffc55877bd940e5512fca62513d054c55da18a85fa8daf71677",
+      "dev": "6345bb51e0e1c9529235ff1ffb2e599a78a85a98007f1b9d247720629c40a60c",
+      "calibration": "f6d87787325e0918c802edf83f2b26e368a9f197f4e61b6f0e2684c1c1e86730"
+    },
+    "sequence_field": "utr50",
+    "exact": "Exclude the entire exact-UTR cluster if its sequence occurs in any role",
+    "hamming1": "For equal-length sequences only, exclude the entire exact-UTR cluster if Hamming distance 1 occurs against any role; unequal lengths are not Hamming-1 matches",
+    "conflict_policy": "One conflict excludes all constructs sharing that full UTR; no row-wise rescue and no subset tuning",
+    "report_remaining": true
+  },
+  "model": {
+    "architecture": "Frozen 4-mer MLP ensemble; 256 normalized 4-mer counts plus GC fraction, binary uAUG and longest_poly_u/50; Linear(259,32)-ReLU-Linear(32,1)",
+    "training": "Forbidden; use existing frozen weights and training scalers only",
+    "input": "Native variable-length full 5'UTR; no 50nt CNN, no truncation, no N-padding, no sequence alteration",
+    "checkpoints": [
+      {"seed": 101, "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_101/best.pt", "sha256": "147a86970d37cd58f0b8810b661d18c4c8eb1d8ac2a3cdd7c91b54af0654fcba", "model_hash": "b830b6a01126001968e437af28617a252a57529e2cf3342fb04abcf180942a47"},
+      {"seed": 202, "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_202/best.pt", "sha256": "9c1c1cbbff726b985a5a1bdbcf55b8f65458165c30bf8b9f634b35f048864a28", "model_hash": "0519824f352de2153a034ba27b1b9089dc0dbe81cb9a30e3304ba60de7655b2f"},
+      {"seed": 303, "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_303/best.pt", "sha256": "0b09912e887ce490089645512d742628f4df28dc347b90886486b00f241214f3", "model_hash": "204e25d62fec471b3d7e5fe12811ea85bee000dbb9e39ef04ce66676acbc7b35"}
+    ],
+    "aggregation": "Unweighted arithmetic mean of three member predictions on the original MRL scale"
+  },
+  "cuda": {
+    "device": "cuda:0",
+    "dtype": "float32",
+    "deterministic_algorithms": true,
+    "cublas_workspace_config": ":4096:8",
+    "tf32": false,
+    "cpu_fallback": "Forbidden; assert model parameters, inputs and outputs are CUDA and record GPU identity",
+    "seed": 20261125
+  },
+  "primary": {
+    "fixed_pool": "All eligible constructs after frozen Sample exclusion",
+    "algorithm_seeds": "20261125 through 20261324 inclusive (200 seeds)",
+    "proposal": "For each seed, PCG64 permutation of construct-row indices; Random selects index 0; BoN selects the maximum frozen proxy mean among the first cap=16 nested proposal rows",
+    "cap": 16,
+    "ties": "Lexicographically smallest Sequence ID, then lowest row position",
+    "oracle": "Maximum measured Ribosome load in the same fixed/resampled pool with the same tie rule",
+    "regret": "Oracle measured MRL minus selected measured MRL; nonnegative",
+    "effect": "BoN-minus-Random realized-MRL regret for the same seed; negative favors BoN",
+    "estimand": "Arithmetic mean paired effect over all 200 algorithm seeds",
+    "significance": "Two-sided bootstrap sign p=2*min((#delta>=0+1)/10001,(#delta<=0+1)/10001), capped at 1; significant only if the 95% percentile CI is entirely below zero and p<0.05; no directional or subset rewrite"
+  },
+  "bootstrap": {
+    "unit": "Exact full 5'UTR cluster; resample clusters with replacement and carry all their construct rows",
+    "replicates": 10000,
+    "cluster_seed": 20261126,
+    "proposal_seed": "PCG64 SeedSequence entropy [20261127, zero_based_bootstrap_index, algorithm_seed]",
+    "rebuild": "Rebuild Random/BoN proposals and measured-MRL oracle in every resample; duplicate cluster copies remain distinct rows",
+    "interval": "Percentile [2.5,97.5] of 10000 replicate mean paired effects"
+  },
+  "secondary": {
+    "construct_level_metrics": ["Spearman", "Pearson", "MAE on the unrecalibrated same-endpoint MRL scale", "Random/BoN top1 regret", "Random/BoN exact oracle-MRL coverage"],
+    "uncertainty": "Same UTR-cluster resamples; recompute each metric on resampled constructs",
+    "independence": "Algorithm seeds are repeated stochastic proposals, not independent biological replicates; inference uses UTR clusters"
+  },
+  "validation": {
+    "round1": "Raw hashes, construct/exclusion audit, tests, actual CUDA inference, frozen statistical execution",
+    "round2": "Independently written XLSX/feature/CUDA/statistical recomputation including all 10000 bootstrap replicates",
+    "round3": "Delivery hash and report-number verification after local synchronization",
+    "negative_results": "Retain null and unfavorable results; no outer tuning, subset changes or protocol edits after metrics"
+  }
+}
