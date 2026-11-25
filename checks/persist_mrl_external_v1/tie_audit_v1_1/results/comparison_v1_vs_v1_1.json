@@ -1,0 +1,28 @@
+{
+  "bootstrap_changed_element_count": 156,
+  "bootstrap_max_absolute_change": 0.0011278031999999993,
+  "frozen_v1_inputs_unchanged": true,
+  "per_seed_changed_count": 0,
+  "reporting_policy": "Retain v1 and v1.1 side by side; no direction-based version selection; v1 remains primary",
+  "v1": {
+    "bon_minus_random_regret": 0.10472255084999998,
+    "ci95": [
+      -0.1009639547475,
+      0.21270577331124993
+    ],
+    "direction": "Random favored",
+    "p_two_sided_sign": 0.24517548245175483,
+    "significant_benefit": false
+  },
+  "v1_1": {
+    "bon_minus_random_regret": 0.10472255084999998,
+    "ci95": [
+      -0.1009639547475,
+      0.21270577331124993
+    ],
+    "direction": "Random favored",
+    "p_two_sided_sign": 0.24517548245175483,
+    "significant_benefit": false
+  },
+  "v1_1_minus_v1_point": 0.0
+}

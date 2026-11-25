@@ -1,0 +1,42 @@
+{
+  "remote_root": "/home/proxy-function-gap-persist-mrl",
+  "remote_access": "read-only source audit; no remote files changed",
+  "git_metadata_present": false,
+  "git_commit": null,
+  "hash_algorithm": "SHA-256",
+  "matches_v1_verification_code_manifest": true,
+  "files": {
+    "finalize_artifacts.py": {
+      "bytes": 816,
+      "sha256": "1261d3dacad5a66cee7f64e607b4212230cbe2f212a7477c72682a3d0cccc48d"
+    },
+    "frozen_protocol.json": {
+      "bytes": 7065,
+      "sha256": "1a764a4f516857255bcf4364ea74cca10ad8410fbfbc90b8aec86dbb281e3573"
+    },
+    "independent_verify.py": {
+      "bytes": 9097,
+      "sha256": "12255cdfa548c580b343a84618095c16860be33d70233b0b8ff8b3a9aed9ab9d"
+    },
+    "persist_mrl.py": {
+      "bytes": 16808,
+      "sha256": "94f667185a48abd035fc757c93d0fef6e455e4e1bc4d4bd981d0b56f999334da"
+    },
+    "run_analysis.py": {
+      "bytes": 990,
+      "sha256": "d7ae15b3c9c12645aeb6daf2bb1c614e3c255455f1927310be2cf2286d7ba9c4"
+    },
+    "tests/test_persist_mrl.py": {
+      "bytes": 1546,
+      "sha256": "0dbcc5d8a929da05dfb658f3b34f95d113eafc9135fecfc8f8ce99058a8fd4b0"
+    }
+  },
+  "actual_v1_tie_rule": {
+    "source": "persist_mrl.py:246-248",
+    "implementation": "sorted(candidates, key=lambda i: (-scores[i], ids[i], int(i)))[0]",
+    "preregistered": true,
+    "protocol": "frozen_protocol.json primary.ties: Lexicographically smallest Sequence ID, then lowest row position",
+    "bootstrap_id_namespace": "sequence_id#zero_based_resampled_row_rank",
+    "documentation_gap": false
+  }
+}

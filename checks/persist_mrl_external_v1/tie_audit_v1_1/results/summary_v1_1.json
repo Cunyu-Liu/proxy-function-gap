@@ -1,0 +1,88 @@
+{
+  "affected_five_mean_delta": {
+    "v1": 0.2830436019999999,
+    "v1_1": 0.2830436019999999
+  },
+  "algorithm_seeds": 200,
+  "analysis_id": "persist_mrl_external_v1_1_tie_sensitivity",
+  "bootstrap_changed_effect_replicates": 78,
+  "bootstrap_replicates": 10000,
+  "bootstrap_seed_selection_changes": 79,
+  "bootstrap_tied_seed_replicates_in_scope": 9229,
+  "exact_tie_seed_count": 9,
+  "order_sensitive_seed_count": 5,
+  "order_sensitive_seeds": [
+    20261147,
+    20261254,
+    20261289,
+    20261290,
+    20261324
+  ],
+  "parent_analysis_id": "persist_mrl_external_v1",
+  "primary": {
+    "bon_minus_random_regret": 0.10472255084999998,
+    "ci95": [
+      -0.1009639547475,
+      0.21270577331124993
+    ],
+    "direction": "Random favored",
+    "p_two_sided_sign": 0.24517548245175483,
+    "significant_benefit": false
+  },
+  "retrospective_sensitivity_only": true,
+  "scope": "All 200 base seeds audited; bootstrap updates only the five base seeds where stable-first differs from frozen v1; the other 195 seeds and all non-selection columns remain v1",
+  "secondary": {
+    "bon_oracle_coverage": {
+      "ci95": [
+        0.0,
+        0.175
+      ],
+      "value": 0.0
+    },
+    "bon_top1_regret": {
+      "ci95": [
+        0.3856734604425001,
+        0.79673876668
+      ],
+      "value": 0.7023886805
+    },
+    "mae": {
+      "ci95": [
+        5.295487677268211,
+        5.785034524418902
+      ],
+      "value": 5.548938772343181
+    },
+    "pearson": {
+      "ci95": [
+        -0.2660981136670975,
+        0.31550301804278374
+      ],
+      "value": 0.055358346046783545
+    },
+    "random_oracle_coverage": {
+      "ci95": [
+        0.005,
+        0.07
+      ],
+      "value": 0.015
+    },
+    "random_top1_regret": {
+      "ci95": [
+        0.3853429960575,
+        0.6591428383537503
+      ],
+      "value": 0.5976661296500002
+    },
+    "spearman": {
+      "ci95": [
+        -0.32670108533664405,
+        0.3154056909680685
+      ],
+      "value": -0.008446587844099072
+    }
+  },
+  "statistical_compute": "CPU only; no model training or inference",
+  "tie_rule": "Among exactly maximum predictions, ascending SHA256(UTF-8 original Sequence ID), then Sequence ID, then row position",
+  "version_selection_by_direction": false
+}

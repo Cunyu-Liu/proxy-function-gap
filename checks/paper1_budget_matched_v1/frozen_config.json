@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "analysis": "paper1_budget_matched_v1",
+  "protocol": "strict_h1_equal_budget_random_n_retrospective_sensitivity",
+  "frozen_before_estimation": "2026-11-25",
+  "new_blind_test": false,
+  "pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1_retry1",
+  "source_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_v3_strict_h1_retry1",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_budget_matched_v1",
+  "contexts": ["n50_hek293t_r1", "defined_hepg2_r1", "defined_tcell_r1", "defined_tcell_r2"],
+  "pool_count": 16,
+  "pool_size": 64,
+  "caps": [1, 2, 4, 8, 16],
+  "seeds": [101, 202, 303, 404, 505],
+  "random_n": {
+    "bit_generator": "PCG64",
+    "entropy": 20261125,
+    "spawn_key": ["context_index", "pool_index", "seed_index", "cap_index"],
+    "draw": "one integers(0, N) prefix-position draw"
+  },
+  "bootstrap": {
+    "cluster": "complete_pool",
+    "replicates": 10000,
+    "original_base_seed": 20261124,
+    "new_base_seed": 20261125,
+    "candidate_budget_offset": 10000,
+    "nominal_percentiles": [2.5, 97.5],
+    "bonferroni_20_percentiles": [0.125, 99.875]
+  },
+  "families": ["bon_minus_random1", "bon_minus_random_n", "random_n_minus_random1"],
+  "family_size": 20,
+  "include_cap1_structural_zero": true,
+  "execution": "CPU_only_no_training_no_inference",
+  "source_code": {
+    "commit": "64b43205984e1dcaf271411c14775fcd14c0f19f",
+    "selection_sha256": "e580a39b046cde6d54d05bac287e592a2956cefd1bed3e0d672ab8c78010a1a9",
+    "selection_eval_sha256": "2d5d8370a0df5e3853420791be0237ad2345d5d2418e2d742d88f64fc1c431b0",
+    "castillo_sha256": "9bb847fca6b5bbb76ab954cd9be1967f0e9f88f06442151a9c4bbd57d80a7239"
+  }
+}

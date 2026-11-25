@@ -1,0 +1,40 @@
+{
+  "base_seed_effect_changes": 0,
+  "base_seed_rows": 200,
+  "bootstrap_changed_elements": 156,
+  "bootstrap_changed_replicates": 78,
+  "bootstrap_difference_validator": "PASS",
+  "bootstrap_replicates": 10000,
+  "compute": "CPU only; no training or inference",
+  "exact_tie_seeds": 9,
+  "original_v1_data_or_results_changed": false,
+  "original_v1_files_verified_against_frozen_manifest": 26,
+  "original_v1_preexisting_manifest_mismatches": {
+    "delivery_verification.json": {
+      "manifest": {
+        "bytes": 225,
+        "sha256": "12b1ac143f3b1e3e6ba884c0bee92c8c3299e4a6e7ea5ea8706d2ef64303487e"
+      },
+      "observed": {
+        "bytes": 225,
+        "sha256": "8accdec714da2c3423db1753a2efcd4179dd4d8865f5d874480dbb966765f13b"
+      }
+    }
+  },
+  "primary_ci95_v1_1": [
+    -0.1009639547475,
+    0.21270577331124993
+  ],
+  "primary_p_v1_1": 0.24517548245175483,
+  "primary_point_v1": 0.10472255084999998,
+  "primary_point_v1_1": 0.10472255084999998,
+  "remote_git_commit": null,
+  "remote_original_environment_bootstrap_bitwise_cells": 80000,
+  "remote_source_files_verified": 6,
+  "report": "PERSIST_TIE_AUDIT_V1_1.md",
+  "report_sha256": "f56b18f66fc88ce75515bd29b1a368284d92c2e586e0bc5225f1a287350a0f54",
+  "round": 3,
+  "stable_first_order_sensitive_seeds": 5,
+  "status": "PASS",
+  "version_selection_by_direction": false
+}

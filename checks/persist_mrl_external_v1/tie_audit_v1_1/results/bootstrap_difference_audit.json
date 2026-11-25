@@ -1,0 +1,81 @@
+{
+  "acceptance": "No blanket 1e-6 tolerance is used. All primary/regret/coverage cells must match exactly. Same-prediction local continuous reductions must be <5e-15 and are separately identified as cross-version arithmetic; the original remote environment must match all 80000 cells exactly. The old independent MAE remainder must satisfy the measured prediction-error bound.",
+  "cause": {
+    "cluster_mapping": "Excluded by exact row-index checks and exact full-array reproduction with frozen predictions",
+    "pearson_and_mae": "The old independent float32 feature accumulation changes frozen-model predictions (old reported max mean delta 4.76837158203125e-7); Pearson also has np.corrcoef versus scipy.pearsonr reduction differences. Local NumPy 2.0.2/SciPy 1.13.1 versus remote 2.2.6/1.15.3 adds at most 3.552713678800501e-15 even with identical predictions",
+    "rng_or_proposal_sampling": "Excluded by bit-identical primary/regret/coverage and remote original-environment reproduction of all 80000 cells",
+    "scientific_data_changed": false,
+    "spearman": "Different but mathematically equivalent reduction: scipy.spearmanr versus rankdata plus np.corrcoef; at most 1.11e-16 with identical predictions"
+  },
+  "cluster_mapping": {
+    "cluster_draws_sha256_int64": "c6023025e56e914587fff5fdc7c4db7091241ccc77b5bd266edc82b3218d873b",
+    "clusters": 49,
+    "identical": true,
+    "method": "Sorted unique/list-comprehension mapping equals independently constructed dictionary-group mapping for all 10000 replicates",
+    "row_indices_sha256_int64": "2f8caf1db062b8e4014dc60513437b48ba15dccf5c59a7384e5ad570102ff28d"
+  },
+  "compute": "CPU only; reused frozen predictions and existing independent arrays; no training or inference",
+  "feature_float32_accumulation": {
+    "different_cells": 114,
+    "independent": "repeated float32 addition of 1.0/denominator",
+    "max_absolute_difference": 2.9802322387695312e-08,
+    "max_mean_prediction_absolute_difference_from_old_report": 4.76837158203125e-07,
+    "original": "float32 integer-like k-mer counts followed by division"
+  },
+  "old_independent_gpu_minus_same_prediction_independent_metrics_max_abs_difference": [
+    0.0,
+    0.0,
+    5.8081193521353214e-08,
+    5.657390023117159e-08,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "old_independent_gpu_vs_v1_max_abs_difference": [
+    0.0,
+    1.1102230246251565e-16,
+    5.808119329930861e-08,
+    5.657390023117159e-08,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "rng_and_sampling": {
+    "cluster_rng": "NumPy default_rng(20261126), PCG64",
+    "evidence": "All primary/regret/coverage cells match exactly on local independent reconstruction; a separate remote NumPy 2.2.6/SciPy 1.15.3 in-memory run reproduced all 80000 cells bit-for-bit",
+    "identical": true,
+    "proposal_entropy": "[20261127, zero_based_bootstrap_index, algorithm_seed]",
+    "remote_original_environment_bitwise_cells": 80000,
+    "remote_original_environment_total_cells": 80000,
+    "remote_reproduction_log": "logs/remote_bootstrap_reproduction.log"
+  },
+  "same_frozen_predictions_independent_metrics_max_abs_difference": [
+    0.0,
+    1.1102230246251565e-16,
+    8.015235610642213e-16,
+    3.552713678800501e-15,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "same_frozen_predictions_original_metrics_max_abs_difference": [
+    0.0,
+    0.0,
+    8.187894806610529e-16,
+    3.552713678800501e-15,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "status": "PASS",
+  "text_roundtrip_parser_check": {
+    "csv_float_vs_pandas_label_max_abs_difference": 0.0,
+    "csv_float_vs_pandas_prediction_max_abs_difference": 8.881784197001252e-16,
+    "handling": "Exact reproduction uses the original pandas parser; Python csv/float is not assumed bit-identical"
+  },
+  "validator_revision": "v1.1 source-separated exact checks replacing the old blanket 1e-6 secondary tolerance"
+}
