@@ -1,0 +1,130 @@
+{
+  "deck": "proxy_function_gap_modern_20261126.pptx",
+  "slides": 12,
+  "size_inches": [
+    13.333,
+    7.5
+  ],
+  "font": "Arial Unicode MS",
+  "runtime": {
+    "python": "3.13.5",
+    "python_pptx": "1.0.2"
+  },
+  "evidence_boundary": "equal-budget value -> sequence-composition boundary -> external-transfer boundary; all new displays are retrospective historical-outer sensitivities, not new blind tests or causal analyses; PERSIST negative result and Paper2/3 failure gates retained",
+  "paper1_budget_matched": {
+    "tcell_r1_holm_caps": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "tcell_r2_holm_caps": [
+      4
+    ],
+    "random_n_minus_random1_holm_significant": 0,
+    "source": {
+      "path": "deliverables/reports/source_data/paper1_budget_matched_v1/results.json",
+      "sha256": "6226ad942d6abc4ecfddd41140a14e41da9f22aa723f382e82f85184454d1c91"
+    }
+  },
+  "paper1_sequence_ablation": {
+    "adjusted_holm_significant": 0,
+    "no_uaug_holm_significant": 0,
+    "no_polyu_holm_significant": [
+      [
+        "defined_tcell_r1",
+        4
+      ],
+      [
+        "defined_tcell_r2",
+        8
+      ]
+    ],
+    "causal_claim": false,
+    "source": {
+      "path": "deliverables/reports/source_data/paper1_sequence_ablation_v1/analysis/results/summary.json",
+      "sha256": "9b76bfb0a034c478ee8700be94439476f713e7a2473d67091cdf9ab86de24b43"
+    }
+  },
+  "persist": {
+    "constructs": 59,
+    "utr_clusters": 49,
+    "algorithm_seeds": 200,
+    "primary": {
+      "bon_minus_random_regret": 0.10472255084999998,
+      "ci95": [
+        -0.1009639547475,
+        0.21270577331124993
+      ],
+      "direction": "Random favored",
+      "p_two_sided_sign": 0.24517548245175483,
+      "significant_benefit": false
+    },
+    "spearman": {
+      "ci95": [
+        -0.32670108533664405,
+        0.3154056909680685
+      ],
+      "value": -0.008446587844099072
+    },
+    "source": {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/results/summary.json",
+      "sha256": "6408d1efde788b1a96a8caab1888c02680a8567c58cb86e0406a65d4728ac32f"
+    }
+  },
+  "paper2_risk_frozen": {
+    "schema_version": "paper2-risk-frozen-v1",
+    "coverage": 0.425,
+    "regret_reduction": -0.005419819448925889,
+    "regret_reduction_95ci": [
+      -0.5092712668595158,
+      0.6286230065478566
+    ],
+    "calibration_gate_pass": false,
+    "outer_scoring_authorized": false,
+    "outer_scored": false,
+    "source": {
+      "path": "deliverables/reports/source_data/paper2_risk_frozen_v1/frozen_protocol.json",
+      "sha256": "ab3ef334edb5452d8ee29db03e218caa894462eb7825899617cc44a3dc083f7d"
+    }
+  },
+  "roadmap": "do not score this outer or tune the threshold; new risk definitions require a new preregistered version and independent evaluation roles",
+  "figures": [
+    {
+      "path": "deliverables/figures/Figure5_v2_pressure_heatmap.png",
+      "sha256": "7558372af678708659aea772f6705d9430cc513e68f01ef5bbbe416c1cc7834e"
+    },
+    {
+      "path": "deliverables/figures/Figure6_v2_error_concordance.png",
+      "sha256": "57e26c37d0a1ac1bffe5867ee3b09d868a5d784a886ae3834b116ced9a7564d3"
+    },
+    {
+      "path": "deliverables/figures/Figure10_v2_leppek_endpoints.png",
+      "sha256": "9b92dbeacd11af9a5a39cbafd0a6a34b9dadf7995bd8164d0dbc8554d2a7fa7b"
+    },
+    {
+      "path": "deliverables/figures/Figure8_v2_paper3_headroom.png",
+      "sha256": "1bd6cb802bdaaee67cfb4f394ca8c19a6b7f4bbd191a6923fe847f691140efb3"
+    },
+    {
+      "path": "deliverables/figures/v3/Figure11_v3_evidence_chain.png",
+      "sha256": "fa4f780e3efd940f00535fb6bf41f250c8bf9f898ee4dc841c3f659cdc29416c"
+    },
+    {
+      "path": "deliverables/figures/v3/Figure12_v3_data_governance_ood.png",
+      "sha256": "6721ad2cda90b5c04b8955757e0b52127e0cc617d29c73730974bcefcaf2f3bd"
+    },
+    {
+      "path": "deliverables/figures/v3/Figure13_v3_persist_external.png",
+      "sha256": "816e2fcbfc6d4ae58d412d1adccc8d6a2641f666a13155d0a507b034f9f6dc8a"
+    },
+    {
+      "path": "deliverables/figures/v3/Figure14_v3_equal_budget_value.png",
+      "sha256": "347521593ff3f23f4e72525bb7062745021ffc47d627826a9fd3a92dbb04e5a0"
+    },
+    {
+      "path": "deliverables/figures/v3/Figure15_v3_sequence_composition_sensitivity.png",
+      "sha256": "3a59db825f668c62dc706a8b092f945a332fcba347cba8208674a22298fa11aa"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "round1": {
+    "status": "PASS",
+    "p3_positive_gates": {
+      "summary4": 0,
+      "kmer4": 5,
+      "cnn64": 1
+    },
+    "paper2_all_cross_zero": true,
+    "schlusser_all_cross_zero": true,
+    "leppek_reversal_171_276": true
+  },
+  "round2": {
+    "deterministic_svg": 4,
+    "status": "PASS"
+  },
+  "round3": {
+    "figures": {
+      "Figure7_v2_paper2_baselines": {
+        "png_px": [
+          3843,
+          1517
+        ]
+      },
+      "Figure8_v2_paper3_headroom": {
+        "png_px": [
+          4032,
+          1581
+        ]
+      },
+      "Figure9_v2_schlusser_te": {
+        "png_px": [
+          3600,
+          1517
+        ]
+      },
+      "Figure10_v2_leppek_endpoints": {
+        "png_px": [
+          3757,
+          1581
+        ]
+      }
+    },
+    "status": "PASS"
+  },
+  "overall": "PASS"
+}

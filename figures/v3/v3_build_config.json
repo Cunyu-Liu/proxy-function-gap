@@ -1,0 +1,207 @@
+{
+  "version": "v3",
+  "date": "2026-11-25",
+  "runtime": {
+    "python": "3.13.5",
+    "matplotlib": "3.10.0",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3"
+  },
+  "figures": [
+    "Figure11_v3_evidence_chain",
+    "Figure12_v3_data_governance_ood",
+    "Figure13_v3_persist_external"
+  ],
+  "exports": {
+    "png_dpi": 300,
+    "pdf": "vector",
+    "svg": "editable text"
+  },
+  "execution": "CPU rendering and statistics only; no training or inference",
+  "evidence": {
+    "tcell_cap16": -1.243371889004706,
+    "tcell_ci": [
+      -1.7095250621699225,
+      -0.7687572300322255
+    ],
+    "correlation_min": 0.8783585172728454,
+    "correlation_max": 0.961720491166174,
+    "schlusser_rho": 0.07207286147836778,
+    "leppek_reversal": 0.6195652173913043,
+    "leppek_pairs": [
+      171,
+      276
+    ],
+    "risk_coverage": 0.425,
+    "risk_accepted": "34/80",
+    "risk_pools": "15/16",
+    "risk_reduction": -0.005419819448925889,
+    "risk_ci": [
+      -0.5092712668595158,
+      0.6286230065478566
+    ],
+    "risk_threshold": 0.10402689717871444,
+    "risk_gate_pass": false,
+    "risk_outer_scored": false,
+    "ei16": 1.220084,
+    "random16": 3.497016,
+    "gates": {
+      "cnn64": 1,
+      "kmer4": 5,
+      "summary4": 0
+    },
+    "h2_cross_sample": [
+      0,
+      6,
+      48,
+      44
+    ],
+    "strict_pools_per_context": [
+      16
+    ],
+    "strict_candidates_per_context": [
+      1024
+    ],
+    "paper3_outer_labels_read": false,
+    "persist": {
+      "constructs": 59,
+      "utr_clusters": 49,
+      "singleton_utrs": 39,
+      "multi_construct_utrs": 10,
+      "algorithm_seeds": 200,
+      "spearman": {
+        "ci95": [
+          -0.32670108533664405,
+          0.3154056909680685
+        ],
+        "value": -0.008446587844099072
+      },
+      "random_top1_regret": {
+        "ci95": [
+          0.3853429960575,
+          0.6591428383537503
+        ],
+        "value": 0.5976661296500002
+      },
+      "bon_top1_regret": {
+        "ci95": [
+          0.3856734604425001,
+          0.79673876668
+        ],
+        "value": 0.7023886805
+      },
+      "primary": {
+        "bon_minus_random_regret": 0.10472255084999998,
+        "ci95": [
+          -0.1009639547475,
+          0.21270577331124993
+        ],
+        "direction": "Random favored",
+        "p_two_sided_sign": 0.24517548245175483,
+        "significant_benefit": false
+      },
+      "exact_h1_conflicts": 0,
+      "retrospective_nonblind": true
+    }
+  },
+  "status_policy": {
+    "paper1": "retrospective strict-H1 protocol sensitivity; not a new blind test",
+    "schlusser": "confirmatory one-shot unblinding",
+    "leppek": "exploratory descriptive audit",
+    "paper2_abstention": "frozen calibration gate failed; outer scoring unauthorized and not performed; no deployment claim",
+    "paper3": "diagnostic development/calibration; outer untouched",
+    "persist": "independent-study same-endpoint retrospective external evaluation; non-blind; no BoN benefit; UTR-cluster uncertainty; seeds are not biological replicates"
+  },
+  "sources": [
+    {
+      "path": "deliverables/figures/source_data/strict_h1_figure2_paired_pressure.csv",
+      "sha256": "426574f2048a1447755dab14f6047c29033ba184a16def3b70331aed81159096",
+      "bytes": 2250
+    },
+    {
+      "path": "deliverables/figures/source_data/strict_h1_figure4_cross_architecture_summary.csv",
+      "sha256": "d8349eddc3202258bb66f884af8c326642e5f28bd99d80467635309ab5f28e15",
+      "bytes": 934
+    },
+    {
+      "path": "deliverables/figures/source_data/strict_h1_figure3_score_matching.csv",
+      "sha256": "97b046b510640709258c7bd36d2caac7b1928fdccfa464b533eb87ba1ebf3101",
+      "bytes": 563
+    },
+    {
+      "path": "deliverables/reports/source_data/paper2_risk_frozen_v1/frozen_protocol.json",
+      "sha256": "ab3ef334edb5452d8ee29db03e218caa894462eb7825899617cc44a3dc083f7d",
+      "bytes": 4767
+    },
+    {
+      "path": "deliverables/reports/source_data/paper3_headroom_v4/headroom_v4_round1/summary.json",
+      "sha256": "7cadfc19ca2ddb0626022c9ef6c610d7d1b0eb7dd398a04160adbb6944eb46ec",
+      "bytes": 71272
+    },
+    {
+      "path": "deliverables/reports/paper3_headroom_v4_20261124.md",
+      "sha256": "438eb354c72f37bd0fa2adc17cfd7205c3bb1ddfc25d21dbfac965a987f80a6d",
+      "bytes": 13135
+    },
+    {
+      "path": "deliverables/reports/source_data/schlusser2024_hepg2_te_confirmatory_v1/evaluator_round_1/summary.json",
+      "sha256": "8115c5409d656af8df04d2462ed7da23bbfa5fc2967c12093a6dc8357dc4626a",
+      "bytes": 27505
+    },
+    {
+      "path": "deliverables/reports/source_data/leppek2022_cds_mechanism_audit_v5/rank_summary.tsv",
+      "sha256": "e832c7a72a6a08387056de52ac7b10523c568de10e2e599aa43db9bbe9d8f4e8",
+      "bytes": 2139
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_strict_h1_v3/pools/build_manifest.json",
+      "sha256": "dd2919ee8c0e1a1b7370145533cc4353651bda5bdd1dd0fb36cd3eca5d61fe71",
+      "bytes": 2528
+    },
+    {
+      "path": "deliverables/reports/source_data/schlusser2024_gate0/role_manifest.json",
+      "sha256": "419217a32e5ce3d45ca832ba82bec1e0f6b2cbcfbd7ab8add4b18d0f1b1909c6",
+      "bytes": 5600
+    },
+    {
+      "path": "deliverables/reports/docs/FULL_AUDIT_20261124.md",
+      "sha256": "d630eaba3e1edb22c8c53f1f8a8459c4db186c7778bcbca3eefda87408155ce5",
+      "bytes": 8289
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/results/summary.json",
+      "sha256": "6408d1efde788b1a96a8caab1888c02680a8567c58cb86e0406a65d4728ac32f",
+      "bytes": 1687
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/predictions/predictions.tsv",
+      "sha256": "61919494970ff3e2a9cb65ce6f3a3f6679b2ecb8e3242ef1f604a253b3e5d6c1",
+      "bytes": 15876
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/protocol/evaluator_labels.tsv",
+      "sha256": "96645ba2d93b758ec2fb590a668ae84b78d1b4559ac1486b7bc12f4e6ac4991c",
+      "bytes": 10793
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/results/per_seed.tsv",
+      "sha256": "26698e4e39b80f3d3a282a1ee9ac2279b460d224d63274ac9a32e0f50594739b",
+      "bytes": 14411
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/results/bootstrap_replicates.npy",
+      "sha256": "f5e0d69aa1a85aea73d31aad54e2bbe60bbff32722e19292b062aa3a53433baa",
+      "bytes": 640128
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/protocol/inclusion_audit.json",
+      "sha256": "d3d23f7de335332de41d575ec9f9d450dc21e154ef74d087f032ca14ae01c715",
+      "bytes": 445
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/raw/GSE173083_Table_S1_-_Attributes_for_pooled_233_sequences.xlsx",
+      "sha256": "2e11287568dd3be66cd4cc7656033335a66a76ef71d26528a300a9eae5dda7a8",
+      "bytes": 193214
+    }
+  ]
+}

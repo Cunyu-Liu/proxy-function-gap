@@ -1,0 +1,84 @@
+{
+  "round1_numeric_independent": {
+    "status": "PASS",
+    "source_hashes": 18,
+    "tcell_bonferroni_intervals": 8,
+    "score_matching_cross_zero": 4,
+    "schlusser_cross_zero": 4,
+    "leppek_reversal": "171/276",
+    "paper2_frozen_calibration_gate_failed": true,
+    "paper2_outer_scored": false,
+    "paper3_outer_untouched": true,
+    "persist_constructs": 59,
+    "persist_utr_clusters": 49,
+    "persist_algorithm_seeds_descriptive": 200,
+    "persist_cluster_bootstrap_replicates": 10000,
+    "persist_primary_crosses_zero": true,
+    "persist_significant_benefit": false
+  },
+  "round2_deterministic_render": {
+    "status": "PASS",
+    "byte_identical_rebuilds": 9,
+    "rebuild_rounds": 2,
+    "python_hash_seeds": [
+      "inherited",
+      "987654321"
+    ],
+    "cross_second_delay": 1.1,
+    "runtime_guard": "builder re-execs the V4-locked canonical renderer under either python or python3",
+    "renderer_runtime": {
+      "python": "3.13.5",
+      "matplotlib": "3.10.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3"
+    }
+  },
+  "round3_format_render": {
+    "status": "PASS",
+    "figures": {
+      "Figure11_v3_evidence_chain": {
+        "png_px": [
+          4248,
+          2238
+        ],
+        "png_dpi": [
+          299.999,
+          299.999
+        ],
+        "pdf_pages": 1,
+        "pdf_vector": true,
+        "svg_editable_text": true,
+        "page_bounds": "PASS"
+      },
+      "Figure12_v3_data_governance_ood": {
+        "png_px": [
+          4248,
+          2478
+        ],
+        "png_dpi": [
+          299.999,
+          299.999
+        ],
+        "pdf_pages": 1,
+        "pdf_vector": true,
+        "svg_editable_text": true,
+        "page_bounds": "PASS"
+      },
+      "Figure13_v3_persist_external": {
+        "png_px": [
+          4248,
+          2388
+        ],
+        "png_dpi": [
+          299.999,
+          299.999
+        ],
+        "pdf_pages": 1,
+        "pdf_vector": true,
+        "svg_editable_text": true,
+        "page_bounds": "PASS"
+      }
+    }
+  },
+  "overall": "PASS"
+}

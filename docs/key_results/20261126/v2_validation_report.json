@@ -1,0 +1,59 @@
+{
+  "round1_data_integrity": {
+    "pressure_cells": 20,
+    "bonferroni_survivors": 8,
+    "score_match_contexts": 4,
+    "cross_arch_contexts": 4,
+    "status": "PASS"
+  },
+  "round2_render_determinism": {
+    "deterministic_svg": 5,
+    "status": "PASS"
+  },
+  "round3_format_and_labels": {
+    "figures": {
+      "Figure2_v2_selection_pressure": {
+        "png_px": [
+          3675,
+          2112
+        ],
+        "pdf_pages": 1,
+        "svg_sha256": "4cbed2796c96662b"
+      },
+      "Figure3_v2_score_matching": {
+        "png_px": [
+          3314,
+          1542
+        ],
+        "pdf_pages": 1,
+        "svg_sha256": "6732ba270123aaba"
+      },
+      "Figure4_v2_common_proxy_error": {
+        "png_px": [
+          3420,
+          1542
+        ],
+        "pdf_pages": 1,
+        "svg_sha256": "ef037e3597e9f9d5"
+      },
+      "Figure5_v2_pressure_heatmap": {
+        "png_px": [
+          3125,
+          1375
+        ],
+        "pdf_pages": 1,
+        "svg_sha256": "a4960991b65f9aa7"
+      },
+      "Figure6_v2_error_concordance": {
+        "png_px": [
+          1942,
+          1855
+        ],
+        "pdf_pages": 1,
+        "svg_sha256": "8c294336902a3e0a"
+      }
+    },
+    "status": "PASS"
+  },
+  "overall": "PASS"
+}

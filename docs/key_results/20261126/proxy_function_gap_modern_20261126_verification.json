@@ -1,0 +1,154 @@
+{
+  "round1_numeric_independent": {
+    "status": "PASS",
+    "slides": 12,
+    "numeric_claims_checked": 48,
+    "budget_pool_effects_recomputed": 40,
+    "holm_families_recomputed": 5,
+    "tcell_r1_equal_budget_all_caps_significant": true,
+    "tcell_r2_only_cap4_significant": true,
+    "random_budget_no_corrected_significance": true,
+    "sequence_adjustment_not_causal": true,
+    "paper2_frozen_calibration_gate_failed": true,
+    "paper2_outer_scored": false,
+    "paper3_outer_untouched": true,
+    "legacy_positive_abstention_absent": true,
+    "diagnostic_confirmatory_labels": true,
+    "persist_negative_result_retained": true,
+    "persist_seeds_not_independent_samples": true,
+    "persist_primary_crosses_zero": true
+  },
+  "round2_deterministic_rebuild": {
+    "status": "PASS",
+    "ppt_payload_entries_identical": 64,
+    "figure_hashes": 9,
+    "rebuild_rounds": 2,
+    "python_hash_seeds": [
+      "inherited",
+      "987654321"
+    ],
+    "environment_variation": {
+      "TZ": "UTC",
+      "LC_ALL": "C"
+    },
+    "cross_second_delay": 1.1,
+    "runtime_guard": "builder re-execs the V4-locked canonical Python under either python or python3",
+    "builder_runtime": {
+      "python": "3.13.5",
+      "python_pptx": "1.0.2"
+    }
+  },
+  "round3_format_render": {
+    "status": "PASS",
+    "pdf_pages": 12,
+    "pdf_page_points": [
+      960,
+      540
+    ],
+    "pdf_export": "Microsoft PowerPoint native",
+    "font": "ArialUnicodeMS embedded",
+    "shape_bounds": "PASS",
+    "pdf_words_outside": 0,
+    "pdf_text_collisions": 0,
+    "embedded_figures_exact": 9,
+    "rendered_pages": [
+      {
+        "slide": 1,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 39.27
+      },
+      {
+        "slide": 2,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 35.28
+      },
+      {
+        "slide": 3,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 48.07
+      },
+      {
+        "slide": 4,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 33.86
+      },
+      {
+        "slide": 5,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 35.54
+      },
+      {
+        "slide": 6,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 35.71
+      },
+      {
+        "slide": 7,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 35.54
+      },
+      {
+        "slide": 8,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 51.13
+      },
+      {
+        "slide": 9,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 38.53
+      },
+      {
+        "slide": 10,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 35.21
+      },
+      {
+        "slide": 11,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 33.1
+      },
+      {
+        "slide": 12,
+        "pixels": [
+          1920,
+          1080
+        ],
+        "std": 70.9
+      }
+    ]
+  },
+  "overall": "PASS"
+}

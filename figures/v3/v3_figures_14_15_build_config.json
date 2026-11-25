@@ -1,0 +1,82 @@
+{
+  "version": "v3-figure14-15",
+  "date": "2026-11-26",
+  "runtime": {
+    "python": "3.13.5",
+    "matplotlib": "3.10.0",
+    "numpy": "2.1.3",
+    "pandas": "2.2.3"
+  },
+  "figures": [
+    "Figure14_v3_equal_budget_value",
+    "Figure15_v3_sequence_composition_sensitivity"
+  ],
+  "exports": {
+    "png_dpi": 300,
+    "pdf": "vector",
+    "svg": "editable text"
+  },
+  "execution": "CPU rendering and frozen-result statistics only; no training, inference, or new outer analysis",
+  "evidence_boundary": "retrospective sensitivity on previously inspected historical outer contexts; not a new blind test; sequence adjustment and exclusions are not causal analyses",
+  "key_results": {
+    "tcell_r1_equal_budget_holm_caps": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "tcell_r2_equal_budget_holm_caps": [
+      4
+    ],
+    "random_n_minus_random1_holm_significant": 0,
+    "adjusted_holm_significant": 0,
+    "no_uaug_holm_significant": 0,
+    "no_polyu_holm_significant": [
+      [
+        "defined_tcell_r1",
+        4
+      ],
+      [
+        "defined_tcell_r2",
+        8
+      ]
+    ]
+  },
+  "sources": [
+    {
+      "path": "deliverables/reports/source_data/paper1_budget_matched_v1/results.json",
+      "sha256": "6226ad942d6abc4ecfddd41140a14e41da9f22aa723f382e82f85184454d1c91",
+      "bytes": 97736
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_budget_matched_v1/pool_effects.tsv",
+      "sha256": "2a2c96a9a89d16fa9de6dac3c6328c5544b250e5d4afb3aa58023bcbf2d724c1",
+      "bytes": 42354
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_budget_matched_v1/family_effects.tsv",
+      "sha256": "838dea2ce1445196b221d0b894e050434421a0dd2bfbda5bfae44abc496c18cf",
+      "bytes": 10510
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_sequence_ablation_v1/analysis/results/summary.json",
+      "sha256": "9b76bfb0a034c478ee8700be94439476f713e7a2473d67091cdf9ab86de24b43",
+      "bytes": 31318
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_sequence_ablation_v1/analysis/results/primary_paired.tsv",
+      "sha256": "b83fc98c0e2eeec0e814b05ca505665099e3b9e53025050f4addd68f0234b099",
+      "bytes": 4082
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_sequence_ablation_v1/analysis/results/pool_effects.tsv",
+      "sha256": "63cffa2de8d933cf437911945ad0978b0d312210574fbcf96c0ce19905c9aeac",
+      "bytes": 33798
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_sequence_ablation_v1/analysis/results/sequence_family_sensitivity.tsv",
+      "sha256": "ec2e28bc6eafed8198d33259a34a5aa11e41d06f7ef7e7a2b83607e9dad6b656",
+      "bytes": 5059
+    }
+  ]
+}

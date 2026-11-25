@@ -1,0 +1,1225 @@
+{
+  "release": "UNIFIED_PREPRINT_V5_20261126",
+  "status": "PASS",
+  "generated_at": "2026-11-25T16:35:59.213108+00:00",
+  "scope": "Local V5 integration of equal-candidate-budget Random(N), sequence fixed-effect/family sensitivities, PERSIST source-confirmed tie audit, Figures 14/15, narrative boundaries, and deterministic PDF packaging. V4 and all earlier history are preserved.",
+  "history_archive": "deliverables/paper/history/V3.1_20261125",
+  "history_preserved": [
+    "deliverables/paper/UNIFIED_PREPRINT_MAIN_V4_20261125.md",
+    "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S2_V4_20261125.md",
+    "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S3_V4_20261125.md",
+    "deliverables/paper/UNIFIED_PREPRINT_V4_RELEASE_MANIFEST.json",
+    "deliverables/reports/docs/SCIENTIFIC_STORY_V4_20261125.md",
+    "deliverables/reports/docs/UNIFIED_PREPRINT_CLAIM_EVIDENCE_LEDGER_V4_20261125.md"
+  ],
+  "source_markdown_sha256": {
+    "UNIFIED_PREPRINT_MAIN_V5_20261126.md": "2dd2f28a8d0adf7210d805fc7ad5bbda26d1f829f80b50e2b57c7d51adfc8ac0",
+    "UNIFIED_PREPRINT_SUPPLEMENT_S2_V5_20261126.md": "ec3b87b48ffde9ccd989a4dce049d16dea63360955fca0748eebeea68536aee5",
+    "UNIFIED_PREPRINT_SUPPLEMENT_S3_V5_20261126.md": "663907b325c7f6bbb84bd666a0291861fa54cace5e78fd0bcfd4fbce564254ed"
+  },
+  "scientific_content_changed": true,
+  "evidence_boundaries": {
+    "paper1_equal_budget": "Retrospective historical-outer sensitivity, not a new blind test. T-cell r1 cap2-16 and r2 cap4 survive complete all-20 Holm including cap1; HepG2 cap2 also survives, cap4 Holm p=0.055994; N50 has no nominal support.",
+    "paper1_sequence": "Retrospective/exploratory composition sensitivity only. GC/uAUG/polyU/support adjustment attenuates T-cell effects with no adjusted all-20 Holm survivor. uAUG exclusions have none; polyU exclusions retain exactly r1 cap4 and r2 cap8. No sequence causation or mediation claim.",
+    "persist_mrl_external_v1": "Completed small independent-study, same-endpoint retrospective full-MLP-contract evaluation: 59 constructs/49 UTRs, exact/H1=0; +0.104723 [-0.100964,0.212706], p=0.245175, Spearman -0.008447. No detectable transfer; not blind, not direct T-cell refutation, not universal failure or BoN benefit.",
+    "persist_tie_audit_v1_1": "Source confirms prediction descending/Sequence ID/row order. SHA256 alternative leaves original selections, primary effect, CI and p unchanged; local bootstrap changes and pre-existing manifest mismatch remain disclosed.",
+    "paper2": "Frozen candidate-risk calibration failed; outer scoring was hard-locked and not performed. Historical outer curves are retrospective sensitivity evidence only; risk control requires an independent gate.",
+    "paper3": "Development/calibration diagnostics only; permanent outer labels and metrics remain untouched. Label repair requires an independent gate; numerical convergence is not scientific or outer validation."
+  },
+  "verification_rounds": [
+    {
+      "name": "Source Markdown hashes and claim boundaries",
+      "status": "PASS",
+      "source_scientific_content_modified": false,
+      "forbidden_stale_positive_wording_found": [],
+      "dry_run_promoted_to_scientific_validity": false,
+      "documents": {
+        "main": {
+          "source": {
+            "path": "deliverables/paper/UNIFIED_PREPRINT_MAIN_V5_20261126.md",
+            "sha256": "2dd2f28a8d0adf7210d805fc7ad5bbda26d1f829f80b50e2b57c7d51adfc8ac0",
+            "bytes": 77130
+          },
+          "missing_required_boundaries": [],
+          "source_hash_unchanged": true,
+          "rendered_content_restores_source_exactly": true,
+          "build_warnings": [
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Italic.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Bold.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Helvetica.ttc`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Menlo.ttc`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/STIXTwoMath.otf`; build may not be reproducible in other environments",
+            "warning: main.tex:270: Underfull \\hbox (badness 1122) in paragraph at lines 267--270",
+            "warning: main.tex:579: Underfull \\hbox (badness 2229) in paragraph at lines 573--579",
+            "warning: main.tex:692: Underfull \\hbox (badness 1189) in paragraph at lines 679--692",
+            "warning: main.tex:1096: Underfull \\hbox (badness 1668) in paragraph at lines 1088--1096",
+            "warning: main.tex:1283: Underfull \\hbox (badness 4832) in paragraph at lines 1277--1283",
+            "warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).",
+            "warning: main.tex:270: Underfull \\hbox (badness 1122) in paragraph at lines 267--270",
+            "warning: main.tex:579: Underfull \\hbox (badness 2229) in paragraph at lines 573--579",
+            "warning: main.tex:692: Underfull \\hbox (badness 1189) in paragraph at lines 679--692",
+            "warning: main.tex:1096: Underfull \\hbox (badness 1668) in paragraph at lines 1088--1096",
+            "warning: main.tex:1283: Underfull \\hbox (badness 4832) in paragraph at lines 1277--1283",
+            "warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).",
+            "warning: main.tex:270: Underfull \\hbox (badness 1122) in paragraph at lines 267--270",
+            "warning: main.tex:579: Underfull \\hbox (badness 2229) in paragraph at lines 573--579",
+            "warning: main.tex:692: Underfull \\hbox (badness 1189) in paragraph at lines 679--692",
+            "warning: main.tex:1096: Underfull \\hbox (badness 1668) in paragraph at lines 1088--1096",
+            "warning: main.tex:1283: Underfull \\hbox (badness 4832) in paragraph at lines 1277--1283",
+            "warning: Trying to include PDF file with version (1.7), which is newer than current output PDF setting (1.5).",
+            "warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details."
+          ],
+          "figures": [
+            {
+              "caption": "Graphical abstract |",
+              "path": "deliverables/figures/v3/Figure11_v3_evidence_chain.pdf",
+              "sha256": "94690604dc734837f9e6d0851e1a67f74d0b52992ac137368e3323937e2c3ad6",
+              "bytes": 56771,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 1 |",
+              "path": "deliverables/figures/Figure2_v2_selection_pressure.pdf",
+              "sha256": "d1f2c1ad40e6a35763f455e801d7d46261fa8b6dee058fb35c729ce97f1dfb56",
+              "bytes": 76001,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 2 |",
+              "path": "deliverables/figures/Figure3_v2_score_matching.pdf",
+              "sha256": "f6a8aeda0f512b2241b57e9f1a7efb093c56f7ecd78762c067fe674e25a6632c",
+              "bytes": 50487,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 3 |",
+              "path": "deliverables/figures/Figure4_v2_common_proxy_error.pdf",
+              "sha256": "2c4f30f9bea092450dfec16ecd2e1d520dd233cd1d03f21c99ac21b6d027254b",
+              "bytes": 48581,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 4 |",
+              "path": "deliverables/figures/Figure9_v2_schlusser_te.pdf",
+              "sha256": "b1988e584af4cc224da194c5a460fad912360a71193f298f1cbc2630215b0ed7",
+              "bytes": 48049,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 4 |",
+              "path": "deliverables/figures/Figure10_v2_leppek_endpoints.pdf",
+              "sha256": "c6761a5981cc0584b1b76caa65ec7976d89a04de941fffcc740c67f035ddda3a",
+              "bytes": 52188,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 5 |",
+              "path": "deliverables/figures/Figure7_v2_paper2_baselines.pdf",
+              "sha256": "7b7d5974b4bbee8d767c4bd62f818a59aab207813a7a0a01c70d27ef82c1dec9",
+              "bytes": 46706,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 6 |",
+              "path": "deliverables/figures/Figure8_v2_paper3_headroom.pdf",
+              "sha256": "df5e5ede2c3404d43f83df5d0dfb7be2c7f3c735785b644a6d95d4dcfefaebad",
+              "bytes": 50649,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 13 |",
+              "path": "deliverables/figures/v3/Figure13_v3_persist_external.pdf",
+              "sha256": "1544fa72d106e811ea1d97d5dffd0268dc6ed952346b2dbcafda4b4720f4441f",
+              "bytes": 60048,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 14 |",
+              "path": "deliverables/figures/v3/Figure14_v3_equal_budget_value.pdf",
+              "sha256": "9fa2988273cee3676923a168ac36bc5f07a01a334e36f888b5517f65a204f526",
+              "bytes": 59039,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Figure 15 |",
+              "path": "deliverables/figures/v3/Figure15_v3_sequence_composition_sensitivity.pdf",
+              "sha256": "7e4bfb8f65100f9fb1e0032c1d1241c71f7598b4822ee99306eed4703a3fd51d",
+              "bytes": 61563,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Extended Data Figure 1 |",
+              "path": "deliverables/figures/ExtendedData_proxy_noise.pdf",
+              "sha256": "0b613a17f790878ae2bda34ab1be2489f5330e35bd62ec2178602b348267e36d",
+              "bytes": 46535,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Extended Data Figure 2 |",
+              "path": "deliverables/figures/v3/Figure12_v3_data_governance_ood.pdf",
+              "sha256": "68d280aefc59fa6b3c5f8e1ba3a574753331bd28e22d5c3e3acdf3451daebcf8",
+              "bytes": 53093,
+              "pdf_valid": true
+            }
+          ],
+          "pass": true
+        },
+        "supplement_s2": {
+          "source": {
+            "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S2_V5_20261126.md",
+            "sha256": "ec3b87b48ffde9ccd989a4dce049d16dea63360955fca0748eebeea68536aee5",
+            "bytes": 15390
+          },
+          "missing_required_boundaries": [],
+          "source_hash_unchanged": true,
+          "rendered_content_restores_source_exactly": true,
+          "build_warnings": [
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Italic.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Bold.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Helvetica.ttc`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Menlo.ttc`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/STIXTwoMath.otf`; build may not be reproducible in other environments"
+          ],
+          "figures": [
+            {
+              "caption": "Supplementary Figure S2.1 |",
+              "path": "deliverables/figures/ExtendedData_VGSC_paired_difference.pdf",
+              "sha256": "a6ec1348ad3c305d26b52e3bf2f88d13a74bc0fbe498becb43874d79407d0af8",
+              "bytes": 41531,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Supplementary Figure S2.2 |",
+              "path": "deliverables/figures/Figure7_v2_paper2_baselines.pdf",
+              "sha256": "7b7d5974b4bbee8d767c4bd62f818a59aab207813a7a0a01c70d27ef82c1dec9",
+              "bytes": 46706,
+              "pdf_valid": true
+            },
+            {
+              "caption": "Supplementary Figure S2.3 |",
+              "path": "deliverables/figures/ExtendedData_proxy_noise.pdf",
+              "sha256": "0b613a17f790878ae2bda34ab1be2489f5330e35bd62ec2178602b348267e36d",
+              "bytes": 46535,
+              "pdf_valid": true
+            }
+          ],
+          "pass": true
+        },
+        "supplement_s3": {
+          "source": {
+            "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S3_V5_20261126.md",
+            "sha256": "663907b325c7f6bbb84bd666a0291861fa54cace5e78fd0bcfd4fbce564254ed",
+            "bytes": 15471
+          },
+          "missing_required_boundaries": [],
+          "source_hash_unchanged": true,
+          "rendered_content_restores_source_exactly": true,
+          "build_warnings": [
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Italic.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Bold.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Helvetica.ttc`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Menlo.ttc`; build may not be reproducible in other environments",
+            "warning: accessing absolute path `/System/Library/Fonts/Supplemental/STIXTwoMath.otf`; build may not be reproducible in other environments",
+            "warning: supplement_s3.tex:546: Underfull \\hbox (badness 1117) in paragraph at lines 536--546",
+            "warning: supplement_s3.tex:546: Underfull \\hbox (badness 3601) in paragraph at lines 536--546",
+            "warning: supplement_s3.tex:546: Underfull \\hbox (badness 1117) in paragraph at lines 536--546",
+            "warning: supplement_s3.tex:546: Underfull \\hbox (badness 3601) in paragraph at lines 536--546",
+            "warning: supplement_s3.tex:546: Underfull \\hbox (badness 1117) in paragraph at lines 536--546",
+            "warning: supplement_s3.tex:546: Underfull \\hbox (badness 3601) in paragraph at lines 536--546",
+            "warning: warnings were issued by the TeX engine; use --print and/or --keep-logs for details."
+          ],
+          "figures": [
+            {
+              "caption": "Supplementary Figure S3.1 |",
+              "path": "deliverables/figures/Figure8_v2_paper3_headroom.pdf",
+              "sha256": "df5e5ede2c3404d43f83df5d0dfb7be2c7f3c735785b644a6d95d4dcfefaebad",
+              "bytes": 50649,
+              "pdf_valid": true
+            }
+          ],
+          "pass": true
+        }
+      }
+    },
+    {
+      "name": "PDF page text, overflow, rendering, and font checks",
+      "status": "PASS",
+      "documents": {
+        "main": {
+          "path": "deliverables/paper/UNIFIED_PREPRINT_MAIN_V5_20261126.pdf",
+          "sha256": "98d967d1f4338340750719899b58df495836ca819b1cd097fa00651e4a5d965f",
+          "bytes": 845427,
+          "pages": 24,
+          "pdfinfo_valid": true,
+          "header_and_eof_valid": true,
+          "missing_required_text": [],
+          "replacement_glyphs": 0,
+          "words_outside_page": [],
+          "page_objects_outside_page": [],
+          "blank_or_textless_pages": [],
+          "xobject_count": 54,
+          "expected_figure_count": 12,
+          "font_audit": {
+            "fonts": [
+              {
+                "font": "IHAIZV+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "BZIVMZ+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "IXFAWU+STIXTwoMath-Regular-Identity-H",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "TQTHRL+Menlo-Regular",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "EVICAO+DejaVuSans-Bold",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "BMQQDV+DejaVuSans",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "EVICAO+DejaVuSans-Bold",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "BMQQDV+DejaVuSans",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "YEUUOC+Arial-ItalicMT",
+                "embedded": true,
+                "unicode": true
+              }
+            ],
+            "all_embedded": true,
+            "all_unicode": true
+          },
+          "page_records": [
+            {
+              "page": 1,
+              "characters": 4392,
+              "words": 1359,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 44.122
+            },
+            {
+              "page": 2,
+              "characters": 5045,
+              "words": 676,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 56.95
+            },
+            {
+              "page": 3,
+              "characters": 4300,
+              "words": 590,
+              "xobjects": 1,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 45.228
+            },
+            {
+              "page": 4,
+              "characters": 4687,
+              "words": 609,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 55.048
+            },
+            {
+              "page": 5,
+              "characters": 4246,
+              "words": 601,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 50.784
+            },
+            {
+              "page": 6,
+              "characters": 4067,
+              "words": 571,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 51.722
+            },
+            {
+              "page": 7,
+              "characters": 4925,
+              "words": 673,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 57.386
+            },
+            {
+              "page": 8,
+              "characters": 4847,
+              "words": 678,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 57.332
+            },
+            {
+              "page": 9,
+              "characters": 5327,
+              "words": 699,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 57.876
+            },
+            {
+              "page": 10,
+              "characters": 5127,
+              "words": 679,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 58.29
+            },
+            {
+              "page": 11,
+              "characters": 4175,
+              "words": 529,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 50.46
+            },
+            {
+              "page": 12,
+              "characters": 5011,
+              "words": 690,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 57.185
+            },
+            {
+              "page": 13,
+              "characters": 4999,
+              "words": 682,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 57.401
+            },
+            {
+              "page": 14,
+              "characters": 4539,
+              "words": 624,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 55.392
+            },
+            {
+              "page": 15,
+              "characters": 4342,
+              "words": 535,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 54.414
+            },
+            {
+              "page": 16,
+              "characters": 2136,
+              "words": 355,
+              "xobjects": 21,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 28.527
+            },
+            {
+              "page": 17,
+              "characters": 2443,
+              "words": 353,
+              "xobjects": 6,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 31.725
+            },
+            {
+              "page": 18,
+              "characters": 2407,
+              "words": 346,
+              "xobjects": 6,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 27.197
+            },
+            {
+              "page": 19,
+              "characters": 2577,
+              "words": 358,
+              "xobjects": 4,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 36.947
+            },
+            {
+              "page": 20,
+              "characters": 2666,
+              "words": 376,
+              "xobjects": 3,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 28.18
+            },
+            {
+              "page": 21,
+              "characters": 2316,
+              "words": 351,
+              "xobjects": 5,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 28.142
+            },
+            {
+              "page": 22,
+              "characters": 2729,
+              "words": 411,
+              "xobjects": 1,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 28.786
+            },
+            {
+              "page": 23,
+              "characters": 3215,
+              "words": 460,
+              "xobjects": 7,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 34.118
+            },
+            {
+              "page": 24,
+              "characters": 3444,
+              "words": 460,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 48.372
+            }
+          ],
+          "pass": true
+        },
+        "supplement_s2": {
+          "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S2_V5_20261126.pdf",
+          "sha256": "d5417b17500702eade54af8c23812639aa9d4c44c64a4c30dc7144b619f39b81",
+          "bytes": 207000,
+          "pages": 6,
+          "pdfinfo_valid": true,
+          "header_and_eof_valid": true,
+          "missing_required_text": [],
+          "replacement_glyphs": 0,
+          "words_outside_page": [],
+          "page_objects_outside_page": [],
+          "blank_or_textless_pages": [],
+          "xobject_count": 8,
+          "expected_figure_count": 3,
+          "font_audit": {
+            "fonts": [
+              {
+                "font": "IHAIZV+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "BZIVMZ+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "IXFAWU+STIXTwoMath-Regular-Identity-H",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "TQTHRL+Menlo-Regular",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              }
+            ],
+            "all_embedded": true,
+            "all_unicode": true
+          },
+          "page_records": [
+            {
+              "page": 1,
+              "characters": 3674,
+              "words": 934,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 45.225
+            },
+            {
+              "page": 2,
+              "characters": 3384,
+              "words": 474,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 49.483
+            },
+            {
+              "page": 3,
+              "characters": 2640,
+              "words": 353,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 43.813
+            },
+            {
+              "page": 4,
+              "characters": 3717,
+              "words": 518,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 51.602
+            },
+            {
+              "page": 5,
+              "characters": 3301,
+              "words": 455,
+              "xobjects": 1,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 44.366
+            },
+            {
+              "page": 6,
+              "characters": 2145,
+              "words": 310,
+              "xobjects": 7,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 35.636
+            }
+          ],
+          "pass": true
+        },
+        "supplement_s3": {
+          "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S3_V5_20261126.pdf",
+          "sha256": "fa73f9bd494e2b48cdcc859919593e7fcef89998f8acea7b857955e3d868d143",
+          "bytes": 129747,
+          "pages": 5,
+          "pdfinfo_valid": true,
+          "header_and_eof_valid": true,
+          "missing_required_text": [],
+          "replacement_glyphs": 0,
+          "words_outside_page": [],
+          "page_objects_outside_page": [],
+          "blank_or_textless_pages": [],
+          "xobject_count": 3,
+          "expected_figure_count": 1,
+          "font_audit": {
+            "fonts": [
+              {
+                "font": "IHAIZV+ArialMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "BZIVMZ+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "IXFAWU+STIXTwoMath-Regular-Identity-H",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "TQTHRL+Menlo-Regular",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+Arial-BoldMT",
+                "embedded": true,
+                "unicode": true
+              },
+              {
+                "font": "GOFYPY+ArialMT",
+                "embedded": true,
+                "unicode": true
+              }
+            ],
+            "all_embedded": true,
+            "all_unicode": true
+          },
+          "page_records": [
+            {
+              "page": 1,
+              "characters": 3740,
+              "words": 901,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 47.065
+            },
+            {
+              "page": 2,
+              "characters": 3376,
+              "words": 439,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 45.498
+            },
+            {
+              "page": 3,
+              "characters": 3346,
+              "words": 461,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 49.004
+            },
+            {
+              "page": 4,
+              "characters": 4308,
+              "words": 595,
+              "xobjects": 0,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 53.706
+            },
+            {
+              "page": 5,
+              "characters": 2251,
+              "words": 311,
+              "xobjects": 3,
+              "render_pixels": [
+                612,
+                792
+              ],
+              "render_std": 35.062
+            }
+          ],
+          "pass": true
+        }
+      }
+    },
+    {
+      "name": "Clean rebuild determinism and file validity",
+      "status": "PASS",
+      "clean_empty_output_directory": true,
+      "source_date_epoch": 1795651200,
+      "source_hashes_unchanged_after_rebuild": true,
+      "outputs": {
+        "main": {
+          "initial_sha256": "98d967d1f4338340750719899b58df495836ca819b1cd097fa00651e4a5d965f",
+          "clean_rebuild_sha256": "98d967d1f4338340750719899b58df495836ca819b1cd097fa00651e4a5d965f",
+          "byte_identical": true,
+          "rebuilt_pdf_valid": true,
+          "pages": 24
+        },
+        "supplement_s2": {
+          "initial_sha256": "d5417b17500702eade54af8c23812639aa9d4c44c64a4c30dc7144b619f39b81",
+          "clean_rebuild_sha256": "d5417b17500702eade54af8c23812639aa9d4c44c64a4c30dc7144b619f39b81",
+          "byte_identical": true,
+          "rebuilt_pdf_valid": true,
+          "pages": 6
+        },
+        "supplement_s3": {
+          "initial_sha256": "fa73f9bd494e2b48cdcc859919593e7fcef89998f8acea7b857955e3d868d143",
+          "clean_rebuild_sha256": "fa73f9bd494e2b48cdcc859919593e7fcef89998f8acea7b857955e3d868d143",
+          "byte_identical": true,
+          "rebuilt_pdf_valid": true,
+          "pages": 5
+        }
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "deliverables/paper/UNIFIED_PREPRINT_MAIN_V5_20261126.md",
+      "sha256": "2dd2f28a8d0adf7210d805fc7ad5bbda26d1f829f80b50e2b57c7d51adfc8ac0",
+      "bytes": 77130
+    },
+    {
+      "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S2_V5_20261126.md",
+      "sha256": "ec3b87b48ffde9ccd989a4dce049d16dea63360955fca0748eebeea68536aee5",
+      "bytes": 15390
+    },
+    {
+      "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S3_V5_20261126.md",
+      "sha256": "663907b325c7f6bbb84bd666a0291861fa54cace5e78fd0bcfd4fbce564254ed",
+      "bytes": 15471
+    },
+    {
+      "path": "deliverables/paper/UNIFIED_PREPRINT_MAIN_V5_20261126.pdf",
+      "sha256": "98d967d1f4338340750719899b58df495836ca819b1cd097fa00651e4a5d965f",
+      "bytes": 845427
+    },
+    {
+      "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S2_V5_20261126.pdf",
+      "sha256": "d5417b17500702eade54af8c23812639aa9d4c44c64a4c30dc7144b619f39b81",
+      "bytes": 207000
+    },
+    {
+      "path": "deliverables/paper/UNIFIED_PREPRINT_SUPPLEMENT_S3_V5_20261126.pdf",
+      "sha256": "fa73f9bd494e2b48cdcc859919593e7fcef89998f8acea7b857955e3d868d143",
+      "bytes": 129747
+    },
+    {
+      "path": "deliverables/paper/build_unified_preprint_v5.py",
+      "sha256": "eee2888a8880ca56d82c92dbdd256952bf950b5bb2faf60329ba5a39c120fea3",
+      "bytes": 30886
+    },
+    {
+      "path": "deliverables/reports/docs/SCIENTIFIC_STORY_V5_20261126.md",
+      "sha256": "04ff7c94f0bc3fc7d2eed488d54d6be7ee12c98c3badfa273bfb7277bd9dff37",
+      "bytes": 11199
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_CLAIM_EVIDENCE_LEDGER_V5_20261126.md",
+      "sha256": "33d2aed59589241b47b2a47054a31009442a0e5968b5fc73fb06e12765c16ad1",
+      "bytes": 11508
+    },
+    {
+      "path": "deliverables/reports/docs/verify_unified_preprint_v5_20261126.py",
+      "sha256": "06cc1a672cef233a9d5f0a3671d585a7f7c0656c93d9e9fc2256734821c8d303",
+      "bytes": 56373
+    },
+    {
+      "path": "deliverables/reports/docs/PERSIST_MRL_EXTERNAL_V1.md",
+      "sha256": "6c54cc89de2f7a7b98bc194d452258010b42c24c997914381ed109a76d8f1876",
+      "bytes": 6376
+    },
+    {
+      "path": "deliverables/reports/docs/PAPER1_BUDGET_MATCHED_V1.md",
+      "sha256": "d7199025e64b8ca2ab8f1eb64307b08c2bbbafefeb1598461d7d34e74d30a2a0",
+      "bytes": 11852
+    },
+    {
+      "path": "deliverables/reports/docs/PAPER1_SEQUENCE_ABLATION_V1.md",
+      "sha256": "284dfe96ba49917ee71503378f6f7b0823617c9e0864a2bd6bb5f451f97cb8fd",
+      "bytes": 11634
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND1.json",
+      "sha256": "1d87351c6f16448f8a01a7971e582c75d5d7fbbff41f22da840a3181e18ff48f",
+      "bytes": 25308
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND1.log",
+      "sha256": "fef5e43d5f743035a263f9d6da94cc79fb63b59fdece11601f2a5cb963a13dc1",
+      "bytes": 8987
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND2.json",
+      "sha256": "705f881a1dd665a5dc98899a62aa6579cf41d3bf3de4280e4243261067cd68a8",
+      "bytes": 25308
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND2.log",
+      "sha256": "a2ffdc64a15266f31e68791c594edfc97dd1060bba42dee751624fbab8911b8c",
+      "bytes": 8987
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND3.json",
+      "sha256": "df0125e6226f90267f0ce16a249d2ca43591a5c793bcd137406ebb4e9fd68f76",
+      "bytes": 25308
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND3.log",
+      "sha256": "05061ec378f5cdc71b46c9b7fba76176eae8bf75d36ee48f64db59d3f515b362",
+      "bytes": 8987
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND1_PREFLIGHT_FAILED.json",
+      "sha256": "3eab0c3bea1957befc7c92e52e6a7dd439c3b9df74f9f295202c24e39c804beb",
+      "bytes": 25310
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND1_PREFLIGHT_FAILED.log",
+      "sha256": "c06774105028f2473c6d4d1cacf48c96727f8e54db158a82a194ed7a6256abeb",
+      "bytes": 8987
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND1_PREFLIGHT2_FAILED.json",
+      "sha256": "3aae3e162d32ad14a0198fac197f85841ec737f24227cb5286f099a2f2107c34",
+      "bytes": 25309
+    },
+    {
+      "path": "deliverables/reports/docs/UNIFIED_PREPRINT_SOURCE_VERIFICATION_V5_20261126_ROUND1_PREFLIGHT2_FAILED.log",
+      "sha256": "a0bbecf10700fb7f2767cd7f5c6fa959913beb95b07c5b5ad5df6bbaf294640a",
+      "bytes": 8987
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_budget_matched_v1/results.json",
+      "sha256": "6226ad942d6abc4ecfddd41140a14e41da9f22aa723f382e82f85184454d1c91",
+      "bytes": 97736
+    },
+    {
+      "path": "deliverables/reports/source_data/paper1_sequence_ablation_v1/analysis/results/summary.json",
+      "sha256": "9b76bfb0a034c478ee8700be94439476f713e7a2473d67091cdf9ab86de24b43",
+      "bytes": 31318
+    },
+    {
+      "path": "deliverables/reports/source_data/persist_mrl_external_v1/results/summary.json",
+      "sha256": "6408d1efde788b1a96a8caab1888c02680a8567c58cb86e0406a65d4728ac32f",
+      "bytes": 1687
+    },
+    {
+      "path": "PERSIST_TIE_AUDIT_V1_1.md",
+      "sha256": "f56b18f66fc88ce75515bd29b1a368284d92c2e586e0bc5225f1a287350a0f54",
+      "bytes": 5242
+    },
+    {
+      "path": "persist_mrl_external_v1/tie_audit_v1_1/results/summary_v1_1.json",
+      "sha256": "d206ae8d26f188f865cdf9a32a854a95a41e554c198ee727f809ac371b740dce",
+      "bytes": 2249
+    },
+    {
+      "path": "persist_mrl_external_v1/tie_audit_v1_1/results/comparison_v1_vs_v1_1.json",
+      "sha256": "f72587caa786905e6f8c5d0a1e701ee42defae77bd43e86555cefccca2e91f9e",
+      "bytes": 821
+    },
+    {
+      "path": "deliverables/figures/ExtendedData_VGSC_paired_difference.pdf",
+      "sha256": "a6ec1348ad3c305d26b52e3bf2f88d13a74bc0fbe498becb43874d79407d0af8",
+      "bytes": 41531
+    },
+    {
+      "path": "deliverables/figures/ExtendedData_proxy_noise.pdf",
+      "sha256": "0b613a17f790878ae2bda34ab1be2489f5330e35bd62ec2178602b348267e36d",
+      "bytes": 46535
+    },
+    {
+      "path": "deliverables/figures/Figure10_v2_leppek_endpoints.pdf",
+      "sha256": "c6761a5981cc0584b1b76caa65ec7976d89a04de941fffcc740c67f035ddda3a",
+      "bytes": 52188
+    },
+    {
+      "path": "deliverables/figures/Figure2_v2_selection_pressure.pdf",
+      "sha256": "d1f2c1ad40e6a35763f455e801d7d46261fa8b6dee058fb35c729ce97f1dfb56",
+      "bytes": 76001
+    },
+    {
+      "path": "deliverables/figures/Figure3_v2_score_matching.pdf",
+      "sha256": "f6a8aeda0f512b2241b57e9f1a7efb093c56f7ecd78762c067fe674e25a6632c",
+      "bytes": 50487
+    },
+    {
+      "path": "deliverables/figures/Figure4_v2_common_proxy_error.pdf",
+      "sha256": "2c4f30f9bea092450dfec16ecd2e1d520dd233cd1d03f21c99ac21b6d027254b",
+      "bytes": 48581
+    },
+    {
+      "path": "deliverables/figures/Figure7_v2_paper2_baselines.pdf",
+      "sha256": "7b7d5974b4bbee8d767c4bd62f818a59aab207813a7a0a01c70d27ef82c1dec9",
+      "bytes": 46706
+    },
+    {
+      "path": "deliverables/figures/Figure8_v2_paper3_headroom.pdf",
+      "sha256": "df5e5ede2c3404d43f83df5d0dfb7be2c7f3c735785b644a6d95d4dcfefaebad",
+      "bytes": 50649
+    },
+    {
+      "path": "deliverables/figures/Figure9_v2_schlusser_te.pdf",
+      "sha256": "b1988e584af4cc224da194c5a460fad912360a71193f298f1cbc2630215b0ed7",
+      "bytes": 48049
+    },
+    {
+      "path": "deliverables/figures/v3/Figure11_v3_evidence_chain.pdf",
+      "sha256": "94690604dc734837f9e6d0851e1a67f74d0b52992ac137368e3323937e2c3ad6",
+      "bytes": 56771
+    },
+    {
+      "path": "deliverables/figures/v3/Figure12_v3_data_governance_ood.pdf",
+      "sha256": "68d280aefc59fa6b3c5f8e1ba3a574753331bd28e22d5c3e3acdf3451daebcf8",
+      "bytes": 53093
+    },
+    {
+      "path": "deliverables/figures/v3/Figure13_v3_persist_external.pdf",
+      "sha256": "1544fa72d106e811ea1d97d5dffd0268dc6ed952346b2dbcafda4b4720f4441f",
+      "bytes": 60048
+    },
+    {
+      "path": "deliverables/figures/v3/Figure14_v3_equal_budget_value.pdf",
+      "sha256": "9fa2988273cee3676923a168ac36bc5f07a01a334e36f888b5517f65a204f526",
+      "bytes": 59039
+    },
+    {
+      "path": "deliverables/figures/v3/Figure15_v3_sequence_composition_sensitivity.pdf",
+      "sha256": "7e4bfb8f65100f9fb1e0032c1d1241c71f7598b4822ee99306eed4703a3fd51d",
+      "bytes": 61563
+    }
+  ],
+  "tools": {
+    "python": "3.9.6",
+    "pandoc": "pandoc 2.12",
+    "tectonic": "Tectonic 0.17.0",
+    "pymupdf": "1.26.5",
+    "numpy": "2.0.2"
+  },
+  "old_release_manifest_overwritten": false,
+  "remote_access_or_unblinding_performed": false
+}

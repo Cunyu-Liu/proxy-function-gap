@@ -1,0 +1,79 @@
+{
+  "round1_numeric_independent": {
+    "status": "PASS",
+    "source_hashes": 7,
+    "budget_pool_effects": 320,
+    "budget_bootstrap_rows_recomputed": 48,
+    "budget_holm_families": 3,
+    "sequence_pool_effects": 320,
+    "sequence_unadjusted_bootstrap_rows_recomputed": 16,
+    "sequence_holm_families": 4,
+    "family_holm_families": 2,
+    "upstream_sequence_raw_independent_comparisons": 620,
+    "remote_px2_seed_level_independent_comparisons": 620,
+    "remote_px2_maximum_absolute_difference": 6.106226635438361e-15,
+    "remote_local_verifier_and_result_hashes_match": true,
+    "local_pool_mean_adjustment_limitation_retained": "verify_14_15_20261126_round1.log",
+    "tcell_r1_all_cap2_16_holm": true,
+    "tcell_r2_only_cap4_holm": true,
+    "random_n_minus_random1_significant": 0,
+    "adjusted_significant": 0,
+    "no_uaug_significant": 0,
+    "no_polyu_significant": 2,
+    "sign_reversals_retained": true
+  },
+  "round2_deterministic_cross_environment": {
+    "status": "PASS",
+    "byte_identical_rebuilds": 6,
+    "rebuild_rounds": 2,
+    "python_hash_seeds": [
+      "inherited",
+      "987654321"
+    ],
+    "environment_variation": {
+      "TZ": "UTC",
+      "LC_ALL": "C"
+    },
+    "cross_second_delay": 1.1,
+    "renderer_runtime": {
+      "python": "3.13.5",
+      "matplotlib": "3.10.0",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3"
+    }
+  },
+  "round3_format_render": {
+    "status": "PASS",
+    "figures": {
+      "Figure14_v3_equal_budget_value": {
+        "png_px": [
+          4248,
+          2658
+        ],
+        "png_dpi": [
+          299.999,
+          299.999
+        ],
+        "pdf_pages": 1,
+        "pdf_vector": true,
+        "svg_editable_text": true,
+        "page_bounds": "PASS"
+      },
+      "Figure15_v3_sequence_composition_sensitivity": {
+        "png_px": [
+          4248,
+          2958
+        ],
+        "png_dpi": [
+          299.999,
+          299.999
+        ],
+        "pdf_pages": 1,
+        "pdf_vector": true,
+        "svg_editable_text": true,
+        "page_bounds": "PASS"
+      }
+    }
+  },
+  "overall": "PASS"
+}
