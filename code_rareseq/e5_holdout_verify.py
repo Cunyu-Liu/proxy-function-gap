@@ -75,6 +75,8 @@ def main():
     seeds = [int(value) for value in summary_config["seeds"].split(",")]
     tracks = summary_config["tracks"].split(",")
     holdouts = summary_config["holdouts"].split(",")
+    summary_pairs = pd.read_csv(os.path.join(args.summary_dir, "holdout_per_rbp.tsv"), sep="\t")
+    allowed = {(int(row.seed), row.track, row.holdout) for row in summary_pairs.itertuples(index=False)}
     runs = {}
     rows = []
     for seed in seeds:
@@ -84,6 +86,13 @@ def main():
                 continue
             run = verify_run(run_dir, seed, track, holdouts)
             verify_alignment(run, seed, track, holdouts)
+            selected = {holdout for current_seed, current_track, holdout in allowed
+                        if current_seed == seed and current_track == track}
+            if not selected:
+                continue
+            run["manifests"] = {key: value for key, value in run["manifests"].items() if key in selected}
+            run["histories"] = {key: value for key, value in run["histories"].items() if key in selected}
+            run["results"] = run["results"][run["results"].holdout.isin(selected)].copy()
             runs[seed, track] = run
             for holdout, manifest in run["manifests"].items():
                 replay_history(run["histories"][holdout], manifest["selection"])

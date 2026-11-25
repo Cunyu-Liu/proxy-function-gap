@@ -153,7 +153,8 @@ def verify_run(run_dir, seed, track, holdouts):
             if manifest["artifacts"][name] != sha256_file(artifact):
                 raise ValueError(f"{manifest_path}: {name} mismatch")
         recheck_window_scores(score_path, pair, manifest)
-    return {"config": config, "results": results, "manifests": manifests, "histories": histories}
+    return {"config": config, "results": results, "manifests": manifests, "histories": histories,
+            "run_dir": run_dir}
 
 
 def verify_alignment(run, seed, track, holdouts):
@@ -192,8 +193,45 @@ def canonical_train_alignment(manifest):
     return hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest()
 
 
+def evaluation_task_alignment(manifest):
+    rows = []
+    for task in manifest["tasks"]:
+        row = {"experiment": task["experiment"], "role": task["role"]}
+        for split in ("validation", "test"):
+            for suffix in ("n", "ids_sha256", "positives"):
+                key = f"{split}_{suffix}"
+                row[key] = task[key]
+        rows.append(row)
+    return rows
+
+
+def compare_pair_across_seeds(reference_manifest, current_manifest, reference_path, current_path):
+    if evaluation_task_alignment(reference_manifest) != evaluation_task_alignment(current_manifest):
+        raise ValueError("Cross-seed per-task validation/test alignment mismatch")
+    if reference_manifest["score_rows"] != current_manifest["score_rows"]:
+        raise ValueError("Cross-seed score_rows mismatch")
+    with np.load(reference_path, allow_pickle=False) as reference, np.load(current_path, allow_pickle=False) as current:
+        if set(reference.files) != set(current.files):
+            raise ValueError("Cross-seed NPZ keys mismatch")
+        for key in reference.files:
+            left, right = reference[key], current[key]
+            if left.shape != right.shape:
+                raise ValueError(f"Cross-seed NPZ shape mismatch: {key}")
+            if np.issubdtype(left.dtype, np.number) and not np.isfinite(left).all():
+                raise ValueError(f"Non-finite reference NPZ array: {key}")
+            if np.issubdtype(right.dtype, np.number) and not np.isfinite(right).all():
+                raise ValueError(f"Non-finite current NPZ array: {key}")
+        for key in ("window_id", "occurrence", "sample_role", "y_ood", "class_label"):
+            if not np.array_equal(reference[key], current[key]):
+                raise ValueError(f"Cross-seed NPZ identity/label mismatch: {key}")
+        n = len(reference["window_id"])
+        if reference_manifest["score_rows"] != n:
+            raise ValueError("Manifest score_rows does not match NPZ")
+
+
 def cross_seed_alignment(all_runs):
     reference = {}
+    comparisons = 0
     for (seed, track), run in sorted(all_runs.items()):
         for holdout, manifest in run["manifests"].items():
             keys = ("train_alignment_sha256", "validation_alignment_sha256", "heldout_test_ids_sha256",
@@ -201,9 +239,18 @@ def cross_seed_alignment(all_runs):
             value = {key: manifest[key] for key in keys}
             value["train_alignment_sha256"] = canonical_train_alignment(manifest)
             identity = (track, holdout)
-            if identity in reference and reference[identity] != value:
-                raise ValueError(f"Cross-seed split/alignment mismatch: {identity}")
-            reference[identity] = value
+            if identity in reference:
+                reference_value, reference_manifest, reference_run = reference[identity]
+                if reference_value != value:
+                    raise ValueError(f"Cross-seed split/alignment mismatch: {identity}")
+                prefix = f"{holdout}_{track}.npz"
+                compare_pair_across_seeds(
+                    reference_manifest, manifest,
+                    os.path.join(reference_run["run_dir"], "scores", prefix),
+                    os.path.join(run["run_dir"], "scores", prefix))
+                comparisons += 1
+            reference[identity] = (value, manifest, run)
+    return comparisons
 
 
 def summarize(all_runs):
@@ -293,7 +340,7 @@ def main():
                         missing.append({"seed": seed, "track": track, "holdout": holdout, "reason": "incomplete pair"})
         if not all_runs:
             raise ValueError("No valid runs")
-        cross_seed_alignment(all_runs)
+        cross_seed_comparisons = cross_seed_alignment(all_runs)
         if missing and not args.allow_partial:
             raise ValueError(f"Incomplete matrix: {missing}")
         results, per_seed, multi, convergence, convergence_summary, conflicts = summarize(all_runs)
@@ -313,6 +360,11 @@ def main():
                         "evidence_level": "pilot fold0 test descriptive; not a final conclusion" if missing else "pilot fold0 test descriptive multiseed",
                         "pass1_schema_finite_checkpoint": True,
                         "pass2_config_split_seed_alignment": True,
+                        "cross_seed_window_npz_alignment": {
+                            "comparisons": cross_seed_comparisons,
+                            "per_task_validation_test_ids_and_positives": True,
+                            "npz_keys_window_occurrence_roles_labels_shapes_finite": True,
+                            "model_scores_compared_for_equality": False},
                         "pass3_report_recalculation": {"groups": n_groups, "passed": True},
                         "missing": missing, "source_run_ids": run_ids,
                         "n_source_runs": len(run_ids), "test_used_for_selection": False,
