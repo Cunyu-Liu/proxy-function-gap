@@ -1,0 +1,305 @@
+train_alignment_sha256 ['abbf0f62a1ef22d70da89a0ec3fd41e634992ae76d8c2bb3b1c1a5a3631aa626', '1f4acafbb8f55bba2ff0bf6d284277c160ec10b3f7dfb817b5efcc08b5e2974e']
+validation_alignment_sha256 ['66a2273d8664dcd3acc2b7b1972675245b68dc32d20d7d9b09535a36fbdaab02', '66a2273d8664dcd3acc2b7b1972675245b68dc32d20d7d9b09535a36fbdaab02']
+heldout_test_ids_sha256 ['ffc099b45647ad0ee5922c192c2c54a8b70228a9108907e3e953e03b8931e954', 'ffc099b45647ad0ee5922c192c2c54a8b70228a9108907e3e953e03b8931e954']
+n_train [2554569, 2554569]
+n_validation [851028, 851028]
+n_known_test [865306, 865306]
+n_heldout_test [23797, 23797]
+SEED 0 run E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y removed 21064 policy assigned-folds-only-v1
+SEED 1 run E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y removed 0 policy assigned-folds-only-v1
+TASK AGGF1_K562 known
+  train_unassigned_positives_removed 308 0
+TASK AGGF1_HepG2 known
+  train_unassigned_positives_removed 164 0
+TASK AKAP1_K562 known
+  train_unassigned_positives_removed 77 0
+TASK AKAP1_HepG2 known
+  train_unassigned_positives_removed 91 0
+TASK AQR_K562 known
+  train_unassigned_positives_removed 35 0
+TASK AQR_HepG2 known
+  train_unassigned_positives_removed 53 0
+TASK BUD13_K562 known
+  train_unassigned_positives_removed 43 0
+TASK BUD13_HepG2 known
+  train_unassigned_positives_removed 41 0
+TASK CSTF2T_K562 known
+  train_unassigned_positives_removed 400 0
+TASK CSTF2T_HepG2 known
+  train_unassigned_positives_removed 357 0
+TASK DDX3X_K562 known
+  train_unassigned_positives_removed 503 0
+TASK DDX3X_HepG2 known
+  train_unassigned_positives_removed 509 0
+TASK DDX52_K562 known
+  train_unassigned_positives_removed 90 0
+TASK DDX52_HepG2 known
+  train_unassigned_positives_removed 105 0
+TASK DDX55_K562 known
+  train_unassigned_positives_removed 25 0
+TASK DDX55_HepG2 known
+  train_unassigned_positives_removed 29 0
+TASK DDX6_K562 known
+  train_unassigned_positives_removed 106 0
+TASK DDX6_HepG2 known
+  train_unassigned_positives_removed 59 0
+TASK DGCR8_K562 known
+  train_unassigned_positives_removed 77 0
+TASK DGCR8_HepG2 known
+  train_unassigned_positives_removed 156 0
+TASK DHX30_K562 known
+  train_unassigned_positives_removed 86 0
+TASK DHX30_HepG2 known
+  train_unassigned_positives_removed 56 0
+TASK DROSHA_K562 known
+  train_unassigned_positives_removed 210 0
+TASK DROSHA_HepG2 known
+  train_unassigned_positives_removed 310 0
+TASK EFTUD2_K562 known
+  train_unassigned_positives_removed 32 0
+TASK EFTUD2_HepG2 known
+  train_unassigned_positives_removed 42 0
+TASK EXOSC5_K562 known
+  train_unassigned_positives_removed 289 0
+TASK EXOSC5_HepG2 known
+  train_unassigned_positives_removed 26 0
+TASK FAM120A_K562 known
+  train_unassigned_positives_removed 142 0
+TASK FAM120A_HepG2 known
+  train_unassigned_positives_removed 360 0
+TASK FASTKD2_K562 known
+  train_unassigned_positives_removed 95 0
+TASK FASTKD2_HepG2 known
+  train_unassigned_positives_removed 155 0
+TASK FTO_K562 known
+  train_unassigned_positives_removed 64 0
+TASK FTO_HepG2 known
+  train_unassigned_positives_removed 73 0
+TASK FUS_K562 known
+  train_unassigned_positives_removed 280 0
+TASK FUS_HepG2 known
+  train_unassigned_positives_removed 287 0
+TASK FXR2_K562 known
+  train_unassigned_positives_removed 74 0
+TASK FXR2_HepG2 known
+  train_unassigned_positives_removed 18 0
+TASK GRWD1_K562 known
+  train_unassigned_positives_removed 55 0
+TASK GRWD1_HepG2 known
+  train_unassigned_positives_removed 36 0
+TASK GTF2F1_K562 known
+  train_unassigned_positives_removed 380 0
+TASK GTF2F1_HepG2 known
+  train_unassigned_positives_removed 385 0
+TASK HLTF_K562 known
+  train_unassigned_positives_removed 90 0
+TASK HLTF_HepG2 known
+  train_unassigned_positives_removed 418 0
+TASK HNRNPA1_K562 known
+  train_unassigned_positives_removed 226 0
+TASK HNRNPA1_HepG2 known
+  train_unassigned_positives_removed 118 0
+TASK HNRNPC_K562 heldout_test
+  train_ids_sha256 06599d59acb6d5e5a5e33b0fb965a7d0253bab2fcc7e9bc1e46aa5b15ebcaa4c 64f64fcd80ad2c01e86b65bf1ece2f69c60b63c9d0777d03d25b731845a86c64
+  train_n 18214 18093
+  train_positives 8954 8833
+TASK HNRNPC_HepG2 heldout_test
+  train_ids_sha256 9b8737b91fbe3b448136ca9fd09a580f85659c21b5f87535cb5cd3877798f560 e7e73c6366581be8936512537c26437de411747ec3eca7babc2918eb1534a988
+  train_n 20274 20039
+  train_positives 10144 9909
+TASK HNRNPK_K562 known
+  train_unassigned_positives_removed 243 0
+TASK HNRNPK_HepG2 known
+  train_unassigned_positives_removed 311 0
+TASK HNRNPL_K562 known
+  train_unassigned_positives_removed 299 0
+TASK HNRNPL_HepG2 known
+  train_unassigned_positives_removed 420 0
+TASK HNRNPM_K562 known
+  train_unassigned_positives_removed 136 0
+TASK HNRNPM_HepG2 known
+  train_unassigned_positives_removed 149 0
+TASK HNRNPU_K562 known
+  train_unassigned_positives_removed 181 0
+TASK HNRNPU_HepG2 known
+  train_unassigned_positives_removed 284 0
+TASK HNRNPUL1_K562 known
+  train_unassigned_positives_removed 40 0
+TASK HNRNPUL1_HepG2 known
+  train_unassigned_positives_removed 160 0
+TASK IGF2BP1_K562 known
+  train_unassigned_positives_removed 26 0
+TASK IGF2BP1_HepG2 known
+  train_unassigned_positives_removed 77 0
+TASK ILF3_K562 known
+  train_unassigned_positives_removed 317 0
+TASK ILF3_HepG2 known
+  train_unassigned_positives_removed 303 0
+TASK KHSRP_K562 known
+  train_unassigned_positives_removed 110 0
+TASK KHSRP_HepG2 known
+  train_unassigned_positives_removed 150 0
+TASK LARP4_K562 known
+  train_unassigned_positives_removed 86 0
+TASK LARP4_HepG2 known
+  train_unassigned_positives_removed 56 0
+TASK LARP7_K562 known
+  train_unassigned_positives_removed 13 0
+TASK LARP7_HepG2 known
+  train_unassigned_positives_removed 7 0
+TASK LIN28B_K562 known
+  train_unassigned_positives_removed 63 0
+TASK LIN28B_HepG2 known
+  train_unassigned_positives_removed 56 0
+TASK LSM11_K562 known
+  train_unassigned_positives_removed 150 0
+TASK LSM11_HepG2 known
+  train_unassigned_positives_removed 113 0
+TASK MATR3_K562 known
+  train_unassigned_positives_removed 169 0
+TASK MATR3_HepG2 known
+  train_unassigned_positives_removed 387 0
+TASK NCBP2_K562 known
+  train_unassigned_positives_removed 197 0
+TASK NCBP2_HepG2 known
+  train_unassigned_positives_removed 1130 0
+TASK NOLC1_K562 known
+  train_unassigned_positives_removed 114 0
+TASK NOLC1_HepG2 known
+  train_unassigned_positives_removed 16 0
+TASK PCBP1_K562 known
+  train_unassigned_positives_removed 70 0
+TASK PCBP1_HepG2 known
+  train_unassigned_positives_removed 26 0
+TASK PRPF8_K562 known
+  train_unassigned_positives_removed 59 0
+TASK PRPF8_HepG2 known
+  train_unassigned_positives_removed 63 0
+TASK PTBP1_K562 known
+  train_unassigned_positives_removed 337 0
+TASK PTBP1_HepG2 known
+  train_unassigned_positives_removed 405 0
+TASK QKI_K562 known
+  train_unassigned_positives_removed 157 0
+TASK QKI_HepG2 known
+  train_unassigned_positives_removed 312 0
+TASK RBFOX2_K562 known
+  train_unassigned_positives_removed 209 0
+TASK RBFOX2_HepG2 known
+  train_unassigned_positives_removed 308 0
+TASK RBM15_K562 known
+  train_unassigned_positives_removed 171 0
+TASK RBM15_HepG2 known
+  train_unassigned_positives_removed 184 0
+TASK RBM22_K562 known
+  train_unassigned_positives_removed 28 0
+TASK RBM22_HepG2 known
+  train_unassigned_positives_removed 139 0
+TASK RPS3_K562 known
+  train_unassigned_positives_removed 87 0
+TASK RPS3_HepG2 known
+  train_unassigned_positives_removed 55 0
+TASK SAFB_K562 known
+  train_unassigned_positives_removed 161 0
+TASK SAFB_HepG2 known
+  train_unassigned_positives_removed 201 0
+TASK SDAD1_K562 known
+  train_unassigned_positives_removed 12 0
+TASK SDAD1_HepG2 known
+  train_unassigned_positives_removed 56 0
+TASK SF3B4_K562 known
+  train_unassigned_positives_removed 44 0
+TASK SF3B4_HepG2 known
+  train_unassigned_positives_removed 73 0
+TASK SLTM_K562 known
+  train_unassigned_positives_removed 521 0
+TASK SLTM_HepG2 known
+  train_unassigned_positives_removed 279 0
+TASK SMNDC1_K562 known
+  train_unassigned_positives_removed 105 0
+TASK SMNDC1_HepG2 known
+  train_unassigned_positives_removed 37 0
+TASK SND1_K562 known
+  train_unassigned_positives_removed 38 0
+TASK SND1_HepG2 known
+  train_unassigned_positives_removed 4 0
+TASK SRSF1_K562 known
+  train_unassigned_positives_removed 192 0
+TASK SRSF1_HepG2 known
+  train_unassigned_positives_removed 195 0
+TASK SRSF7_K562 known
+  train_unassigned_positives_removed 52 0
+TASK SRSF7_HepG2 known
+  train_unassigned_positives_removed 100 0
+TASK SSB_K562 known
+  train_unassigned_positives_removed 38 0
+TASK SSB_HepG2 known
+  train_unassigned_positives_removed 30 0
+TASK SUPV3L1_K562 known
+  train_unassigned_positives_removed 2 0
+TASK SUPV3L1_HepG2 known
+  train_unassigned_positives_removed 37 0
+TASK TAF15_K562 known
+  train_unassigned_positives_removed 139 0
+TASK TAF15_HepG2 known
+  train_unassigned_positives_removed 325 0
+TASK TBRG4_K562 known
+  train_unassigned_positives_removed 76 0
+TASK TBRG4_HepG2 known
+  train_unassigned_positives_removed 22 0
+TASK TIA1_K562 known
+  train_unassigned_positives_removed 144 0
+TASK TIA1_HepG2 known
+  train_unassigned_positives_removed 75 0
+TASK TRA2A_K562 known
+  train_unassigned_positives_removed 49 0
+TASK TRA2A_HepG2 known
+  train_unassigned_positives_removed 25 0
+TASK TROVE2_K562 known
+  train_unassigned_positives_removed 47 0
+TASK TROVE2_HepG2 known
+  train_unassigned_positives_removed 104 0
+TASK U2AF1_K562 known
+  train_unassigned_positives_removed 95 0
+TASK U2AF1_HepG2 known
+  train_unassigned_positives_removed 180 0
+TASK U2AF2_K562 known
+  train_unassigned_positives_removed 123 0
+TASK U2AF2_HepG2 known
+  train_unassigned_positives_removed 188 0
+TASK UCHL5_K562 known
+  train_unassigned_positives_removed 35 0
+TASK UCHL5_HepG2 known
+  train_unassigned_positives_removed 32 0
+TASK UPF1_K562 known
+  train_unassigned_positives_removed 81 0
+TASK UPF1_HepG2 known
+  train_unassigned_positives_removed 128 0
+TASK UTP18_K562 known
+  train_unassigned_positives_removed 19 0
+TASK UTP18_HepG2 known
+  train_unassigned_positives_removed 14 0
+TASK WDR43_K562 known
+  train_unassigned_positives_removed 17 0
+TASK WDR43_HepG2 known
+  train_unassigned_positives_removed 17 0
+TASK XRCC6_K562 known
+  train_unassigned_positives_removed 135 0
+TASK XRCC6_HepG2 known
+  train_unassigned_positives_removed 75 0
+TASK XRN2_K562 known
+  train_unassigned_positives_removed 175 0
+TASK XRN2_HepG2 known
+  train_unassigned_positives_removed 335 0
+TASK YBX3_K562 known
+  train_unassigned_positives_removed 22 0
+TASK YBX3_HepG2 known
+  train_unassigned_positives_removed 28 0
+TASK ZC3H11A_K562 known
+  train_unassigned_positives_removed 81 0
+TASK ZC3H11A_HepG2 known
+  train_unassigned_positives_removed 137 0
+TASK ZNF800_K562 known
+  train_unassigned_positives_removed 29 0
+TASK ZNF800_HepG2 known
+  train_unassigned_positives_removed 27 0

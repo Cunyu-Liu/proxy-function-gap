@@ -1,5 +1,5 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261125-185532-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261125-192011-ZDLg6Y",
   "args": {
     "run_root": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence",
     "seeds": "0,1,2",
@@ -10,5 +10,5 @@
     "log": "/home/ProxyFunctionGap/logs/experiments.jsonl",
     "data_version": "e0-v1-id90-frozen"
   },
-  "code_sha256": "62caa86553be24cf7595a8f1dc7888adac6b7fda4a9141608b44fde1349e0c49"
+  "code_sha256": "0b413b3144bc14f886ab6541b654b19a6dc1f6684d277349ed2da9e3dd6bcaef"
 }

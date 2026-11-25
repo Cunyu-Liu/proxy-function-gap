@@ -182,6 +182,16 @@ def verify_alignment(run, seed, track, holdouts):
             raise ValueError(f"Result/checkpoint epoch mismatch: {holdout}/{track}")
 
 
+def canonical_train_alignment(manifest):
+    rows = []
+    for task in manifest["tasks"]:
+        if task["role"] == "known":
+            rows.append({key: value for key, value in task.items()
+                         if (key.startswith("train_") and key != "train_unassigned_positives_removed")
+                         or key in ("experiment", "track")})
+    return hashlib.sha256(json.dumps(rows, sort_keys=True).encode()).hexdigest()
+
+
 def cross_seed_alignment(all_runs):
     reference = {}
     for (seed, track), run in sorted(all_runs.items()):
@@ -189,6 +199,7 @@ def cross_seed_alignment(all_runs):
             keys = ("train_alignment_sha256", "validation_alignment_sha256", "heldout_test_ids_sha256",
                     "n_train", "n_validation", "n_known_test", "n_heldout_test")
             value = {key: manifest[key] for key in keys}
+            value["train_alignment_sha256"] = canonical_train_alignment(manifest)
             identity = (track, holdout)
             if identity in reference and reference[identity] != value:
                 raise ValueError(f"Cross-seed split/alignment mismatch: {identity}")

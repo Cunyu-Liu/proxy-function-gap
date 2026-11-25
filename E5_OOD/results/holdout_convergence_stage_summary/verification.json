@@ -1,7 +1,7 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261125-185532-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261125-192011-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 24,
+  "n_pairs_completed": 25,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
@@ -15,7 +15,68 @@
     {
       "seed": 1,
       "track": "neg1c",
-      "reason": "missing results"
+      "holdout": "PTBP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "U2AF2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "SRSF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "RBFOX2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "QKI",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "IGF2BP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "LIN28B",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "TAF15",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "UPF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "CSTF2T",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "holdout": "YBX3",
+      "reason": "incomplete pair"
     },
     {
       "seed": 1,
@@ -36,9 +97,10 @@
   "source_run_ids": [
     "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
     "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
-    "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y"
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y"
   ],
-  "n_source_runs": 3,
+  "n_source_runs": 4,
   "test_used_for_selection": false,
-  "input_digest": "1740264e16c74fe8f10b2fd519a8f6a173191beffed0a0d611d4db54eef96428"
+  "input_digest": "1d0b45d1ec4951a047614f3d2a9d75718ebbb6376151db5c0925d26258aa4d85"
 }
