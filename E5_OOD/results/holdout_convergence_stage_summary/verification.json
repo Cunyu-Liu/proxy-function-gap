@@ -1,7 +1,7 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261125-170348-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261125-175840-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 17,
+  "n_pairs_completed": 18,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
@@ -12,12 +12,6 @@
     "passed": true
   },
   "missing": [
-    {
-      "seed": 0,
-      "track": "neg2",
-      "holdout": "QKI",
-      "reason": "incomplete pair"
-    },
     {
       "seed": 0,
       "track": "neg2",
@@ -77,9 +71,10 @@
   ],
   "source_run_ids": [
     "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
-    "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y"
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y"
   ],
-  "n_source_runs": 2,
+  "n_source_runs": 3,
   "test_used_for_selection": false,
-  "input_digest": "bbf58f0a19f628e1f6088a9ebe29110aab407dcddbc0c020eaf50bd843890aaa"
+  "input_digest": "1740264e16c74fe8f10b2fd519a8f6a173191beffed0a0d611d4db54eef96428"
 }
