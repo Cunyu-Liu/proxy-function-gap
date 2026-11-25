@@ -1,5 +1,5 @@
 {
-  "completed_modern_runs": 8,
+  "completed_modern_runs": 10,
   "failed": false,
   "checks": [
     {
@@ -95,6 +95,30 @@
       "best_epoch_min": 1,
       "best_epoch_max": 18,
       "stopped_epoch_max": 38,
+      "cuda0": true,
+      "strict3train": true
+    },
+    {
+      "run": "f2_modern_bce_s2",
+      "run_id": "E1-frozen-modern-20261125-175529-ZDLg6Y",
+      "code_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+      "history_rows": 7566,
+      "checkpoints": 292,
+      "best_epoch_min": 1,
+      "best_epoch_max": 24,
+      "stopped_epoch_max": 44,
+      "cuda0": true,
+      "strict3train": true
+    },
+    {
+      "run": "f3_modern_bce_s0",
+      "run_id": "E1-frozen-modern-20261125-175528-ZDLg6Y",
+      "code_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+      "history_rows": 7701,
+      "checkpoints": 292,
+      "best_epoch_min": 1,
+      "best_epoch_max": 19,
+      "stopped_epoch_max": 39,
       "cuda0": true,
       "strict3train": true
     }
