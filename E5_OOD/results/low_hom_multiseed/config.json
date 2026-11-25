@@ -1,0 +1,18 @@
+{
+  "run_id": "E1-low-hom-multiseed-20261125-050853-ZDLg6Y",
+  "args": {
+    "modern": [
+      "0=/root/rareseq/data/e1/cv_all_predictions/modern_bce_s0.tsv.gz",
+      "1=/root/rareseq/data/e1/cv_all_predictions/modern_bce_s1.tsv.gz",
+      "2=/root/rareseq/data/e1/cv_all_predictions/modern_bce_s2.tsv.gz"
+    ],
+    "knn": "/root/rareseq/data/e1/cv_all_predictions/knn.tsv.gz",
+    "identity": "/root/rareseq/data/e0/identity/per_window_identity.tsv",
+    "out": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/low_hom_multiseed",
+    "low_hom_max": 0.6,
+    "expected_rows": 2419417,
+    "log": "/home/ProxyFunctionGap/logs/experiments.jsonl",
+    "data_version": "e0-v1-id90-frozen"
+  },
+  "code_sha256": "19f59fe5e804499fb6f9b4c81bc4949c0fec456aac7ec06454b77e029a3d1b67"
+}

@@ -1,0 +1,108 @@
+{
+  "evidence_level": "E5 PAR-CLIP hg38 v2 external descriptive; 9 RBPs; 3 seeds; 3 negative references; no significance claim",
+  "sources": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/seed0_cross_protocol_results.tsv",
+      "bytes": 3553,
+      "sha256": "22e304ee30e7a32504e63c9c5d83209f27aaa3dac3406d9d5a79e0085cba5590"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/seed1_cross_protocol_results.tsv",
+      "bytes": 3553,
+      "sha256": "62ed5acd5f38daadfed18385cf6ca3c6c013046e18c88a7e2461d63224fe6569"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/seed2_cross_protocol_results.tsv",
+      "bytes": 3551,
+      "sha256": "fa102c4f7f9b5ff482dbac881803e6e68c1cf8679d016c85809c0833cc2ad3e7"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/three_seed_macro_by_seed.tsv",
+      "bytes": 605,
+      "sha256": "08656611ceb1431c863a9215d62c68a207b9551f834bfa19836571be3e3046a5"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/three_seed_macro_summary.tsv",
+      "bytes": 637,
+      "sha256": "677048023d8aff0afcdc9a433ada89513b54d8bcba27f78017355200bccc2d67"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/three_seed_per_rbp_summary.tsv",
+      "bytes": 3024,
+      "sha256": "febdc0598e13070fd5866ed1e76e12013e8b40b6f527bbea8c9184b81fa85f5f"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/parclip_p20/three_pass_verification.json",
+      "bytes": 2625,
+      "sha256": "c88ad1574387891848028515fa312ad85547d0395c763619bbea3ed521e96339"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/PAR-CLIP跨协议评测报告_2026-11-25.md",
+      "bytes": 12070,
+      "sha256": "d8545b3dcf41e417b2ef59b07102e3911719aa8fb927e5e86c8a15352de8579d"
+    }
+  ],
+  "pass1_schema_finite": {
+    "rows_per_seed": 27,
+    "n_rbp": 9,
+    "upstream_verification": "passed"
+  },
+  "pass2_configuration_alignment": {
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "protocols": [
+      "eCLIP-neg1c-fold0",
+      "eCLIP-neg2-fold0",
+      "PARCLIP-otherRBP-geneMatched-excl300"
+    ],
+    "patience": 20,
+    "min_delta": 0.0001,
+    "all_stopped_at_best_plus_20": true,
+    "selection": "eCLIP validation fold1; PAR-CLIP excluded from selection"
+  },
+  "pass3_report_recalculation": {
+    "macro_by_seed_exact_match": true,
+    "macro_summary_exact_match": true,
+    "per_rbp_summary_exact_match": true,
+    "macro_auroc_mean_sd": {
+      "eCLIP-neg1c-fold0": [
+        0.6461923914676485,
+        0.0026407693310562443
+      ],
+      "eCLIP-neg2-fold0": [
+        0.6078693548441341,
+        0.00259502350604157
+      ],
+      "PARCLIP-otherRBP-geneMatched-excl300": [
+        0.6557012966685122,
+        0.004950933925470827
+      ]
+    }
+  },
+  "plot_data": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig3/cross_protocol_three_seed.tsv",
+      "bytes": 10488,
+      "sha256": "3f35c8004ffc6eb877c0f5cd3ca22dc0b0299023ba42eb00dacefbfb0f2f6e39"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig3/macro_by_seed.tsv",
+      "bytes": 605,
+      "sha256": "08656611ceb1431c863a9215d62c68a207b9551f834bfa19836571be3e3046a5"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig3/per_rbp_summary.tsv",
+      "bytes": 3023,
+      "sha256": "5bc45e3130fcee5d9fc1f165fdb45259ab70c5350447d453c0019b86bc1615e8"
+    }
+  ],
+  "figure_stem": "Fig3_E5_PARCLIP_cross_protocol",
+  "run_ids": [
+    "E5-parclip-cross-protocol-contract-p20-20261125-065228-ZDLg6Y",
+    "E5-parclip-cross-protocol-contract-p20-20261125-065619-ZDLg6Y",
+    "E5-parclip-cross-protocol-contract-p20-20261125-065953-ZDLg6Y"
+  ]
+}

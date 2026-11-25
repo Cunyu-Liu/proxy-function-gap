@@ -1,0 +1,175 @@
+{
+  "run_id": "E5-holdout-convergence-summary-20261125-143810-ZDLg6Y",
+  "status": "partial",
+  "n_pairs_completed": 2,
+  "n_pairs_expected": 72,
+  "train_fold_policy": "assigned-folds-only-v1",
+  "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
+  "pass1_schema_finite_checkpoint": true,
+  "pass2_config_split_seed_alignment": true,
+  "pass3_report_recalculation": {
+    "groups": 6,
+    "passed": true
+  },
+  "missing": [
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "PTBP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "U2AF2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "SRSF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "RBFOX2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "QKI",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "IGF2BP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "LIN28B",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "TAF15",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "UPF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "CSTF2T",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg1c",
+      "holdout": "YBX3",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "PTBP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "U2AF2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "SRSF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "RBFOX2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "QKI",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "IGF2BP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "LIN28B",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "TAF15",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "UPF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "CSTF2T",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 0,
+      "track": "neg2",
+      "holdout": "YBX3",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 1,
+      "track": "neg1c",
+      "reason": "missing results"
+    },
+    {
+      "seed": 1,
+      "track": "neg2",
+      "reason": "missing results"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "reason": "missing results"
+    },
+    {
+      "seed": 2,
+      "track": "neg2",
+      "reason": "missing results"
+    }
+  ],
+  "source_run_ids": [
+    "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y"
+  ],
+  "n_source_runs": 2,
+  "test_used_for_selection": false,
+  "input_digest": "bbf58f0a19f628e1f6088a9ebe29110aab407dcddbc0c020eaf50bd843890aaa"
+}

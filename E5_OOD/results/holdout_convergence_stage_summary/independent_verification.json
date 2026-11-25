@@ -1,0 +1,10 @@
+{
+  "status": "partial",
+  "n_pairs_completed": 2,
+  "n_pairs_expected": 72,
+  "pass1_schema_hashes_checkpoint": true,
+  "pass2_independent_vector_recalculation": true,
+  "pass3_independent_rank_loop_and_history_replay": true,
+  "train_fold_policy": "assigned-folds-only-v1",
+  "metric_version": 2
+}

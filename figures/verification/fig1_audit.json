@@ -1,0 +1,78 @@
+{
+  "evidence_level": "E0 design and audit; descriptive; legacy E1 fold=-1 training-use gap disclosed",
+  "sources": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/positives_audit.tsv",
+      "bytes": 23691,
+      "sha256": "6a94f4ea2cf057ff01ceb556c3fbb60342b15f69b7d86db5500d1f20f87446d1"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/dual_cellline_consistency.tsv",
+      "bytes": 3151,
+      "sha256": "bd4e9237cd42810889f4c7e2a430df51d5eb5b1765c2b67bc5f2824bba7514ef"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/identity_summary.json",
+      "bytes": 210,
+      "sha256": "0942958371cc57dd4bf42a3ea0669b5843fe543ee8ab02889afcbfa0e1d08159"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/leakage_summary.json",
+      "bytes": 1145,
+      "sha256": "3c996219d2599d6b9553839e27a10f06e1793a4995f5691e4ebd7a4999e664cc"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/split_manifest.id90.json",
+      "bytes": 811,
+      "sha256": "3e1e056800f34062c34c631c1c7b9e29380cf0f9621d377f5dec525557b00e18"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/rbp_distribution.json",
+      "bytes": 448,
+      "sha256": "3aa0e32641a43b1ce90daafd9df3293dc05e78d7c5c64b4c46eefd52ff3c4eab"
+    }
+  ],
+  "pass1_schema_finite": true,
+  "pass2_configuration_alignment": {
+    "identity": 0.9,
+    "split_seed": 20261122,
+    "folds": 5,
+    "negative_seed": 42,
+    "legacy_loader_fold_minus_one_training_gap": true,
+    "strict_zero_leakage_claim": false,
+    "legacy_cluster_check_caveat": "includes validation and counts each positive in two tracks; not a strict three-fold train rate"
+  },
+  "pass3_report_recalculation": {
+    "n_rbps": 150,
+    "gini": 0.3523391738557822,
+    "top20_site_share": 0.3783606704172719,
+    "median_overlap_K562": 0.2732,
+    "median_overlap_HepG2": 0.2399,
+    "identity_below_0.7": 0.9474027845885963,
+    "cross_fold_cluster_leak": 0.000225,
+    "global_neff_ratio": 0.5153501643120726
+  },
+  "plot_data": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig1/rbp_support.tsv",
+      "bytes": 1771,
+      "sha256": "2dd29da9ce2460e5c6e25d5c8373c1576188ad87f2257a62e9b5a3fc8dbaac94"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig1/dual_cell_overlap.tsv",
+      "bytes": 3151,
+      "sha256": "bd4e9237cd42810889f4c7e2a430df51d5eb5b1765c2b67bc5f2824bba7514ef"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig1/identity_cdf.tsv",
+      "bytes": 169,
+      "sha256": "f9e2e573e8b30e6d9a835ef8c0f2b1a810c8637fcbb2d5b40d0c31a23e22ad01"
+    }
+  ],
+  "figure_stem": "Fig1_E0_data_and_leakage_audit",
+  "excluded_ambiguous_number": "45.98 is an experiment-level max/min ratio, not the RBP-summed ratio; it is not plotted.",
+  "run_ids": [
+    "E0-leakage-quant-20261122-102238-ZDLg6Y",
+    "E0-window-identity-20261122-104517-ZDLg6Y"
+  ]
+}

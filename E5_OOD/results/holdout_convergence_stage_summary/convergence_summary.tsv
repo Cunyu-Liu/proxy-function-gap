@@ -1,0 +1,3 @@
+seed	track	n_pairs	n_early_stop	n_failsafe	min_epochs_run	median_epochs_run	max_epochs_run	max_best_epoch
+0	neg1c	1	1	0	29	29.0	29	9
+0	neg2	1	1	0	22	22.0	22	2

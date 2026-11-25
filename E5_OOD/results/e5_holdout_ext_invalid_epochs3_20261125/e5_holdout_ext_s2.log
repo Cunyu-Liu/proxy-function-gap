@@ -1,0 +1,12 @@
+EPOCH 1 {'epoch': 1, 'val_tail_auroc': 0.856971872760559, 'val_tail_auprc': 0.851784916467628, 'train_loss': 2.8537701385720467e-05}
+EPOCH 2 {'epoch': 2, 'val_tail_auroc': 0.8595657279561856, 'val_tail_auprc': 0.8519875677615802, 'train_loss': 2.8004701617782168e-05}
+EPOCH 3 {'epoch': 3, 'val_tail_auroc': 0.863550843464628, 'val_tail_auprc': 0.8570052721256569, 'train_loss': 2.7764163514282982e-05}
+HOLDOUT_DONE HNRNPC neg1c [{'holdout': 'HNRNPC', 'track': 'neg1c', 'method': 'msp', 'auroc_ood': 0.51675578279743, 'fpr95': 0.05431900361591, 'aurc': 0.38702851124834337, 'ece': 0.06924819604319898, 'brier': 0.18222160281023003, 'best_epoch': 3, 'n_train': 2575633, 'n_known': 865306, 'n_unknown': 12445}, {'holdout': 'HNRNPC', 'track': 'neg1c', 'method': 'energy', 'auroc_ood': 0.48324421882764507, 'fpr95': 0.046203294495781436, 'aurc': 0.15776670527442044, 'ece': 0.06924819604319898, 'brier': 0.18222160281023003, 'best_epoch': 3, 'n_train': 2575633, 'n_known': 865306, 'n_unknown': 12445}, {'holdout': 'HNRNPC', 'track': 'neg1c', 'method': 'deep_knn', 'auroc_ood': 0.5941038504717635, 'fpr95': 0.08766572920851748, 'aurc': 0.2584524473241381, 'ece': 0.06924819604319898, 'brier': 0.18222160281023003, 'best_epoch': 3, 'n_train': 2575633, 'n_known': 865306, 'n_unknown': 12445}]
+Traceback (most recent call last):
+  File "/root/rareseq/work/e5_rbp_holdout.py", line 186, in <module>
+    main()
+  File "/root/rareseq/work/e5_rbp_holdout.py", line 145, in main
+    model, mean, std, best = train_shared(x, y, w, vx, vy, vt, args, seed, device)
+  File "/root/rareseq/work/e5_rbp_holdout.py", line 55, in train_shared
+    vt = torch.from_numpy(val_x).to(device)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.03 GiB. GPU 0 has a total capacity of 31.36 GiB of which 1.55 GiB is free. Process 3042602 has 5.39 GiB memory in use. Process 3046541 has 5.42 GiB memory in use. Process 3193249 has 6.25 GiB memory in use. Including non-PyTorch memory, this process has 9.04 GiB memory in use. Process 3212982 has 3.69 GiB memory in use. Of the allocated memory 8.39 GiB is allocated by PyTorch, and 33.13 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

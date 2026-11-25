@@ -1,0 +1,87 @@
+{
+  "pass1_files_schema_finite": {
+    "seed0": {
+      "rows": 27,
+      "histories": 18,
+      "checkpoints": 18,
+      "score_files": 27,
+      "all_finite": true
+    },
+    "seed1": {
+      "rows": 27,
+      "histories": 18,
+      "checkpoints": 18,
+      "score_files": 27,
+      "all_finite": true
+    },
+    "seed2": {
+      "rows": 27,
+      "histories": 18,
+      "checkpoints": 18,
+      "score_files": 27,
+      "all_finite": true
+    }
+  },
+  "pass2_alignment": {
+    "seed0": {
+      "run_id": "E5-parclip-cross-protocol-contract-p20-20261125-065228-ZDLg6Y",
+      "split_seed_history_checkpoint_aligned": true,
+      "patience": 20,
+      "min_delta": 0.0001,
+      "epoch_failsafe": 1000,
+      "all_stopped_before_failsafe": true,
+      "preexisting_log_line_111_recorded": true
+    },
+    "seed1": {
+      "run_id": "E5-parclip-cross-protocol-contract-p20-20261125-065619-ZDLg6Y",
+      "split_seed_history_checkpoint_aligned": true,
+      "patience": 20,
+      "min_delta": 0.0001,
+      "epoch_failsafe": 1000,
+      "all_stopped_before_failsafe": true,
+      "preexisting_log_line_111_recorded": true
+    },
+    "seed2": {
+      "run_id": "E5-parclip-cross-protocol-contract-p20-20261125-065953-ZDLg6Y",
+      "split_seed_history_checkpoint_aligned": true,
+      "patience": 20,
+      "min_delta": 0.0001,
+      "epoch_failsafe": 1000,
+      "all_stopped_before_failsafe": true,
+      "preexisting_log_line_111_recorded": true
+    },
+    "fixed_external_matching_across_seeds": true
+  },
+  "pass3_metric_recalculation": {
+    "seed0": {
+      "max_abs_auroc_error": 1.1102230246251565e-16,
+      "max_abs_auprc_error": 1.1102230246251565e-16,
+      "macro_recalculated": true
+    },
+    "seed1": {
+      "max_abs_auroc_error": 1.1102230246251565e-16,
+      "max_abs_auprc_error": 1.1102230246251565e-16,
+      "macro_recalculated": true
+    },
+    "seed2": {
+      "max_abs_auroc_error": 1.1102230246251565e-16,
+      "max_abs_auprc_error": 1.1102230246251565e-16,
+      "macro_recalculated": true
+    }
+  },
+  "old_seed0_comparison": {
+    "max_abs_auroc_difference": 0.004930014462191434,
+    "max_abs_auprc_difference": 0.0037651815365364882,
+    "best_epoch_same": false
+  },
+  "run_log_completed": {
+    "E5-parclip-cross-protocol-contract-p20-20261125-065228-ZDLg6Y": 226.85,
+    "E5-parclip-cross-protocol-contract-p20-20261125-065619-ZDLg6Y": 210.03,
+    "E5-parclip-cross-protocol-contract-p20-20261125-065953-ZDLg6Y": 209.25
+  },
+  "code_sha256": "74c34708735035b891ed3df0bfd3548e676443b9c348e8b9dc6cb6c99a036024",
+  "skipped_malformed_unrelated_log_lines": [
+    111
+  ],
+  "status": "passed"
+}

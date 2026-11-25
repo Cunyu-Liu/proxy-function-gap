@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-from log_run import RunLogger, sha256_file
+from e1_locked_logger import E1RunLogger as RunLogger
+from log_run import sha256_file
 
 
 def metric(y, score):
@@ -31,7 +32,10 @@ def latest_runs(log_path):
         return runs
     with open(log_path) as handle:
         for line in handle:
-            rec = json.loads(line)
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
             for out in rec.get("outputs", []):
                 runs[out] = rec
     return runs
@@ -91,7 +95,9 @@ def main():
                      "auroc_sem": values.auroc.sem(), "auprc_sem": values.auprc.sem()})
     summary = pd.DataFrame(rows)
     summary.to_csv(os.path.join(args.out, "stratified_summary.tsv"), sep="\t", index=False)
-    pivot = pred.pivot_table(index=["experiment", "rbp", "tier", "fold", "track", "window_id", "label"],
+    occurrence_keys = ["model", "experiment", "rbp", "tier", "fold", "track", "window_id", "label"]
+    pred["occurrence"] = pred.groupby(occurrence_keys, sort=False).cumcount()
+    pivot = pred.pivot_table(index=occurrence_keys[1:] + ["occurrence"],
                              columns="model", values="score").reset_index()
     pair_rows = []
     models = sorted(pred.model.unique())
@@ -112,8 +118,8 @@ def main():
                                   "d_auprc": values.d_auprc.mean(), "d_auroc_sem": values.d_auroc.sem(),
                                   "d_auprc_sem": values.d_auprc.sem()})
     pd.DataFrame(pair_rows).to_csv(os.path.join(args.out, "paired_deltas.tsv"), sep="\t", index=False)
-    lines = ["# E1 首批误差分层（描述性）", "",
-             "仅汇总已生成预测；单折单种子不作显著性、G0 最终确认或论文结论。", "",
+    lines = ["# E1 误差分层（描述性）", "",
+             "仅汇总已生成预测；频率切片的显著性只来自预指定配对 bootstrap，低同源切片不作显著性声明。", "",
              f"低同源定义：测试正例 d_hom < {args.low_hom_max:.2f}，配同实验全部测试负例；负例不按 d_hom 子采样。", "",
              markdown_table(summary.round(6)), "", "## Run ID"]
     for spec in args.run:

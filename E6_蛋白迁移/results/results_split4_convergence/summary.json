@@ -1,0 +1,222 @@
+{
+  "selected_tau": 0.5,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "test2_coverage": {
+    "test2_rows": 902,
+    "test2_rows_with_any_train_label": 230,
+    "test2_rows_without_train_label": 672,
+    "test2_known_label_annotations": 384,
+    "test2_total_label_annotations": 1135
+  },
+  "function_metrics": [
+    {
+      "macro_auprc": 0.8591721726648308,
+      "micro_auprc": 0.9503492973548884,
+      "sample_fmax_at_val_threshold": 0.9180452351139892,
+      "val_fmax_threshold": 0.89,
+      "macro_auprc_head_ge100": 0.9787169474857821,
+      "labels_with_positive_head_ge100": 444,
+      "macro_auprc_mid_30_99": 0.9495038274783004,
+      "labels_with_positive_mid_30_99": 371,
+      "macro_auprc_tail_10_29": 0.907450304784793,
+      "labels_with_positive_tail_10_29": 555,
+      "macro_auprc_tail_lt10": 0.8056127549591723,
+      "labels_with_positive_tail_lt10": 2117,
+      "seed": 0,
+      "model": "frozen_bce_la",
+      "best_epoch": 76,
+      "temperature": 0.9983726739883423,
+      "tau": 0.5,
+      "ece": 0.0044399664123302394,
+      "brier": 0.0001343209203367131
+    },
+    {
+      "macro_auprc": 0.862067112596493,
+      "micro_auprc": 0.952417218597064,
+      "sample_fmax_at_val_threshold": 0.9228073679613212,
+      "val_fmax_threshold": 0.89,
+      "macro_auprc_head_ge100": 0.9793286184701024,
+      "labels_with_positive_head_ge100": 444,
+      "macro_auprc_mid_30_99": 0.9489224552434972,
+      "labels_with_positive_mid_30_99": 371,
+      "macro_auprc_tail_10_29": 0.9119511810019333,
+      "labels_with_positive_tail_10_29": 555,
+      "macro_auprc_tail_lt10": 0.809174765551174,
+      "labels_with_positive_tail_lt10": 2117,
+      "seed": 1,
+      "model": "frozen_bce_la",
+      "best_epoch": 100,
+      "temperature": 1.0,
+      "tau": 0.5,
+      "ece": 0.0017086928176295755,
+      "brier": 7.414407253155094e-05
+    },
+    {
+      "macro_auprc": 0.8628297194031846,
+      "micro_auprc": 0.9512562176795832,
+      "sample_fmax_at_val_threshold": 0.9207622878592193,
+      "val_fmax_threshold": 0.89,
+      "macro_auprc_head_ge100": 0.9791065516216549,
+      "labels_with_positive_head_ge100": 444,
+      "macro_auprc_mid_30_99": 0.9508688084301262,
+      "labels_with_positive_mid_30_99": 371,
+      "macro_auprc_tail_10_29": 0.910380114002083,
+      "labels_with_positive_tail_10_29": 555,
+      "macro_auprc_tail_lt10": 0.810548243476692,
+      "labels_with_positive_tail_lt10": 2117,
+      "seed": 2,
+      "model": "frozen_bce_la",
+      "best_epoch": 92,
+      "temperature": 0.9999896883964539,
+      "tau": 0.5,
+      "ece": 0.0021730865158822664,
+      "brier": 8.236241340843113e-05
+    },
+    {
+      "macro_auprc": 0.5903422951367885,
+      "micro_auprc": 0.7102817909741255,
+      "sample_fmax_at_val_threshold": 0.6600248387502854,
+      "val_fmax_threshold": 0.15000000000000002,
+      "macro_auprc_head_ge100": 0.7807346887093931,
+      "labels_with_positive_head_ge100": 444,
+      "macro_auprc_mid_30_99": 0.6423162833634934,
+      "labels_with_positive_mid_30_99": 371,
+      "macro_auprc_tail_10_29": 0.579160373901306,
+      "labels_with_positive_tail_10_29": 555,
+      "macro_auprc_tail_lt10": 0.5442343092640197,
+      "labels_with_positive_tail_lt10": 2117,
+      "seed": "deterministic",
+      "model": "deep_knn",
+      "k": 20,
+      "ece": 4.224161205112109e-05,
+      "brier": 9.912509465105393e-05
+    }
+  ],
+  "function_label_bootstrap": [
+    {
+      "bucket": "all",
+      "n_labels": 3487,
+      "delta_macro_auprc_neural_minus_knn": 0.271014039751381,
+      "ci_low": 0.2590404404763009,
+      "ci_high": 0.28295545595953897,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000,
+      "resampling_unit": "EC label within frequency tier"
+    },
+    {
+      "bucket": "tail_lt10",
+      "n_labels": 2117,
+      "delta_macro_auprc_neural_minus_knn": 0.2642109453983263,
+      "ci_low": 0.24807604657330104,
+      "ci_high": 0.2809786925785163,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000,
+      "resampling_unit": "EC label within frequency tier"
+    },
+    {
+      "bucket": "tail_10_29",
+      "n_labels": 555,
+      "delta_macro_auprc_neural_minus_knn": 0.3307668260282971,
+      "ci_low": 0.30286812315030287,
+      "ci_high": 0.3591959676339794,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000,
+      "resampling_unit": "EC label within frequency tier"
+    },
+    {
+      "bucket": "mid_30_99",
+      "n_labels": 371,
+      "delta_macro_auprc_neural_minus_knn": 0.3074487470204813,
+      "ci_low": 0.2770245944229465,
+      "ci_high": 0.338150768885567,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000,
+      "resampling_unit": "EC label within frequency tier"
+    },
+    {
+      "bucket": "head_ge100",
+      "n_labels": 444,
+      "delta_macro_auprc_neural_minus_knn": 0.19831601714978672,
+      "ci_low": 0.17815963542914778,
+      "ci_high": 0.2193844992760544,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000,
+      "resampling_unit": "EC label within frequency tier"
+    }
+  ],
+  "ood_metrics": [
+    {
+      "method": "msp",
+      "metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "auroc_ood": 0.9017950657298393,
+      "fpr95": 0.28109897384971866,
+      "aurc_ood_error": 0.0038552078241822193,
+      "ood_tpr_at_known_fpr5": 0.37915742793791574,
+      "score_sha256": "9b34c590f8f1816003d7749b6bb1dca367c18ca6c8a72c55154c020f29c8f443",
+      "score_dtype": "float32",
+      "n_samples": 31112
+    },
+    {
+      "method": "energy",
+      "metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "auroc_ood": 0.8962194424688673,
+      "fpr95": 0.28871234690499836,
+      "aurc_ood_error": 0.00409114073455897,
+      "ood_tpr_at_known_fpr5": 0.3713968957871397,
+      "score_sha256": "eba76a17aec281dcf906aeedad8c32de8783716fc286e0d791e7f8981d916f43",
+      "score_dtype": "float32",
+      "n_samples": 31112
+    },
+    {
+      "method": "deep_knn",
+      "metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "auroc_ood": 0.6793768087540946,
+      "fpr95": 0.8933796756041046,
+      "aurc_ood_error": 0.017133224866411972,
+      "ood_tpr_at_known_fpr5": 0.16186252771618626,
+      "score_sha256": "cbf9b8e029224d2eff7b3b92a6b0dadb54bb991eb6c53e2981c76b5c1393193b",
+      "score_dtype": "float32",
+      "n_samples": 31112
+    }
+  ],
+  "ood_bootstrap": [
+    {
+      "comparison": "msp_minus_deep_knn",
+      "delta_auroc_ood": 0.2224182569757447,
+      "ci_low": 0.20563418419720184,
+      "ci_high": 0.2395432666773655,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000
+    },
+    {
+      "comparison": "energy_minus_deep_knn",
+      "delta_auroc_ood": 0.21684263371477275,
+      "ci_low": 0.20052743277281748,
+      "ci_high": 0.23349251492254758,
+      "p_two_sided": 0.00019998000199980003,
+      "n_bootstrap": 10000
+    }
+  ],
+  "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+  "ood_recompute": {
+    "run_id": "E6-ood-metric-recompute-v2-20261125-072246-ZDLg6Y",
+    "source": "saved per-sample seed-ensemble scores; no retraining",
+    "score_sha256": {
+      "msp": "9b34c590f8f1816003d7749b6bb1dca367c18ca6c8a72c55154c020f29c8f443",
+      "energy": "eba76a17aec281dcf906aeedad8c32de8783716fc286e0d791e7f8981d916f43",
+      "deep_knn": "cbf9b8e029224d2eff7b3b92a6b0dadb54bb991eb6c53e2981c76b5c1393193b"
+    },
+    "synthetic_counterexamples_passed": true,
+    "numpy_version": "2.2.6",
+    "argsort_kind": "quicksort; tied-order effects recorded",
+    "quantile_method": "linear",
+    "fpr95": "fraction of ID scores >= quantile(OOD scores, 0.05)",
+    "aurc": "trapezoid of cumulative OOD fraction with samples sorted by ascending OOD score",
+    "ood_tpr_at_known_fpr5": "legacy mislabeled fpr95 retained only as a separately named audit field",
+    "bootstrap_note": "existing paired bootstrap intervals cover AUROC-OOD only; no new FPR95/AURC CI"
+  }
+}

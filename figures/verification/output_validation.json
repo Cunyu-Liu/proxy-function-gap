@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "figures": {
+    "Fig1_E0_data_and_leakage_audit": {
+      "png300_size": [
+        3665,
+        1210
+      ],
+      "png600_size": [
+        7341,
+        2421
+      ],
+      "pdf_pages": 1,
+      "svg_xml": true,
+      "required_pdf_text": [
+        "fold=-1 positives",
+        "foldfix pending"
+      ]
+    },
+    "Fig3_E5_PARCLIP_cross_protocol": {
+      "png300_size": [
+        4215,
+        1750
+      ],
+      "png600_size": [
+        8426,
+        3501
+      ],
+      "pdf_pages": 1,
+      "svg_xml": true,
+      "required_pdf_text": [
+        "Three-seed macro AUROC",
+        "PAR-CLIP matched neg2"
+      ]
+    },
+    "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2": {
+      "png300_size": [
+        4196,
+        2200
+      ],
+      "png600_size": [
+        8402,
+        4401
+      ],
+      "pdf_pages": 1,
+      "svg_xml": true,
+      "required_pdf_text": [
+        "all 20 split",
+        "FPR95",
+        "ascending OOD score"
+      ]
+    }
+  },
+  "archived_fig2_warning_verified": true,
+  "contact_sheet": {
+    "size": [
+      3118,
+      1870
+    ],
+    "grayscale_mode": "L",
+    "grayscale_std": 22.928868864658224,
+    "grayscale_unique_values": 256,
+    "fig2_excluded": true
+  }
+}

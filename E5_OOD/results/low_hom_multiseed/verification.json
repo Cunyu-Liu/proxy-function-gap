@@ -1,0 +1,26 @@
+{
+  "run_id": "E1-low-hom-multiseed-20261125-050853-ZDLg6Y",
+  "status": "complete",
+  "evidence_level": "pilot fivefold test descriptive multiseed",
+  "pass1_schema_finite": true,
+  "pass2_fold_seed_window_label_alignment": {
+    "signature": "1146e3d66b8c5947a8179057c58cc0b1a77ca87066a964a598e96165b44a6e2e",
+    "input_rows": {
+      "bce_s0": 2419417,
+      "bce_s1": 2419417,
+      "bce_s2": 2419417,
+      "knn": 2419417
+    },
+    "passed": true
+  },
+  "pass3_report_recalculation": {
+    "values_checked": 8,
+    "passed": true
+  },
+  "source_prediction_run_ids": [],
+  "source_log_malformed_lines_skipped": [
+    111
+  ],
+  "test_used_for_selection": false,
+  "significance_test": "none; descriptive mean/std across three seeds"
+}

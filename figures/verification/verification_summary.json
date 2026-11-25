@@ -1,0 +1,54 @@
+{
+  "status": "rendering_and_numeric_verification_passed",
+  "submission_status": {
+    "fig1": "descriptive_with_disclosed_training_gap",
+    "fig2": "archived_do_not_submit",
+    "fig3": "external_descriptive",
+    "fig4": "five_split_descriptive"
+  },
+  "figures": {
+    "fig1": {
+      "run_ids": [
+        "E0-leakage-quant-20261122-102238-ZDLg6Y",
+        "E0-window-identity-20261122-104517-ZDLg6Y"
+      ],
+      "evidence_level": "E0 design and audit; descriptive; legacy E1 fold=-1 training-use gap disclosed",
+      "figure_stem": "Fig1_E0_data_and_leakage_audit"
+    },
+    "fig3": {
+      "run_ids": [
+        "E5-parclip-cross-protocol-contract-p20-20261125-065228-ZDLg6Y",
+        "E5-parclip-cross-protocol-contract-p20-20261125-065619-ZDLg6Y",
+        "E5-parclip-cross-protocol-contract-p20-20261125-065953-ZDLg6Y"
+      ],
+      "evidence_level": "E5 PAR-CLIP hg38 v2 external descriptive; 9 RBPs; 3 seeds; 3 negative references; no significance claim",
+      "figure_stem": "Fig3_E5_PARCLIP_cross_protocol"
+    },
+    "fig4": {
+      "run_ids": [
+        "E6-grimm-frozen-baselines-20261124-085329-ZDLg6Y",
+        "E6-grimm-frozen-baselines-20261124-070400-ZDLg6Y",
+        "E6-grimm-frozen-baselines-20261124-104344-ZDLg6Y",
+        "E6-grimm-frozen-baselines-20261124-123513-ZDLg6Y",
+        "E6-grimm-frozen-baselines-20261124-171811-ZDLg6Y",
+        "E6-ood-metric-recompute-v2-20261125-072246-ZDLg6Y",
+        "E6-five-split-summary-20261125-080318-ZDLg6Y",
+        "E6-five-split-independent-verification-20261125-080348-ZDLg6Y"
+      ],
+      "evidence_level": "E6 GRIMM EC_v2 five official splits; Test-1; Test-2 pseudo-OOD v2; cross-split descriptive only",
+      "figure_stem": "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2"
+    }
+  },
+  "audit_history": {
+    "fig2": {
+      "run_ids": [
+        "E1-cv-prediction-combine-20261123-085050-ZDLg6Y",
+        "E1-cv-summary-20261123-085240-ZDLg6Y",
+        "E1-paired-bootstrap-20261123-085242-ZDLg6Y"
+      ],
+      "evidence_level": "ARCHIVED historical E1 pilot; fold=-1 training-use gap; do not submit; replace after foldfix",
+      "figure_stem": "Fig2_E1_pilot_five_fold_baselines",
+      "excluded_from_contact_sheet": true
+    }
+  }
+}

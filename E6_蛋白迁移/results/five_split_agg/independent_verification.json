@@ -1,0 +1,65 @@
+{
+  "accepted": true,
+  "verification_run_id": "E6-five-split-independent-verification-20261125-080348-ZDLg6Y",
+  "schema_and_finite_values": true,
+  "config_seed_and_alignment": true,
+  "report_numbers_recalculated": true,
+  "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+  "ood_semantics_verified": true,
+  "synthetic_counterexamples_passed": true,
+  "training_code_hash": "ba170e4067f8370e9e5a6aadfc4d8b45330ddbd730b81b056c91f68f00852177",
+  "corrected_metric_code_hash": "51b5f7b3609ccadd8112f32ec520502085e1d21173f0e31bafcb4439ff2c2339",
+  "per_split": {
+    "1": {
+      "run_id": "E6-grimm-frozen-baselines-20261124-085329-ZDLg6Y",
+      "config_verified": true,
+      "embedding_960_finite_id_aligned": true,
+      "bootstrap_recalculated": true,
+      "ood_recalculated": true,
+      "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "ood_score_hashes_verified": true,
+      "risk_coverage_recalculated": true
+    },
+    "2": {
+      "run_id": "E6-grimm-frozen-baselines-20261124-070400-ZDLg6Y",
+      "config_verified": true,
+      "embedding_960_finite_id_aligned": true,
+      "bootstrap_recalculated": true,
+      "ood_recalculated": true,
+      "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "ood_score_hashes_verified": true,
+      "risk_coverage_recalculated": true
+    },
+    "3": {
+      "run_id": "E6-grimm-frozen-baselines-20261124-104344-ZDLg6Y",
+      "config_verified": true,
+      "embedding_960_finite_id_aligned": true,
+      "bootstrap_recalculated": true,
+      "ood_recalculated": true,
+      "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "ood_score_hashes_verified": true,
+      "risk_coverage_recalculated": true
+    },
+    "4": {
+      "run_id": "E6-grimm-frozen-baselines-20261124-123513-ZDLg6Y",
+      "config_verified": true,
+      "embedding_960_finite_id_aligned": true,
+      "bootstrap_recalculated": true,
+      "ood_recalculated": true,
+      "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "ood_score_hashes_verified": true,
+      "risk_coverage_recalculated": true
+    },
+    "5": {
+      "run_id": "E6-grimm-frozen-baselines-20261124-171811-ZDLg6Y",
+      "config_verified": true,
+      "embedding_960_finite_id_aligned": true,
+      "bootstrap_recalculated": true,
+      "ood_recalculated": true,
+      "ood_metric_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+      "ood_score_hashes_verified": true,
+      "risk_coverage_recalculated": true
+    }
+  },
+  "cross_split_statistics": "equal-weight split mean/sample SD/range; no pooled inference"
+}

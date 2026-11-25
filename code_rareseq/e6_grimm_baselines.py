@@ -11,6 +11,8 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 
 from log_run import RunLogger, sha256_file
 
+OOD_METRIC_DEFINITION = "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score"
+
 
 def multilabel(frame, labels):
     lookup = {label: i for i, label in enumerate(labels)}
@@ -135,13 +137,22 @@ def knn_predict(train_x, train_y, eval_x, k, batch=512):
 
 
 def ood_statistics(y, score):
-    order = np.argsort(-score)
+    y = np.asarray(y)
+    score = np.asarray(score)
+    if y.ndim != 1 or score.shape != y.shape or len(y) < 2:
+        raise ValueError("OOD labels and scores must be aligned one-dimensional arrays")
+    if not np.isfinite(score).all() or not np.isin(y, [0, 1]).all() or len(np.unique(y)) != 2:
+        raise ValueError("OOD metrics require finite scores and both binary classes")
+    order = np.argsort(score, kind="quicksort")
     risk = np.cumsum(y[order]) / np.arange(1, len(y) + 1)
     coverage = np.arange(1, len(y) + 1) / len(y)
-    threshold = np.quantile(score[y == 0], 0.95)
-    return {"auroc_ood": float(roc_auc_score(y, score)),
-            "fpr95": float((score[y == 1] >= threshold).mean()),
-            "aurc_ood_error": float(np.trapezoid(risk, coverage))}
+    threshold = np.quantile(score[y == 1], 0.05)
+    legacy_threshold = np.quantile(score[y == 0], 0.95)
+    return {"metric_definition": OOD_METRIC_DEFINITION,
+            "auroc_ood": float(roc_auc_score(y, score)),
+            "fpr95": float((score[y == 0] >= threshold).mean()),
+            "aurc_ood_error": float(np.trapezoid(risk, coverage)),
+            "ood_tpr_at_known_fpr5": float((score[y == 1] >= legacy_threshold).mean())}
 
 
 def main():
@@ -291,7 +302,7 @@ def main():
             row = {"method": method, **ood_statistics(y_ood, score)}
             ood_rows.append(row)
             np.save(os.path.join(args.out, f"ood_scores_{method}.npy"), score.astype(np.float32))
-            order = np.argsort(-score)
+            order = np.argsort(score, kind="quicksort")
             risk = np.cumsum(y_ood[order]) / np.arange(1, len(score) + 1)
             points = np.linspace(0.05, 1, 20)
             pd.DataFrame({"coverage": points, "ood_error": risk[np.ceil(points * len(score)).astype(int) - 1]}).to_csv(

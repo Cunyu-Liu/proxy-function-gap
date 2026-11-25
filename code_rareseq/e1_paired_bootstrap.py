@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-from log_run import RunLogger, sha256_file
+from e1_locked_logger import E1RunLogger as RunLogger
+from log_run import sha256_file
 
 _DATA = None
 
@@ -47,6 +48,8 @@ def main():
     ap.add_argument("--reference", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--tiers", default="tail,head")
+    ap.add_argument("--tracks", default="neg1c,neg2")
+    ap.add_argument("--resume", action="store_true")
     ap.add_argument("--n-boot", type=int, default=10000)
     ap.add_argument("--jobs", type=int, default=8)
     ap.add_argument("--seed", type=int, default=20261123)
@@ -80,19 +83,26 @@ def main():
     data = reference.merge(modern, on=keys, validate="one_to_one")
     score_cols = [f"seed_{s}" for s in seeds]
     rows = []
-    for track, tier in [(t, s) for t in sorted(data.track.unique()) for s in args.tiers.split(",")]:
+    for track, tier in [(t, s) for t in args.tracks.split(",") for s in args.tiers.split(",")]:
         subset = data[(data.track == track) & (data.tier == tier)]
         groups = []
         for _, g in subset.groupby("experiment", sort=True):
             groups.append((g.label.to_numpy(), g.reference.to_numpy(), g[score_cols].to_numpy().T))
         observed = one_draw((None, groups))
-        seeds_boot = np.random.SeedSequence(args.seed).generate_state(args.n_boot) + np.uint32(args.seed)
-        if args.jobs > 1:
-            with mp.Pool(args.jobs, initializer=init_worker, initargs=(groups,)) as pool:
-                boot = np.array(list(pool.imap_unordered(worker, seeds_boot, chunksize=20)))
+        boot_path = os.path.join(args.out, f"bootstrap_{track}_{tier}.npz")
+        if args.resume and os.path.exists(boot_path):
+            boot = np.load(boot_path)["deltas"]
+            if boot.shape != (args.n_boot, 2) or not np.isfinite(boot).all():
+                raise ValueError(f"invalid resume artifact: {boot_path}")
+            print("BOOT_REUSED", track, tier, flush=True)
         else:
-            boot = np.array([one_draw((s, groups)) for s in seeds_boot])
-        np.savez_compressed(os.path.join(args.out, f"bootstrap_{track}_{tier}.npz"), deltas=boot)
+            seeds_boot = np.random.SeedSequence(args.seed).generate_state(args.n_boot) + np.uint32(args.seed)
+            if args.jobs > 1:
+                with mp.Pool(args.jobs, initializer=init_worker, initargs=(groups,)) as pool:
+                    boot = np.array(list(pool.imap_unordered(worker, seeds_boot, chunksize=20)))
+            else:
+                boot = np.array([one_draw((s, groups)) for s in seeds_boot])
+            np.savez_compressed(boot_path, deltas=boot)
         for j, metric in enumerate(("auroc", "auprc")):
             values = boot[:, j]
             values = values[np.isfinite(values)]

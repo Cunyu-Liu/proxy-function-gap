@@ -1,0 +1,17 @@
+{
+  "captured_at": "2026-11-25T12:27:17+08:00",
+  "stopped_at": "2026-11-25T12:28:15+08:00",
+  "host": "ZDLg6Y",
+  "driver_pid": 3441420,
+  "python_pid": 3441422,
+  "driver": "bash run_e5_holdout_seeds12.sh",
+  "active_seed": 1,
+  "active_run_id": "E5-rbp-holdout-20261125-040735-ZDLg6Y",
+  "reason": "epochs=3 does not satisfy validation early-stopping convergence requirement",
+  "action": "SIGTERM after PID/cmdline verification; no E5 holdout process remained",
+  "remote_evidence": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/invalid_epochs3_evidence_20261125T1227",
+  "scientific_use": "forbidden; audit evidence only",
+  "seed0": {"rows": 72, "status_in_log": "completed", "valid_convergence": false},
+  "seed1": {"rows": 30, "status_in_log": "running_at_stop", "valid_convergence": false},
+  "seed2": {"rows": 3, "status_in_log": "failed_cuda_oom", "valid_convergence": false}
+}

@@ -7,3 +7,7 @@ __pycache__/
 *.tsv.gz
 logs/
 artifacts/
+.pptx_build/
+figures/_work/
+figures/contact_sheet*.png
+figures/gallery_comparison.png

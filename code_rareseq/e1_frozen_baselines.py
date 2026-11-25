@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """RARE-Seq E1 — 严格 train/val/test 的冻结嵌入现代头与簇去重 OverfitNN。
 
-val 用于按尾部 RBP 平均 AUPRC 选择 epoch 或邻居数；test 仅在选择后汇总。
-现代头采用两遍训练，第二遍重训至选定 epoch，避免按测试集早停。
+train 只含三个显式分配的 fold；val/test 保持不变。现代头逐任务按 validation
+AUPRC 早停并恢复最佳 checkpoint；kNN 按尾部 RBP 平均 validation AUPRC 选 k。
 """
 import argparse
 import gzip
@@ -16,7 +16,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from log_run import RunLogger, sha256_file  # noqa: E402
+from e1_locked_logger import E1RunLogger as RunLogger  # noqa: E402
+from log_run import sha256_file  # noqa: E402
 
 
 def metrics(y, score):
@@ -72,21 +73,34 @@ class TaskLoader:
                 raise ValueError(f"{name}: positive windows missing frozen fold assignment")
             for fold in [int(x) for x in self.args.folds.split(",")]:
                 val_fold = (fold + 1) % 5
+                train_folds = sorted(set(range(5)) - {fold, val_fold})
+                if len(train_folds) != 3:
+                    raise ValueError(f"fold{fold}: expected exactly three train folds")
                 for track in self.args.tracks.split(","):
-                    ntr = neg[(neg.track == track) & (~neg.fold.isin([fold, val_fold]))]
+                    ntr = neg[(neg.track == track) & (neg.fold.isin(train_folds))]
                     nva = neg[(neg.track == track) & (neg.fold == val_fold)]
                     nte = neg[(neg.track == track) & (neg.fold == fold)]
-                    ptr = pos[~pos_fold.isin([fold, val_fold])]
+                    ptr = pos[pos_fold.isin(train_folds)]
                     pva = pos[pos_fold == val_fold]
                     pte = pos[pos_fold == fold]
+                    if (ptr.window_id.map(self.fold_by_wid) == -1).any():
+                        raise AssertionError(f"{name}/fold{fold}: fold=-1 entered train")
                     splits = []
+                    fold_counts = []
                     for p, n in ((ptr, ntr), (pva, nva), (pte, nte)):
                         splits.append((p.window_id.tolist() + n.window_id.tolist(),
                                        np.array([1] * len(p) + [0] * len(n), dtype=np.int64)))
+                        fold_counts.append({
+                            "positive": {str(int(k)): int(v) for k, v in
+                                         p.window_id.map(self.fold_by_wid).value_counts().sort_index().items()},
+                            "negative": {str(int(k)): int(v) for k, v in
+                                         n.fold.value_counts().sort_index().items()},
+                        })
                     if any(len(s[0]) == 0 for s in splits):
                         raise ValueError(f"{name}/fold{fold}/{track}: empty train/val/test split")
                     yield {"experiment": name, "rbp": rbp_of(name), "tier": self.tiers[rbp_of(name)],
-                           "fold": fold, "track": track, "splits": splits}
+                           "fold": fold, "val_fold": val_fold, "train_folds": train_folds,
+                           "track": track, "splits": splits, "fold_counts": fold_counts}
 
     def embeddings(self, name, ids):
         idx = {}
@@ -121,6 +135,24 @@ def stable_seed(base, task):
     return int.from_bytes(hashlib.sha256(key.encode()).digest()[:4], "little")
 
 
+def ids_sha256(ids):
+    return hashlib.sha256(("\n".join(ids) + "\n").encode()).hexdigest()
+
+
+def split_audit_rows(task):
+    row = {key: task[key] for key in ("experiment", "rbp", "tier", "fold", "val_fold", "track")}
+    row["train_folds"] = json.dumps(task["train_folds"])
+    for split, (ids, y), counts in zip(("train", "val", "test"), task["splits"], task["fold_counts"]):
+        ids = np.asarray(ids)
+        for label, name in ((1, "pos"), (0, "neg")):
+            selected = ids[y == label].tolist()
+            row[f"{split}_{name}_fold_counts"] = json.dumps(counts["positive" if label else "negative"],
+                                                             sort_keys=True)
+            row[f"{split}_{name}_id_sha256"] = ids_sha256(selected)
+            row[f"n_{split}_{name}"] = len(selected)
+    return row
+
+
 def predict_torch(model, x, batch):
     import torch
     outputs = []
@@ -130,7 +162,7 @@ def predict_torch(model, x, batch):
     return np.concatenate(outputs)
 
 
-def train_modern(task, arrays, args, epochs, pass_id, device):
+def train_modern(task, arrays, args, device):
     import torch
     import torch.nn.functional as F
     seed = stable_seed(args.seed, task)
@@ -146,15 +178,18 @@ def train_modern(task, arrays, args, epochs, pass_id, device):
     ytr_t = torch.from_numpy(ytr.astype(np.float32)).to(device)
     xva_t = torch.from_numpy(xva).to(device)
     xte_t = torch.from_numpy(xte).to(device)
-    hidden = args.hidden
     model = torch.nn.Sequential(
-        torch.nn.Linear(xtr.shape[1], hidden), torch.nn.GELU(), torch.nn.Dropout(args.dropout),
-        torch.nn.Linear(hidden, 1)).to(device)
+        torch.nn.Linear(xtr.shape[1], args.hidden), torch.nn.GELU(), torch.nn.Dropout(args.dropout),
+        torch.nn.Linear(args.hidden, 1)).to(device)
     opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
     generator = torch.Generator(device=device)
     generator.manual_seed(seed)
     val_rows = []
-    for epoch in range(1, epochs + 1):
+    best_metric = -np.inf
+    best_state = None
+    best_epoch = 0
+    best_auroc = np.nan
+    for epoch in range(1, args.epochs + 1):
         model.train()
         order = torch.randperm(len(xtr_t), device=device, generator=generator)
         total_loss = 0.0
@@ -189,20 +224,38 @@ def train_modern(task, arrays, args, epochs, pass_id, device):
         model.eval()
         val_score = predict_torch(model, xva_t, args.batch)
         val_auroc, val_auprc = metrics(yva, val_score)
+        train_loss = total_loss / len(order)
+        if not np.isfinite([val_auroc, val_auprc, train_loss]).all():
+            raise ValueError(f"Non-finite metric: {task['experiment']} fold{task['fold']} {task['track']}")
         val_rows.append({"epoch": epoch, "val_auroc": val_auroc, "val_auprc": val_auprc,
-                         "train_loss": total_loss / len(order)})
-    result = {"val_history": val_rows}
-    if pass_id == 2:
-        model.eval()
-        result["val_score"] = predict_torch(model, xva_t, args.batch)
-        result["test_score"] = predict_torch(model, xte_t, args.batch)
-        result["val_ids"] = arrays[1][0]
-        result["test_ids"] = test_ids
-        result["val_y"] = yva
-        result["test_y"] = yte
+                         "train_loss": train_loss})
+        if val_auprc > best_metric + args.min_delta:
+            best_metric = val_auprc
+            best_auroc = val_auroc
+            best_epoch = epoch
+            best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
+        if epoch - best_epoch >= args.patience:
+            break
+    if best_state is None or epoch >= args.epochs:
+        raise RuntimeError(f"Training failsafe reached: {task['experiment']} fold{task['fold']} {task['track']}")
+    model.load_state_dict(best_state)
+    model.eval()
+    result = {
+        "val_history": val_rows,
+        "best_state": best_state,
+        "mean": mean,
+        "std": std,
+        "info": {"best_epoch": best_epoch, "stopped_epoch": epoch, "early_stopped": True,
+                 "best_val_auprc": best_metric, "best_val_auroc": best_auroc,
+                 "patience": args.patience, "min_delta": args.min_delta},
+        "val_score": predict_torch(model, xva_t, args.batch),
+        "test_score": predict_torch(model, xte_t, args.batch),
+        "val_ids": arrays[1][0], "test_ids": test_ids, "val_y": yva, "test_y": yte,
+    }
+    if not np.isfinite(result["val_score"]).all() or not np.isfinite(result["test_score"]).all():
+        raise ValueError("Non-finite evaluation score")
     del model, opt, xtr_t, ytr_t, xva_t, xte_t
-    if device == "cuda":
-        torch.cuda.empty_cache()
+    torch.cuda.empty_cache()
     return result
 
 
@@ -216,60 +269,84 @@ def prediction_rows(task, split, ids, y, score):
     return pd.DataFrame(row)
 
 
-def run_modern(loader, args, lg):
+def require_cuda():
     import torch
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if not torch.cuda.is_available():
+        raise RuntimeError("CUDA is required for E1; CPU fallback is forbidden")
+    device = torch.device("cuda:0")
+    torch.cuda.set_device(device)
+    probe = torch.tensor([1.25, -2.0], device=device) * torch.tensor([2.0, 3.0], device=device)
+    observed = probe.cpu().numpy()
+    if not np.array_equal(observed, np.array([2.5, -6.0], dtype=np.float32)):
+        raise RuntimeError(f"CUDA numeric probe failed: {observed}")
+    if torch.cuda.current_device() != 0 or probe.device.type != "cuda" or probe.device.index != 0:
+        raise RuntimeError(f"CUDA device probe failed: {probe.device}")
+    torch.cuda.synchronize(device)
+    info = {"device": "cuda:0", "name": torch.cuda.get_device_name(device),
+            "numeric_probe": observed.tolist()}
+    print("DEVICE_PROBE " + json.dumps(info), flush=True)
+    return device, info
+
+
+def run_modern(loader, args, lg, device_info=None):
+    import torch
+    if device_info is None:
+        _, device_info = require_cuda()
+    device = torch.device("cuda:0")
     tasks = list(loader.tasks())
-    histories = []
+    histories, audit_rows = [], []
+    rows, predictions, val_predictions = [], [], []
+    os.makedirs(os.path.join(args.out, "checkpoints"), exist_ok=True)
     train_examples = 0
     for i, task in enumerate(tasks, 1):
         arrays = loader.arrays(task)
         train_examples += len(arrays[0][2])
-        result = train_modern(task, arrays, args, args.epochs, 1, device)
-        for row in result["val_history"]:
-            histories.append({**{k: task[k] for k in ("experiment", "rbp", "tier", "fold", "track")}, **row})
-        print(f"PASS1 {i}/{len(tasks)} {task['experiment']} f{task['fold']} {task['track']}", flush=True)
-    history = pd.DataFrame(histories)
-    history.to_csv(os.path.join(args.out, "validation_history.tsv"), sep="\t", index=False)
-    tail = history[history.tier == "tail"]
-    selected = tail.groupby(["track", "epoch"]).val_auprc.mean().groupby("track").idxmax()
-    best_epoch = {track: int(epoch) for track, epoch in selected}
-    if not best_epoch:
-        raise ValueError("No tail-RBP validation tasks; refusing overall-AUPRC early stopping")
-    print("SELECTED_EPOCH", best_epoch, flush=True)
-    rows, predictions, val_predictions = [], [], []
-    for i, task in enumerate(tasks, 1):
-        arrays = loader.arrays(task)
-        result = train_modern(task, arrays, args, best_epoch[task["track"]], 2, device)
+        audit = split_audit_rows(task)
+        audit_rows.append(audit)
+        result = train_modern(task, arrays, args, device)
+        for history_row in result["val_history"]:
+            histories.append({**{k: task[k] for k in ("experiment", "rbp", "tier", "fold", "track")},
+                              **history_row})
+        checkpoint = {"model_state": result["best_state"],
+                      "mean": torch.from_numpy(result["mean"]), "std": torch.from_numpy(result["std"]),
+                      "task": {key: task[key] for key in ("experiment", "fold", "val_fold", "train_folds", "track")},
+                      "seed": stable_seed(args.seed, task), "split_audit": audit,
+                      "training_device": device_info, **result["info"]}
+        checkpoint_path = os.path.join(args.out, "checkpoints",
+                                       f"{task['experiment']}.f{task['fold']}.{task['track']}.best.pt")
+        torch.save(checkpoint, checkpoint_path)
         for split in ("val", "test"):
             y = result[f"{split}_y"]
             score = result[f"{split}_score"]
             auroc, auprc = metrics(y, score)
             rows.append({**{k: task[k] for k in ("experiment", "rbp", "tier", "fold", "track")},
-                         "split": split, "best_epoch": best_epoch[task["track"]],
-                         "n_train": len(arrays[0][2]), "n_eval": len(y), "auroc": auroc, "auprc": auprc})
-            if split == "test":
-                predictions.append(prediction_rows(task, split, result[f"{split}_ids"], y, score))
-            else:
-                val_predictions.append(prediction_rows(task, split, result[f"{split}_ids"], y, score))
-        print(f"PASS2 {i}/{len(tasks)} {task['experiment']} f{task['fold']} {task['track']}", flush=True)
+                         "split": split, **result["info"], "n_train": len(arrays[0][2]),
+                         "n_eval": len(y), "auroc": auroc, "auprc": auprc})
+            target = predictions if split == "test" else val_predictions
+            target.append(prediction_rows(task, split, result[f"{split}_ids"], y, score))
+        print(f"MODERN {i}/{len(tasks)} {task['experiment']} f{task['fold']} {task['track']} "
+              f"best={result['info']['best_epoch']} stop={result['info']['stopped_epoch']}", flush=True)
+    history = pd.DataFrame(histories)
+    history.to_csv(os.path.join(args.out, "validation_history.tsv"), sep="\t", index=False)
+    pd.DataFrame(audit_rows).to_csv(os.path.join(args.out, "split_audit.tsv"), sep="\t", index=False)
     results = pd.DataFrame(rows)
     results.to_csv(os.path.join(args.out, "modern_results.tsv"), sep="\t", index=False)
-    summary = results.groupby(["track", "split", "tier"])[["auroc", "auprc"]].mean().round(6)
-    summary.to_csv(os.path.join(args.out, "modern_summary.tsv"), sep="\t")
+    results.groupby(["track", "split", "tier"])[["auroc", "auprc"]].mean().round(6).to_csv(
+        os.path.join(args.out, "modern_summary.tsv"), sep="\t")
     pd.concat(predictions, ignore_index=True).to_csv(
         os.path.join(args.out, "modern_test_predictions.tsv.gz"), sep="\t", index=False, compression="gzip")
     pd.concat(val_predictions, ignore_index=True).to_csv(
         os.path.join(args.out, "modern_val_predictions.tsv.gz"), sep="\t", index=False, compression="gzip")
     config = vars(args).copy()
-    config.update({"selected_epoch_by_track": best_epoch,
-                   "selection": "mean validation AUPRC over tail RBPs; test excluded",
+    config.update({"selection": "per-task validation AUPRC; patience=20, min_delta=1e-4; test excluded",
+                   "cuda": device_info, "strict_train_folds": True,
                    "logit_adjustment": "analytic no-op: balanced binary pi=0.5 gives tau*log(pi/(1-pi))=0"})
     with open(os.path.join(args.out, "modern_config.json"), "w") as handle:
         json.dump(config, handle, indent=2)
     test = results[results.split == "test"]
-    return {"n_tasks": len(tasks), "best_epoch": best_epoch,
-            "train_examples_per_pass": train_examples,
+    return {"n_tasks": len(tasks), "train_examples": train_examples, "cuda": device_info,
+            "best_epoch_min": int(results.best_epoch.min()), "best_epoch_max": int(results.best_epoch.max()),
+            "stopped_epoch_max": int(results.stopped_epoch.max()), "all_early_stopped": True,
             "test_macro": {track: {"auroc": float(g.auroc.mean()), "auprc": float(g.auprc.mean())}
                            for track, g in test.groupby("track")}}
 
@@ -290,14 +367,17 @@ def knn_scores(xtr, ytr, xev, ks, device, batch=2048):
     return {k: np.concatenate(v) for k, v in out.items()}
 
 
-def run_knn(loader, args, lg):
+def run_knn(loader, args, device_info=None):
     import torch
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device_info is None:
+        _, device_info = require_cuda()
+    device = torch.device("cuda:0")
     cluster = parse_clstr(args.split_clstr)
     ks = [int(x) for x in args.ks.split(",")]
-    rows, cached = [], {}
+    rows, cached, audit_rows = [], {}, []
     for i, task in enumerate(loader.tasks(), 1):
         arrays = loader.arrays(task)
+        audit_rows.append(split_audit_rows(task))
         (train_ids, xtr, ytr), (_, xva, yva), (_, xte, yte) = arrays
         seen = set()
         keep = []
@@ -340,6 +420,7 @@ def run_knn(loader, args, lg):
             else:
                 val_predictions.append(prediction_rows(task, split, ids, y, score))
     val_results.to_csv(os.path.join(args.out, "knn_validation.tsv"), sep="\t", index=False)
+    pd.DataFrame(audit_rows).to_csv(os.path.join(args.out, "split_audit.tsv"), sep="\t", index=False)
     results = pd.DataFrame(final_rows)
     results.to_csv(os.path.join(args.out, "knn_results.tsv"), sep="\t", index=False)
     results.groupby(["track", "split", "tier"])[["auroc", "auprc"]].mean().round(6).to_csv(
@@ -348,12 +429,14 @@ def run_knn(loader, args, lg):
         os.path.join(args.out, "knn_test_predictions.tsv.gz"), sep="\t", index=False, compression="gzip")
     pd.concat(val_predictions, ignore_index=True).to_csv(
         os.path.join(args.out, "knn_val_predictions.tsv.gz"), sep="\t", index=False, compression="gzip")
-    with open(os.path.join(args.out, "knn_config.json"), "w") as handle:
-        json.dump({"selected_k_by_track": best_k, "selection": "tail-RBP mean validation AUPRC",
+    config = vars(args).copy()
+    config.update({"selected_k_by_track": best_k, "selection": "tail-RBP mean validation AUPRC",
                    "dedup": "one training positive per frozen id90 cluster; negatives unchanged",
-                   "ks": ks}, handle, indent=2)
+                   "cuda": device_info, "strict_train_folds": True})
+    with open(os.path.join(args.out, "knn_config.json"), "w") as handle:
+        json.dump(config, handle, indent=2)
     test = results[results.split == "test"]
-    return {"n_tasks": len(results) // 2, "best_k": best_k,
+    return {"n_tasks": len(results) // 2, "best_k": best_k, "cuda": device_info,
             "test_macro": {track: {"auroc": float(g.auroc.mean()), "auprc": float(g.auprc.mean())}
                            for track, g in test.groupby("track")}}
 
@@ -374,7 +457,9 @@ def main():
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--loss", choices=["bce", "focal", "nnpu"], default="bce")
     ap.add_argument("--pi", type=float, default=0.1, help="nnPU positive-class prior")
-    ap.add_argument("--epochs", type=int, default=5)
+    ap.add_argument("--epochs", type=int, default=1000)
+    ap.add_argument("--patience", type=int, default=20)
+    ap.add_argument("--min-delta", type=float, default=1e-4)
     ap.add_argument("--batch", type=int, default=512)
     ap.add_argument("--lr", type=float, default=1e-3)
     ap.add_argument("--weight-decay", type=float, default=1e-4)
@@ -387,6 +472,8 @@ def main():
     ap.add_argument("--data-version", default="e0-v1-id90-frozen")
     ap.add_argument("--stage", default="E1", choices=["E1", "E2", "E4"])
     args = ap.parse_args()
+    if args.epochs < 1 or args.patience < 1 or args.min_delta < 0:
+        raise ValueError("epochs/patience must be positive and min_delta nonnegative")
     os.makedirs(args.out, exist_ok=True)
     lg = RunLogger(args.log, stage=args.stage, kind=f"frozen-{args.command}")
     config = vars(args).copy()
@@ -394,8 +481,9 @@ def main():
     lg.start(config=config, seed=args.seed, data_version=args.data_version,
              inputs=[args.split_clstr, args.exps_file], code_version=config["code_sha256"])
     try:
+        device, device_info = require_cuda()
         loader = TaskLoader(args)
-        result = run_modern(loader, args, lg) if args.command == "modern" else run_knn(loader, args, lg)
+        result = run_modern(loader, args, lg, device_info) if args.command == "modern" else run_knn(loader, args, device_info)
         lg.finish(metrics=result, outputs=[args.out])
     except Exception as exc:
         lg.finish(status="failed", notes=f"{type(exc).__name__}: {exc}", outputs=[args.out])

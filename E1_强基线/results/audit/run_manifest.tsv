@@ -1,0 +1,21 @@
+name	run_id	code_sha256	selected_neg1c	selected_neg2	history_rows	result_rows	best_k	validation_rows
+f0_modern_bce_s0	E1-frozen-modern-20261124-150137-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	10.0	5.0	8760.0	584
+f0_modern_bce_s1	E1-frozen-modern-20261124-150137-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	10.0	3.0	8760.0	584
+f0_modern_bce_s2	E1-frozen-modern-20261124-163912-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	9.0	4.0	8760.0	584
+f1_modern_bce_s0	E1-frozen-modern-20261124-163912-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	6.0	5.0	8760.0	584
+f1_modern_bce_s1	E1-frozen-modern-20261124-170752-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	5.0	7.0	8760.0	584
+f1_modern_bce_s2	E1-frozen-modern-20261124-170752-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	9.0	4.0	8760.0	584
+f2_modern_bce_s0	E1-frozen-modern-20261124-173733-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	4.0	4.0	8760.0	584
+f2_modern_bce_s1	E1-frozen-modern-20261124-173753-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	4.0	4.0	8760.0	584
+f2_modern_bce_s2	E1-frozen-modern-20261124-180614-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	5.0	5.0	8760.0	584
+f3_modern_bce_s0	E1-frozen-modern-20261124-180614-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	8.0	5.0	8760.0	584
+f3_modern_bce_s1	E1-frozen-modern-20261124-183534-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	11.0	4.0	8760.0	584
+f3_modern_bce_s2	E1-frozen-modern-20261124-183634-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	8.0	6.0	8760.0	584
+f4_modern_bce_s0	E1-frozen-modern-20261124-190515-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	7.0	3.0	8760.0	584
+f4_modern_bce_s1	E1-frozen-modern-20261124-190615-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	7.0	5.0	8760.0	584
+f4_modern_bce_s2	E1-frozen-modern-20261124-193416-ZDLg6Y	d848ea590d3bdbb0e9c6600a12d109ce3bab264d60b8d42b6f26f76eae330ef4	7.0	3.0	8760.0	584
+f0_knn	E1-frozen-knn-20261124-200230-ZDLg6Y					584	{'neg1c': 20, 'neg2': 20}	876.0
+f1_knn	E1-frozen-knn-20261124-201130-ZDLg6Y					584	{'neg1c': 20, 'neg2': 20}	876.0
+f2_knn	E1-frozen-knn-20261124-202005-ZDLg6Y					584	{'neg1c': 20, 'neg2': 20}	876.0
+f3_knn	E1-frozen-knn-20261124-202850-ZDLg6Y					584	{'neg1c': 20, 'neg2': 20}	876.0
+f4_knn	E1-frozen-knn-20261124-203734-ZDLg6Y					584	{'neg1c': 20, 'neg2': 20}	876.0

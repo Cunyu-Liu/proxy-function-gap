@@ -17,6 +17,7 @@ import sys
 import time
 import datetime
 import hashlib
+import fcntl
 
 
 def sha256_file(path, limit=None):
@@ -63,8 +64,18 @@ class RunLogger:
         self._append()
 
     def _append(self):
-        with open(self.path, "a") as f:
-            f.write(json.dumps(self.rec, ensure_ascii=False) + "\n")
+        payload = (json.dumps(self.rec, ensure_ascii=False) + "\n").encode("utf-8")
+        with open(self.path + ".lock", "a+") as lock:
+            fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+            descriptor = os.open(self.path, os.O_APPEND | os.O_CREAT | os.O_WRONLY, 0o644)
+            try:
+                written = os.write(descriptor, payload)
+                if written != len(payload):
+                    raise OSError(f"Partial JSONL append: {written}/{len(payload)}")
+                os.fsync(descriptor)
+            finally:
+                os.close(descriptor)
+                fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
 
 
 if __name__ == "__main__":

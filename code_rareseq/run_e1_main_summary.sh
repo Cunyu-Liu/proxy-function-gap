@@ -1,6 +1,6 @@
 #!/bin/bash
 # E1 主集五折三种子汇总：合并预测 → CV 分层 → 配对 bootstrap。等训练 ALL_DONE 后运行。
-set -u
+set -euo pipefail
 PY=/root/miniconda3/envs/llr_env/bin/python
 export PYTHONPATH=/root/rareseq/pydeps
 W=/root/rareseq/work
@@ -12,6 +12,7 @@ for i in $(seq 1 360); do
   grep -q ALL_DONE /home/ProxyFunctionGap/logs/e1_main_driver.status 2>/dev/null && break
   sleep 60
 done
+grep -q ALL_DONE /home/ProxyFunctionGap/logs/e1_main_driver.status
 echo "=== COMBINE $(date) ===" >> "$L"
 $PY e1_combine_cv_predictions.py --e1-root "$ROOT" --prefix "" --out "$ROOT/cv_combined" \
   --folds 0,1,2,3,4 --seeds 0,1,2 --log "$LOG" --data-version e0-v1-id90-frozen-main >> "$L" 2>&1

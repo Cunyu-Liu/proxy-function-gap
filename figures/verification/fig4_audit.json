@@ -1,0 +1,151 @@
+{
+  "evidence_level": "E6 GRIMM EC_v2 five official splits; Test-1; Test-2 pseudo-OOD v2; cross-split descriptive only",
+  "sources": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/five_split_buckets.tsv",
+      "bytes": 3881,
+      "sha256": "3811216c69bc88a385fdd06da7e5f6b5878f4f05c1902d2aa86cdc18e2b60d22"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/five_split_bucket_summary.tsv",
+      "bytes": 700,
+      "sha256": "cee09b71f46f94c04815d938e4a83aba16fb71a2aaf27f3dd32cc119efd11db1"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/five_split_ood.tsv",
+      "bytes": 4756,
+      "sha256": "c210e8373e2a2a81f41958f7b7d0d8ce4389e6a168181ccfe85afa2ae4b5cbe6"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/five_split_ood_summary.tsv",
+      "bytes": 999,
+      "sha256": "a61ba13dc62ae7cf7f4aa00d1cccb8f30e0eb5d84e1a11759549482a5ff1b68a"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/five_split_convergence.tsv",
+      "bytes": 1511,
+      "sha256": "efcb93c2ead1f92d7255201bfe9cbecea7b483445562169417eb29b49f53b5bf"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/five_split_summary.json",
+      "bytes": 10919,
+      "sha256": "0e53c0206bc90ad63741d380b02a46f571fd23d550a574467cdc7b79f9efe007"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/results/five_split_agg/independent_verification.json",
+      "bytes": 2729,
+      "sha256": "68d04baa5ad326eaaf2df99f4fd4ff62b2c3692c7381142dc8e04e3951c5c009"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E6_蛋白迁移/E6_五划分冻结基线报告_2026-11-25.md",
+      "bytes": 13995,
+      "sha256": "48a7981adb1030c5ace5f53312067b9a3ebb098f25193e0fdeeca9eca42d6f33"
+    }
+  ],
+  "pass1_schema_finite": {
+    "function_rows": 25,
+    "ood_rows": 15,
+    "convergence_rows": 15,
+    "independent_verification_accepted": true
+  },
+  "pass2_configuration_alignment": {
+    "splits": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_bootstrap": 10000,
+    "patience": 20,
+    "ood_definition": "e6-ood-v2:fpr95=id_at_ood_tpr95;aurc=ascending_ood_score",
+    "ood_semantics_verified": true,
+    "selection": "validation checkpoint, tau and Fmax threshold; Test-2 pseudo-OOD only"
+  },
+  "pass3_report_recalculation": {
+    "all_20_frequency_cells_positive_and_ci_exclude_zero": true,
+    "bucket_mean_sd_range_exact_match": true,
+    "ood_mean_sd_range_exact_match": true,
+    "msp_energy_better_than_deep_knn_all_metrics_all_splits_descriptive": true,
+    "bucket_split_mean_sd": [
+      {
+        "bucket": "tail_lt10",
+        "split_mean": 0.2705341257973224,
+        "split_sd": 0.004935812320039448,
+        "split_min": 0.2642109453983263,
+        "split_max": 0.2775859614022452
+      },
+      {
+        "bucket": "tail_10_29",
+        "split_mean": 0.3447289735567134,
+        "split_sd": 0.0142324492973436,
+        "split_min": 0.3307668260282971,
+        "split_max": 0.3627917796376632
+      },
+      {
+        "bucket": "mid_30_99",
+        "split_mean": 0.31389295384062954,
+        "split_sd": 0.013635503001145414,
+        "split_min": 0.3042319900265566,
+        "split_max": 0.3370787465818083
+      },
+      {
+        "bucket": "head_ge100",
+        "split_mean": 0.20318869115159757,
+        "split_sd": 0.007761102165182632,
+        "split_min": 0.1954127273314581,
+        "split_max": 0.2123193710158959
+      },
+      {
+        "bucket": "all",
+        "split_mean": 0.27804989873713176,
+        "split_sd": 0.005617669064099235,
+        "split_min": 0.271014039751381,
+        "split_max": 0.2847767308371665
+      }
+    ]
+  },
+  "plot_data": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig4/function_by_split.tsv",
+      "bytes": 3745,
+      "sha256": "bcf9d74b43fd35edf00407c7d6982f14c793961bba434fe75458a70742358795"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig4/function_split_summary.tsv",
+      "bytes": 683,
+      "sha256": "73311d498791410ee88e9178854191f169e2a16d236f3e8e250d13768f9679e7"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig4/ood_v2_by_split.tsv",
+      "bytes": 4704,
+      "sha256": "d511c99552c7547877a9a2ad0f6ea240c2b67c0d8605caac1814a0652b7f0759"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig4/ood_v2_split_summary.tsv",
+      "bytes": 956,
+      "sha256": "b34f0c01653d68f5f278fd88e32bffe0b6668a2a774ded0aa4b96743db3d99aa"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig4/convergence.tsv",
+      "bytes": 1509,
+      "sha256": "0dd4601b985fb337c44e1fcbaa0ac325f75c2e0a4e061abf0253eb7b368124a9"
+    }
+  ],
+  "figure_stem": "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2",
+  "run_ids": [
+    "E6-grimm-frozen-baselines-20261124-085329-ZDLg6Y",
+    "E6-grimm-frozen-baselines-20261124-070400-ZDLg6Y",
+    "E6-grimm-frozen-baselines-20261124-104344-ZDLg6Y",
+    "E6-grimm-frozen-baselines-20261124-123513-ZDLg6Y",
+    "E6-grimm-frozen-baselines-20261124-171811-ZDLg6Y",
+    "E6-ood-metric-recompute-v2-20261125-072246-ZDLg6Y",
+    "E6-five-split-summary-20261125-080318-ZDLg6Y",
+    "E6-five-split-independent-verification-20261125-080348-ZDLg6Y"
+  ]
+}

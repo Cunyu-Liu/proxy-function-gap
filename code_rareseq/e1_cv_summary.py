@@ -6,7 +6,8 @@ import os
 import numpy as np
 import pandas as pd
 
-from log_run import RunLogger, sha256_file
+from e1_locked_logger import E1RunLogger as RunLogger
+from log_run import sha256_file
 
 
 def main():

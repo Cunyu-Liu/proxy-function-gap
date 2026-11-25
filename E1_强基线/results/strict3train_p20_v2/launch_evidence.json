@@ -1,0 +1,48 @@
+{
+  "actual_driver_start": "2026-11-25T22:33:32+08:00",
+  "driver_pid": 3591465,
+  "post_driver_pid": 3596525,
+  "driver_status": "RUNNING 2026-11-25T22:33:32+08:00",
+  "output_root": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2",
+  "core_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+  "completed_run_ids": {
+    "f0_modern_bce_s0": "E1-frozen-modern-20261125-143332-ZDLg6Y",
+    "f0_modern_bce_s1": "E1-frozen-modern-20261125-143332-ZDLg6Y",
+    "f1_modern_bce_s0": "E1-frozen-modern-20261125-152400-ZDLg6Y",
+    "f0_modern_bce_s2": "E1-frozen-modern-20261125-152341-ZDLg6Y"
+  },
+  "active_processes": [
+    "3618231 /root/miniconda3/envs/llr_env/bin/python e1_frozen_baselines.py modern --windows-dir /root/rareseq/data/e0/windows --neg-dir /root/rareseq/data/e0/neg --emb-dir /root/rareseq/data/e0/emb --positives-audit /root/rareseq/data/e0/positives_audit.tsv --split-clstr /root/rareseq/data/e0/splits/clusters.id90.clstr --exps-file /root/rareseq/data/e0/main_exps.txt --tracks neg1c,neg2 --epochs 1000 --patience 20 --min-delta 1e-4 --log /home/ProxyFunctionGap/logs/experiments.jsonl --data-version e0-v2-id90-strict3train-main --folds 1 --seed 2 --loss bce --out /teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/f1_modern_bce_s2",
+    "3618312 /root/miniconda3/envs/llr_env/bin/python e1_frozen_baselines.py modern --windows-dir /root/rareseq/data/e0/windows --neg-dir /root/rareseq/data/e0/neg --emb-dir /root/rareseq/data/e0/emb --positives-audit /root/rareseq/data/e0/positives_audit.tsv --split-clstr /root/rareseq/data/e0/splits/clusters.id90.clstr --exps-file /root/rareseq/data/e0/main_exps.txt --tracks neg1c,neg2 --epochs 1000 --patience 20 --min-delta 1e-4 --log /home/ProxyFunctionGap/logs/experiments.jsonl --data-version e0-v2-id90-strict3train-main --folds 1 --seed 1 --loss bce --out /teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/f1_modern_bce_s1",
+    "3623326 bash -c cd /root/rareseq/work && PYTHONPATH=/root/rareseq/pydeps /root/miniconda3/envs/llr_env/bin/python - <<'PY' import json,os,subprocess,torch,numpy as np,pandas as pd from types import SimpleNamespace from e1_frozen_baselines import TaskLoader,predict_torch root=\"/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2\";run=root+\"/f0_modern_bce_s0\" c=json.load(open(run+\"/modern_config.json\"));task=next(t for t in TaskLoader(SimpleNamespace(**c)).tasks() if t[\"experiment\"]==\"AGGF1_K562\" and t[\"track\"]==\"neg1c\") ckpath=run+\"/checkpoints/AGGF1_K562.f0.neg1c.best.pt\";ck=torch.load(ckpath,map_location=\"cpu\",weights_only=False);arrays=TaskLoader(SimpleNamespace(**c)).arrays(task) model=torch.nn.Sequential(torch.nn.Linear(640,256),torch.nn.GELU(),torch.nn.Dropout(0.1),torch.nn.Linear(256,1)).to(\"cuda:0\");model.load_state_dict(ck[\"model_state\"]);model.eval();reloads={} for si,split in ((1,\"val\"),(2,\"test\")):  ids,x,y=arrays[si];x=(x-ck[\"mean\"].numpy())/ck[\"std\"].numpy();score=predict_torch(model,torch.from_numpy(x).to(\"cuda:0\"),512)  saved=pd.read_csv(\"{}/modern_{}_predictions.tsv.gz\".format(run,split),sep=\"\\t\");saved=saved[(saved.experiment==\"AGGF1_K562\")&(saved.track==\"neg1c\")]  assert saved.window_id.tolist()==ids;diff=float(np.max(np.abs(saved.score.to_numpy()-score)));assert np.allclose(saved.score.to_numpy(),score,rtol=1e-6,atol=1e-7);reloads[split]={\"rows\":len(saved),\"max_abs_diff\":diff} history=pd.read_csv(run+\"/validation_history.tsv\",sep=\"\\t\");history=history[(history.experiment==\"AGGF1_K562\")&(history.track==\"neg1c\")];assert len(history)==ck[\"stopped_epoch\"] and history.iloc[-1].epoch==ck[\"stopped_epoch\"] runs={} for line in open(\"/home/ProxyFunctionGap/logs/experiments.jsonl\"):  try:r=json.loads(line)  except json.JSONDecodeError:continue  out=r.get(\"config\",{}).get(\"out\",\"\")  if r.get(\"status\")==\"completed\" and out.startswith(root):runs[os.path.basename(out)]=r.get(\"run_id\") ps=subprocess.check_output([\"ps\",\"-eo\",\"pid,cmd\"],text=True);active=[line.strip() for line in ps.splitlines() if \"e1_frozen_baselines.py\" in line and \"strict3train\" in line] ev={\"actual_driver_start\":\"2026-11-25T22:33:32+08:00\",\"driver_pid\":3591465,\"post_driver_pid\":3596525,\"driver_status\":open(\"/home/ProxyFunctionGap/logs/e1_main_strict3train_p20_driver.status\").read().strip(),\"output_root\":root,\"core_sha256\":\"0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24\",\"completed_run_ids\":runs,\"active_processes\":active,\"first_task\":{\"experiment\":\"AGGF1_K562\",\"fold\":0,\"track\":\"neg1c\",\"history_rows\":len(history),\"best_epoch\":ck[\"best_epoch\"],\"stopped_epoch\":ck[\"stopped_epoch\"],\"training_device\":ck[\"training_device\"],\"checkpoint\":ckpath,\"checkpoint_reload\":reloads,\"modern_results_bytes\":os.path.getsize(run+\"/modern_results.tsv\"),\"split_audit_bytes\":os.path.getsize(run+\"/split_audit.tsv\")}} path=\"/home/ProxyFunctionGap/logs/e1_strict3train_launch_evidence.json\";json.dump(ev,open(path,\"w\"),indent=2);print(json.dumps(ev,indent=2)) PY"
+  ],
+  "first_task": {
+    "experiment": "AGGF1_K562",
+    "fold": 0,
+    "track": "neg1c",
+    "history_rows": 28,
+    "best_epoch": 8,
+    "stopped_epoch": 28,
+    "training_device": {
+      "device": "cuda:0",
+      "name": "NVIDIA GeForce RTX 5090",
+      "numeric_probe": [
+        2.5,
+        -6.0
+      ]
+    },
+    "checkpoint": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/f0_modern_bce_s0/checkpoints/AGGF1_K562.f0.neg1c.best.pt",
+    "checkpoint_reload": {
+      "val": {
+        "rows": 8465,
+        "max_abs_diff": 2.3831176765298778e-07
+      },
+      "test": {
+        "rows": 8558,
+        "max_abs_diff": 2.540893557778645e-07
+      }
+    },
+    "modern_results_bytes": 82453,
+    "split_audit_bytes": 178294
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "audit_run_id": "E1-main-independent-audit-20261125-045344-ZDLg6Y",
+  "n_pairs": 8760,
+  "n_bootstrap_rows": 12,
+  "n_boot_per_slice": 10000,
+  "cv_metrics_recalculated": true,
+  "bootstrap_observed_ci_p_recalculated": true,
+  "all_npz_finite": true
+}

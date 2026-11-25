@@ -1,0 +1,38 @@
+{
+  "n_experiments": 146,
+  "n_experiment_fold_track_rows": 1460,
+  "unique_fold_minus1_positives": 21420,
+  "old_positive_train_occurrences": 6549057,
+  "strict_positive_train_occurrences": 6441957,
+  "fold_minus1_train_occurrences": 107100,
+  "affected_experiment_folds": 730,
+  "all_15_old_modern_n_train_reproduced": true,
+  "negative_train_unchanged": true,
+  "per_fold": {
+    "0": {
+      "old_n_train_pos": 1302202,
+      "strict_n_train_pos": 1280782,
+      "fold_minus1_n_train_pos": 21420
+    },
+    "1": {
+      "old_n_train_pos": 1314883,
+      "strict_n_train_pos": 1293463,
+      "fold_minus1_n_train_pos": 21420
+    },
+    "2": {
+      "old_n_train_pos": 1314884,
+      "strict_n_train_pos": 1293464,
+      "fold_minus1_n_train_pos": 21420
+    },
+    "3": {
+      "old_n_train_pos": 1314885,
+      "strict_n_train_pos": 1293465,
+      "fold_minus1_n_train_pos": 21420
+    },
+    "4": {
+      "old_n_train_pos": 1302203,
+      "strict_n_train_pos": 1280783,
+      "fold_minus1_n_train_pos": 21420
+    }
+  }
+}
