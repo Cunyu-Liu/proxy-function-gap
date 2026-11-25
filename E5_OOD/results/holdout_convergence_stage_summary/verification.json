@@ -1,14 +1,14 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261125-195706-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261125-201118-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 29,
+  "n_pairs_completed": 31,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
   "pass1_schema_finite_checkpoint": true,
   "pass2_config_split_seed_alignment": true,
   "cross_seed_window_npz_alignment": {
-    "comparisons": 5,
+    "comparisons": 7,
     "per_task_validation_test_ids_and_positives": true,
     "npz_keys_window_occurrence_roles_labels_shapes_finite": true,
     "model_scores_compared_for_equality": false
@@ -18,18 +18,6 @@
     "passed": true
   },
   "missing": [
-    {
-      "seed": 1,
-      "track": "neg1c",
-      "holdout": "QKI",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 1,
-      "track": "neg1c",
-      "holdout": "IGF2BP1",
-      "reason": "incomplete pair"
-    },
     {
       "seed": 1,
       "track": "neg1c",
