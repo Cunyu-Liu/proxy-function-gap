@@ -1,7 +1,7 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261125-143810-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261125-170348-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 2,
+  "n_pairs_completed": 17,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
@@ -12,96 +12,6 @@
     "passed": true
   },
   "missing": [
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "PTBP1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "U2AF2",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "SRSF1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "RBFOX2",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "QKI",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "IGF2BP1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "LIN28B",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "TAF15",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "UPF1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "CSTF2T",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg1c",
-      "holdout": "YBX3",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg2",
-      "holdout": "PTBP1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg2",
-      "holdout": "U2AF2",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg2",
-      "holdout": "SRSF1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 0,
-      "track": "neg2",
-      "holdout": "RBFOX2",
-      "reason": "incomplete pair"
-    },
     {
       "seed": 0,
       "track": "neg2",

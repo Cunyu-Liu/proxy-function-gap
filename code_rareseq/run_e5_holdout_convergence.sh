@@ -30,16 +30,8 @@ run_track() {
   "$PY" e5_rbp_holdout.py "${COMMON[@]}" --tracks "$track" --seed "$seed" --out "$out" "${extra[@]}" >> "$log" 2>&1
 }
 for S in 0 1 2; do
-  run_track "$S" neg1c & P1=$!
-  run_track "$S" neg2 & P2=$!
-  set +e
-  wait "$P1"; R1=$?
-  wait "$P2"; R2=$?
-  set -e
-  if [[ $R1 -ne 0 || $R2 -ne 0 ]]; then
-    echo "Seed $S failed: neg1c=$R1 neg2=$R2" >&2
-    false
-  fi
+  run_track "$S" neg1c
+  run_track "$S" neg2
   "$PY" e5_holdout_ext_summary.py --run-root "$RUN_ROOT" --out "$ROOT/holdout_convergence_summary" \
     --seeds 0,1,2 --allow-partial --log "$LOG"
 done

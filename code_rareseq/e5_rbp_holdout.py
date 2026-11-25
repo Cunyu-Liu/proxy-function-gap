@@ -5,6 +5,7 @@ import gc
 import hashlib
 import json
 import os
+import resource
 
 import numpy as np
 import pandas as pd
@@ -20,6 +21,7 @@ TRAIN_FOLD_POLICY = "assigned-folds-only-v1"
 COMPATIBLE_TRAIN_CODE_HASHES = {
     "bbe4b60734d26c98ab040ad7491f1a75a7126f492e62632fb25f5256569cd909",
     "cb180b4299633c485c4bb5a2d3801b520c2d9a88114b7b2b492011dbc326f9c6",
+    "192b77cadda6d566e45254f99489aa55c6a59fd9d6f70c7fa4b9cfe3a0fedee8",
 }
 
 
@@ -64,6 +66,21 @@ def require_cuda():
             "torch_version": str(torch.__version__), "numerical_probe": "passed"}
     print("CUDA_PROBE", json.dumps(info), flush=True)
     return device, info
+
+
+def log_host_memory(phase, metadata=None):
+    values = {"phase": phase, "peak_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss}
+    try:
+        with open("/proc/self/status") as handle:
+            for line in handle:
+                if line.startswith(("VmRSS:", "VmHWM:")):
+                    key, value = line.split(":", 1)
+                    values[key] = value.strip()
+    except FileNotFoundError:
+        pass
+    if metadata:
+        values.update(metadata)
+    print("HOST_MEMORY", json.dumps(values), flush=True)
 
 
 def binary_metrics(y, score):
@@ -355,12 +372,13 @@ def evaluate_and_save(model, mean, std, data, knn_x, args, device, metadata, sel
     window_id = np.concatenate([data["known_ids"], data["target_ids"]]).astype(str)
     occurrence = pd.Series(window_id).groupby(window_id).cumcount().to_numpy(dtype=np.int32)
     a = torch.nn.functional.normalize(torch.from_numpy(knn_x).to(device), dim=1)
-    b = torch.nn.functional.normalize(torch.from_numpy(
-        np.concatenate([data["tx"], data["target_x"]])).to(device), dim=1)
     similarities = []
     with torch.no_grad():
-        for start in range(0, len(b), 1024):
-            similarities.append((b[start:start + 1024] @ a.T).max(dim=1).values.cpu().numpy())
+        for values in (data["tx"], data["target_x"]):
+            for start in range(0, len(values), 1024):
+                b = torch.nn.functional.normalize(
+                    torch.from_numpy(values[start:start + 1024]).to(device), dim=1)
+                similarities.append((b @ a.T).max(dim=1).values.cpu().numpy())
     similarity = np.concatenate(similarities)
     scores = {"msp": -np.maximum(probability, 1 - probability),
               "energy": -np.abs(all_logit), "deep_knn": -similarity}
@@ -497,16 +515,29 @@ def main():
             checkpoint_path = os.path.join(args.out, "checkpoints", prefix + ".pt")
             manifest_path = os.path.join(args.out, "manifests", prefix + ".json")
             score_path = os.path.join(args.out, "scores", prefix + ".npz")
-            complete = all(os.path.exists(path) for path in
-                           (pair_path, history_path, checkpoint_path, manifest_path, score_path))
-            if complete:
+            artifact_paths = {"pair_sha256": pair_path, "history_sha256": history_path,
+                              "checkpoint_sha256": checkpoint_path, "scores_sha256": score_path}
+            present = [os.path.exists(path) for path in
+                       (pair_path, history_path, checkpoint_path, manifest_path, score_path)]
+            if all(present):
                 with open(manifest_path) as handle:
                     previous_manifest = json.load(handle)
+                hashes_valid = all(previous_manifest.get("artifacts", {}).get(key) == sha256_file(path)
+                                   for key, path in artifact_paths.items())
                 if (previous_manifest.get("metric_version") == METRIC_VERSION and
-                        previous_manifest.get("train_fold_policy") == TRAIN_FOLD_POLICY):
-                    print("RESUME_SKIP", heldout, track, flush=True)
+                        previous_manifest.get("train_fold_policy") == TRAIN_FOLD_POLICY and hashes_valid):
+                    print("RESUME_SKIP_HASH_VERIFIED", heldout, track, flush=True)
                     continue
+            if any(present):
+                quarantine = os.path.join(args.out, "quarantine", f"{prefix}_{run_id}")
+                os.makedirs(quarantine, exist_ok=False)
+                for path in (pair_path, history_path, checkpoint_path, manifest_path, score_path):
+                    if os.path.exists(path):
+                        os.replace(path, os.path.join(quarantine, os.path.basename(path)))
+                print("QUARANTINED_INCOMPLETE_OR_INVALID", heldout, track, quarantine, flush=True)
+            log_host_memory("before_load", {"holdout": heldout, "track": track})
             data, current_manifest = load_pair(loader, base_tasks, heldout, track, int(args.folds))
+            log_host_memory("after_load", {"holdout": heldout, "track": track})
             seed = stable_seed(args.seed, {"experiment": heldout, "fold": int(args.folds), "track": track})
             metadata = {"run_id": run_id, "holdout": heldout, "track": track,
                         "seed": args.seed, "stable_seed": seed}
@@ -535,8 +566,10 @@ def main():
                              "n_train": len(data["y"]), "n_validation": len(data["vy"]),
                              "n_known_test": len(data["ty"]), "n_heldout_test": len(data["target_y"]),
                              "history_path": history_path, "checkpoint_path": checkpoint_path})
+            log_host_memory("before_evaluation", {"holdout": heldout, "track": track})
             rows = evaluate_and_save(model, mean, std, data, knn_x, args, device, metadata, selection,
                                      score_path, pair_path, manifest_path, manifest)
+            log_host_memory("after_evaluation", {"holdout": heldout, "track": track})
             aggregate_pairs(args.out, expected)
             print("HOLDOUT_DONE", heldout, track, json.dumps(selection),
                   json.dumps([{k: row[k] for k in ("method", "auroc_ood", "fpr95", "aurc")} for row in rows]), flush=True)

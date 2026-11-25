@@ -1,0 +1,1 @@
+run_e5_holdout_convergence.sh: line 22: 3588948 Killed                  "$PY" e5_rbp_holdout.py "${COMMON[@]}" --tracks "$track" --seed "$seed" --out "$out" "${extra[@]}" >> "$log" 2>&1

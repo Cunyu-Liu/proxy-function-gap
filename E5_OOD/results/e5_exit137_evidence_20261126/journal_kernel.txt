@@ -1,0 +1,2 @@
+[0;1;39mNo journal files were found.[0m
+-- No entries --
