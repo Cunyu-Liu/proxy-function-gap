@@ -1,0 +1,21 @@
+name	run_id	code_sha256	best_neg1c_min	best_neg1c_max	best_neg2_min	best_neg2_max	history_rows	result_rows	checkpoints	best_k	validation_rows
+f0_modern_bce_s0	E1-frozen-modern-20261125-143332-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	1.0	22.0	1.0	42.0	7556.0	584	292.0		
+f0_modern_bce_s1	E1-frozen-modern-20261125-143332-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	1.0	28.0	1.0	43.0	7644.0	584	292.0		
+f0_modern_bce_s2	E1-frozen-modern-20261125-152341-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	25.0	1.0	43.0	7642.0	584	292.0		
+f1_modern_bce_s0	E1-frozen-modern-20261125-152400-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	23.0	1.0	27.0	7584.0	584	292.0		
+f1_modern_bce_s1	E1-frozen-modern-20261125-161346-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	25.0	1.0	19.0	7617.0	584	292.0		
+f1_modern_bce_s2	E1-frozen-modern-20261125-161332-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	18.0	1.0	25.0	7608.0	584	292.0		
+f2_modern_bce_s0	E1-frozen-modern-20261125-170402-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	22.0	1.0	15.0	7618.0	584	292.0		
+f2_modern_bce_s1	E1-frozen-modern-20261125-170400-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	18.0	1.0	14.0	7547.0	584	292.0		
+f2_modern_bce_s2	E1-frozen-modern-20261125-175529-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	18.0	1.0	24.0	7566.0	584	292.0		
+f3_modern_bce_s0	E1-frozen-modern-20261125-175528-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	16.0	1.0	19.0	7701.0	584	292.0		
+f3_modern_bce_s1	E1-frozen-modern-20261125-184719-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	19.0	1.0	21.0	7646.0	584	292.0		
+f3_modern_bce_s2	E1-frozen-modern-20261125-184722-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	14.0	1.0	15.0	7591.0	584	292.0		
+f4_modern_bce_s0	E1-frozen-modern-20261125-193913-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	25.0	1.0	27.0	7755.0	584	292.0		
+f4_modern_bce_s1	E1-frozen-modern-20261125-193856-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	24.0	1.0	21.0	7818.0	584	292.0		
+f4_modern_bce_s2	E1-frozen-modern-20261125-212655-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	28.0	1.0	19.0	7741.0	584	292.0		
+f0_knn	E1-frozen-knn-20261126-002334-ZDLg6Y							584		{'neg1c': 20, 'neg2': 20}	876.0
+f1_knn	E1-frozen-knn-20261125-221802-ZDLg6Y							584		{'neg1c': 20, 'neg2': 20}	876.0
+f2_knn	E1-frozen-knn-20261126-012340-ZDLg6Y							584		{'neg1c': 20, 'neg2': 20}	876.0
+f3_knn	E1-frozen-knn-20261125-232138-ZDLg6Y							584		{'neg1c': 20, 'neg2': 20}	876.0
+f4_knn	E1-frozen-knn-20261126-022620-ZDLg6Y							584		{'neg1c': 20, 'neg2': 20}	876.0

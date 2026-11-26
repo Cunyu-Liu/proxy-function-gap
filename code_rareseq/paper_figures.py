@@ -14,6 +14,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw, ImageFont
@@ -26,19 +27,25 @@ VERIFY_ROOT = FIGURE_ROOT / "verification"
 AUDIT_HISTORY = FIGURE_ROOT / "audit_history"
 
 E0 = STAGE_ROOT / "E0_数据审计" / "results"
-E1 = STAGE_ROOT / "E1_强基线"
+E1 = PROJECT_ROOT / "E1_强基线"
 E6 = PROJECT_ROOT / "E6_蛋白迁移"
 E5_REPORT = PROJECT_ROOT / "E5_OOD" / "PAR-CLIP跨协议评测报告_2026-11-25.md"
+E5_HOLDOUT = PROJECT_ROOT / "E5_OOD" / "results" / "holdout_convergence_final_summary"
+E5_HOLDOUT_REPORT = PROJECT_ROOT / "E5_OOD" / "E5_整RBP留出三seed双轨最终报告_2026-11-26.md"
 
 RUNS = {
     "fig1": [
         "E0-leakage-quant-20261122-102238-ZDLg6Y",
         "E0-window-identity-20261122-104517-ZDLg6Y",
+        "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+        "E1-main-independent-recalculation-20261126-105611-ZDLg6Y",
     ],
     "fig2": [
-        "E1-cv-prediction-combine-20261123-085050-ZDLg6Y",
-        "E1-cv-summary-20261123-085240-ZDLg6Y",
-        "E1-paired-bootstrap-20261123-085242-ZDLg6Y",
+        "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+        "E1-cv-prediction-combine-20261126-064253-ZDLg6Y",
+        "E1-cv-summary-20261126-065042-ZDLg6Y",
+        "E1-paired-bootstrap-20261126-065044-ZDLg6Y",
+        "E1-main-independent-recalculation-20261126-105611-ZDLg6Y",
     ],
     "fig3": [
         "E5-parclip-cross-protocol-contract-p20-20261125-065228-ZDLg6Y",
@@ -55,7 +62,24 @@ RUNS = {
         "E6-five-split-summary-20261125-080318-ZDLg6Y",
         "E6-five-split-independent-verification-20261125-080348-ZDLg6Y",
     ],
+    "fig5": [
+        "E5-holdout-convergence-summary-20261126-112101-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s1-neg2-20261125-205610-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s2-neg1c-20261126-014523-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s2-neg2-20261126-064623-ZDLg6Y",
+    ],
 }
+
+ARCHIVED_FIG2_RUNS = [
+    "E1-cv-prediction-combine-20261123-085050-ZDLg6Y",
+    "E1-cv-summary-20261123-085240-ZDLg6Y",
+    "E1-paired-bootstrap-20261123-085242-ZDLg6Y",
+]
 
 BLUE = "#0F4D92"
 TEAL = "#168C88"
@@ -145,9 +169,15 @@ def panel(ax: plt.Axes, letter: str, title: str) -> None:
     )
 
 
-def save_figure(fig: plt.Figure, stem: str, output_root: Path = FIGURE_ROOT) -> None:
+def save_figure(fig: plt.Figure, stem: str, output_root: Path = FIGURE_ROOT, layout: str = "constrained") -> None:
     output_root.mkdir(parents=True, exist_ok=True)
-    fig.set_layout_engine("constrained")
+    if layout == "manual":
+        fig.set_layout_engine("none")
+    elif layout == "tight":
+        fig.set_layout_engine("none")
+        fig.tight_layout(pad=1.2)
+    else:
+        fig.set_layout_engine("constrained")
     fig.savefig(output_root / f"{stem}_300dpi.png", dpi=300, bbox_inches="tight", pad_inches=0.06)
     fig.savefig(output_root / f"{stem}_600dpi.png", dpi=600, bbox_inches="tight", pad_inches=0.06)
     fig.savefig(output_root / f"{stem}.pdf", bbox_inches="tight", pad_inches=0.06)
@@ -191,6 +221,7 @@ def figure1() -> dict:
     leakage_path = E0 / "leakage_summary.json"
     manifest_path = E0 / "split_manifest.id90.json"
     distribution_path = E0 / "rbp_distribution.json"
+    contract_path = E1 / "results" / "strict3train_p20_v2" / "verification" / "final_verification.json"
     positives = read_tsv(
         positives_path,
         ["rbp", "cell", "n_sites", "n_unique"],
@@ -205,6 +236,11 @@ def figure1() -> dict:
     leakage = read_json(leakage_path)
     manifest = read_json(manifest_path)
     distribution = read_json(distribution_path)
+    contract = read_json(contract_path)
+    assert contract["accepted"] and contract["data_version"] == "e0-v2-id90-strict3train-main"
+    assert contract["pass_2_protocol_alignment"]["n_experiments"] == 146
+    assert contract["pass_2_protocol_alignment"]["all_train_strict_three_folds"]
+    assert contract["pass_2_protocol_alignment"]["no_fold_minus1_in_train"]
     assert len(positives) == 223 and positives["rbp"].nunique() == 150
     assert len(dual) == 73 and dual["rbp"].is_unique
     assert manifest["identity"] == 0.9 and manifest["seed"] == 20261122 and manifest["folds"] == 5
@@ -275,34 +311,34 @@ def figure1() -> dict:
     ax.text(
         0.98,
         8,
-        "Legacy E1 loader gap: fold=-1 positives\nentered every training fold; foldfix pending",
+        "Current E1 strict3train contract:\nfold=-1 excluded from train | 146 experiments accepted",
         ha="right",
         va="bottom",
         fontsize=8,
-        color=ORANGE,
+        color=TEAL,
         fontweight="bold",
-        bbox={"facecolor": "#FFF4E8", "edgecolor": ORANGE, "boxstyle": "round,pad=0.35"},
+        bbox={"facecolor": "#EAF6F4", "edgecolor": TEAL, "boxstyle": "round,pad=0.35"},
     )
     ax.text(
         0.98,
         38,
-        f"Legacy cluster check* = {cluster_leak:.4%}\nGlobal $n_{{eff}}$/windows = {global_neff:.3f}",
+        f"Historical loader issue remediated; legacy cluster check* = {cluster_leak:.4%}\nGlobal $n_{{eff}}$/windows = {global_neff:.3f}",
         ha="right",
         va="bottom",
         fontsize=8,
     )
     ax.set(xlim=(0, 1), ylim=(0, 105), xlabel="Nearest training identity ($d_{hom}$)", ylabel="Test windows, cumulative (%)")
-    panel(ax, "c", "Split design and audit reveal a training-use gap")
+    panel(ax, "c", "Current data contract repaired and independently accepted")
 
     stem = "Fig1_E0_data_and_leakage_audit"
     save_figure(fig, stem)
     cdf_frame = pd.DataFrame({"identity_threshold": thresholds, "cumulative_fraction": homology_cdf})
     plot_files = write_plot_data("fig1", {"rbp_support": per_rbp, "dual_cell_overlap": dual, "identity_cdf": cdf_frame})
     return {
-        "evidence_level": "E0 design and audit; descriptive; legacy E1 fold=-1 training-use gap disclosed",
-        "sources": [source(p) for p in [positives_path, dual_path, identity_path, leakage_path, manifest_path, distribution_path]],
+        "evidence_level": "E0 design and historical audit; current E1 strict3train data contract repaired and accepted",
+        "sources": [source(p) for p in [positives_path, dual_path, identity_path, leakage_path, manifest_path, distribution_path, contract_path]],
         "pass1_schema_finite": True,
-        "pass2_configuration_alignment": {"identity": 0.9, "split_seed": 20261122, "folds": 5, "negative_seed": 42, "legacy_loader_fold_minus_one_training_gap": True, "strict_zero_leakage_claim": False, "legacy_cluster_check_caveat": "includes validation and counts each positive in two tracks; not a strict three-fold train rate"},
+        "pass2_configuration_alignment": {"identity": 0.9, "split_seed": 20261122, "folds": 5, "negative_seed": 42, "current_data_version": contract["data_version"], "current_contract_accepted": True, "current_n_experiments": 146, "current_all_train_strict_three_folds": True, "current_no_fold_minus1_in_train": True, "legacy_loader_fold_minus_one_training_gap": "historical; remediated", "strict_zero_leakage_claim": False, "legacy_cluster_check_caveat": "historical only; includes validation and counts each positive in two tracks; not a strict three-fold train rate"},
         "pass3_report_recalculation": {
             "n_rbps": len(per_rbp),
             "gini": g,
@@ -320,61 +356,78 @@ def figure1() -> dict:
 
 
 def figure2() -> dict:
-    bootstrap_path = E1 / "results" / "cv_all_bootstrap" / "paired_bootstrap.tsv"
-    folds_path = E1 / "results" / "cv_all_summary" / "cv_by_fold.tsv"
-    config_path = E1 / "results" / "pilot_f0_modern_bce_s0" / "modern_config.json"
-    log_path = STAGE_ROOT / "实验日志" / "experiments.jsonl"
+    result_dir = E1 / "results" / "strict3train_p20_v2"
+    bootstrap_path = result_dir / "cv_bootstrap" / "paired_bootstrap.tsv"
+    folds_path = result_dir / "cv_summary" / "cv_by_fold.tsv"
+    metrics_path = result_dir / "cv_summary" / "cv_metrics.tsv"
+    verification_path = result_dir / "verification" / "final_verification.json"
+    manifest_path = result_dir / "verification" / "final_run_manifest.tsv"
+    report_path = E1 / "E1_主集严格三折冻结基线最终报告_2026-11-26.md"
     bootstrap = read_tsv(
         bootstrap_path,
-        ["track", "slice", "metric", "n_experiments", "n_seeds", "n_boot", "observed_delta", "ci_low", "ci_high"],
-        ["observed_delta", "ci_low", "ci_high", "p_two_sided"],
+        ["track", "slice", "metric", "n_experiments", "n_seeds", "n_boot", "observed_delta", "ci_low", "ci_high", "p_two_sided"],
+        ["n_experiments", "n_seeds", "n_boot", "observed_delta", "ci_low", "ci_high", "p_two_sided"],
     )
     folds = read_tsv(
         folds_path,
-        ["fold", "track", "split", "tier", "auroc_modern", "auroc_knn", "d_auroc"],
-        ["auroc_modern", "auroc_knn", "d_auroc"],
+        ["fold", "track", "split", "tier", "auroc_modern", "auprc_modern", "auroc_knn", "auprc_knn", "d_auroc", "d_auprc"],
+        ["fold", "auroc_modern", "auprc_modern", "auroc_knn", "auprc_knn", "d_auroc", "d_auprc"],
     )
-    config = read_json(config_path)
-    run = completed_run(log_path, RUNS["fig2"][-1])
-    assert len(bootstrap) == 8 and set(bootstrap["n_seeds"]) == {3} and set(bootstrap["n_boot"]) == {10000}
-    assert run["config"]["folds"] if "folds" in run["config"] else True
-    assert run["config"]["n_boot"] == 10000 and run["config"]["seed"] == 20261123
-    assert config["data_version"] == "e0-v1-id90-frozen" and config["seed"] == 0
-    assert config["selection"] == "mean validation AUPRC over tail RBPs; test excluded"
-    assert set(folds["fold"]) == set(range(5)) and set(folds["split"]) == {"test", "val"}
-    tail = folds[(folds["split"] == "test") & (folds["tier"] == "tail")].copy()
-    assert len(tail) == 10 and (tail["d_auroc"] > 0).all()
-    assert np.allclose(tail["d_auroc"], tail["auroc_modern"] - tail["auroc_knn"])
+    metrics = read_tsv(
+        metrics_path,
+        ["track", "split", "tier", "d_auroc_mean", "d_auprc_mean", "n_pairs", "n_folds", "n_seeds"],
+        ["d_auroc_mean", "d_auprc_mean", "n_pairs", "n_folds", "n_seeds"],
+    )
+    manifest = read_tsv(manifest_path, ["stage", "name", "run_id", "status", "data_version"], [])
+    verification = read_json(verification_path)
+    assert verification["accepted"] and verification["data_version"] == "e0-v2-id90-strict3train-main"
+    assert sha256(report_path) == verification["report_sha256"]
+    assert verification["pass_2_protocol_alignment"]["n_experiments"] == 146
+    assert verification["pass_2_protocol_alignment"]["all_train_strict_three_folds"]
+    assert verification["pass_2_protocol_alignment"]["no_fold_minus1_in_train"]
+    assert verification["pass_3_numeric_recalculation"]["n_cv_pairs"] == 8760
+    assert verification["pass_3_numeric_recalculation"]["bootstrap_observed_ci_p_recalculated"]
+    assert len(manifest) == 26 and manifest["status"].eq("completed").all()
+    assert manifest["data_version"].eq("e0-v2-id90-strict3train-main").all()
+    assert set(RUNS["fig2"]).issubset(set(manifest["run_id"]))
+    assert len(bootstrap) == 12 and set(bootstrap["n_seeds"]) == {3} and set(bootstrap["n_boot"]) == {10000}
+    assert set(bootstrap["slice"]) == {"head", "mid", "tail"} and set(bootstrap["track"]) == {"neg1c", "neg2"}
+    expected_counts = {"head": 100, "mid": 28, "tail": 18}
+    assert all(row["n_experiments"] == expected_counts[row["slice"]] for _, row in bootstrap.iterrows())
+    assert ((bootstrap["observed_delta"] > 0) & (bootstrap["ci_low"] > 0)).all()
+    test = folds[folds["split"] == "test"].copy()
+    assert len(test) == 30 and set(test["fold"]) == set(range(5)) and set(test["tier"]) == set(expected_counts)
+    assert np.allclose(test["d_auroc"], test["auroc_modern"] - test["auroc_knn"])
+    assert np.allclose(test["d_auprc"], test["auprc_modern"] - test["auprc_knn"])
+    assert (test[["d_auroc", "d_auprc"]] > 0).all().all()
 
     ci_recalculated = {}
     for track in ["neg1c", "neg2"]:
-        for slice_name in ["tail", "head"]:
-            npz_path = E1 / "results" / "cv_all_bootstrap" / f"bootstrap_{track}_{slice_name}.npz"
+        for slice_name in ["head", "mid", "tail"]:
+            npz_path = result_dir / "cv_bootstrap" / f"bootstrap_{track}_{slice_name}.npz"
             deltas = np.load(npz_path)["deltas"]
             assert deltas.shape == (10000, 2) and np.isfinite(deltas).all()
             interval = np.quantile(deltas, [0.025, 0.975], axis=0)
             for index, metric in enumerate(["auroc", "auprc"]):
                 row = bootstrap[(bootstrap["track"] == track) & (bootstrap["slice"] == slice_name) & (bootstrap["metric"] == metric)].iloc[0]
                 assert np.allclose(interval[:, index], [row["ci_low"], row["ci_high"]], atol=1e-12)
+                negative = (1 + np.sum(deltas[:, index] <= 0)) / 10001
+                positive = (1 + np.sum(deltas[:, index] >= 0)) / 10001
+                assert np.isclose(min(1.0, 2 * min(negative, positive)), row["p_two_sided"], atol=1e-12)
                 ci_recalculated[f"{track}_{slice_name}_{metric}"] = interval[:, index].tolist()
 
-    fold_means = tail.groupby("track")["d_auroc"].mean()
-    assert round(fold_means["neg1c"], 5) == 0.02446
-    assert round(fold_means["neg2"], 5) == 0.02888
+    fold_means = test.groupby(["track", "tier"])[["d_auroc", "d_auprc"]].mean().sort_index()
+    published_metrics = metrics[metrics["split"] == "test"].set_index(["track", "tier"])[["d_auroc_mean", "d_auprc_mean"]].sort_index()
+    assert np.allclose(fold_means.to_numpy(), published_metrics.to_numpy())
+    assert metrics["n_pairs"].sum() == 8760 and metrics[metrics["split"] == "test"]["n_pairs"].sum() == 4380
 
-    fig = plt.figure(figsize=(12.2, 5.8))
-    fig.suptitle(
-        "HISTORICAL LOADER GAP: fold=-1 positives in every train fold | replace after foldfix",
-        color=ORANGE,
-        fontsize=12,
-        fontweight="bold",
-    )
-    grid = fig.add_gridspec(2, 2, width_ratios=[1.25, 1.0], height_ratios=[1, 1], wspace=0.30, hspace=0.65)
+    fig = plt.figure(figsize=(13.0, 7.1))
+    grid = fig.add_gridspec(2, 3, width_ratios=[1.70, 0.78, 0.78], height_ratios=[1, 1], wspace=0.38, hspace=0.65)
     ax = fig.add_subplot(grid[:, 0])
     ordered = pd.concat(
         [
             bootstrap[(bootstrap["slice"] == slice_name) & (bootstrap["track"] == track) & (bootstrap["metric"] == metric)]
-            for slice_name in ["tail", "head"]
+            for slice_name in ["head", "mid", "tail"]
             for track in ["neg1c", "neg2"]
             for metric in ["auroc", "auprc"]
         ],
@@ -385,36 +438,39 @@ def figure2() -> dict:
         color = BLUE if row["metric"] == "auroc" else TEAL
         marker = "o" if row["metric"] == "auroc" else "D"
         ax.plot([row["ci_low"], row["ci_high"]], [pos, pos], color=color, lw=2.0, solid_capstyle="round")
-        ax.scatter(row["observed_delta"], pos, s=52, marker=marker, color=color, edgecolor="white", linewidth=0.7, zorder=4)
-        ax.text(0.057, pos, f"{row['observed_delta']:.3f}  [{row['ci_low']:.3f}, {row['ci_high']:.3f}]", va="center", fontsize=7.7)
+        ax.scatter(row["observed_delta"], pos, s=48, marker=marker, color=color, edgecolor="white", linewidth=0.7, zorder=4)
+        ax.text(0.055, pos, f"{row['observed_delta']:.3f}  [{row['ci_low']:.3f}, {row['ci_high']:.3f}]", va="center", fontsize=7.2)
     ax.axvline(0, color=MID, lw=0.9, ls="--")
+    ax.axhline(7.5, color=LIGHT, lw=0.7)
+    ax.axhline(3.5, color=LIGHT, lw=0.7)
     labels = [f"{r['slice'].capitalize()} · {r['track']} · {r['metric'].upper()}" for _, r in ordered.iterrows()]
     ax.set_yticks(y, labels)
-    ax.set(xlim=(0, 0.084), xlabel="Δ performance (BCE − cluster-deduplicated kNN), 95% CI")
-    panel(ax, "a", "Frozen BCE improves head and tail performance")
+    ax.set(xlim=(-0.002, 0.077), ylim=(-0.7, 11.7), xlabel="Δ BCE − kNN (pooled test predictions; 95% CI)\nCV panels: fold × experiment × seed macro deltas; descriptive, not bootstrap intervals")
+    ax.xaxis.label.set_fontsize(8)
+    panel(ax, "a", "Accepted 146-experiment main set: all 12 effects favor BCE")
 
+    tier_styles = {"head": (BLUE, "o", "Head"), "mid": (ORANGE, "s", "Mid"), "tail": (TEAL, "D", "Tail")}
+    letters = [["b", "c"], ["d", "e"]]
     for row_index, track in enumerate(["neg1c", "neg2"]):
-        ax = fig.add_subplot(grid[row_index, 1])
-        subset = tail[tail["track"] == track].sort_values("fold")
-        for _, record in subset.iterrows():
-            ax.plot([0, 1], [record["auroc_knn"], record["auroc_modern"]], color=LIGHT, lw=1.25, zorder=1)
-        ax.scatter(np.zeros(len(subset)), subset["auroc_knn"], s=42, color=ORANGE, label="kNN", zorder=3)
-        ax.scatter(np.ones(len(subset)), subset["auroc_modern"], s=42, color=BLUE, label="BCE", zorder=3)
-        delta_min = subset["d_auroc"].min()
-        delta_max = subset["d_auroc"].max()
-        ax.text(0.5, 0.05, f"5/5 positive\nΔ range {delta_min:.3f} to {delta_max:.3f}", transform=ax.transAxes, ha="center", fontsize=8, fontweight="bold")
-        ax.set(xlim=(-0.30, 1.43), xticks=[0, 1], xticklabels=["kNN", "BCE"], ylabel="Tail AUROC")
-        panel(ax, "b" if row_index == 0 else "c", f"Every fold favors BCE in the tail ({track})")
-
-    stem = "Fig2_E1_pilot_five_fold_baselines"
-    save_figure(fig, stem, AUDIT_HISTORY)
-    plot_files = write_plot_data("fig2", {"paired_bootstrap": bootstrap, "tail_by_fold": tail})
+        for col_index, metric in enumerate(["auroc", "auprc"]):
+            ax = fig.add_subplot(grid[row_index, col_index + 1])
+            for tier, (color, marker, label) in tier_styles.items():
+                subset = test[(test["track"] == track) & (test["tier"] == tier)].sort_values("fold")
+                ax.plot(subset["fold"], subset[f"d_{metric}"], color=color, marker=marker, ms=4.5, lw=1.35, label=label)
+            ax.axhline(0, color=MID, lw=0.8, ls="--")
+            ax.set(xticks=range(5), xlabel="Test fold", ylim=(0.015, 0.060), ylabel=f"Δ{metric.upper()} (BCE − kNN)" if col_index == 0 else "")
+            panel(ax, letters[row_index][col_index], f"CV by fold · {track} · {metric.upper()}")
+            if row_index == 0 and col_index == 1:
+                ax.legend(loc="upper right", fontsize=7, ncol=3, columnspacing=0.8, handlelength=1.4)
+    stem = "Fig2_E1_main_strict3train_five_fold_three_seed"
+    save_figure(fig, stem)
+    plot_files = write_plot_data("fig2", {"paired_bootstrap": bootstrap, "cv_test_by_fold": test, "cv_test_metrics": published_metrics.reset_index()})
     return {
-        "evidence_level": "ARCHIVED historical E1 pilot; fold=-1 training-use gap; do not submit; replace after foldfix",
-        "sources": [source(p) for p in [bootstrap_path, folds_path, config_path, log_path]],
-        "pass1_schema_finite": True,
-        "pass2_configuration_alignment": {"folds": [0, 1, 2, 3, 4], "model_seeds": [0, 1, 2], "bootstrap_seed": 20261123, "n_boot": 10000, "data_version": config["data_version"], "selection": config["selection"], "legacy_loader_fold_minus_one_training_gap": True, "submission_acceptance": False},
-        "pass3_report_recalculation": {"bootstrap_ci_from_npz": ci_recalculated, "fold_macro_delta_neg1c": float(fold_means["neg1c"]), "fold_macro_delta_neg2": float(fold_means["neg2"]), "all_tail_fold_deltas_positive": True},
+        "evidence_level": "ACCEPTED E1 main strict3train; 146 experiments; five folds; three seeds; frozen RNA-FM BCE versus cluster-deduplicated cosine kNN",
+        "sources": [source(p) for p in [bootstrap_path, folds_path, metrics_path, verification_path, manifest_path, report_path]],
+        "pass1_schema_finite": {"bootstrap_rows": len(bootstrap), "cv_test_rows": len(test), "bootstrap_npz": 6, "manifest_rows": len(manifest), "upstream_accepted": verification["accepted"]},
+        "pass2_configuration_alignment": {"data_version": verification["data_version"], "n_experiments": 146, "tier_experiments": expected_counts, "folds": [0, 1, 2, 3, 4], "model_seeds": [0, 1, 2], "n_boot": 10000, "strict_three_fold_train": True, "no_fold_minus1_in_train": True, "submission_acceptance": True},
+        "pass3_report_recalculation": {"bootstrap_ci_and_p_from_six_new_npz": ci_recalculated, "cv_metrics_exact_match": True, "n_cv_pairs": 8760, "all_12_bootstrap_effects_positive_ci_exclude_zero": True, "all_60_fold_track_tier_metric_deltas_positive": True},
         "plot_data": plot_files,
         "figure_stem": stem,
     }
@@ -649,6 +705,208 @@ def figure4() -> dict:
     }
 
 
+def figure5() -> dict:
+    raw_path = E5_HOLDOUT / "holdout_per_rbp.tsv"
+    per_seed_path = E5_HOLDOUT / "holdout_per_seed.tsv"
+    multiseed_path = E5_HOLDOUT / "holdout_multiseed.tsv"
+    conflicts_path = E5_HOLDOUT / "metric_winner_conflicts.tsv"
+    convergence_path = E5_HOLDOUT / "convergence_per_pair.tsv"
+    independent_path = E5_HOLDOUT / "independent_window_recalculation.tsv"
+    verification_path = E5_HOLDOUT / "verification.json"
+    independent_verification_path = E5_HOLDOUT / "independent_verification.json"
+    config_path = E5_HOLDOUT / "config.json"
+    metric_names = ["auroc_ood", "fpr95", "aurc"]
+    raw = read_tsv(
+        raw_path,
+        ["run_id", "holdout", "track", "seed", "stable_seed", "method", "metric_version", *metric_names, "stop_reason", "max_epochs_failsafe"],
+        ["seed", "stable_seed", "metric_version", *metric_names, "max_epochs_failsafe"],
+    )
+    per_seed_published = read_tsv(per_seed_path, ["seed", "track", "method", *metric_names], ["seed", *metric_names])
+    multiseed_published = read_tsv(
+        multiseed_path,
+        ["track", "method", *[f"{metric}_{stat}" for metric in metric_names for stat in ["mean", "std"]], "n_seeds"],
+        [* [f"{metric}_{stat}" for metric in metric_names for stat in ["mean", "std"]], "n_seeds"],
+    )
+    independent = read_tsv(independent_path, ["seed", "track", "holdout", "method", *metric_names, "manual_passed"], ["seed", *metric_names])
+    convergence = read_tsv(convergence_path, ["holdout", "track", "seed", "stop_reason", "best_epoch", "epochs_run"], ["seed", "best_epoch", "epochs_run"])
+    conflicts_published = read_tsv(conflicts_path, ["track", "auroc_ood_winner", "fpr95_winner", "aurc_winner", "winner_conflict"], [])
+    verification = read_json(verification_path)
+    independent_verification = read_json(independent_verification_path)
+    config = read_json(config_path)
+    holdout_order = config["args"]["holdouts"].split(",")
+    methods = ["msp", "energy", "deep_knn"]
+    tracks = ["neg1c", "neg2"]
+    assert verification["status"] == independent_verification["status"] == "complete"
+    assert verification["n_pairs_completed"] == verification["n_pairs_expected"] == 72
+    assert independent_verification["n_pairs_completed"] == independent_verification["n_pairs_expected"] == 72
+    assert verification["run_id"] == config["run_id"] == RUNS["fig5"][0]
+    assert verification["source_run_ids"] == RUNS["fig5"][1:]
+    assert verification["train_fold_policy"] == independent_verification["train_fold_policy"] == "assigned-folds-only-v1"
+    assert independent_verification["metric_version"] == 2 and independent_verification["pass2_independent_vector_recalculation"]
+    assert independent_verification["pass3_independent_rank_loop_and_history_replay"]
+    assert verification["cross_seed_window_npz_alignment"]["comparisons"] == 48
+    assert not verification["test_used_for_selection"] and verification["missing"] == []
+    assert len(raw) == len(independent) == 216 and len(convergence) == 72
+    assert raw.groupby(["holdout", "track", "seed"]).ngroups == 72
+    assert set(raw["holdout"]) == set(holdout_order) and set(raw["track"]) == set(tracks)
+    assert set(raw["seed"]) == {0, 1, 2} and set(raw["method"]) == set(methods)
+    assert raw["metric_version"].eq(2).all() and raw["stop_reason"].eq("validation_early_stop").all()
+    assert raw["max_epochs_failsafe"].eq(1000).all() and convergence["stop_reason"].eq("validation_early_stop").all()
+    assert (convergence["epochs_run"] - convergence["best_epoch"] == 20).all()
+
+    keys = ["seed", "track", "holdout", "method"]
+    aligned = raw[keys + metric_names].merge(independent, on=keys, suffixes=("_published", "_independent"), validate="one_to_one")
+    assert len(aligned) == 216 and independent["manual_passed"].all()
+    for metric in metric_names:
+        assert np.allclose(aligned[f"{metric}_published"], aligned[f"{metric}_independent"], rtol=0, atol=1e-12)
+
+    per_seed = raw.groupby(["seed", "track", "method"], as_index=False)[metric_names].mean()
+    published_seed = per_seed_published.set_index(["seed", "track", "method"])[metric_names].sort_index()
+    assert np.allclose(per_seed.set_index(["seed", "track", "method"])[metric_names].sort_index(), published_seed, rtol=0, atol=1e-12)
+    multiseed = per_seed.groupby(["track", "method"])[metric_names].agg(["mean", "std"])
+    published_multi = multiseed_published.set_index(["track", "method"])
+    for metric in metric_names:
+        assert np.allclose(multiseed[(metric, "mean")], published_multi[f"{metric}_mean"], rtol=0, atol=1e-12)
+        assert np.allclose(multiseed[(metric, "std")], published_multi[f"{metric}_std"], rtol=0, atol=1e-12)
+    assert multiseed_published["n_seeds"].eq(3).all()
+
+    rbp_means = raw.groupby(["track", "holdout", "method"])[metric_names].mean()
+    rbp_sd = raw.groupby(["track", "holdout", "method"])[metric_names].std()
+    conflict_records = []
+    effect_records = []
+    for track in tracks:
+        for holdout in holdout_order:
+            values = rbp_means.loc[(track, holdout)]
+            winners = {
+                "auroc_ood": values["auroc_ood"].idxmax(),
+                "fpr95": values["fpr95"].idxmin(),
+                "aurc": values["aurc"].idxmin(),
+            }
+            conflict = len(set(winners.values())) > 1
+            conflict_records.append({"track": track, "holdout": holdout, **{f"{metric}_winner": winner for metric, winner in winners.items()}, "winner_conflict": conflict})
+            effect_records.append(
+                {
+                    "track": track,
+                    "holdout": holdout,
+                    "auroc_ood_delta": values.loc["deep_knn", "auroc_ood"] - values.loc["msp", "auroc_ood"],
+                    "fpr95_delta": values.loc["msp", "fpr95"] - values.loc["deep_knn", "fpr95"],
+                    "aurc_delta": values.loc["msp", "aurc"] - values.loc["deep_knn", "aurc"],
+                    "winner_conflict": conflict,
+                    **{f"{metric}_winner": winner for metric, winner in winners.items()},
+                }
+            )
+    conflicts = pd.DataFrame(conflict_records)
+    effects = pd.DataFrame(effect_records)
+    assert len(conflicts) == 24 and conflicts["winner_conflict"].sum() == 23
+    no_conflict = conflicts[~conflicts["winner_conflict"]]
+    assert len(no_conflict) == 1 and no_conflict.iloc[0]["track"] == "neg1c" and no_conflict.iloc[0]["holdout"] == "IGF2BP1"
+    assert no_conflict.iloc[0][["auroc_ood_winner", "fpr95_winner", "aurc_winner"]].eq("energy").all()
+    macro_conflicts = {}
+    for track in tracks:
+        values = multiseed.loc[track]
+        macro_conflicts[track] = {
+            "auroc_ood": values["auroc_ood"]["mean"].idxmax(),
+            "fpr95": values["fpr95"]["mean"].idxmin(),
+            "aurc": values["aurc"]["mean"].idxmin(),
+        }
+        published = conflicts_published[conflicts_published["track"] == track].iloc[0]
+        assert published["winner_conflict"]
+        for metric in metric_names:
+            assert published[f"{metric}_winner"] == macro_conflicts[track][metric]
+            assert np.isclose(published[f"{metric}_value"], multiseed.loc[(track, macro_conflicts[track][metric]), (metric, "mean")], rtol=0, atol=1e-12)
+
+    method_styles = {"msp": (BLUE, "o", "MSP"), "energy": (TEAL, "D", "Energy"), "deep_knn": (ORANGE, "s", "deep-kNN")}
+    metric_titles = {"auroc_ood": "AUROC-OOD ↑ higher is better", "fpr95": "FPR95 ↓ lower is better", "aurc": "AURC ↓ lower is better"}
+    fig = plt.figure(figsize=(14.2, 11.0))
+    grid = fig.add_gridspec(2, 4, width_ratios=[1, 1, 1, 1.18], height_ratios=[0.88, 1.55], wspace=0.48, hspace=0.32)
+    for metric_index, metric in enumerate(metric_names):
+        ax = fig.add_subplot(grid[0, metric_index])
+        for method_index, method in enumerate(methods):
+            color, marker, label = method_styles[method]
+            offset = (method_index - 1) * 0.20
+            for track_index, track in enumerate(tracks):
+                subset = per_seed[(per_seed["track"] == track) & (per_seed["method"] == method)].sort_values("seed")
+                center = track_index + offset
+                ax.scatter(center + np.linspace(-0.035, 0.035, 3), subset[metric], s=20, color=color, marker=marker, alpha=0.60, zorder=3)
+                mean = multiseed.loc[(track, method), (metric, "mean")]
+                sd = multiseed.loc[(track, method), (metric, "std")]
+                ax.errorbar(center, mean, yerr=sd, fmt=marker, ms=6, color=color, lw=1.5, capsize=3, label=label if track_index == 0 and metric_index == 0 else None, zorder=4)
+        if metric == "auroc_ood":
+            ax.axhline(0.5, color=MID, lw=0.8, ls="--")
+            ax.set_ylim(0.42, 0.525)
+            ax.legend(loc="lower left", fontsize=7, ncol=3, columnspacing=0.8)
+        elif metric == "fpr95":
+            ax.set_ylim(0.935, 0.970)
+        else:
+            ax.set_ylim(0.13, 0.51)
+        ax.set(xlim=(-0.48, 1.48), xticks=[0, 1], xticklabels=tracks, ylabel=metric.upper().replace("_OOD", "-OOD"))
+        panel(ax, chr(97 + metric_index), metric_titles[metric])
+        ax.text(0.5, -0.18, "points: seeds; bars: mean ± sample SD", transform=ax.transAxes, ha="center", fontsize=7, color=MID)
+
+    ax = fig.add_subplot(grid[1, :3])
+    effect_columns = ["auroc_ood_delta", "fpr95_delta", "aurc_delta"]
+    matrix = effects[effect_columns].to_numpy()
+    limit = float(np.abs(matrix).max())
+    cmap = LinearSegmentedColormap.from_list("ood_effect", [ORANGE, "#FFFFFF", BLUE])
+    image = ax.imshow(matrix, aspect="auto", cmap=cmap, vmin=-limit, vmax=limit)
+    for row in range(len(effects)):
+        for column in range(3):
+            value = matrix[row, column]
+            ax.text(column, row, f"{value:+.3f}", ha="center", va="center", fontsize=6.8, color="white" if abs(value) > 0.60 * limit else INK)
+        ax.text(3, row, "Yes" if effects.iloc[row]["winner_conflict"] else "No", ha="center", va="center", fontsize=7.2, color=ORANGE if effects.iloc[row]["winner_conflict"] else TEAL, fontweight="bold")
+    labels = [f"{row['track']} · {row['holdout']}" for _, row in effects.iterrows()]
+    ax.set_yticks(np.arange(len(effects)), labels, fontsize=7.3)
+    ax.set_xticks([0, 1, 2, 3], ["AUROC-OOD ↑\nΔ=kNN−MSP", "FPR95 ↓\nΔ=MSP−kNN", "AURC ↓\nΔ=MSP−kNN", "Winner\nconflict"])
+    ax.set_xlim(-0.5, 3.5)
+    ax.axhline(11.5, color=INK, lw=1.0)
+    ax.tick_params(length=0)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    colorbar_axis = ax.inset_axes([1.025, 0.08, 0.022, 0.84])
+    colorbar = fig.colorbar(image, cax=colorbar_axis)
+    colorbar.set_label("Direction-aligned Δ; positive favors deep-kNN", fontsize=8)
+    panel(ax, "d", "24 RBP×track effects: 23/24 groups have metric-winner conflicts")
+
+    ax = fig.add_subplot(grid[:, 3])
+    for metric_index, metric in enumerate(metric_names):
+        y = len(metric_names) - 1 - metric_index
+        for method_index, method in enumerate(methods):
+            color, marker, label = method_styles[method]
+            values = rbp_sd.xs(method, level="method")[metric].to_numpy()
+            pos = y + (method_index - 1) * 0.20
+            ax.scatter(values, np.full(len(values), pos), s=18, color=color, marker=marker, alpha=0.38, edgecolors="none")
+            median = float(np.median(values))
+            ax.plot([median, median], [pos - 0.105, pos + 0.105], color=color, lw=2.2)
+    ax.set_xscale("log")
+    ax.set(xlim=(1e-4, 5e-2), ylim=(-0.55, 2.55), yticks=[2, 1, 0], yticklabels=["AUROC-OOD", "FPR95", "AURC"], xlabel="Within-RBP SD across 3 seeds (log scale) ↓")
+    panel(ax, "e", "Seed stability varies across heldout RBPs")
+    ax.text(0.5, -0.09, "points: 24 RBP×track groups per method; bars: median", transform=ax.transAxes, ha="center", fontsize=7.2, color=MID)
+    ax.text(0.5, -0.145, "Descriptive only; no bootstrap or unified winner", transform=ax.transAxes, ha="center", fontsize=8, color=ORANGE, fontweight="bold")
+
+    fig.subplots_adjust(left=0.065, right=0.965, bottom=0.08, top=0.94, wspace=0.48, hspace=0.38)
+    stem = "Fig5_E5_whole_RBP_holdout_three_seed_OOD"
+    save_figure(fig, stem, layout="manual")
+    plot_files = write_plot_data(
+        "fig5",
+        {
+            "holdout_metrics_216": raw,
+            "macro_by_seed": per_seed,
+            "macro_three_seed": multiseed_published,
+            "rbp_direction_aligned_effects": effects,
+            "seed_stability": rbp_sd.reset_index(),
+        },
+    )
+    return {
+        "evidence_level": "ACCEPTED E5 whole-RBP holdout pilot fold0 test; 12 RBPs × 2 tracks × 3 seeds; descriptive only; no unified winner or significance claim",
+        "sources": [source(p) for p in [raw_path, per_seed_path, multiseed_path, conflicts_path, convergence_path, independent_path, verification_path, independent_verification_path, config_path, E5_HOLDOUT_REPORT]],
+        "pass1_schema_finite": {"raw_rows": len(raw), "independent_rows": len(independent), "pairs": 72, "rbp_track_groups": 24, "methods": methods, "convergence_rows": len(convergence)},
+        "pass2_configuration_alignment": {"data_version": config["args"]["data_version"], "train_fold_policy": verification["train_fold_policy"], "metric_version": 2, "seeds": [0, 1, 2], "tracks": tracks, "holdouts": holdout_order, "cross_seed_alignment_comparisons": 48, "test_used_for_selection": False, "all_validation_early_stop": True},
+        "pass3_report_recalculation": {"independent_window_metrics_exact_match_216": True, "per_seed_macro_exact_match_18": True, "three_seed_mean_sample_sd_exact_match_6": True, "winner_conflicts": 23, "rbp_track_groups": 24, "sole_no_conflict_group": "neg1c/IGF2BP1 (energy)", "macro_winners": macro_conflicts, "unified_winner": False},
+        "plot_data": plot_files,
+        "figure_stem": stem,
+    }
+
+
 def make_contact_sheets(stems: list[str]) -> None:
     images = []
     for stem in stems:
@@ -704,9 +962,11 @@ def make_contact_sheets(stems: list[str]) -> None:
 
 def validate_rendered_outputs() -> dict:
     expected = {
-        "Fig1_E0_data_and_leakage_audit": ["fold=-1 positives", "foldfix pending"],
+        "Fig1_E0_data_and_leakage_audit": ["Current E1 strict3train contract", "146 experiments accepted"],
+        "Fig2_E1_main_strict3train_five_fold_three_seed": ["Accepted 146-experiment main set", "CV by fold", "neg2"],
         "Fig3_E5_PARCLIP_cross_protocol": ["Three-seed macro AUROC", "PAR-CLIP matched neg2"],
         "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2": ["all 20 split", "FPR95", "ascending OOD score"],
+        "Fig5_E5_whole_RBP_holdout_three_seed_OOD": ["23/24 groups have metric-winner conflicts", "Seed stability", "no bootstrap or unified winner"],
     }
     records = {}
     for stem, tokens in expected.items():
@@ -738,7 +998,7 @@ def validate_rendered_outputs() -> dict:
         "status": "passed",
         "figures": records,
         "archived_fig2_warning_verified": True,
-        "contact_sheet": {"size": list(color.size), "grayscale_mode": gray.mode, "grayscale_std": float(gray_array.std()), "grayscale_unique_values": len(np.unique(gray_array)), "fig2_excluded": True},
+        "contact_sheet": {"size": list(color.size), "grayscale_mode": gray.mode, "grayscale_std": float(gray_array.std()), "grayscale_unique_values": len(np.unique(gray_array)), "fig2_included": True, "fig5_included": True},
     }
     (VERIFY_ROOT / "output_validation.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
     return result
@@ -746,10 +1006,10 @@ def validate_rendered_outputs() -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--figure", choices=["all", "fig1", "fig2", "fig3", "fig4"], default="all")
+    parser.add_argument("--figure", choices=["all", "fig1", "fig2", "fig3", "fig4", "fig5"], default="all")
     parser.add_argument("--contact-sheet", action="store_true")
     args = parser.parse_args()
-    functions = {"fig1": figure1, "fig2": figure2, "fig3": figure3, "fig4": figure4}
+    functions = {"fig1": figure1, "fig2": figure2, "fig3": figure3, "fig4": figure4, "fig5": figure5}
     selected = list(functions) if args.figure == "all" else [args.figure]
     audits = {}
     for name in selected:
@@ -758,17 +1018,17 @@ def main() -> None:
         audits[name] = audit
         print(f"{name}: rendered and verified {audit['figure_stem']}")
     if args.contact_sheet:
-        make_contact_sheets([audits[name]["figure_stem"] for name in selected if name != "fig2"])
-        print("contact sheets: rendered; archived Fig2 excluded")
+        make_contact_sheets([audits[name]["figure_stem"] for name in selected])
+        print("contact sheets: rendered; selected current figures included")
     if args.figure == "all":
         if args.contact_sheet:
             validate_rendered_outputs()
             print("output validation: numeric/vector/DPI/grayscale checks passed")
         summary = {
             "status": "rendering_and_numeric_verification_passed",
-            "submission_status": {"fig1": "descriptive_with_disclosed_training_gap", "fig2": "archived_do_not_submit", "fig3": "external_descriptive", "fig4": "five_split_descriptive"},
-            "figures": {name: {"run_ids": RUNS[name], "evidence_level": audits[name]["evidence_level"], "figure_stem": audits[name]["figure_stem"]} for name in selected if name != "fig2"},
-            "audit_history": {"fig2": {"run_ids": RUNS["fig2"], "evidence_level": audits["fig2"]["evidence_level"], "figure_stem": audits["fig2"]["figure_stem"], "excluded_from_contact_sheet": True}},
+            "submission_status": {"fig1": "descriptive_current_contract_accepted", "fig2": "accepted_strict3train_main", "fig3": "external_descriptive", "fig4": "five_split_descriptive", "fig5": "accepted_whole_rbp_holdout_descriptive"},
+            "figures": {name: {"run_ids": RUNS[name], "evidence_level": audits[name]["evidence_level"], "figure_stem": audits[name]["figure_stem"]} for name in selected},
+            "audit_history": {"fig2": {"run_ids": ARCHIVED_FIG2_RUNS, "evidence_level": "Historical E1 pilot with fold=-1 training-use gap; retained only for audit", "figure_stem": "Fig2_E1_pilot_five_fold_baselines", "excluded_from_contact_sheet": True}},
         }
         (VERIFY_ROOT / "verification_summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
 

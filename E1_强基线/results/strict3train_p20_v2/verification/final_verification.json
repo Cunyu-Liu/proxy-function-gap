@@ -1,0 +1,82 @@
+{
+  "accepted": true,
+  "data_version": "e0-v2-id90-strict3train-main",
+  "old_npz_used": false,
+  "report": "E1_\u5f3a\u57fa\u7ebf/E1_\u4e3b\u96c6\u4e25\u683c\u4e09\u6298\u51bb\u7ed3\u57fa\u7ebf\u6700\u7ec8\u62a5\u544a_2026-11-26.md",
+  "report_sha256": "6d5483bd21a936f7ce06488e659f2532bf5a59c68cb208f73e570339779602db",
+  "run_manifest": "E1_\u5f3a\u57fa\u7ebf/results/strict3train_p20_v2/verification/final_run_manifest.tsv",
+  "run_counts": {
+    "modern": 15,
+    "knn": 5,
+    "post": 6,
+    "total": 26
+  },
+  "audit_run_id": "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+  "independent_recalculation_run_id": "E1-main-independent-recalculation-20261126-105611-ZDLg6Y",
+  "pass_1_schema_files": {
+    "modern_runs": 15,
+    "knn_runs": 5,
+    "combined_rows_each": 8692659,
+    "bootstrap_npz": 6,
+    "bootstrap_npz_shape": [
+      10000,
+      2
+    ],
+    "bootstrap_rows": 12,
+    "low_hom_models_per_track": 5,
+    "all_scores_finite": true,
+    "run_manifest_rows": 26
+  },
+  "pass_2_protocol_alignment": {
+    "source_log_malformed_lines": 1,
+    "n_experiments": 146,
+    "n_modern_runs": 15,
+    "n_knn_runs": 5,
+    "n_tracks": 2,
+    "n_folds": 5,
+    "n_seeds": 3,
+    "all_early_stopped_below_1000": true,
+    "all_cuda0_numeric_probes_passed": true,
+    "all_train_strict_three_folds": true,
+    "no_fold_minus1_in_train": true,
+    "all_prediction_keys_aligned": true,
+    "all_raw_splits_aligned": true,
+    "all_scores_finite": true
+  },
+  "pass_3_numeric_recalculation": {
+    "n_cv_pairs": 8760,
+    "cv_metrics_recalculated": true,
+    "bootstrap_observed_ci_p_recalculated": true,
+    "local_bootstrap_table_exact_match": true,
+    "local_cv_table_exact_match": true,
+    "low_hom_three_seeds_recalculated": true,
+    "local_final_recheck": "FINAL_LOCAL_RECHECK_OK"
+  },
+  "old_withdrawn_sensitivity_only": [
+    {
+      "metric": "neg1c_tail_delta_auroc",
+      "old": 0.031164,
+      "new": 0.031365257056409676,
+      "new_minus_old": 0.00020125705640959904
+    },
+    {
+      "metric": "neg1c_tail_delta_auprc",
+      "old": 0.043244,
+      "new": 0.043648983651954916,
+      "new_minus_old": 0.0004049836519549044
+    },
+    {
+      "metric": "neg2_tail_delta_auroc",
+      "old": 0.027057,
+      "new": 0.024114010919176396,
+      "new_minus_old": -0.002942989080823702
+    },
+    {
+      "metric": "neg2_tail_delta_auprc",
+      "old": 0.038584,
+      "new": 0.0348541451590588,
+      "new_minus_old": -0.0037298548409412033
+    }
+  ],
+  "interpretation_boundary": "Only frozen RNA-FM BCE versus cluster-deduplicated cosine kNN; not SOTA or causal attribution. Old values are sensitivity audit only."
+}

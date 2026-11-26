@@ -1,0 +1,2 @@
+figures/*.svg whitespace=-trailing-space
+E1_强基线/results/strict3train_p20_v2/audit/run_manifest.tsv whitespace=-trailing-space

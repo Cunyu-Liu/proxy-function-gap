@@ -1,19 +1,33 @@
 {
   "status": "rendering_and_numeric_verification_passed",
   "submission_status": {
-    "fig1": "descriptive_with_disclosed_training_gap",
-    "fig2": "archived_do_not_submit",
+    "fig1": "descriptive_current_contract_accepted",
+    "fig2": "accepted_strict3train_main",
     "fig3": "external_descriptive",
-    "fig4": "five_split_descriptive"
+    "fig4": "five_split_descriptive",
+    "fig5": "accepted_whole_rbp_holdout_descriptive"
   },
   "figures": {
     "fig1": {
       "run_ids": [
         "E0-leakage-quant-20261122-102238-ZDLg6Y",
-        "E0-window-identity-20261122-104517-ZDLg6Y"
+        "E0-window-identity-20261122-104517-ZDLg6Y",
+        "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+        "E1-main-independent-recalculation-20261126-105611-ZDLg6Y"
       ],
-      "evidence_level": "E0 design and audit; descriptive; legacy E1 fold=-1 training-use gap disclosed",
+      "evidence_level": "E0 design and historical audit; current E1 strict3train data contract repaired and accepted",
       "figure_stem": "Fig1_E0_data_and_leakage_audit"
+    },
+    "fig2": {
+      "run_ids": [
+        "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+        "E1-cv-prediction-combine-20261126-064253-ZDLg6Y",
+        "E1-cv-summary-20261126-065042-ZDLg6Y",
+        "E1-paired-bootstrap-20261126-065044-ZDLg6Y",
+        "E1-main-independent-recalculation-20261126-105611-ZDLg6Y"
+      ],
+      "evidence_level": "ACCEPTED E1 main strict3train; 146 experiments; five folds; three seeds; frozen RNA-FM BCE versus cluster-deduplicated cosine kNN",
+      "figure_stem": "Fig2_E1_main_strict3train_five_fold_three_seed"
     },
     "fig3": {
       "run_ids": [
@@ -37,6 +51,21 @@
       ],
       "evidence_level": "E6 GRIMM EC_v2 five official splits; Test-1; Test-2 pseudo-OOD v2; cross-split descriptive only",
       "figure_stem": "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2"
+    },
+    "fig5": {
+      "run_ids": [
+        "E5-holdout-convergence-summary-20261126-112101-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s1-neg2-20261125-205610-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s2-neg1c-20261126-014523-ZDLg6Y",
+        "E5-rbp-holdout-convergence-s2-neg2-20261126-064623-ZDLg6Y"
+      ],
+      "evidence_level": "ACCEPTED E5 whole-RBP holdout pilot fold0 test; 12 RBPs × 2 tracks × 3 seeds; descriptive only; no unified winner or significance claim",
+      "figure_stem": "Fig5_E5_whole_RBP_holdout_three_seed_OOD"
     }
   },
   "audit_history": {
@@ -46,7 +75,7 @@
         "E1-cv-summary-20261123-085240-ZDLg6Y",
         "E1-paired-bootstrap-20261123-085242-ZDLg6Y"
       ],
-      "evidence_level": "ARCHIVED historical E1 pilot; fold=-1 training-use gap; do not submit; replace after foldfix",
+      "evidence_level": "Historical E1 pilot with fold=-1 training-use gap; retained only for audit",
       "figure_stem": "Fig2_E1_pilot_five_fold_baselines",
       "excluded_from_contact_sheet": true
     }

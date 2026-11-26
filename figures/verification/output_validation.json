@@ -3,18 +3,35 @@
   "figures": {
     "Fig1_E0_data_and_leakage_audit": {
       "png300_size": [
-        3665,
+        3803,
         1210
       ],
       "png600_size": [
-        7341,
+        7605,
         2421
       ],
       "pdf_pages": 1,
       "svg_xml": true,
       "required_pdf_text": [
-        "fold=-1 positives",
-        "foldfix pending"
+        "Current E1 strict3train contract",
+        "146 experiments accepted"
+      ]
+    },
+    "Fig2_E1_main_strict3train_five_fold_three_seed": {
+      "png300_size": [
+        3924,
+        2140
+      ],
+      "png600_size": [
+        7848,
+        4281
+      ],
+      "pdf_pages": 1,
+      "svg_xml": true,
+      "required_pdf_text": [
+        "Accepted 146-experiment main set",
+        "CV by fold",
+        "neg2"
       ]
     },
     "Fig3_E5_PARCLIP_cross_protocol": {
@@ -49,17 +66,35 @@
         "FPR95",
         "ascending OOD score"
       ]
+    },
+    "Fig5_E5_whole_RBP_holdout_three_seed_OOD": {
+      "png300_size": [
+        4337,
+        3448
+      ],
+      "png600_size": [
+        8675,
+        6897
+      ],
+      "pdf_pages": 1,
+      "svg_xml": true,
+      "required_pdf_text": [
+        "23/24 groups have metric-winner conflicts",
+        "Seed stability",
+        "no bootstrap or unified winner"
+      ]
     }
   },
   "archived_fig2_warning_verified": true,
   "contact_sheet": {
     "size": [
       3118,
-      1870
+      2940
     ],
     "grayscale_mode": "L",
-    "grayscale_std": 22.928868864658224,
+    "grayscale_std": 23.421906895167933,
     "grayscale_unique_values": 256,
-    "fig2_excluded": true
+    "fig2_included": true,
+    "fig5_included": true
   }
 }

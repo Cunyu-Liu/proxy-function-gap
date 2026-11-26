@@ -6,8 +6,8 @@
 >
 > 本文以下是 2026-11-24 的“方法重启设计”历史原稿，**不是当前执行方案**。M1a 已止损，M1b–M1f 禁止运行；proxy function gap 至多是描述性现象命名，不是已验证机制。当前路线为泄漏受控基准（设计目标）+ 强基线 + 误差分层。
 >
-> - 旧 E1 加载器把 `fold=-1` 正例带入每个 train 折；旧主集撤回验收，旧 pilot、微调、路由、PU、低同源派生结果与 M1a 数值只留 legacy/止损记录。strict3train patience20 主集仍在重跑，不能写新性能或沿用旧性能，见 [E1 P0 交接](../E1_强基线/E1_严格三折P0重跑交接_2026-11-26.md)。
-> - 旧 RNA OOD 数值及“双轨冲突”撤回。当前 foldfix holdout 只有 2/72 pair 合格（阶段汇总 `E5-holdout-convergence-summary-20261125-143810-ZDLg6Y`），均为 HNRNPC/seed0，不能写成 12 RBP、三 seed 或最终 OOD 结论，见 [E5 阶段状态](../E5_OOD/E5_留出扩展与低同源多种子_2026-11-25.md)。
+> - **E1 strict3train 主集已最终验收。** 146 实验的 15 modern、5 kNN 与全部后处理完成。frozen RNA-FM BCE 相对簇去重余弦 kNN 的尾部 pooled ΔAUROC/ΔAUPRC 为 neg1c **+0.031365/+0.043649**、neg2 **+0.024114/+0.034854**；12 个切片差值均为正、95% CI 均排除 0、双侧校正 p 均为 **0.00019998**。低同源三 seed 描述性 ΔAUROC/ΔAUPRC 为 neg1c +0.044580/+0.083869、neg2 +0.038785/+0.068516；未做低同源 bootstrap。该比较不是 SOTA 或完整最强基线胜利。旧 E1 主集因 `fold=-1` 加载缺口继续撤回验收；旧 pilot、微调、路由、PU、低同源派生结果与 M1a 数值只留 legacy/止损记录，不与新主集混用。见 [E1 最终报告](../E1_强基线/E1_主集严格三折冻结基线最终报告_2026-11-26.md)。
+> - **E5 整 RBP 留出已最终验收 72/72 pair。**正式汇总 `E5-holdout-convergence-summary-20261126-112101-ZDLg6Y` 与独立三遍 verify 均 complete，12 RBP×双轨×三 seed 共 216 行，missing=[]，48 次跨 seed 对齐通过。deep-kNN 两轨 AUROC-OOD/FPR95 最佳：neg1c 0.507697/0.947266、neg2 0.508286/0.945827；AURC 分别由 energy（neg1c 0.155127）和 MSP（neg2 0.473079）最佳，23/24 个 RBP×轨组有指标冲突。AUROC 接近随机且 FPR95 很高，不能称可靠统一拒识。仅为 pilot fold0 test 三 seed 描述性宏平均，无 OOD bootstrap/显著性，三 seed 非独立生物重复；旧错误指标继续撤回。见 [E5 最终报告](../E5_OOD/E5_整RBP留出三seed双轨最终报告_2026-11-26.md)。
 > - 当前 PAR-CLIP 证据是 9 RBP、patience20、三 seed 外部描述性结果；宏 AUROC 依次为 `0.646192±0.002641`、`0.607869±0.002595`、`0.655701±0.004951`，run 为 `E5-parclip-cross-protocol-contract-p20-20261125-065228-ZDLg6Y`、`E5-parclip-cross-protocol-contract-p20-20261125-065619-ZDLg6Y`、`E5-parclip-cross-protocol-contract-p20-20261125-065953-ZDLg6Y`。三 seed 非生物重复，三种负例切片不混报，差值不作因果提升，见 [PAR-CLIP 报告](../E5_OOD/PAR-CLIP跨协议评测报告_2026-11-25.md)。
 > - E6 新协议 25/25 频率桶均为 BCE>deep-kNN，旧 split_1 五 epoch 的头尾反转不作当前结论。OOD v2 撤回旧 FPR95/AURC 冲突；MSP/energy 三指标在 5/5 split 的描述性方向均优于 deep-kNN，但仅限 seed-ensemble pseudo-OOD，无 FPR95/AURC 逐 seed 区间，也不是未知 EC 发现，见 [E6 五划分报告](../E6_蛋白迁移/E6_五划分冻结基线报告_2026-11-25.md)。
 >
@@ -28,7 +28,7 @@
 - **结果层级混杂**：五折三种子、单折单种子、pilot 与主集曾被放在同一叙事平面，读者难以判断证据强度。
 - **概念过大**：把“证据状态”同时当作频率、密度、环境、不确定性与拒识的共同解释，超出了实际识别能力。
 
-> **2026-11-26 段内纠错：**E5 旧“双轨冲突”与 E6 旧“头尾反转”均不再成立为当前实测依据。当前只能写：旧 RNA OOD 撤回、foldfix 部分矩阵仅 2/72；E6 新协议 25/25 桶为 BCE>deep-kNN，不能据此恢复或否定统一机制。M1a 已止损，以下从现象到残差的推导不再是执行理由。
+> **2026-11-26 段内纠错：**E5 旧“双轨冲突”与 E6 旧“头尾反转”均不再成立为当前实测依据。当前可写：E5 72/72 最终矩阵存在 23/24 组指标冲突，deep-kNN 的 AUROC 接近随机且 FPR95 很高，不能可靠统一拒识；E6 新协议 25/25 桶为 BCE>deep-kNN，不能据此恢复或否定统一机制。M1a 已止损，以下从现象到残差的推导不再是执行理由。
 
 修正原则：每一步只提出上一个实验**真正排除不了的新问题**；机制是否成立必须由后续对照证明，而不是由名称或直觉证明。
 
@@ -78,7 +78,7 @@ evidence/joint 相对频率路由没有尾部增益，neg1c 甚至显著为负�
 
 **承上启下**：不再给样本分配专家，而改为显式建模“目标功能是谁”以及共享代理到该功能的残差。nnPU 的失败进一步说明，仅修类别先验不能替代功能映射（`E4-g3-bootstrap-20261123-172506-ZDLg6Y`）。
 
-> **2026-11-26 S2–S4 纠错：**上述 E1/E2/E4 数字均受旧 `fold=-1` 加载链影响，只保留 legacy 历史或止损记录，不支持“冻结 FM 含可泛化信号”“更多参数导致尾部过拟合”或“当前 `d_hom` 不能识别映射差异”的最终科学结论。旧统计可回算不等于数据合同合格；strict3train 主集尚在重跑。由这些历史现象导向残差的“承上启下”已随 M1a 止损终止，不得据此运行 M1b–M1f。
+> **2026-11-26 S2–S4 纠错：**上述旧 E1/E2/E4 数字均受旧 `fold=-1` 加载链影响，只保留 legacy 历史或止损记录，不支持“更多参数导致尾部过拟合”或“当前 `d_hom` 不能识别映射差异”的最终科学结论。strict3train 主集已最终验收，但只支持 frozen RNA-FM BCE 相对簇去重余弦 kNN 的当前协议比较，不自动恢复旧 pilot、微调、路由或 PU 结果。由这些历史现象导向残差的“承上启下”已随 M1a 止损终止，不得据此运行 M1b–M1f。
 
 ### S5：新方法如何承接上述现象？
 
@@ -103,7 +103,7 @@ OOD 不再被包装成同一机制的自然出口。它只是检验：目标映�
 
 E5 双轨冲突（`E5-rbp-holdout-20261123-174134-ZDLg6Y`）要求同时报告 AUROC-OOD、FPR95 与 AURC，不能只挑有利指标。
 
-> **2026-11-26 S6 纠错：**该旧 run 的 energy/AURC/FPR95 及“双轨冲突”全部撤回。当前 foldfix holdout 仅 2/72 pair 合格，不是最终 RNA OOD 结果。当前蛋白 OOD v2 采用 `E6-ood-metric-recompute-v2-20261125-072246-ZDLg6Y`、汇总 `E6-five-split-summary-20261125-080318-ZDLg6Y` 和独立验证 `E6-five-split-independent-verification-20261125-080348-ZDLg6Y`；MSP/energy 三指标在 5/5 split 描述性优于 deep-kNN，但无 FPR95/AURC 逐 seed 区间，仍不得写成可靠统一拒识。
+> **2026-11-26 S6 纠错：**该旧 run 的 energy/AURC/FPR95 及旧“双轨冲突”全部撤回。E5 最终 72/72 由 `E5-holdout-convergence-summary-20261126-112101-ZDLg6Y` 验收：deep-kNN 两轨 AUROC-OOD/FPR95 最佳，AURC 分别由 energy/MSP 最佳，23/24 组有指标冲突；AUROC 接近随机且 FPR95 很高，仍不得写成可靠统一拒识。三 seed 仅为描述性统计重复，无 OOD bootstrap。当前蛋白 OOD v2 采用 `E6-ood-metric-recompute-v2-20261125-072246-ZDLg6Y`、汇总 `E6-five-split-summary-20261125-080318-ZDLg6Y` 和独立验证 `E6-five-split-independent-verification-20261125-080348-ZDLg6Y`；MSP/energy 三指标在 5/5 split 描述性优于 deep-kNN，但无 FPR95/AURC 逐 seed 区间。
 
 ### S7：蛋白结果是边界，不是装饰
 
@@ -123,7 +123,7 @@ E6 显示蛋白头部 BCE 强、尾部 kNN 强，方向与 RNA 不同（`E6-grim
 | 划分 | RNA id90 连通分量五折冻结，test/val/train 角色固定；neg1c/neg2 双轨 | 80%划分仅敏感性备用；不得为新模式重排冻结 test 或按 test 调参 |
 | OOD | 跨细胞系双向首批、整 RBP 留出5个、GRIMM pseudo-OOD | 跨协议未完成；低同源只有 seed0 描述性；更多留出 RBP 未跑；蛋白无实测 identity 桶 |
 
-> **2026-11-26 表后纠错：**“约1%不进 CV”和“id90 跨折簇泄漏0.0225%”不得作为旧训练实现事实；`fold=-1` 正例实际进入每个 train 折，旧 0.0225% 含 validation 且重复计数。PAR-CLIP 已完成 hg38 v2、9 个重叠 RBP 的 patience20 三 seed 外部描述性评测，原“17 RBP”不是当前重叠数。E6 已完成五官方 split 与 OOD v2；Test-2 仍是 pseudo-OOD。E5 当前仅 2/72 pair 合格，旧留出数字撤回；低同源多种子表来自旧 pilot 预测，只作 legacy。具体当前 run 与数字见文首报告链接。
+> **2026-11-26 表后纠错：**“约1%不进 CV”和“id90 跨折簇泄漏0.0225%”不得作为旧训练实现事实；`fold=-1` 正例实际进入每个 train 折，旧 0.0225% 含 validation 且重复计数。strict3train 新主集已最终验收，但不恢复旧结果。PAR-CLIP 已完成 hg38 v2、9 个重叠 RBP 的 patience20 三 seed 外部描述性评测，原“17 RBP”不是当前重叠数。E6 已完成五官方 split 与 OOD v2；Test-2 仍是 pseudo-OOD。E5 已完成并验收 72/72，最终结果为 23/24 组指标冲突、AUROC 接近随机且 FPR95 很高，不支持可靠统一拒识；旧留出数字撤回。E5 低同源多种子表来自旧 pilot 预测，只作 legacy，E1 主集低同源描述性另见最终报告。具体当前 run 与数字见文首报告链接。
 
 ## 5. Benchmark、baseline 与超参审计
 

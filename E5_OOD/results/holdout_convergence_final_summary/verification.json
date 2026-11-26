@@ -1,0 +1,34 @@
+{
+  "run_id": "E5-holdout-convergence-summary-20261126-112101-ZDLg6Y",
+  "status": "complete",
+  "n_pairs_completed": 72,
+  "n_pairs_expected": 72,
+  "train_fold_policy": "assigned-folds-only-v1",
+  "evidence_level": "pilot fold0 test descriptive multiseed",
+  "pass1_schema_finite_checkpoint": true,
+  "pass2_config_split_seed_alignment": true,
+  "cross_seed_window_npz_alignment": {
+    "comparisons": 48,
+    "per_task_validation_test_ids_and_positives": true,
+    "npz_keys_window_occurrence_roles_labels_shapes_finite": true,
+    "model_scores_compared_for_equality": false
+  },
+  "pass3_report_recalculation": {
+    "groups": 6,
+    "passed": true
+  },
+  "missing": [],
+  "source_run_ids": [
+    "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg2-20261125-205610-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s2-neg1c-20261126-014523-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s2-neg2-20261126-064623-ZDLg6Y"
+  ],
+  "n_source_runs": 8,
+  "test_used_for_selection": false,
+  "input_digest": "027b9e8ab3655b2cf0313ed410a3d8af3dccb282c1e8838fc375360c33439d54"
+}

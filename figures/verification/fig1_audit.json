@@ -1,5 +1,5 @@
 {
-  "evidence_level": "E0 design and audit; descriptive; legacy E1 fold=-1 training-use gap disclosed",
+  "evidence_level": "E0 design and historical audit; current E1 strict3train data contract repaired and accepted",
   "sources": [
     {
       "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/positives_audit.tsv",
@@ -30,6 +30,11 @@
       "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E0_数据审计/results/rbp_distribution.json",
       "bytes": 448,
       "sha256": "3aa0e32641a43b1ce90daafd9df3293dc05e78d7c5c64b4c46eefd52ff3c4eab"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/results/strict3train_p20_v2/verification/final_verification.json",
+      "bytes": 2645,
+      "sha256": "106483d3d8a218058c8ce605b88ca4164288c645bbd168d8f3975e314ab288f3"
     }
   ],
   "pass1_schema_finite": true,
@@ -38,9 +43,14 @@
     "split_seed": 20261122,
     "folds": 5,
     "negative_seed": 42,
-    "legacy_loader_fold_minus_one_training_gap": true,
+    "current_data_version": "e0-v2-id90-strict3train-main",
+    "current_contract_accepted": true,
+    "current_n_experiments": 146,
+    "current_all_train_strict_three_folds": true,
+    "current_no_fold_minus1_in_train": true,
+    "legacy_loader_fold_minus_one_training_gap": "historical; remediated",
     "strict_zero_leakage_claim": false,
-    "legacy_cluster_check_caveat": "includes validation and counts each positive in two tracks; not a strict three-fold train rate"
+    "legacy_cluster_check_caveat": "historical only; includes validation and counts each positive in two tracks; not a strict three-fold train rate"
   },
   "pass3_report_recalculation": {
     "n_rbps": 150,
@@ -73,6 +83,8 @@
   "excluded_ambiguous_number": "45.98 is an experiment-level max/min ratio, not the RBP-summed ratio; it is not plotted.",
   "run_ids": [
     "E0-leakage-quant-20261122-102238-ZDLg6Y",
-    "E0-window-identity-20261122-104517-ZDLg6Y"
+    "E0-window-identity-20261122-104517-ZDLg6Y",
+    "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+    "E1-main-independent-recalculation-20261126-105611-ZDLg6Y"
   ]
 }

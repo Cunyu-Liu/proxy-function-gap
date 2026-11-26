@@ -1,29 +1,52 @@
 {
-  "evidence_level": "ARCHIVED historical E1 pilot; fold=-1 training-use gap; do not submit; replace after foldfix",
+  "evidence_level": "ACCEPTED E1 main strict3train; 146 experiments; five folds; three seeds; frozen RNA-FM BCE versus cluster-deduplicated cosine kNN",
   "sources": [
     {
-      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E1_强基线/results/cv_all_bootstrap/paired_bootstrap.tsv",
-      "bytes": 975,
-      "sha256": "f7934be4a9840d20fd752018801c01a8088d65e2247c5fcec8be3762a7ea2fe9"
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/results/strict3train_p20_v2/cv_bootstrap/paired_bootstrap.tsv",
+      "bytes": 1426,
+      "sha256": "b92f7862da21ff37e9d8ff63527aa0775d4284a8ed264c5899f5b29126d51e04"
     },
     {
-      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E1_强基线/results/cv_all_summary/cv_by_fold.tsv",
-      "bytes": 8071,
-      "sha256": "e0fe212324b3c558165fdfd07cfe57f161b8d997efafa2c5fdaa0c5d1bc7920c"
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/results/strict3train_p20_v2/cv_summary/cv_by_fold.tsv",
+      "bytes": 8041,
+      "sha256": "e8edfb8f9d98c9dff96f47ac6ec60d497c4f6b460d8aa2a2b2e01b1fda3c8a7b"
     },
     {
-      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/E1_强基线/results/pilot_f0_modern_bce_s0/modern_config.json",
-      "bytes": 988,
-      "sha256": "729837a2556285e55a1590d88028b70209d0b5e9dcfcb29dbda932dc475408fe"
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/results/strict3train_p20_v2/cv_summary/cv_metrics.tsv",
+      "bytes": 3347,
+      "sha256": "5bfeb0177f96b8db02f9754a5221e12fc75b49637cbab93a3f160ea0a23c65ff"
     },
     {
-      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/实验日志/experiments.jsonl",
-      "bytes": 444350,
-      "sha256": "afad0f9769d4b72c63e2d77ba3c9c12570184b41d6d6096eebda9d78bb0005f9"
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/results/strict3train_p20_v2/verification/final_verification.json",
+      "bytes": 2645,
+      "sha256": "106483d3d8a218058c8ce605b88ca4164288c645bbd168d8f3975e314ab288f3"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/results/strict3train_p20_v2/verification/final_run_manifest.tsv",
+      "bytes": 6744,
+      "sha256": "dc4d285224ddec906941f11c12d53797cb6824adc3e258e37e29ff912d266126"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/E1_主集严格三折冻结基线最终报告_2026-11-26.md",
+      "bytes": 8242,
+      "sha256": "6d5483bd21a936f7ce06488e659f2532bf5a59c68cb208f73e570339779602db"
     }
   ],
-  "pass1_schema_finite": true,
+  "pass1_schema_finite": {
+    "bootstrap_rows": 12,
+    "cv_test_rows": 30,
+    "bootstrap_npz": 6,
+    "manifest_rows": 26,
+    "upstream_accepted": true
+  },
   "pass2_configuration_alignment": {
+    "data_version": "e0-v2-id90-strict3train-main",
+    "n_experiments": 146,
+    "tier_experiments": {
+      "head": 100,
+      "mid": 28,
+      "tail": 18
+    },
     "folds": [
       0,
       1,
@@ -36,68 +59,90 @@
       1,
       2
     ],
-    "bootstrap_seed": 20261123,
     "n_boot": 10000,
-    "data_version": "e0-v1-id90-frozen",
-    "selection": "mean validation AUPRC over tail RBPs; test excluded",
-    "legacy_loader_fold_minus_one_training_gap": true,
-    "submission_acceptance": false
+    "strict_three_fold_train": true,
+    "no_fold_minus1_in_train": true,
+    "submission_acceptance": true
   },
   "pass3_report_recalculation": {
-    "bootstrap_ci_from_npz": {
-      "neg1c_tail_auroc": [
-        0.02003258825978031,
-        0.0302725816264691
-      ],
-      "neg1c_tail_auprc": [
-        0.03039530728785258,
-        0.04394239630995192
-      ],
+    "bootstrap_ci_and_p_from_six_new_npz": {
       "neg1c_head_auroc": [
-        0.037504094021901004,
-        0.03846322614807979
+        0.03883687279739126,
+        0.039362521099003074
       ],
       "neg1c_head_auprc": [
-        0.05075194870224652,
-        0.05214854366939708
+        0.05126947533689855,
+        0.05198755432660944
       ],
-      "neg2_tail_auroc": [
-        0.021050777623347814,
-        0.034650406494591765
+      "neg1c_mid_auroc": [
+        0.03491464527046022,
+        0.03636576522011186
       ],
-      "neg2_tail_auprc": [
-        0.034298593598926334,
-        0.0502329916156521
+      "neg1c_mid_auprc": [
+        0.04519328199423013,
+        0.04713052844609286
+      ],
+      "neg1c_tail_auroc": [
+        0.02942844252287391,
+        0.03336166072080151
+      ],
+      "neg1c_tail_auprc": [
+        0.04113905211533319,
+        0.04622812622801674
       ],
       "neg2_head_auroc": [
-        0.032091348283066305,
-        0.03320300369898642
+        0.035799945293783865,
+        0.03643627538934357
       ],
       "neg2_head_auprc": [
-        0.04731937713429365,
-        0.04892809183698017
+        0.05069921493277162,
+        0.05157854375301093
+      ],
+      "neg2_mid_auroc": [
+        0.03192523093109382,
+        0.03383609895394164
+      ],
+      "neg2_mid_auprc": [
+        0.043893443987727765,
+        0.046282695470185944
+      ],
+      "neg2_tail_auroc": [
+        0.021317451500072405,
+        0.026865036862552368
+      ],
+      "neg2_tail_auprc": [
+        0.03165270137174477,
+        0.03810448396644915
       ]
     },
-    "fold_macro_delta_neg1c": 0.02445717876547172,
-    "fold_macro_delta_neg2": 0.028884084726787364,
-    "all_tail_fold_deltas_positive": true
+    "cv_metrics_exact_match": true,
+    "n_cv_pairs": 8760,
+    "all_12_bootstrap_effects_positive_ci_exclude_zero": true,
+    "all_60_fold_track_tier_metric_deltas_positive": true
   },
   "plot_data": [
     {
       "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig2/paired_bootstrap.tsv",
-      "bytes": 910,
-      "sha256": "85c9e8b061d15c9f63376470e935a37dbe1a7b085fc1e612de350292f1138df5"
+      "bytes": 1327,
+      "sha256": "89482d48d5aeceeeed96544d332fc684380c8c9336a5202cc31cb0ffd9ea7ecf"
     },
     {
-      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig2/tail_by_fold.tsv",
-      "bytes": 1394,
-      "sha256": "bb892af07facea73c4e85d1b7f34aa67e16b0390e632d4a5aa9ba79011aeb3cc"
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig2/cv_test_by_fold.tsv",
+      "bytes": 3984,
+      "sha256": "a1d531a77616f931b0c0165d07c63e8a4bb0ab36604e17cd4f958fee7a4c0289"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig2/cv_test_metrics.tsv",
+      "bytes": 322,
+      "sha256": "71ed03cd64bebd55fd11094b2869e6fa21131fafc6e0fa60cdb40ccf5763f0a6"
     }
   ],
-  "figure_stem": "Fig2_E1_pilot_five_fold_baselines",
+  "figure_stem": "Fig2_E1_main_strict3train_five_fold_three_seed",
   "run_ids": [
-    "E1-cv-prediction-combine-20261123-085050-ZDLg6Y",
-    "E1-cv-summary-20261123-085240-ZDLg6Y",
-    "E1-paired-bootstrap-20261123-085242-ZDLg6Y"
+    "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+    "E1-cv-prediction-combine-20261126-064253-ZDLg6Y",
+    "E1-cv-summary-20261126-065042-ZDLg6Y",
+    "E1-paired-bootstrap-20261126-065044-ZDLg6Y",
+    "E1-main-independent-recalculation-20261126-105611-ZDLg6Y"
   ]
 }

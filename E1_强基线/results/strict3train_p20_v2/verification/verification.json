@@ -1,0 +1,12 @@
+{
+  "run_id": "E1-main-independent-recalculation-20261126-105611-ZDLg6Y",
+  "audit_run_id": "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+  "n_pairs": 8760,
+  "n_bootstrap_rows": 12,
+  "n_boot_per_slice": 10000,
+  "cv_metrics_recalculated": true,
+  "bootstrap_observed_ci_p_recalculated": true,
+  "all_npz_finite": true,
+  "low_hom_three_seeds_recalculated": true,
+  "strict_train_and_cuda_audit_passed": true
+}

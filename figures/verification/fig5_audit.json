@@ -1,0 +1,158 @@
+{
+  "evidence_level": "ACCEPTED E5 whole-RBP holdout pilot fold0 test; 12 RBPs × 2 tracks × 3 seeds; descriptive only; no unified winner or significance claim",
+  "sources": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/holdout_per_rbp.tsv",
+      "bytes": 70035,
+      "sha256": "e2ef38945fca91a852df6ca6e989b5b257d485b7358f998f4231b3a0f85f44f0"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/holdout_per_seed.tsv",
+      "bytes": 2043,
+      "sha256": "7d1043007607ab02a796759046ef87568cc64d07dca88644660bc5dd3afd3bee"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/holdout_multiseed.tsv",
+      "bytes": 1457,
+      "sha256": "706187f2c40c32b7c6f6cb9552f6770f79d7edbe1416a59b91b42006344844a7"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/metric_winner_conflicts.tsv",
+      "bytes": 286,
+      "sha256": "10759927e7802d40a12529c4f840a0f6bceff64c053acf7bcde7dd36e4dc6ecb"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/convergence_per_pair.tsv",
+      "bytes": 2995,
+      "sha256": "2703c2b89c9a7580757ce14a23f23a5962198dfc94970990749388fe2f171235"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/independent_window_recalculation.tsv",
+      "bytes": 17959,
+      "sha256": "1feb886b07f0b2e4fe059e51e71737533e58fe1675635655fd51973b5b05c10b"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/verification.json",
+      "bytes": 1369,
+      "sha256": "8decb1f643834b43eaf1910b2ea655746974d3b9f7f30b2fc58c787455761961"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/independent_verification.json",
+      "bytes": 301,
+      "sha256": "9c9e31863e0796ef0315737cc8cbb5d84572af3d20049ef42599d7e4774dc10f"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/results/holdout_convergence_final_summary/config.json",
+      "bytes": 657,
+      "sha256": "3c893d9952641aeae023d5b86f6f42dd17c90c22f26652a682cc1d089ffa8bc2"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E5_OOD/E5_整RBP留出三seed双轨最终报告_2026-11-26.md",
+      "bytes": 10423,
+      "sha256": "04ea3e1b0c396e00325399c90c322cc4ae9565dbc6fde7cfbb83e80c02065127"
+    }
+  ],
+  "pass1_schema_finite": {
+    "raw_rows": 216,
+    "independent_rows": 216,
+    "pairs": 72,
+    "rbp_track_groups": 24,
+    "methods": [
+      "msp",
+      "energy",
+      "deep_knn"
+    ],
+    "convergence_rows": 72
+  },
+  "pass2_configuration_alignment": {
+    "data_version": "e0-v1-id90-frozen",
+    "train_fold_policy": "assigned-folds-only-v1",
+    "metric_version": 2,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tracks": [
+      "neg1c",
+      "neg2"
+    ],
+    "holdouts": [
+      "HNRNPC",
+      "PTBP1",
+      "U2AF2",
+      "SRSF1",
+      "RBFOX2",
+      "QKI",
+      "IGF2BP1",
+      "LIN28B",
+      "TAF15",
+      "UPF1",
+      "CSTF2T",
+      "YBX3"
+    ],
+    "cross_seed_alignment_comparisons": 48,
+    "test_used_for_selection": false,
+    "all_validation_early_stop": true
+  },
+  "pass3_report_recalculation": {
+    "independent_window_metrics_exact_match_216": true,
+    "per_seed_macro_exact_match_18": true,
+    "three_seed_mean_sample_sd_exact_match_6": true,
+    "winner_conflicts": 23,
+    "rbp_track_groups": 24,
+    "sole_no_conflict_group": "neg1c/IGF2BP1 (energy)",
+    "macro_winners": {
+      "neg1c": {
+        "auroc_ood": "deep_knn",
+        "fpr95": "deep_knn",
+        "aurc": "energy"
+      },
+      "neg2": {
+        "auroc_ood": "deep_knn",
+        "fpr95": "deep_knn",
+        "aurc": "msp"
+      }
+    },
+    "unified_winner": false
+  },
+  "plot_data": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig5/holdout_metrics_216.tsv",
+      "bytes": 70035,
+      "sha256": "e2ef38945fca91a852df6ca6e989b5b257d485b7358f998f4231b3a0f85f44f0"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig5/macro_by_seed.tsv",
+      "bytes": 1319,
+      "sha256": "b29963dba665057d0873a6993f55bfcb990306c34cde6a091dd2e0331436d0b1"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig5/macro_three_seed.tsv",
+      "bytes": 1347,
+      "sha256": "23e26d47dcd5466c1e88cdd2e73d1504b4254479dc0cd8438d9ee9839a49fb51"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig5/rbp_direction_aligned_effects.tsv",
+      "bytes": 2528,
+      "sha256": "89beebef6356fe3888559744379be0dd1186ad2b47ec7f0b9ef3a51fed505804"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig5/seed_stability.tsv",
+      "bytes": 6011,
+      "sha256": "0a272fe157b98283a85860b77f92aa78ca3db6f22e36aeae799cf49b79e6a453"
+    }
+  ],
+  "figure_stem": "Fig5_E5_whole_RBP_holdout_three_seed_OOD",
+  "run_ids": [
+    "E5-holdout-convergence-summary-20261126-112101-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg2-20261125-205610-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s2-neg1c-20261126-014523-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s2-neg2-20261126-064623-ZDLg6Y"
+  ]
+}

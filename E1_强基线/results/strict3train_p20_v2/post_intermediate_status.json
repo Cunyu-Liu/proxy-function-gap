@@ -1,5 +1,5 @@
 {
-  "stage": "bootstrap_running_neg2_head",
+  "stage": "completed",
   "data_version": "e0-v2-id90-strict3train-main",
   "audit_run_id": "E1-main-independent-audit-20261126-032635-ZDLg6Y",
   "audit_checks": {
@@ -75,10 +75,11 @@
     }
   },
   "bootstrap_overall_conclusion": null,
-  "bootstrap_running_slices": [
-    "neg2_head"
-  ],
-  "bootstrap_completed_count": 5,
-  "low_hom_status": "pending",
-  "independent_verification_status": "pending"
+  "bootstrap_running_slices": [],
+  "bootstrap_completed_count": 6,
+  "low_hom_status": "completed",
+  "independent_verification_status": "completed",
+  "final_report": "E1_\u5f3a\u57fa\u7ebf/E1_\u4e3b\u96c6\u4e25\u683c\u4e09\u6298\u51bb\u7ed3\u57fa\u7ebf\u6700\u7ec8\u62a5\u544a_2026-11-26.md",
+  "final_verification": "results/strict3train_p20_v2/verification/final_verification.json",
+  "final_run_manifest": "results/strict3train_p20_v2/verification/final_run_manifest.tsv"
 }
