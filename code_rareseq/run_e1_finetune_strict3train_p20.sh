@@ -153,4 +153,6 @@ done
 ALL_RUNS=${ALL_RUNS#,}
 "$PY" e1_finetune_verify.py --runs "$ALL_RUNS" --require-eval --out "$ROOT/final_matrix_verification.json" \
   >"$LOGDIR/e1_finetune_final_gate.log" 2>&1 || { echo "FINAL_VERIFY_FAILED $(date -Is)" > "$STATUS"; exit 1; }
+"$PY" e1_finetune_summary.py --root "$ROOT" --log "$LOG" >"$LOGDIR/e1_finetune_summary.log" 2>&1 || {
+  echo "SUMMARY_FAILED $(date -Is)" > "$STATUS"; exit 1; }
 echo "ALL_DONE $(date -Is)" > "$STATUS"
