@@ -421,7 +421,7 @@ def write_atomic(path, payload):
 def main():
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--remote", required=True, type=Path)
+    parser.add_argument("--remote", required=True, type=Path, action="append")
     parser.add_argument("--local", type=Path, default=root / "实验日志/experiments.jsonl")
     parser.add_argument(
         "--audit-json", type=Path, default=root / "实验日志/experiments_sync_audit.json"
@@ -435,7 +435,11 @@ def main():
         parser.error("--e5-verification and --e5-per-rbp must be supplied together")
 
     local_events = read_events(args.local, "local")
-    remote_events = read_events(args.remote, "remote")
+    remote_events = [
+        event
+        for remote_path in args.remote
+        for event in read_events(remote_path, "remote")
+    ]
     result = merge_events(local_events, remote_events)
     merged = result["merged"]
     attempts = build_attempts(merged)
@@ -459,11 +463,14 @@ def main():
                 "sha256": sha256_file(args.local),
                 "lines": len(local_events),
             },
-            "remote": {
-                "path": str(args.remote),
-                "sha256": sha256_file(args.remote),
-                "lines": len(remote_events),
-            },
+            "remote": [
+                {
+                    "path": str(remote_path),
+                    "sha256": sha256_file(remote_path),
+                    "lines": len(read_events(remote_path, "remote")),
+                }
+                for remote_path in args.remote
+            ],
         },
         "merge": {
             "merged_lines": len(merged),
