@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "tcell_residual_bstrict_v1",
+  "frozen_date": "2026-11-26",
+  "audit_source": "TCELL_AUXILIARY_SUPERVISION_AUDIT_20261126.md section 8",
+  "evidence_boundary": "Retrospective method development/protocol sensitivity only; historical outer labels were previously inspected. Not a new blind test or prospective confirmation.",
+  "raw": {
+    "n50_hek293t_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_random_end_hek293t_N50_r1.csv.gz",
+    "defined_hepg2_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_hepg2_r1.csv.gz",
+    "defined_tcell_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r1.csv.gz",
+    "defined_tcell_r2": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r2.csv.gz"
+  },
+  "raw_expected": {
+    "n50_hek293t_r1": {"rows": 2238030, "valid_unique_50nt": 2200533},
+    "defined_hepg2_r1": {"rows": 12566288, "valid_unique_50nt": 12563191},
+    "defined_tcell_r1": {"rows": 349633, "valid_unique_50nt": 349633},
+    "defined_tcell_r2": {"rows": 352724, "valid_unique_50nt": 352724}
+  },
+  "sample_roles": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+  ],
+  "pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1_retry1",
+  "inference_config": "/home/proxy-function-gap-tcell-residual/configs/ensemble_inference_v2.json",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_residual_bstrict_v1",
+  "features_in_order": ["p", "p2", "gc", "uAUG", "longest_poly_u", "intercept"],
+  "residual": "y_minus_p",
+  "residual_standardization": "source auxiliary train residual mean and population SD only",
+  "deployment": "corrected = p + sample_train_sd * strength * X_dot_beta",
+  "sample_train_sd": 1.6689551812138181,
+  "lambda_grid": [0.0, 0.000001, 0.0001, 0.01, 1.0, 100.0],
+  "strength_grid": [0.0, 0.25, 0.5, 0.75, 1.0],
+  "ridge_loss": "mean_squared_error_plus_lambda_times_nonintercept_coefficient_l2_square",
+  "intercept_penalized": false,
+  "solver": "torch_float64_cuda_closed_form_solve",
+  "condition_number_max": 1000000000000.0,
+  "selection": {
+    "directions": ["n50_hek293t_r1_to_defined_hepg2_r1", "defined_hepg2_r1_to_n50_hek293t_r1"],
+    "source_role": "train",
+    "selection_role": "destination_dev",
+    "gate_role": "destination_test",
+    "primary_metric": "cap16_bon_mean_regret",
+    "tie_tolerance": 1e-12,
+    "tie_breakers_in_order": ["destination_dev_mse", "larger_lambda", "smaller_strength", "lambda_ascending", "strength_ascending"],
+    "cap": 16,
+    "pool_size": 64,
+    "seeds": [101, 202, 303, 404, 505],
+    "gate": "both destination test cap16 corrected regret values must be strictly lower than frozen CNN",
+    "final_combination": "equal_weight_mean_of_two_directional_standardized_corrections_including_strength"
+  },
+  "split": {
+    "method": "H1 connected components after exact/H1 exclusion of union T-cell r1/r2 and Sample train/dev/calibration",
+    "hash": "sha256(context|minimum_component_sequence)",
+    "train_mod10": [0, 1, 2, 3, 4, 5, 6, 7],
+    "dev_mod10": [8],
+    "test_mod10": [9],
+    "minimum_rows_per_role": 1000,
+    "minimum_components_per_role": 100
+  },
+  "auxiliary_pools": "sha256(context|split|sequence) ascending; complete nonoverlapping pools of 64; deterministic seeded uniform proposals with replacement",
+  "affine_negative_control": "fit p and intercept with the selected full-model lambda and strength per direction; require positive final effective slope; evaluate the mathematically invariant frozen-CNN ranking so floating-point tie perturbations do not create artificial selection differences; retain transformed scores",
+  "target": {
+    "contexts": ["defined_tcell_r1", "defined_tcell_r2"],
+    "caps": [1, 2, 4, 8, 16],
+    "seeds": [101, 202, 303, 404, 505],
+    "models": ["frozen_cnn", "corrected_cnn", "affine_only"],
+    "selection_regret": null,
+    "evaluation_count": 1,
+    "primary_cap": 16,
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261124,
+    "bootstrap_cluster": "pool; combined analysis resamples all 32 pools",
+    "success": [
+      "both repeat cap16 corrected-minus-frozen mean regret differences are negative",
+      "combined pool-cluster bootstrap 95th percentile CI upper bound is below zero",
+      "combined absolute mean regret reduction is at least max(0.1 MRL, 5 percent of combined frozen baseline regret)",
+      "all isolation, CUDA, numerical, training and calibration logs pass"
+    ],
+    "secondary_holm_family": "six repeat-specific cap2/4/8 corrected-minus-frozen effects"
+  },
+  "forbidden": "No T-cell MRL for training, calibration, feature/lambda/strength/subset selection, early stopping, gating, or method changes. No post-target scientific changes.",
+  "local_export": "Aggregates, coefficients, configs, code and logs only; no sequence strings or sequence-level labels/predictions."
+}

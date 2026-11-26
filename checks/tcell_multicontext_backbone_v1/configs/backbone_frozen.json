@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "tcell_multicontext_backbone_v1",
+  "frozen_date": "2026-11-26",
+  "scientific_hypothesis": "A same-capacity CNN trained on legal multi-context Sample data with context-train-only target scaling and a dynamic predicted-high-tail pairwise logistic objective improves equal-budget T-cell MRL selection relative to the frozen original Sample CNN.",
+  "evidence_boundary": "Retrospective method development/protocol sensitivity only; historical outer results were previously inspected. Not a new blind test or prospective confirmation.",
+  "workspace": "/home/proxy-function-gap-tcell-backbone",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_multicontext_backbone_v1",
+  "sample": {
+    "sequence_index": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_sample2019_v1/sequence_index.tsv.gz",
+    "role_assignments": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_split_v2/role_assignments_v2.tsv.gz",
+    "source_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/data_manifest.json",
+    "original_data_manifest": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/fresh_proxy_cnn_v2/training/formal_run1/input_v2/data_manifest.json",
+    "contexts": [
+      "eGFP|unmod|1",
+      "eGFP|unmod|2",
+      "eGFP|pseudo|1",
+      "eGFP|pseudo|2",
+      "eGFP|m1pseudo|1",
+      "eGFP|m1pseudo|2",
+      "mCherry|unmod|1",
+      "mCherry|unmod|2",
+      "eGFP|unmod|designed_single_assay"
+    ],
+    "normalization": "Use the previously validated sample2019-fixed-utr-v1 normalized_sequence; require exactly 50 ACGT and finite measured_rl. No varying-length rows.",
+    "legal_roles": "original_evolution random-library rows in train/development/historical_measured_state_outer, plus designed rows only when original E1_pool_eligible=true. Exclude official seen/boundary, scaler/control/quarantine, unsupported and non-50nt rows.",
+    "target_exclusion": "Read only utr/UTR sequence keys from both raw T-cell files. Exclude any Sample exact/H1 match and its entire allocation_unit_id before splitting; never access T-cell rl.",
+    "split": "Deterministic SHA256('tcell_multicontext_backbone_v1|'+allocation_unit_id) integer modulo 10: 0=dev, otherwise train. Existing exact/H1/trajectory allocation components remain intact.",
+    "original_ablation_data": "Use the unchanged original fresh-CNN train/dev pack, including only its original eGFP unmod r1 and designed roles; no resplit.",
+    "target_standardization": "For each context independently, mean and population SD from that context's train rows only; zero SD fails. Network outputs remain in standardized score units for zero-shot ranking."
+  },
+  "model": {
+    "architecture": "FreshSampleCNN unchanged: Conv1d(4,32,k5)-ReLU-MaxPool1d(2)-Conv1d(32,64,k5)-ReLU-global-mean-Flatten-Linear(64,32)-ReLU-Linear(32,1)",
+    "capacity_changes_forbidden": true,
+    "dtype": "float32",
+    "device": "cuda:0",
+    "seeds": [11, 23, 37],
+    "memory_fraction_per_seed": 0.28,
+    "parallelism": "Three seed processes in parallel after a real CUDA three-process memory probe; queue by seed only if capacity fails.",
+    "pool_size": 64,
+    "pools_per_batch": 16,
+    "batch_size": 1024,
+    "learning_rate": 0.001,
+    "optimizer": "Adam",
+    "lambda_grid": [0.01, 0.1, 1.0],
+    "objective": "Equal-context total MSE plus lambda times equal-context dynamic-tail pairwise logistic loss. Within each context every pool has equal total pair weight; exact label-tied pairs have zero weight. MSE is weighted so each context has equal total epoch weight.",
+    "dynamic_tail": "At every training and dev batch, detach current predictions only for top16 membership; all 120 ordered-by-index unordered pairs per pool, softplus(-sign(y_i-y_j)*(p_i-p_j)); gradients flow through selected pair scores.",
+    "convergence": "Original DualPlateau on train and dev combined objective, min_delta=0.0001, patience=5; any absolute dev best resets plateau. No maximum epoch.",
+    "best_epoch": "Absolute best dev combined objective; finite train/dev losses and real CUDA required at every epoch.",
+    "min_delta": 0.0001,
+    "patience": 5,
+    "scientific_max_epoch": null
+  },
+  "model_roles": {
+    "baseline": "Frozen original three-member Sample CNN ensemble; no retraining.",
+    "main": "Extended multi-context data, joint MSE+dynamic-tail rank; lambda selected separately from the frozen grid.",
+    "extended_mse_only": "Extended multi-context data, MSE only; preregistered data-attribution ablation.",
+    "original_mse_tail_rank": "Unchanged original train/dev data, joint MSE+dynamic-tail rank; lambda selected separately; preregistered rank-loss-attribution ablation."
+  },
+  "auxiliary": {
+    "input_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_residual_bstrict_v1/auxiliary",
+    "contexts": ["n50_hek293t_r1", "defined_hepg2_r1"],
+    "directions": ["n50_hek293t_r1_to_defined_hepg2_r1", "defined_hepg2_r1_to_n50_hek293t_r1"],
+    "split_values": {"train": 0, "dev": 1, "test": 2},
+    "refilter": "Before any new-model inference, remove every old auxiliary row with exact/H1 match to any extended Sample train/dev sequence. Existing exact/H1 component split assignments and strict target exclusions remain unchanged.",
+    "pool_rule": "Reuse deterministic SHA256(context|split|sequence) complete nonoverlapping 64-item pools after refiltering.",
+    "proposal_seeds": [101, 202, 303, 404, 505],
+    "cap": 16,
+    "lambda_selection": "For each rank variant independently, ensemble its three seeds and minimize the mean of normalized cap16 regret over all Sample dev contexts and both auxiliary source-inner dev contexts. Normalize each context regret by its own train target SD. Destination dev and test are forbidden. Ties within 1e-12 use dev combined objective then smaller lambda.",
+    "destination_test_evaluations_per_direction": 1,
+    "gate": {
+      "effect": "main_ensemble_minus_frozen_original_CNN_cap16_regret",
+      "point_requirement": "strictly_negative_in_each_direction",
+      "ci_requirement": "pool-cluster 95% percentile upper strictly below zero in each direction",
+      "bootstrap_replicates": 10000,
+      "bootstrap_seed": 20261126,
+      "cluster": "destination auxiliary test pool; mean over five seeds before resampling pools",
+      "both_directions_required": true,
+      "failure_action": "stop_without_reading_or_scoring_T_cell"
+    }
+  },
+  "target_if_and_only_if_dual_gate_pass": {
+    "anchor_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_cross_cell_anchor_v1",
+    "contexts": ["defined_tcell_r1", "defined_tcell_r2"],
+    "raw": {
+      "defined_tcell_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r1.csv.gz",
+      "defined_tcell_r2": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r2.csv.gz"
+    },
+    "raw_sha256": {
+      "defined_tcell_r1": "87e42c4c871eb061db7de187cec221d4343948c0abeb75d3fa8105f466edbc09",
+      "defined_tcell_r2": "d701431fcabcf0984baae5f5aa8379018775cae704e5cabaab45e06d49ee5015"
+    },
+    "evaluation_count": 1,
+    "models": ["baseline", "main", "extended_mse_only", "original_mse_tail_rank"],
+    "caps": [1, 2, 4, 8, 16],
+    "proposal_seeds": [101, 202, 303, 404, 505],
+    "shared_nested_prefix": true,
+    "primary_cap": 16,
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261124,
+    "bootstrap_cluster": "16 repeat-linked pools; both repeats and five proposal seeds move together",
+    "success": [
+      "both repeat cap16 main-minus-baseline mean regret effects are strictly negative",
+      "combined repeat-linked block bootstrap 95% percentile CI upper is strictly below zero",
+      "combined absolute reduction is at least max(0.1 MRL, 5% of combined baseline regret)",
+      "all isolation, finite-loss, real-CUDA, convergence and best-epoch records pass"
+    ],
+    "secondary_holm_family": "six repeat-specific cap2/4/8 main-minus-baseline effects",
+    "ablations": "Evaluate both frozen ablation ensembles once at all caps for attribution; they do not relax the main gate or success rule.",
+    "post_target_protocol_changes_forbidden": true
+  },
+  "verification_rounds": [
+    "Round 1 raw/input hashes, target-label-blind preparation, exact/H1 allocation and target isolation, focused tests and real CUDA memory probe",
+    "Round 2 standalone independent source-inner selection, destination test regret/bootstrap, checkpoint/history/numerical audit without importing training modules",
+    "Round 3 clean-process tests, deterministic replay/hash audit, fail-closed target count and local forbidden-export scan"
+  ],
+  "local_export": "De-identified aggregates, configs, code, logs, curves and verification only; no sequence strings, per-sequence labels or predictions.",
+  "no_push": true
+}

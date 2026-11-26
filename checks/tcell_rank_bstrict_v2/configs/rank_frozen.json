@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "tcell_rank_bstrict_v2",
+  "frozen_date": "2026-11-26",
+  "evidence_boundary": "Retrospective method development/protocol sensitivity only; historical outer results were previously inspected. Not a new blind test or prospective confirmation.",
+  "v1_input_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_residual_bstrict_v1",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_rank_bstrict_v2",
+  "v1_read_only": true,
+  "contexts": ["n50_hek293t_r1", "defined_hepg2_r1"],
+  "directions": ["n50_hek293t_r1_to_defined_hepg2_r1", "defined_hepg2_r1_to_n50_hek293t_r1"],
+  "split_values": {"train": 0, "dev": 1, "test": 2},
+  "features_in_order": ["p", "p2", "gc", "uAUG", "longest_poly_u", "intercept"],
+  "feature_scaling": "source train all-row mean and population SD for five nonintercept features; zero SD fails; intercept fixed to zero in pairwise coefficient vector",
+  "sample_train_sd": 1.6689551812138181,
+  "deployment": "corrected = p + sample_train_sd * strength * X_scaled_dot_beta",
+  "pair_construction": {
+    "pool_rule": "reuse deterministic v1 sha256(context|train|sequence) complete nonoverlapping 64-item pools",
+    "tail": "frozen CNN full-pool top16 by stable descending score before labels are used",
+    "tail_k": 16,
+    "pairs_per_pool": "all 120 unordered pairs within the fixed tail",
+    "label": "sign(y_i-y_j); exact MRL ties receive zero weight",
+    "weight": "each source train pool has equal total weight; nontied pairs within a pool have equal weight; global weights sum to one",
+    "frozen_before_training": true
+  },
+  "objective": "weighted softplus(-label * (p_i-p_j + sample_train_sd * (z_i-z_j) dot beta)) + lambda * beta_dot_beta",
+  "solver": {
+    "method": "convex damped Newton with Armijo backtracking",
+    "device": "cuda:0",
+    "dtype": "float64",
+    "gradient_inf_tolerance": 1e-8,
+    "relative_loss_tolerance": 1e-12,
+    "loss_stopping_gradient_inf_max": 1e-5,
+    "scientific_iteration_cap": null,
+    "armijo_step_cap": null,
+    "condition_number_max": 1e12,
+    "finite_required": true
+  },
+  "lambda_grid": [0.0, 0.000001, 0.0001, 0.01, 1.0, 100.0],
+  "strength_grid": [0.0, 0.25, 0.5, 0.75, 1.0],
+  "selection": {
+    "role": "source_inner_dev_only",
+    "primary_metric": "cap16_bon_mean_regret",
+    "cap": 16,
+    "seeds": [101, 202, 303, 404, 505],
+    "tie_tolerance": 1e-12,
+    "tie_breakers_in_order": ["source_dev_pairwise_logistic_loss", "larger_lambda", "smaller_strength"],
+    "destination_dev_forbidden": true,
+    "destination_test_evaluations": 1
+  },
+  "auxiliary_gate": {
+    "effect": "corrected_minus_frozen_cap16_regret",
+    "point_requirement": "strictly_negative_in_each_direction",
+    "ci_requirement": "pool_cluster_bootstrap_95_percentile_upper_strictly_below_zero_in_each_direction",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261126,
+    "cluster": "target auxiliary test pool; mean over five seeds before resampling pools with replacement",
+    "both_directions_required": true,
+    "failure_action": "stop_without_reading_or_scoring_T_cell"
+  },
+  "target_if_and_only_if_dual_gate_pass": {
+    "contexts": ["defined_tcell_r1", "defined_tcell_r2"],
+    "deployment": "equal weight mean of the two selected directional corrections, including their selected strengths; no refit after auxiliary test",
+    "caps": [1, 2, 4, 8, 16],
+    "seeds": [101, 202, 303, 404, 505],
+    "evaluation_count": 1,
+    "primary_cap": 16,
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261124,
+    "bootstrap_cluster": "repeat-linked pool block; all repeats and five seeds move together",
+    "success": [
+      "both repeat cap16 corrected-minus-frozen mean regret differences are negative",
+      "combined repeat-linked block bootstrap 95th percentile CI upper bound is below zero",
+      "combined absolute mean regret reduction is at least max(0.1 MRL, 5 percent of combined frozen baseline regret)",
+      "all isolation, CUDA, numerical, training and calibration logs pass"
+    ],
+    "secondary_holm_family": "six repeat-specific cap2/4/8 corrected-minus-frozen effects",
+    "post_target_protocol_changes_forbidden": true
+  },
+  "verification_rounds": [
+    "round1 implementation, strict input hashes/isolation, focused synthetic and regression tests",
+    "round2 independent auxiliary pair/loss/optimizer/selection/regret/bootstrap recomputation and deterministic replay",
+    "round3 clean-process delivery verification, tests, hashes and forbidden-export audit"
+  ],
+  "forbidden": "No T-cell MRL for training, calibration, pair construction, feature/lambda/strength/subset selection, early stopping, gating, or method changes. No target read if either auxiliary gate fails. No post-target scientific changes.",
+  "local_export": "Aggregates, coefficients, configs, code and logs only; no sequence strings or sequence-level labels/predictions."
+}

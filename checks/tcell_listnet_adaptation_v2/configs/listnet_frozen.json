@@ -1,0 +1,102 @@
+{
+  "schema_version": "2.0",
+  "analysis_id": "tcell_listnet_adaptation_v2",
+  "frozen_date": "2026-11-26",
+  "scientific_hypothesis": "On the frozen v1 50k target-train groups, replacing prediction-tail pairwise logistic supervision with full-group true-label ListNet cross-entropy improves reproducible r1/r2-average T-cell MRL selection relative to both the original Sample CNN and frozen v1 main on a new component-disjoint 16x64 test-v2.",
+  "sole_core_modification": "Within each fixed complete 64-sequence source-train group, ListNet cross-entropy is -sum_i softmax(y/tau)_i * log_softmax(p/tau)_i. The objective is ListNet + mse_weight*MSE. All 64 candidates participate; no prediction-derived tail or pair is constructed.",
+  "evidence_boundary": "Target-context retrospective grouped holdout. v1 train/dev labels are reused for adaptation and selection. test-v2 is newly constructed from the original terminal pool after excluding every exact/H1 component touching v1 train/dev/test and Sample train/dev/calibration. Historical outer results were previously inspected. This is not an independent study, external validation, prospective blind test, or wet-lab confirmation.",
+  "workspace": "/home/proxy-function-gap-tcell-listnet",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_listnet_adaptation_v2",
+  "v1_artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_target_adaptation_v1",
+  "raw": {
+    "defined_tcell_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r1.csv.gz",
+    "defined_tcell_r2": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r2.csv.gz"
+  },
+  "raw_sha256": {
+    "defined_tcell_r1": "87e42c4c871eb061db7de187cec221d4343948c0abeb75d3fa8105f466edbc09",
+    "defined_tcell_r2": "d701431fcabcf0984baae5f5aa8379018775cae704e5cabaab45e06d49ee5015"
+  },
+  "sample_roles": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+  ],
+  "sample_sha256": {
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz": "3a58f2558cd1cffc55877bd940e5512fca62513d054c55da18a85fa8daf71677",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz": "6345bb51e0e1c9529235ff1ffb2e599a78a85a98007f1b9d247720629c40a60c",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz": "f6d87787325e0918c802edf83f2b26e368a9f197f4e61b6f0e2684c1c1e86730"
+  },
+  "split": {
+    "train_dev_reuse": "Reuse v1 frozen 50,000 train and 10,000 dev indices, arithmetic mean-replicate labels, fixed sequence pools and dev proposals without reconstruction or relabeling.",
+    "test_v2_exclusion": "Reconstruct exact/H1 connected components over the 314,563 common 50nt ACGT r1/r2 sequence keys. Exclude a whole component if any member belongs to v1 train/dev/test. Also exclude any component with exact/H1 contact to Sample train/dev/calibration. No target label column is accessed during selection.",
+    "component_order": "SHA256('tcell_listnet_adaptation_v2|component|'+SHA256 of sorted concatenated member sequences), component minimum sequence as deterministic tie key.",
+    "test_unique_sequences": 1024,
+    "test_pools": 16,
+    "test_pool_size": 64,
+    "test_allocation": "Allocate exactly 1,024 eligible sequences by frozen whole-component order with skip-if-oversize. Pack the chosen whole components into 16 exact 64-sequence pools by the same rule; components cannot cross pools. r1/r2 share all pools and proposal prefixes.",
+    "label_rule": "Only v1 frozen train/dev mean labels are loaded before evaluation. test-v2 r1/r2 labels may be read only by evaluate.py after all models and all test-v2 predictions are hash-frozen, in one refuse-overwrite evaluation event."
+  },
+  "model": {
+    "architecture": "FreshSampleCNN unchanged: Conv1d(4,32,k5)-ReLU-MaxPool1d(2)-Conv1d(32,64,k5)-ReLU-global-mean-Flatten-Linear(64,32)-ReLU-Linear(32,1)",
+    "inference_config": "/home/proxy-function-gap-tcell-residual/configs/ensemble_inference_v1.json",
+    "baseline": "Frozen original three-member Sample CNN arithmetic mean in measured-MRL units.",
+    "v1_reuse": "Read-only reuse of frozen v1 main and MSE-only selections and their three best-dev checkpoints. No v1 model, from-scratch model or MSE-only model is retrained.",
+    "initialization": "Every ListNet run for seeds 11/23/37 starts from the corresponding frozen original Sample CNN member model_state.",
+    "seeds": [11, 23, 37],
+    "parallelism": "Three real CUDA seed processes in parallel; no silent CPU fallback.",
+    "device": "cuda:0",
+    "dtype": "float32",
+    "memory_fraction_per_seed": 0.28,
+    "optimizer": "Adam",
+    "learning_rate_grid": [0.00001, 0.0001, 0.001],
+    "temperature_grid": [0.5, 1.0, 2.0],
+    "mse_weight_grid": [0.1, 1.0, 10.0],
+    "pool_size": 64,
+    "pools_per_batch": 16,
+    "target_scaling": "Standardize frozen v1 50k mean-replicate MRL with train-only mean and population SD; apply the same scaler to dev. Both prediction and true-MRL softmaxes use standardized values divided by temperature. Deployment scores are unstandardized network outputs; only order matters.",
+    "objective": "Mean over complete fixed pools of full-64 ListNet cross-entropy plus mse_weight times mean-pool MSE. MSE retains the final partial pool. ListNet never uses current predictions to choose candidates, tails or pairs.",
+    "convergence": "DualPlateau on full train and dev combined objective: min_delta=0.0001, patience=5; any absolute dev best resets plateau. No maximum epoch.",
+    "min_delta": 0.0001,
+    "patience": 5,
+    "scientific_max_epoch": null,
+    "best_epoch": "Absolute best dev combined objective. Save complete history, best checkpoint and model/hash identity."
+  },
+  "selection": {
+    "proposal_seeds": [101, 202, 303, 404, 505],
+    "proposal_rule": "test-v2 uses Python random.Random('tcell_listnet_adaptation_v2|test_v2|pool_index|seed'), floor(random()*64) for 16 nested draws with replacement. Dev reuses v1 proposals.",
+    "caps": [1, 2, 4, 8, 16],
+    "primary_cap": 16,
+    "dev_metric": "For each of 27 LR/temperature/MSE-weight candidates, average all three seed best-checkpoint scores and minimize cap16 regret against mean-replicate dev MRL over 156 complete pools and five shared nested proposal seeds.",
+    "tie_rule": "Ties within 1e-12 use lower mean dev combined objective at best epochs, then lower LR, lower temperature and lower MSE weight.",
+    "test_freeze": "All 81 ListNet runs, dev selection, original/v1 reused weights and every test-v2 prediction must be hash-frozen before test-v2 MRL is read. Temperature, MSE weight, LR, seed membership, cap and budget cannot change after prediction freeze or label evaluation."
+  },
+  "evaluation": {
+    "evaluation_count": 1,
+    "methods": ["original_cnn", "v1_main", "v1_mse_only", "listnet"],
+    "regret": "Full 64-sequence pool maximum measured MRL minus selected measured MRL. The primary estimand uses per-sequence arithmetic mean of r1/r2 MRL; r1 and r2 are separately complete secondary estimands.",
+    "random": "Random(N) selects the first position of the exact same nested proposal prefix used by every scored method; cap1 deterministic methods coincide.",
+    "effect_sign": "ListNet regret minus comparator regret; negative is improvement.",
+    "primary": "Two co-primary cap16 mean-replicate comparisons: ListNet versus original CNN and ListNet versus frozen v1 main. Both must pass; neither can offset the other.",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261126,
+    "bootstrap_unit": "16 repeat-linked and exact/H1-component-disjoint pools; r1/r2 are averaged after per-sequence pairing and all five proposal seeds move together within each pool. Percentile 95% CI.",
+    "success": [
+      "For each of the two primary comparisons, the repeat-linked 95% CI upper bound is strictly below zero.",
+      "For each comparison, absolute cap16 regret reduction is at least max(0.1 MRL, 5% of that comparator's mean-replicate cap16 regret).",
+      "All v1/test-v2/Sample isolation, finite loss, real CUDA, natural convergence, prediction-freeze and one-evaluation checks pass."
+    ],
+    "holm_family": "Ten mean-replicate ListNet-minus-comparator effects: two comparators at all caps 1/2/4/8/16. Two-sided sign-style pool-bootstrap p-values with Holm step-down and monotonicity enforcement.",
+    "baseline_bootstrap_seed_offset": {"original_cnn": 0, "v1_main": 1000},
+    "cap_bootstrap_seed_offset": {"1": 0, "2": 10, "4": 20, "8": 30, "16": 40},
+    "secondary": "Retain r1 and r2 separately at every cap for every method and Random(N), with effects and intervals; report top-tail true flips, pair accuracy, selection turnover, MAE/RMSE/bias/Spearman and MAE-regret synchronization for both primary comparators and mean/repeat contexts.",
+    "post_evaluation_changes_forbidden": true,
+    "failure_rule": "A failed primary result is retained. No alternate endpoint, model, temperature, weight, cap, budget or post-hoc success definition is permitted."
+  },
+  "verification_rounds": [
+    "Round 1 raw/input/v1 hashes, label-blind component-disjoint test-v2, fixed groups, ListNet math/gradient and all-position supervision, selection/bootstrap/success tests and real CUDA.",
+    "Round 2 standalone independent re-reader recomputes component isolation, 81 training summaries, dev selection, frozen predictions, all context/cap selections/regret/bootstrap/Holm, primary gates and diagnostics without importing implementation modules.",
+    "Round 3 clean-process tests, deterministic hash/one-evaluation audit, local aggregate export and forbidden per-sequence/raw-file scan."
+  ],
+  "local_export": "De-identified aggregates, configs, code, logs, training curves and verification only; no sequence strings, per-sequence labels or predictions, .npy/.npz/.pt, raw data or test selection indices.",
+  "no_push": true
+}

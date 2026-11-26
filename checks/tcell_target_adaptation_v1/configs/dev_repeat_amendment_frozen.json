@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "amendment_id": "tcell_target_adaptation_v1_dev_repeat_prereview",
+  "frozen_date": "2026-11-26",
+  "base_config_sha256": "7df31364834289e617f3cb48cf11e1c406ef02dc45a8d51a3515782f8a6a042f",
+  "reason": "Independent pre-review required dev model selection not to rely only on the mean-replicate label and obscure a single-repeat failure. This amendment is frozen before any target test inference or test MRL reading; it does not alter training data, model grids, test pools, caps, success thresholds or evaluation results.",
+  "selection_metric": "maximum_of_r1_and_r2_cap16_regret",
+  "selection_rule": "For every main, MSE-only and from-scratch candidate, compute cap16 regret separately with measured dev r1 and dev r2 using the equal-weight three-seed ensemble and the same proposals. Minimize the worse (maximum) of the two repeat-specific regrets. Ties within 1e-12 use mean-replicate cap16 regret, then mean dev combined objective, lower LR and lower lambda.",
+  "train_repeat_equal_weight": "The original frozen arithmetic mean (r1+r2)/2 is retained. For MSE this is exactly equal to 1/2 MSE(r1)+1/2 MSE(r2) up to a parameter-independent constant; each repeat therefore has equal 1/2 label weight. Pairwise supervision remains the preregistered mean-replicate target.",
+  "three_seed_equal_weight": "Every dev and test ensemble is the arithmetic mean of seeds 11/23/37 at their individually natural-converged best checkpoints; no seed is dropped or reweighted.",
+  "from_scratch_fairness": "From-scratch retains the same architecture, target train/dev data, mean-replicate labels, 3x3 LR-lambda grid, three seeds, DualPlateau and worst-repeat dev selection as fine-tuned main.",
+  "nested_rule": "Nested budgets must use the amended selected main LR/lambda. If the earlier mean-only selection differs, earlier nested runs are preserved as superseded development artifacts and excluded from the final 72-run freeze; replacement nested runs use identical budgets and rules.",
+  "test_rule": "All amendment, dev repeat labels, selections and required replacement nested runs must freeze before the single test evaluation. No test result is available at amendment time and no post-test change is allowed.",
+  "code_sha256": {
+    "adaptation.py": "36b436161461669dac8afbe12c8fd4863bee2d85411495cbb9e8353bf0a60728",
+    "prepare.py": "052665dec2c73795c089f0827f9364c19eba906edb9bde3d20b070994687e063",
+    "prepare_dev_repeat_labels.py": "63c0dd5199267ea784608bec22ba26c0a0e10a59148e0a94e197714ebd2c337a",
+    "train.py": "dcfc7f4529550af7b5697cd164c599eeae16261f0fbf8ed84b8d51b5372d9df2",
+    "select_models.py": "f4d67e9af50e61ab07d13462f9f7a86f45e0eab595cd191d70dbba9251709c22",
+    "evaluate.py": "731cf3924a9b4bdbabc2c5d12c13ae5f7d73735d13da774fe12361658ad0bf99",
+    "independent_verify.py": "366f1629d8eff499ae776b668ccc59137ab29547d0c7c22c46bf1828db22643d",
+    "delivery_verify.py": "c5b39019103196ea4f75560f28865491566b8b9ed025700449fc47a78399bbad",
+    "export_delivery.py": "03f9c38bc31079119d3eede3e44379e41561f1ef466d5ee3aabe0ff04c10a118",
+    "tests/test_adaptation.py": "2574e4065457eb29cbfe0f393848eee0ca616b7ccc49442edff48ef031832239"
+  }
+}

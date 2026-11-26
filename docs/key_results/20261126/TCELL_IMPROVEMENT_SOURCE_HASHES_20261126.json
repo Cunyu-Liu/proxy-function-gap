@@ -1,0 +1,653 @@
+{
+  "release_date": "2026-11-26",
+  "base_commit": "2e6a67ca945cf2b525b993773f9e447f530f8b8c",
+  "records": {
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/residual.py": {
+      "sha256": "60171af33971f6519ff82d06b27270a07fd0e3836414578f59ed264b2a9e35b7",
+      "bytes": 10432,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/src/proxy_function_gap/residual.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/residual_auxiliary.py": {
+      "sha256": "0326b6c3f8125bffecd66be44c47c802cac3b56bf95e4cde596683c50e9d2513",
+      "bytes": 8390,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/src/proxy_function_gap/residual_auxiliary.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/residual_prepare.py": {
+      "sha256": "dae50545b1e81eabe33a6c98ca55dd8cef92a75c39a429e81af3af95baac3284",
+      "bytes": 10320,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/src/proxy_function_gap/residual_prepare.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/residual_target.py": {
+      "sha256": "9db42b805cd3e7b1c64867d3b0697be42fe1bc193ad10b25d0ec6495e90953cb",
+      "bytes": 14804,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/src/proxy_function_gap/residual_target.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/residual_verify.py": {
+      "sha256": "0cae9945579f7e9432daae54b8ea5a02ad708acf95c4753baa9706eecfc14e40",
+      "bytes": 14671,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/src/proxy_function_gap/residual_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/scripts/export_delivery.py": {
+      "sha256": "bf6480ce4483edc5b947e2c81c369ffa04b2b394e2e36fcd0fc8cebf49fbe05e",
+      "bytes": 3141,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/scripts/export_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/configs/bstrict_frozen.json": {
+      "sha256": "18da1eddb6e72ed38ceeaa717638c41d50fa459af89e363fde4eec132db674e3",
+      "bytes": 5539,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/configs/bstrict_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/tests/test_residual.py": {
+      "sha256": "24bac46cab9f0cd9f2f5634ac38412128aa0e4fc55ded4d4d4b655aad7592269",
+      "bytes": 4006,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-residual",
+      "source_path": "/home/proxy-function-gap-tcell-residual/tests/test_residual.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/auxiliary.py": {
+      "sha256": "8630083ebbfcacfc9eb78bc423000af3e856d3bab58f39dbbc141053540c6002",
+      "bytes": 9245,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/auxiliary.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/rank.py": {
+      "sha256": "b3d180c1c3daa621a55e7d3cd5681f375c8e80b372596f1f0b5410dd54fb6040",
+      "bytes": 11634,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/rank.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/preflight.py": {
+      "sha256": "525bb18881077fca9a0b5d92809cef799c8076faf5dffc594bcf1665699d272f",
+      "bytes": 3384,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/preflight.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/independent_verify.py": {
+      "sha256": "68ecefb08a051f5e7dc72603bdf40fa2ba3d59150cceda5c821b66d72176aba5",
+      "bytes": 8945,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/independent_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/delivery_verify.py": {
+      "sha256": "dee81b71927255e72fb16643f10ec324f248d5ff62e0f522fee58e5ef4979b3c",
+      "bytes": 3728,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/delivery_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/export_delivery.py": {
+      "sha256": "ceb848e9369d77a32a29d700ce047d92a1b6504bd105f370a40a0e05fbd4dc78",
+      "bytes": 3030,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/export_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/scripts/diagnose_v1.py": {
+      "sha256": "d6808b684b6e85535cb28003ff7630c95a975907da8c488302493f5773f0b29c",
+      "bytes": 7122,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/scripts/diagnose_v1.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/configs/rank_frozen.json": {
+      "sha256": "16c94ae5caaf9bd166b9a61af9505a69ae776b6689838705e005192747b55afd",
+      "bytes": 4964,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/configs/rank_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/tests/rank_frozen.json": {
+      "sha256": "16c94ae5caaf9bd166b9a61af9505a69ae776b6689838705e005192747b55afd",
+      "bytes": 4964,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/tests/rank_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_rank_bstrict_v2/tests/test_rank.py": {
+      "sha256": "51eccea528a442c647a09d2f8703cac124a8b07bec717cd55ba3915655d85ddc",
+      "bytes": 4419,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-rank",
+      "source_path": "/home/proxy-function-gap-tcell-rank/tests/test_rank.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/anchor.py": {
+      "sha256": "23b759f94f916327b1a5686bb3a642ee5ab25ae2ad4060adcadf0a981e3da4aa",
+      "bytes": 6961,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/anchor.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/prepare.py": {
+      "sha256": "e51827949e4ab53fd043438c74be0256452bee57056453266f849c97d489e1a4",
+      "bytes": 8081,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/prepare.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/evaluate.py": {
+      "sha256": "b8b63a4955b8d46604db132eaafff3265fbd6cf12ca6da1e39a833fb3ee7696b",
+      "bytes": 12855,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/evaluate.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/independent_verify.py": {
+      "sha256": "a905fb5c11a370b2fb45c44cf474d38e5202478112564b40ad45363c52b854d8",
+      "bytes": 13244,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/independent_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/delivery_verify.py": {
+      "sha256": "10a275688fe8897feb3a2e26444a9b9e6e046dcbcdaf183a2b1820cdc11935f6",
+      "bytes": 5419,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/delivery_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/export_delivery.py": {
+      "sha256": "6867eeda13afeaf9136db4d2fa1651cdb96926b80957ce9a66eb985ebfae86a4",
+      "bytes": 1695,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/export_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/verify_local_delivery.py": {
+      "sha256": "963fb82e472f39d79770231e6068ac2f98df232a3b92aca7cc74226c6d42c7ba",
+      "bytes": 1565,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/verify_local_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/configs/anchor_frozen.json": {
+      "sha256": "09611fd14cf76588c449e7d5d2fd0a8c3315fb31c5a63690c02b186bce11e2b4",
+      "bytes": 8179,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/configs/anchor_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/tests/test_anchor.py": {
+      "sha256": "fe949604b24399dcf51c3ce8e97bbcdf75b601e54edfff6109b2724414c80493",
+      "bytes": 4886,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/tests/test_anchor.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_cross_cell_anchor_v1/docs/plans/2026-11-26-tcell-cross-cell-anchor.md": {
+      "sha256": "18d1bc78ad6185637a4340e8540475e37770b95aa9cee854e827febcd3b27023",
+      "bytes": 4279,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-anchor",
+      "source_path": "/home/proxy-function-gap-tcell-anchor/docs/plans/2026-11-26-tcell-cross-cell-anchor.md",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/backbone.py": {
+      "sha256": "5687fd5d68578569a62f843e8937d76d54173d162e0e152d72de805f5e328a6c",
+      "bytes": 11975,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/backbone.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/prepare_auxiliary.py": {
+      "sha256": "c863912df6ac3957055df029f8ed584c6858a531ff52b87deeb278c78b514bd2",
+      "bytes": 4430,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/prepare_auxiliary.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/prepare_sample.py": {
+      "sha256": "5f2606603e4cf5db29c10618477cf6866bdfa5b0f329eb9061c30b65acaa6faa",
+      "bytes": 10384,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/prepare_sample.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/train.py": {
+      "sha256": "edf13d0b9b257e64059d88830c22cf8e835c085eafafd02db5332a507018b5fb",
+      "bytes": 9489,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/train.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/select_and_gate.py": {
+      "sha256": "58243377957063815ecc8db2d93237f3488075b7663777aaeffe3011b1591b8b",
+      "bytes": 9822,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/select_and_gate.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/evaluate_target.py": {
+      "sha256": "767558110ad3c16ed8ac129171379167eae11f11ee4a639e14db50b3b0a9c1c0",
+      "bytes": 6766,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/evaluate_target.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/independent_verify.py": {
+      "sha256": "277a3f6667c633030260c2d878b8decabc35aa06b56804af521dc8e99e72bc87",
+      "bytes": 7107,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/independent_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/delivery_verify.py": {
+      "sha256": "90882befcf0cec0f6bb6d52b5eacd08a7ab44d77547a7410b2e3e2a5c01d9430",
+      "bytes": 2609,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/delivery_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/configs/backbone_frozen.json": {
+      "sha256": "02cbfca7ae4feff294fa99deedf0ee5169088d8eb83429e6df40f6ea55c952b5",
+      "bytes": 9039,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/configs/backbone_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_multicontext_backbone_v1/tests/test_backbone.py": {
+      "sha256": "d4aa2192bb046e9ec6baf7acdf87fa76464c7fc6828c1883297f3e79ef430720",
+      "bytes": 3910,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-backbone",
+      "source_path": "/home/proxy-function-gap-tcell-backbone/tests/test_backbone.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/adaptation.py": {
+      "sha256": "36b436161461669dac8afbe12c8fd4863bee2d85411495cbb9e8353bf0a60728",
+      "bytes": 14378,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/adaptation.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/prepare.py": {
+      "sha256": "052665dec2c73795c089f0827f9364c19eba906edb9bde3d20b070994687e063",
+      "bytes": 12442,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/prepare.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/prepare_dev_repeat_labels.py": {
+      "sha256": "63c0dd5199267ea784608bec22ba26c0a0e10a59148e0a94e197714ebd2c337a",
+      "bytes": 3121,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/prepare_dev_repeat_labels.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/train.py": {
+      "sha256": "dcfc7f4529550af7b5697cd164c599eeae16261f0fbf8ed84b8d51b5372d9df2",
+      "bytes": 10829,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/train.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/select_models.py": {
+      "sha256": "f4d67e9af50e61ab07d13462f9f7a86f45e0eab595cd191d70dbba9251709c22",
+      "bytes": 8077,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/select_models.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/evaluate.py": {
+      "sha256": "7566188a08f3f68c71ac109bfa70710c3b74ab02dd37e56c428ae476378ed6a2",
+      "bytes": 16750,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/evaluate.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/fix_learning_curve_aggregate.py": {
+      "sha256": "aa526b43d61803c15f79b3a7f6d6e8792d712e33704dc10df70c9cb1374ff2e5",
+      "bytes": 2971,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/fix_learning_curve_aggregate.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/independent_verify.py": {
+      "sha256": "bc40c6352b3348802b26344bfe031dec70e60464a78d7f57c76ea9ad7b50acc7",
+      "bytes": 13830,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/independent_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/delivery_verify.py": {
+      "sha256": "d903b5400b9a18494685723c18fa4c62494d2cd71ea9b5e8f0df6a0240082f1e",
+      "bytes": 4030,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/delivery_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/export_delivery.py": {
+      "sha256": "19182098998c65eeb1e1b50c18207471f62e75fd554c103879159e160660ec93",
+      "bytes": 2737,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/export_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/configs/adaptation_frozen.json": {
+      "sha256": "7df31364834289e617f3cb48cf11e1c406ef02dc45a8d51a3515782f8a6a042f",
+      "bytes": 10729,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/configs/adaptation_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/configs/dev_repeat_amendment_frozen.json": {
+      "sha256": "2777178b6d431b6bc945714ad776c15deffa1efcb410353f46585cf5e0ed74ff",
+      "bytes": 3192,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/configs/dev_repeat_amendment_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_target_adaptation_v1/tests/test_adaptation.py": {
+      "sha256": "2574e4065457eb29cbfe0f393848eee0ca616b7ccc49442edff48ef031832239",
+      "bytes": 5052,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-adaptation",
+      "source_path": "/home/proxy-function-gap-tcell-adaptation/tests/test_adaptation.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/adaptation.py": {
+      "sha256": "81f67481a43da9d16651ed0cf14398a5cecf8c024c36e55e9b4ae43b0db3d82d",
+      "bytes": 15658,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/adaptation.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/prepare.py": {
+      "sha256": "42e84eec26ad30cbc665a926e03ee191e53f84dc6fc87e48a7dc1b926bc7c6b7",
+      "bytes": 11023,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/prepare.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/train.py": {
+      "sha256": "e80b41d436a03b8027cf0c15393ec36a7ff8cf97decb261fe82f9c89816211ad",
+      "bytes": 10714,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/train.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/select_models.py": {
+      "sha256": "4845761829bff4d0c303bde8e9c47fc0daf61d5bb15a0190126dcfa015a64fa6",
+      "bytes": 5868,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/select_models.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/freeze_predictions.py": {
+      "sha256": "4cb4b39b795dd9b946e454c61948f8c5d72c4427a430cd1c04b607d82c47a1cd",
+      "bytes": 5586,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/freeze_predictions.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/evaluate.py": {
+      "sha256": "c5148efcea177ffdec49c81a3774eb9ddc0071ab79f9c12ec97e4aa8e1241160",
+      "bytes": 13455,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/evaluate.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/independent_verify.py": {
+      "sha256": "5fac757610f2242b74fe25143529fcc82b71b705d0b7fb639bca08e9cf0d2d33",
+      "bytes": 21535,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/independent_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/delivery_verify.py": {
+      "sha256": "01447ed769c538de3c74f7c41dc444b58daf734e937069c43c6881a87d94c939",
+      "bytes": 4073,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/delivery_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/export_delivery.py": {
+      "sha256": "e1949ff369608e6ba11b7c4ed8439a0b54a1ab8af2a04a439beb55afa1470d39",
+      "bytes": 2702,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/export_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/configs/listnet_frozen.json": {
+      "sha256": "f7d7c2fc38b5d32d4e7f648b47f6894f3072c7870a869eddca3d8e46a76587e2",
+      "bytes": 10516,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/configs/listnet_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/tests/test_listnet.py": {
+      "sha256": "2669288f70a0f911c1585eeb01ecaccc31bddc39aa32ded922b57d24612fc788",
+      "bytes": 6265,
+      "source_kind": "remote_workspace",
+      "source_root": "/home/proxy-function-gap-tcell-listnet",
+      "source_path": "/home/proxy-function-gap-tcell-listnet/tests/test_listnet.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/frozen_protocol.json": {
+      "sha256": "f6b481e634d3d565f12efedf6ce1acd4d8d7e58388d281f4e0c3b573e1209d48",
+      "bytes": 1055,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/frozen_protocol.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/independent_verify.py": {
+      "sha256": "c89dd0e0317626d5d714257c64d0c8c4f666cb88ddc8cbcc1df410e0b313b9b6",
+      "bytes": 15308,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/independent_verify.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/run_analysis.py": {
+      "sha256": "ad43af6deaa4eaf29655bcd1146e9a67d2ba8184406fa67051f882fce758bcc5",
+      "bytes": 32691,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/run_analysis.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/tests/test_analysis.py": {
+      "sha256": "cd15a72f408409064b11f755a6b254d6e0ad0de4441dee8c79f11c997b3c9025",
+      "bytes": 1591,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/tests/test_analysis.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/verify_delivery.py": {
+      "sha256": "db39495057fe448416228cc352e5bf8d83ff5af6432772ee029564f3df7f237a",
+      "bytes": 7282,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/verify_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/verify_local_delivery.py": {
+      "sha256": "dc329d08e971bdb4f831bbc8b1f73d714b3edb0461f431fbdee9126174d6a7e8",
+      "bytes": 2486,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/verify_local_delivery.py",
+      "source_hash_match": true
+    },
+    "checks/tcell_error_diagnosis_v1/PROTOCOL.md": {
+      "sha256": "a99afeddf62e3e4030231b985280dfbf826e7a88f49ccc6789c32cb6a39dbad5",
+      "bytes": 8277,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_error_diagnosis_v1",
+      "source_path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/PROTOCOL.md",
+      "source_hash_match": true
+    },
+    "checks/tcell_listnet_adaptation_v2/configs/statistical_clarification_frozen.json": {
+      "sha256": "fa8bc291cc3d2d029c947a89f947e24021a5e83e6681db03b148a30c7857ac96",
+      "bytes": 1596,
+      "source_kind": "local_frozen_snapshot",
+      "source_root": "deliverables/reports/source_data/tcell_listnet_adaptation_v2",
+      "source_path": "deliverables/reports/source_data/tcell_listnet_adaptation_v2/configs/statistical_clarification_frozen.json",
+      "source_hash_match": true
+    },
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/__init__.py": {
+      "sha256": "a8415eab7cae7f7950295b1e00b98bf1a3ccf1fa424b9e01ff9a6bcb4d0cde19",
+      "bytes": 76,
+      "source_kind": "archive_packaging_adapter",
+      "source_root": ".pool_staging",
+      "source_path": ".pool_staging/tcell_residual_package_init.py",
+      "source_hash_match": true
+    },
+    "docs/TCELL_ERROR_DIAGNOSIS_V1.md": {
+      "sha256": "c5d59316820c42dfa3a73e89b2a0cb2ba157ad6ec18d3066c49ddb28e5c9ceb4",
+      "bytes": 18225,
+      "source_kind": "local_frozen_report",
+      "source_root": ".",
+      "source_path": "TCELL_ERROR_DIAGNOSIS_V1.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_RANK_BSTRICT_V2.md": {
+      "sha256": "be8151b272cb18bca60e623830aea51a2084900ff54f61260f96474388cc5df6",
+      "bytes": 11328,
+      "source_kind": "local_frozen_report",
+      "source_root": ".",
+      "source_path": "TCELL_RANK_BSTRICT_V2.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_CROSS_CELL_ANCHOR_V1.md": {
+      "sha256": "a3f64a6dee1e3ef55f42d82abdc697c35a870b6f00c6aa4d3a3e95f65dd2b724",
+      "bytes": 9607,
+      "source_kind": "local_frozen_report",
+      "source_root": ".",
+      "source_path": "TCELL_CROSS_CELL_ANCHOR_V1.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_MULTICONTEXT_BACKBONE_V1.md": {
+      "sha256": "96125bfc5594a14eaf3cacd799e805280a063f19fab46c9684a30743cf549868",
+      "bytes": 9956,
+      "source_kind": "local_frozen_report",
+      "source_root": ".",
+      "source_path": "TCELL_MULTICONTEXT_BACKBONE_V1.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_TARGET_ADAPTATION_V1.md": {
+      "sha256": "df21fbb8567c9db9f26b423bd43a4c44880678203e4646ae335c816405fff7dd",
+      "bytes": 13023,
+      "source_kind": "local_frozen_report",
+      "source_root": ".",
+      "source_path": "TCELL_TARGET_ADAPTATION_V1.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_LISTNET_ADAPTATION_V2.md": {
+      "sha256": "459b3427f85cc0711d834e477670e26edd68105cb36505e3dae60a1553dfc9ad",
+      "bytes": 15840,
+      "source_kind": "local_frozen_report",
+      "source_root": ".",
+      "source_path": "TCELL_LISTNET_ADAPTATION_V2.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_RESIDUAL_BSTRICT_V1.md": {
+      "sha256": "7de88a3fbbf6ebc26388ef50825f235966ff0017ba53fb67fe86ee1b92036863",
+      "bytes": 6178,
+      "source_kind": "local_frozen_report",
+      "source_root": "deliverables/reports/docs",
+      "source_path": "deliverables/reports/docs/TCELL_RESIDUAL_BSTRICT_V1.md",
+      "source_hash_match": true
+    },
+    "docs/TCELL_IMPROVEMENT_RELEASE_20261126.md": {
+      "sha256": "e38b95cdf8aeda5352f52ebef10831d732abbd75083b20ffed8bc64d3da18342",
+      "bytes": 4799,
+      "source_kind": "release_summary",
+      "source_root": ".pool_staging",
+      "source_path": ".pool_staging/TCELL_IMPROVEMENT_RELEASE_20261126.md",
+      "source_hash_match": true
+    }
+  },
+  "record_count": 79,
+  "diagnosis_recovery": {
+    "workspace": "/home/proxy-function-gap-tcell-diagnosis",
+    "workspace_present": false,
+    "remote_artifact": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_error_diagnosis_v1",
+    "remote_source_snapshot_present": false,
+    "actual_source": "local frozen code snapshot previously synchronized from the remote workspace",
+    "hash_authority": "deliverables/reports/source_data/tcell_error_diagnosis_v1/artifact_manifest.json",
+    "files_recovered": 7,
+    "hash_mismatches": 0
+  },
+  "scientific_code_modified": false,
+  "packaging_adapters": [
+    "checks/tcell_residual_bstrict_v1/src/proxy_function_gap/__init__.py"
+  ]
+}

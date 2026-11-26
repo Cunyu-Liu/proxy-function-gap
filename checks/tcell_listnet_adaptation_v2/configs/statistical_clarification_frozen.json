@@ -1,0 +1,12 @@
+{
+  "analysis_id": "tcell_listnet_adaptation_v2",
+  "frozen_before_test_v2_prediction_and_label_evaluation": true,
+  "base_config_sha256": "f7d7c2fc38b5d32d4e7f648b47f6894f3072c7870a869eddca3d8e46a76587e2",
+  "scientific_success_rule_changed": false,
+  "primary_inference": "Joint co-primary intersection-union test (IUT): ListNet versus original CNN and ListNet versus v1 main must each have an unadjusted two-sided 95% percentile repeat-linked pool-bootstrap CI strictly below zero and meet its own frozen minimum effect. Passing the joint claim does not make either interval a Holm-adjusted simultaneous interval.",
+  "secondary_multiplicity": "Holm-10 over two comparators by five caps is a secondary all-cap multiplicity family. Interpret it only after the joint primary gate passes; if the primary fails, other caps are descriptive. Repeat-specific intervals and p-values are secondary descriptive and have no separate confirmatory multiplicity family.",
+  "offline_scoring": "Each of four methods scores all 1,024 test-v2 sequences with three members: 3,072 member-item forwards per method and 3x64 per pool. Selection then uses only each shared N-item proposal prefix offline. cap16 is a proposal/selection budget, not 16 model forwards per pool.",
+  "search_budget": "ListNet used 27 candidates x 3 seeds; historical v1 main used 9 candidates x 3 seeds. Architecture, target labels, dev metric, proposals and deployment seeds are shared, but total training compute and dev search budgets are not equal.",
+  "test_v2_mrl_read_at_freeze": false,
+  "test_v2_predictions_at_freeze": false
+}

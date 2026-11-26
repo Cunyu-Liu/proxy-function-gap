@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "tcell_target_adaptation_v1",
+  "frozen_date": "2026-11-26",
+  "scientific_hypothesis": "A small amount of target-context supervision can repair high-score tail selection in T-cell: fine-tuning the frozen Sample CNN on grouped target-context sequences with joint MSE and dynamic-top16 pairwise logistic loss reduces equal-budget cap16 regret relative to the original CNN.",
+  "evidence_boundary": "Target-context retrospective grouped holdout only. Target r1/r2 labels are explicitly used in train/dev. Historical outer results were previously inspected. This is not an independent study, sequence-external validation, new blind test, or prospective confirmation.",
+  "workspace": "/home/proxy-function-gap-tcell-adaptation",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_target_adaptation_v1",
+  "raw": {
+    "defined_tcell_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r1.csv.gz",
+    "defined_tcell_r2": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r2.csv.gz"
+  },
+  "raw_sha256": {
+    "defined_tcell_r1": "87e42c4c871eb061db7de187cec221d4343948c0abeb75d3fa8105f466edbc09",
+    "defined_tcell_r2": "d701431fcabcf0984baae5f5aa8379018775cae704e5cabaab45e06d49ee5015"
+  },
+  "raw_expected": {
+    "defined_tcell_r1": {"valid_unique_50nt": 349633},
+    "defined_tcell_r2": {"valid_unique_50nt": 352724},
+    "common_valid_unique_50nt": 314563
+  },
+  "sample_roles": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+  ],
+  "sample_sha256": {
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz": "3a58f2558cd1cffc55877bd940e5512fca62513d054c55da18a85fa8daf71677",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz": "6345bb51e0e1c9529235ff1ffb2e599a78a85a98007f1b9d247720629c40a60c",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz": "f6d87787325e0918c802edf83f2b26e368a9f197f4e61b6f0e2684c1c1e86730"
+  },
+  "split": {
+    "eligibility": "Exact 50nt ACGT sequence shared by r1 and r2. Build undirected exact/H1 connected components over all common sequences before any target label is read. r1/r2 shared sequences are therefore always in the same role.",
+    "component_order": "SHA256('tcell_target_adaptation_v1|component|'+SHA256 concatenation of hash-sorted member sequence strings), with component minimum sequence as deterministic tie key.",
+    "test_sample_exclusion": "A component is test-ineligible if any member has exact/H1 match to any Sample train/dev/calibration utr50. The whole component is excluded from test, preventing pretraining exact/H1 leakage into the adapted-versus-original comparison.",
+    "allocation": "Allocate test first from Sample-clean components, then dev, then train, in frozen component order. At each role, skip a component if it exceeds the remaining exact budget and continue until the budget is filled exactly. Fail if exhausted. Unallocated sequences remain unused.",
+    "train_unique_sequences": 50000,
+    "dev_unique_sequences": 10000,
+    "test_unique_sequences": 1024,
+    "test_pools": 16,
+    "test_pool_size": 64,
+    "nested_train_budgets": [1000, 5000, 20000, 50000],
+    "nested_rule": "Within the frozen 50k train role, order whole components by SHA256('tcell_target_adaptation_v1|nested|'+component_id), take each exact budget with the same skip-if-too-large rule, and verify 1k subset 5k subset 20k subset 50k.",
+    "pool_rule": "Within each role/budget, sort sequences by SHA256('tcell_target_adaptation_v1|pools|role|budget|sequence'); consecutive blocks of 64. Training/dev MSE uses the final partial pool; pairwise and dev selection use complete pools only. Test has exactly 16 complete pools.",
+    "adjustment_rule": "Budgets are primary and may be changed only if exact allocation is impossible; any adjustment must be frozen before target label training. No adjustment is permitted after dev/test results.",
+    "label_rule": "After SPLIT_FROZEN.json is written, read r1/r2 MRL only for train/dev. Fit labels are the arithmetic mean (r1+r2)/2. Test MRL remains unread until the one final evaluation."
+  },
+  "model": {
+    "architecture": "FreshSampleCNN unchanged: Conv1d(4,32,k5)-ReLU-MaxPool1d(2)-Conv1d(32,64,k5)-ReLU-global-mean-Flatten-Linear(64,32)-ReLU-Linear(32,1)",
+    "inference_config": "/home/proxy-function-gap-tcell-residual/configs/ensemble_inference_v1.json",
+    "baseline": "Frozen original three-member Sample CNN arithmetic mean in measured-MRL units.",
+    "initialization": "Main, MSE-only and nested runs for seeds 11/23/37 start from the corresponding frozen original member model_state. From-scratch uses the same architecture with ordinary seeded random initialization.",
+    "seeds": [11, 23, 37],
+    "parallelism": "Three real CUDA seed processes in parallel; no silent CPU fallback.",
+    "device": "cuda:0",
+    "dtype": "float32",
+    "memory_fraction_per_seed": 0.28,
+    "optimizer": "Adam",
+    "learning_rate_grid": [0.00001, 0.0001, 0.001],
+    "lambda_grid": [0.01, 0.1, 1.0],
+    "mse_only_lambda": 0.0,
+    "pool_size": 64,
+    "pools_per_batch": 16,
+    "target_scaling": "For each train budget independently, standardize mean-replicate MRL with that budget's train-only mean and population SD. Apply the same scaler to dev. Deployed scores are raw network outputs; only order matters.",
+    "objective": "Mean-pool MSE plus lambda times mean-complete-pool dynamic-top16 pairwise logistic loss. All 120 unordered pairs per complete pool, softplus(-sign(y_i-y_j)*(p_i-p_j)); exact label ties have zero weight. Top16 membership uses detached current predictions; score gradients flow through pairs.",
+    "convergence": "DualPlateau on full train and dev combined objective: min_delta=0.0001, patience=5; any absolute dev best resets plateau. No maximum epoch.",
+    "min_delta": 0.0001,
+    "patience": 5,
+    "scientific_max_epoch": null,
+    "best_epoch": "Absolute best dev combined objective. Save full history, checkpoint and model/hash identity at every best epoch."
+  },
+  "selection": {
+    "proposal_seeds": [101, 202, 303, 404, 505],
+    "proposal_rule": "Python random.Random('tcell_target_adaptation_v1|role|pool_index|seed'), floor(random()*64) for 16 nested draws with replacement.",
+    "caps": [1, 2, 4, 8, 16],
+    "primary_cap": 16,
+    "dev_metric": "For each variant/hyperparameter candidate, average the three seed best-checkpoint scores on dev and minimize mean cap16 regret using mean-replicate dev MRL, all complete dev pools and five shared nested proposal seeds.",
+    "tie_rule": "Ties within 1e-12 use lower mean dev combined objective at best epochs, then lower LR, then lower lambda.",
+    "main": "Select lambda and LR jointly from the full 3x3 grid using train/dev only.",
+    "mse_only": "Fine-tuned lambda=0 ablation; select LR from the same grid using train/dev only.",
+    "from_scratch": "From-scratch joint-loss ablation; select lambda and LR independently from the same full grid using train/dev only.",
+    "nested": "Use only the selected 50k main lambda/LR; train 1k/5k/20k nested budgets without new hyperparameter selection. Learning curves are secondary.",
+    "test_freeze": "All main, ablation and nested runs, selections, hashes and configuration must be complete before target test inference or MRL reading. No test-driven model, budget, lambda, LR or protocol changes."
+  },
+  "evaluation": {
+    "evaluation_count": 1,
+    "methods": ["original_cnn", "main_50k", "mse_only_50k", "from_scratch_50k"],
+    "nested_methods_cap16_only": ["main_1k", "main_5k", "main_20k", "main_50k"],
+    "regret": "Full 64-sequence test-pool maximum measured repeat-specific MRL minus selected repeat-specific MRL.",
+    "random": "Random(N) selects the first position of the exact same nested proposal prefix used by every scored method; cap1 methods coincide.",
+    "effect_sign": "Adapted-method regret minus original-CNN regret; negative is improvement.",
+    "primary": "Main-50k ensemble versus original CNN at cap16 in r1 and r2.",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261126,
+    "bootstrap_unit": "16 repeat-linked pools; both repeats and all five proposal seeds move together. Percentile 95% CI.",
+    "success": [
+      "Both repeat-specific cap16 main-minus-original mean regret effects are strictly negative.",
+      "Combined repeat-linked block bootstrap 95% CI upper bound is strictly below zero.",
+      "Combined absolute reduction is at least max(0.1 MRL, 5% of combined original-CNN cap16 regret).",
+      "All split isolation, finite loss, real CUDA, natural convergence, hash and one-evaluation checks pass."
+    ],
+    "holm_family": "Ten repeat-specific main-minus-original effects: both repeats at all caps 1/2/4/8/16. Two-sided sign-style pool-bootstrap p-values with Holm step-down and monotonicity enforcement.",
+    "repeat_bootstrap_seed_offset": {"defined_tcell_r1": 0, "defined_tcell_r2": 1000},
+    "cap_bootstrap_seed_offset": {"1": 0, "2": 10, "4": 20, "8": 30, "16": 40},
+    "secondary": "Report all caps for main and both 50k ablations, Random(N), cap16 nested learning curve, top-tail flips, selection turnover, pointwise MAE/RMSE/bias/Spearman, and whether error and regret changes move together.",
+    "post_evaluation_changes_forbidden": true
+  },
+  "verification_rounds": [
+    "Round 1 raw/input hashes, label-blind split, exact/H1 component and Sample-clean test isolation, nested subsets, focused tests and real CUDA.",
+    "Round 2 standalone independent re-reader recomputes split isolation, dev selection, all test selections/regret/bootstrap/Holm and training summaries without importing implementation modules.",
+    "Round 3 clean-process tests, deterministic hash/one-evaluation audit, local aggregate export and forbidden per-sequence/raw-file scan."
+  ],
+  "local_export": "De-identified aggregates, configs, code, logs, training curves and verification only; no sequence strings, per-sequence labels or predictions, .npy/.npz/.pt, raw data or test selection indices.",
+  "no_push": true
+}

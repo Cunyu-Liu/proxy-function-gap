@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "tcell_cross_cell_anchor_v1",
+  "frozen_date": "2026-11-26",
+  "scientific_hypothesis": "Same-sequence measured HepG2 MRL is a paired cross-cell experimental anchor that can improve real T-cell MRL selection relative to frozen Sample-CNN scores; no residual or other-sequence correction model is fitted.",
+  "evidence_boundary": "Paired cross-cell retrospective evidence only. HepG2 measurements are not T-cell labels, but the same sequences are used in both cells. Historical outer results were previously inspected; this is neither sequence-independent validation nor a new blind/prospective test.",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_cross_cell_anchor_v1",
+  "historical_source_root": "/home/proxy-function-gap-tcell-residual",
+  "inference_config": "/home/proxy-function-gap-tcell-residual/configs/ensemble_inference_v1.json",
+  "raw": {
+    "defined_hepg2_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_hepg2_r1.csv.gz",
+    "defined_tcell_r1": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r1.csv.gz",
+    "defined_tcell_r2": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/raw/castillo_hair_gse232927/GSE232927_processed_defined_end_tcell_r2.csv.gz"
+  },
+  "raw_sha256": {
+    "defined_hepg2_r1": "a960e88e7d34449579a2eee38eebdd8a3520f3de76a596a9561422b7e9cdae80",
+    "defined_tcell_r1": "87e42c4c871eb061db7de187cec221d4343948c0abeb75d3fa8105f466edbc09",
+    "defined_tcell_r2": "d701431fcabcf0984baae5f5aa8379018775cae704e5cabaab45e06d49ee5015"
+  },
+  "raw_expected": {
+    "defined_hepg2_r1": {"rows": 12566288, "valid_unique_50nt": 12563191},
+    "defined_tcell_r1": {"valid_unique_50nt": 349633},
+    "defined_tcell_r2": {"valid_unique_50nt": 352724}
+  },
+  "sample_roles": [
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+  ],
+  "sample_sha256": {
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz": "3a58f2558cd1cffc55877bd940e5512fca62513d054c55da18a85fa8daf71677",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz": "6345bb51e0e1c9529235ff1ffb2e599a78a85a98007f1b9d247720629c40a60c",
+    "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz": "f6d87787325e0918c802edf83f2b26e368a9f197f4e61b6f0e2684c1c1e86730"
+  },
+  "eligibility": {
+    "length": 50,
+    "alphabet": "ACGT",
+    "definition": "Exact sequence shared by T-cell r1, T-cell r2 and defined-end HepG2 r1 with finite measured HepG2 MRL; T-cell rl is not read during preparation.",
+    "sample_exclusion": "Exclude exact or Hamming-distance-1 match to any Sample train/dev/calibration utr50.",
+    "minimum_eligible_after_sample_exclusion": 1024,
+    "pool_h1_rule": "Sort eligible sequences by SHA256('tcell_cross_cell_anchor_v1|sequence'); greedily retain a sequence only if it has no exact/H1 match to any previously retained sequence. Stop after 1024; fail if exhausted. This guarantees no exact/H1 within or between pools."
+  },
+  "pools": {
+    "count": 16,
+    "size": 64,
+    "unique_sequences_total": 1024,
+    "assignment": "Consecutive blocks of 64 in the frozen hash-sorted, H1-isolated retained list.",
+    "repeat_linkage": "Exactly the same sequence and pool membership for r1 and r2.",
+    "pool_manifest_hash_algorithm": "SHA256 of sequence-order array file and proposal array file"
+  },
+  "learner": {
+    "inputs": ["frozen_three_member_sample_cnn_mean", "same_sequence_measured_hepg2_mrl"],
+    "target_tcell_labels_forbidden": true,
+    "residual_model": false,
+    "hyperparameter_search": false
+  },
+  "methods": {
+    "cnn": "Frozen three-member Sample CNN arithmetic mean in measured-MRL units; no fitting.",
+    "hepg2_anchor": "Measured same-sequence HepG2 MRL used directly as the BoN score.",
+    "rank_fusion_50_50": "Secondary preregistered method: for each full 64-sequence pool, compute average-tie percentile ranks separately for CNN and HepG2, with best=1 and worst=0; score=(CNN_rank+HepG2_rank)/2. Weights fixed at 50/50 before results.",
+    "random": "Random(N) selects the first position of the same nested proposal prefix used by all scored methods; proposal positions are iid uniform with replacement."
+  },
+  "selection": {
+    "caps": [1, 2, 4, 8, 16],
+    "proposal_seeds": [101, 202, 303, 404, 505],
+    "proposal_rule": "Python random.Random('tcell_cross_cell_anchor_v1|pool_index|seed'), floor(random()*64) at each of 16 nested draws.",
+    "shared_nested_prefix": true,
+    "with_replacement": true,
+    "score_tie_rule": "np.argmax stable first proposed position",
+    "primary_cap": 16,
+    "regret": "Full 64-sequence pool maximum measured T-cell MRL minus selected measured T-cell MRL",
+    "effect_sign": "HepG2-anchor regret minus Sample-CNN regret; negative is improvement"
+  },
+  "primary_success": {
+    "both_repeats_cap16_effect_strictly_negative": true,
+    "combined_repeat_linked_pool_bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261126,
+    "bootstrap_unit": "One of 16 repeat-linked pools; both repeats and all five proposal seeds move together.",
+    "ci": "Two-sided 95% percentile interval of combined anchor-minus-CNN regret; upper bound strictly below 0.",
+    "minimum_absolute_reduction": "max(0.1 MRL, 5% of combined cap16 CNN mean regret)",
+    "all_isolation_and_cuda_checks_pass": true,
+    "evaluation_count": 1,
+    "post_evaluation_protocol_changes_forbidden": true
+  },
+  "multiplicity": {
+    "family": "Ten repeat-specific anchor-minus-CNN cap effects: r1/r2 at caps 1/2/4/8/16.",
+    "method": "Holm step-down adjustment of two-sided sign-style pool-bootstrap p-values; max monotonicity enforcement.",
+    "repeat_bootstrap_seed_offset": {"defined_tcell_r1": 0, "defined_tcell_r2": 1000},
+    "cap_bootstrap_seed_offset": {"1": 0, "2": 10, "4": 20, "8": 30, "16": 40},
+    "note": "All five caps are reported. Holm supports secondary cap-wise inference and does not replace the combined primary gate."
+  },
+  "secondary": {
+    "spearman": "For each repeat and predictor (CNN, HepG2), overall 1024-sequence average-tie Spearman and median/range of 16 within-pool Spearman coefficients. This is descriptive cross-cell association, not target-label training.",
+    "top_tail": "Per full pool: CNN-vs-HepG2 top1 flip count, top16 membership Jaccard, and within-CNN-top16 nontied predictor-order flips; for flips with nontied T-cell order, counts favoring HepG2 versus CNN.",
+    "turnover": "For every cap/repeat, changed BoN selections decomposed into improved, worsened and unchanged-T-cell-label counts plus mean selected-MRL change.",
+    "oracle_opportunity_loss": "Best T-cell MRL among unique proposed candidates minus selected T-cell MRL; proposal headroom is full-pool best minus proposal best; their sum equals full-pool regret.",
+    "fusion": "Descriptive cap-wise effects and cap16 repeat-linked bootstrap; no fusion success claim or weight adjustment."
+  },
+  "verification_rounds": [
+    "Round 1: raw hashes, label-blind preparation audit, eligible/isolation, CUDA, focused tests and prefreeze hashes.",
+    "Round 2: standalone re-reader independently recomputes all selections, primary and secondary aggregate statistics without importing anchor.py/evaluate.py.",
+    "Round 3: clean-process tests, deterministic replay/hash checks, one-evaluation audit and local forbidden-export scan."
+  ],
+  "local_export": "Aggregate metrics, configs, code, logs and verification only; no sequence strings, per-sequence labels/predictions or raw data.",
+  "no_push": true
+}
