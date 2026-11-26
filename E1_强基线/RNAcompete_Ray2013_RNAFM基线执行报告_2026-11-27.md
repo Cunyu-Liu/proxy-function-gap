@@ -73,3 +73,4 @@ fold0门基于05:42通过，12个神经run和2个kNN评价全部完成；统一s
 RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±0.007741`、kNN `0.156648`（40组）。这些仅是完整fold0门禁结果；fold1–4正在运行，**不得解释为五折性能、稳定外部泛化或SOTA结论**。
 
 扩展首个`sequence_linear_f1_s0`已完成并独立重放：732行指标一致、43,998×244 ID正确、checkpoint CUDA预测一致，best/stop `45/65`，沿用fold0冻结selection SHA。该单run不与fold0或其他fold混写；驱动已进入fold1 seed1，最终门禁和五折汇总尚未形成。
+- `sequence_linear_f1_s1`随后完成并独立重放通过：732行指标、ID、checkpoint CUDA预测及selection SHA一致，best/stop `16/36`。05:53进度为14/60神经eval、2/10 kNN，fold1 seed2训练中；最终门禁不存在，五折汇总未生成。
