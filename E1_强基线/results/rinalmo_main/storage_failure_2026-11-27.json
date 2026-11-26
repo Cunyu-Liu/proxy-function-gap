@@ -1,0 +1,259 @@
+{
+  "timestamp": "2026-11-26T21:46:23.312754+00:00",
+  "status": "blocked_disk_quota",
+  "error": "OSError: [Errno 122] Disk quota exceeded",
+  "failed_driver_pid": 4080653,
+  "completed_unique_cache_pairs": 261,
+  "required_cache_pairs": 292,
+  "missing_cache_pairs": 31,
+  "missing_rows": 847523,
+  "remaining_embeddings_exact_bytes_including_ids": 2199134816,
+  "remaining_embeddings_exact_GiB": 2.0481038987636566,
+  "space": {
+    "/teams/HoulabData_1788502323/liucunyu": {
+      "free_GiB": 0.9102
+    },
+    "/home": {
+      "free_GiB": 6.4433
+    },
+    "/root": {
+      "free_GiB": 6.4433
+    }
+  },
+  "additional_bytes_beyond_current_teams_free": 1221815008,
+  "fold0_output_projection_bytes_from_smoke": 391982698,
+  "full_15_bce_5_knn_output_projection_bytes_from_smoke": 5864645530,
+  "projection_note": "Projection scales measured SUPV3L1 smoke outputs to 292 tasks per fold; not an exact quota reservation.",
+  "temporary_files_preserved": [
+    {
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rinalmo_main_strict3train_p20_v1/embeddings/UPF1_K562.neg.rinalmo-giga.npy.tmp",
+      "bytes": 0
+    }
+  ],
+  "missing": [
+    {
+      "experiment": "UPF1_K562",
+      "kind": "neg",
+      "rows": 59735,
+      "estimated_file_bytes_with_ids": 155031597
+    },
+    {
+      "experiment": "UPF1_HepG2",
+      "kind": "pos",
+      "rows": 19549,
+      "estimated_file_bytes_with_ids": 50585728
+    },
+    {
+      "experiment": "UPF1_HepG2",
+      "kind": "neg",
+      "rows": 59579,
+      "estimated_file_bytes_with_ids": 154686371
+    },
+    {
+      "experiment": "UTP18_K562",
+      "kind": "pos",
+      "rows": 2625,
+      "estimated_file_bytes_with_ids": 6792556
+    },
+    {
+      "experiment": "UTP18_K562",
+      "kind": "neg",
+      "rows": 7980,
+      "estimated_file_bytes_with_ids": 20718566
+    },
+    {
+      "experiment": "UTP18_HepG2",
+      "kind": "pos",
+      "rows": 3088,
+      "estimated_file_bytes_with_ids": 7993855
+    },
+    {
+      "experiment": "UTP18_HepG2",
+      "kind": "neg",
+      "rows": 9412,
+      "estimated_file_bytes_with_ids": 24445871
+    },
+    {
+      "experiment": "WDR43_K562",
+      "kind": "pos",
+      "rows": 3747,
+      "estimated_file_bytes_with_ids": 9695978
+    },
+    {
+      "experiment": "WDR43_K562",
+      "kind": "neg",
+      "rows": 11430,
+      "estimated_file_bytes_with_ids": 29675836
+    },
+    {
+      "experiment": "WDR43_HepG2",
+      "kind": "pos",
+      "rows": 5280,
+      "estimated_file_bytes_with_ids": 13668388
+    },
+    {
+      "experiment": "WDR43_HepG2",
+      "kind": "neg",
+      "rows": 16121,
+      "estimated_file_bytes_with_ids": 41871636
+    },
+    {
+      "experiment": "XRCC6_K562",
+      "kind": "pos",
+      "rows": 13707,
+      "estimated_file_bytes_with_ids": 35468813
+    },
+    {
+      "experiment": "XRCC6_K562",
+      "kind": "neg",
+      "rows": 41581,
+      "estimated_file_bytes_with_ids": 107957996
+    },
+    {
+      "experiment": "XRCC6_HepG2",
+      "kind": "pos",
+      "rows": 5788,
+      "estimated_file_bytes_with_ids": 14982995
+    },
+    {
+      "experiment": "XRCC6_HepG2",
+      "kind": "neg",
+      "rows": 17450,
+      "estimated_file_bytes_with_ids": 45322809
+    },
+    {
+      "experiment": "XRN2_K562",
+      "kind": "pos",
+      "rows": 16124,
+      "estimated_file_bytes_with_ids": 41706617
+    },
+    {
+      "experiment": "XRN2_K562",
+      "kind": "neg",
+      "rows": 48441,
+      "estimated_file_bytes_with_ids": 125719018
+    },
+    {
+      "experiment": "XRN2_HepG2",
+      "kind": "pos",
+      "rows": 19841,
+      "estimated_file_bytes_with_ids": 51340693
+    },
+    {
+      "experiment": "XRN2_HepG2",
+      "kind": "neg",
+      "rows": 58953,
+      "estimated_file_bytes_with_ids": 153060130
+    },
+    {
+      "experiment": "YBX3_K562",
+      "kind": "pos",
+      "rows": 18838,
+      "estimated_file_bytes_with_ids": 48727805
+    },
+    {
+      "experiment": "YBX3_K562",
+      "kind": "neg",
+      "rows": 59916,
+      "estimated_file_bytes_with_ids": 155500782
+    },
+    {
+      "experiment": "YBX3_HepG2",
+      "kind": "pos",
+      "rows": 19002,
+      "estimated_file_bytes_with_ids": 49170329
+    },
+    {
+      "experiment": "YBX3_HepG2",
+      "kind": "neg",
+      "rows": 59888,
+      "estimated_file_bytes_with_ids": 155488123
+    },
+    {
+      "experiment": "ZC3H11A_K562",
+      "kind": "pos",
+      "rows": 12068,
+      "estimated_file_bytes_with_ids": 31251635
+    },
+    {
+      "experiment": "ZC3H11A_K562",
+      "kind": "neg",
+      "rows": 36528,
+      "estimated_file_bytes_with_ids": 94911034
+    },
+    {
+      "experiment": "ZC3H11A_HepG2",
+      "kind": "pos",
+      "rows": 15536,
+      "estimated_file_bytes_with_ids": 40248364
+    },
+    {
+      "experiment": "ZC3H11A_HepG2",
+      "kind": "neg",
+      "rows": 46993,
+      "estimated_file_bytes_with_ids": 122149593
+    },
+    {
+      "experiment": "ZNF800_K562",
+      "kind": "pos",
+      "rows": 19143,
+      "estimated_file_bytes_with_ids": 49554995
+    },
+    {
+      "experiment": "ZNF800_K562",
+      "kind": "neg",
+      "rows": 59913,
+      "estimated_file_bytes_with_ids": 155613628
+    },
+    {
+      "experiment": "ZNF800_HepG2",
+      "kind": "pos",
+      "rows": 19371,
+      "estimated_file_bytes_with_ids": 50164395
+    },
+    {
+      "experiment": "ZNF800_HepG2",
+      "kind": "neg",
+      "rows": 59896,
+      "estimated_file_bytes_with_ids": 155628680
+    }
+  ],
+  "main_embed_log_tail": [
+    "RINALMO_EMBED {\"experiment\": \"TROVE2_K562\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 26639.324, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 12462, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"bb55665e821d053a9b8fd0c0eead6d6fcba9093bb5b89162ef4f3d176398de95\"}",
+    "RINALMO_EMBED {\"experiment\": \"TROVE2_HepG2\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 26688.635, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 6160, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"2ef7aec2c60135c54631c2ae1792a5624ec2f867b84117b20674208c7ed92a86\"}",
+    "RINALMO_EMBED {\"experiment\": \"TROVE2_HepG2\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 26811.938, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 18478, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"fdd540020170cf0d6be1116341e38f99101f7d4d89ebae3e6057e65cf2065b12\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF1_K562\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 26926.346, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 18126, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"9c639b7aaab4be1865716c2fb49ebb5436ba8f3a7bf8011c2c6b39a9a5f1092d\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF1_K562\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 27303.458, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 56031, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"fcd4366364850d66cb199e350da2c6bb12f584475b04b16aa65697553b2081e7\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF1_HepG2\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 27423.845, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 19552, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"04a86c3196619f1b0881d26fe00da218dec4a999508d6d8102be9fd1f01cb273\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF1_HepG2\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 27773.584, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 59432, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"6ee2d6f421e8354d59d7c2d8ed25e3601a3048a9cec2f25009cf6c24cc73ed4e\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF2_K562\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 27880.873, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 19009, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"c378e790dc2755c11ea3cd0b7b751c2fe44acf987745736cf8341c1cd72bd600\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF2_K562\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 28285.751, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 59616, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"35ffc436e8e01ee2fa3275887badb60be9f1f6b07594635dc7e4f03343ceb09c\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF2_HepG2\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 28407.307, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 19531, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"fe629dc82770ba5822ad92080a674dacb4678c57a2868646bc5503cbbece1607\"}",
+    "RINALMO_EMBED {\"experiment\": \"U2AF2_HepG2\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 28797.01, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 59401, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"5f9627b88825a712dfb6bc8ac6ed4941d7ed2069a060a0a649140b945ea4222d\"}",
+    "RINALMO_EMBED {\"experiment\": \"UCHL5_K562\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 28928.373, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 19240, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"c0d182c42bdbd08118d8686c3a5acf42ab32f8042709cd84b26eeff8cf619858\"}",
+    "RINALMO_EMBED {\"experiment\": \"UCHL5_K562\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 29262.678, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 59894, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"de7cc00b10080946f39d2c0d5f7c7a3e0529620ecb88f5bb9cb1a6947861bde2\"}",
+    "RINALMO_EMBED {\"experiment\": \"UCHL5_HepG2\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 29387.231, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 19514, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"b1e7aa1ecbb9c8135db808b3ed88dc37c7f9d5ea2a2f05af483dfeeda9af9e10\"}",
+    "RINALMO_EMBED {\"experiment\": \"UCHL5_HepG2\", \"kind\": \"neg\", \"source\": \"generated\", \"elapsed_seconds\": 29769.654, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 59888, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"565b3ea90fd92e813d3ccb2437bfe01b75be4b091cc3d9e511983ac6defed9e5\"}",
+    "RINALMO_EMBED {\"experiment\": \"UPF1_K562\", \"kind\": \"pos\", \"source\": \"generated\", \"elapsed_seconds\": 29894.934, \"cuda\": {\"device\": \"cuda:0\", \"name\": \"NVIDIA GeForce RTX 5090\", \"numeric_probe\": [2.5, -6.0]}, \"rows\": 19457, \"dim\": 1280, \"dtype\": \"float16\", \"ids_sha256\": \"d66ff2f83284f520a12bc05629894faaa4416c4191aedb7f3512736f4a633d4e\"}",
+    "Traceback (most recent call last):",
+    "  File \"/home/ProxyFunctionGap/code_rareseq/e1_rinalmo_embed.py\", line 51, in atomic_save",
+    "    np.save(handle, emb)",
+    "  File \"/root/miniconda3/envs/llr_env/lib/python3.10/site-packages/numpy/lib/_npyio_impl.py\", line 581, in save",
+    "    format.write_array(fid, arr, allow_pickle=allow_pickle,",
+    "  File \"/root/miniconda3/envs/llr_env/lib/python3.10/site-packages/numpy/lib/format.py\", line 754, in write_array",
+    "    array.tofile(fp)",
+    "OSError: [Errno 122] Disk quota exceeded",
+    "",
+    "During handling of the above exception, another exception occurred:",
+    "",
+    "Traceback (most recent call last):",
+    "  File \"/home/ProxyFunctionGap/code_rareseq/e1_rinalmo_embed.py\", line 179, in <module>",
+    "    main()",
+    "  File \"/home/ProxyFunctionGap/code_rareseq/e1_rinalmo_embed.py\", line 150, in main",
+    "    atomic_save(emb, expected_ids, npy_path, ids_path)",
+    "  File \"/home/ProxyFunctionGap/code_rareseq/e1_rinalmo_embed.py\", line 50, in atomic_save",
+    "    with open(npy_tmp, \"wb\") as handle:",
+    "OSError: [Errno 122] Disk quota exceeded"
+  ],
+  "files_deleted": false
+}

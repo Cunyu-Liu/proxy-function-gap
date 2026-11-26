@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-11-26T21:46:23.312754+00:00",
+  "scope": "completed cache pairs added before quota failure",
+  "n_files": 2,
+  "n_rows": 79345,
+  "all_ids_exact": true,
+  "all_shape_1280": true,
+  "all_fp16": true,
+  "all_finite": true,
+  "all_ids_sha256_match": true,
+  "files": [
+    {
+      "experiment": "UCHL5_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59888,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UPF1_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19457,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    }
+  ]
+}

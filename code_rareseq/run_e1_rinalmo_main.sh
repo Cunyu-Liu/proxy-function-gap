@@ -52,8 +52,24 @@ gpu_wait() {
   done
 }
 
+storage_wait() {
+  local required=$1 available
+  while true; do
+    available=$(df -k "$BASE" | awk 'NR==2{print int($4/1048576)}')
+    if [ "$available" -ge "$required" ]; then
+      echo "STORAGE_OK required_free=${required}GiB available=${available}GiB $(date -Is)"
+      return 0
+    fi
+    echo "STORAGE_WAIT required_free=${required}GiB available=${available}GiB $(date -Is)"
+    set_status "WAITING storage required=${required}GiB available=${available}GiB"
+    sleep 300
+  done
+}
+
 run_embed() {
   local exps=$1 log=$2
+  storage_wait 3
+  set_status "RUNNING embedding $(basename "$exps")"
   gpu_wait 9000 16
   PYTHONPATH=/root/rnaft/pypath:/root/rareseq/pydeps "$PY" e1_rinalmo_embed.py \
     --windows-dir "$E0/windows" --neg-dir "$E0/neg" --exps-file "$exps" \
@@ -67,6 +83,8 @@ run_modern() {
   local done=$dir/.complete lock=$dir.lock log=$LOGDIR/${tag}_f${fold}_s${seed}.log rc
   if [ -s "$dir/modern_results.tsv" ] && [ -f "$done" ]; then echo "SKIP modern $tag f$fold s$seed"; return 0; fi
   if ! mkdir "$lock" 2>/dev/null; then echo "LOCKED modern $tag f$fold s$seed" >&2; return 1; fi
+  set_status "RUNNING modern $tag f$fold s$seed"
+  storage_wait 1
   set_status "RUNNING modern $tag f$fold s$seed"
   gpu_wait 6000 12
   if "$PY" e1_rinalmo_frozen_baselines.py modern --windows-dir "$E0/windows" --neg-dir "$E0/neg" \
@@ -92,6 +110,8 @@ run_knn() {
   local done=$dir/.complete lock=$dir.lock log=$LOGDIR/${tag}_f${fold}_knn.log rc
   if [ -s "$dir/knn_results.tsv" ] && [ -f "$done" ]; then echo "SKIP knn $tag f$fold"; return 0; fi
   if ! mkdir "$lock" 2>/dev/null; then echo "LOCKED knn $tag f$fold" >&2; return 1; fi
+  set_status "RUNNING knn $tag f$fold"
+  storage_wait 1
   set_status "RUNNING knn $tag f$fold"
   gpu_wait 8000 18
   if "$PY" e1_rinalmo_knn.py --windows-dir "$E0/windows" --neg-dir "$E0/neg" \
