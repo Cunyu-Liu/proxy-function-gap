@@ -273,7 +273,7 @@ def freeze(args):
         design, controls = read_design(os.path.join(input_root, "RBD_v3_design_unified.txt"))
         norm_path = os.path.join(input_root, "norm_data.txt.gz")
         norm_header, norm_scan = scan_normalized(norm_path)
-        matrix = pd.read_csv(norm_path, sep="\t")
+        matrix = pd.read_csv(norm_path, sep="\t", low_memory=False)
         assert matrix.columns.tolist() == norm_header
         assert matrix.columns[:3].tolist() == ["Probe_Set", "RNA_Seq", "Probe_ID"]
         experiments = list(matrix.columns[3:])
@@ -337,8 +337,9 @@ def freeze(args):
         sequence_table["fold"] = sequence_table.cluster_id.map(cluster_fold)
         assert sequence_table.fold.notna().all()
         assert sequence_table.groupby("cluster_id").fold.nunique().max() == 1
-        assert sorted(sequence_table.groupby("fold").size().to_dict()) == list(range(N_FOLDS))
-        assert sequence_table.groupby("fold").size().to_dict() == fold_loads
+        fold_counts = sequence_table.groupby("fold").size().to_dict()
+        assert sorted(fold_counts) == list(range(N_FOLDS))
+        assert [fold_counts[fold] for fold in range(N_FOLDS)] == fold_loads
         print("CDHIT_AND_SEQUENCE_FOLDS_OK", fold_loads, flush=True)
 
         group_sizes = master.groupby("species_gene").size().to_dict()
