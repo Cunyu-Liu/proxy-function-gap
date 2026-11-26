@@ -17,11 +17,11 @@ COMMON=(train --windows-dir "$E0/windows" --neg-dir "$E0/neg"
   --data-version e0-v2-id90-strict3train-main --log "$LOGDIR/experiments.jsonl")
 
 resource_gate() {
-  local FREE_MIB AVAIL_KIB ATTEMPT
+  local MIN_FREE=$1 FREE_MIB AVAIL_KIB ATTEMPT
   for ATTEMPT in $(seq 1 36); do
     FREE_MIB=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits -i 0)
     AVAIL_KIB=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
-    if [ "$FREE_MIB" -ge 14000 ] && [ "$AVAIL_KIB" -ge 12582912 ]; then
+    if [ "$FREE_MIB" -ge "$MIN_FREE" ] && [ "$AVAIL_KIB" -ge 12582912 ]; then
       echo "RESOURCE_OK free_mib=$FREE_MIB mem_available_kib=$AVAIL_KIB"
       return 0
     fi
@@ -33,10 +33,10 @@ resource_gate() {
 }
 
 run_pilot() {
-  local MODE=$1 LR=3e-4 DIR="$ROOT/pilot_cuda_$1" LOG="$LOGDIR/e1_finetune_pilot_$1.log"
-  [ "$MODE" = full ] && LR=1e-5
+  local MODE=$1 LR=3e-4 MIN_FREE=9000 DIR="$ROOT/pilot_cuda_$1" LOG="$LOGDIR/e1_finetune_pilot_$1.log"
+  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=14000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP pilot $MODE"; return 0; fi
-  resource_gate || return 1
+  resource_gate "$MIN_FREE" || return 1
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --encoder-lr "$LR" --lora-r 8 --out "$DIR" >"$LOG" 2>&1
 }
 

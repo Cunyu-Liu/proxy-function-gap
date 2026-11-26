@@ -8,6 +8,7 @@ import os
 import numpy as np
 import pandas as pd
 
+from e1_frozen_baselines import metrics
 from e1_finetune import DATA_VERSION, atomic_json
 
 
@@ -34,6 +35,10 @@ def verify_run(run, require_eval=False, expected_rank=None):
     counts = history.groupby(["experiment", "fold", "track"]).size().reset_index(name="n")
     merged = validation.merge(counts, on=["experiment", "fold", "track"], validate="one_to_one")
     assert (merged.n == merged.stopped_epoch).all()
+    accepted = history[history.is_best].groupby(["experiment", "fold", "track"]).epoch.max().reset_index()
+    accepted = accepted.rename(columns={"epoch": "replayed_best_epoch"})
+    replayed = validation.merge(accepted, on=["experiment", "fold", "track"], validate="one_to_one")
+    assert (replayed.best_epoch == replayed.replayed_best_epoch).all()
     split_audit = pd.read_csv(os.path.join(run, "split_audit.tsv"), sep="\t")
     assert len(split_audit) == len(validation)
     for _, row in split_audit.iterrows():
@@ -52,6 +57,12 @@ def verify_run(run, require_eval=False, expected_rank=None):
         prediction = np.load(os.path.join(directory, "validation_predictions.npz"))
         assert np.isfinite(prediction["score"]).all()
         assert len(prediction["score"]) == metadata["n_eval"]
+        auroc, auprc = metrics(prediction["label"], prediction["score"])
+        selected = validation[(validation.experiment == metadata["experiment"]) &
+                              (validation.fold == metadata["fold"]) &
+                              (validation.track == metadata["track"])]
+        assert len(selected) == 1
+        assert np.allclose([auroc, auprc], selected.iloc[0][["auroc", "auprc"]].astype(float), atol=1e-12)
     result = {"run": run, "mode": args["mode"], "fold": args["folds"], "seed": args["seed"],
               "lora_r": args["lora_r"], "n_tasks": len(validation), "train_passed": True,
               "eval_passed": False}
@@ -65,6 +76,9 @@ def verify_run(run, require_eval=False, expected_rank=None):
         for directory in test_tasks:
             prediction = np.load(os.path.join(directory, "test_predictions.npz"))
             assert np.isfinite(prediction["score"]).all()
+            auroc, auprc = metrics(prediction["label"], prediction["score"])
+            metadata = json.load(open(os.path.join(directory, "metadata.json")))
+            assert np.allclose([auroc, auprc], [metadata["auroc"], metadata["auprc"]], atol=1e-12)
         if args["mode"] == "lora":
             eval_config = json.load(open(os.path.join(run, "finetune_eval_config.json")))
             assert eval_config["selection_sha256"]

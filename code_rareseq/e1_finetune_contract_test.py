@@ -64,9 +64,10 @@ def verification_check():
         atomic_marker(os.path.join(run, ".train_complete"))
         result = {"experiment": "RBP_Cell", "fold": 0, "track": "neg1c", "split": "val",
                   "best_epoch": 1, "stopped_epoch": 21, "early_stopped": True,
-                  "auroc": 0.7, "auprc": 0.6}
+                  "auroc": 1.0, "auprc": 1.0}
         pd.DataFrame([result]).to_csv(os.path.join(run, "finetune_validation_results.tsv"), sep="\t", index=False)
-        pd.DataFrame([{**result, "epoch": epoch, "train_loss": 0.1, "val_auroc": 0.7, "val_auprc": 0.6}
+        pd.DataFrame([{**result, "epoch": epoch, "train_loss": 0.1, "val_auroc": 0.7,
+                       "val_auprc": 0.6, "is_best": epoch == 1}
                       for epoch in range(1, 22)]).to_csv(os.path.join(run, "validation_history.tsv"), sep="\t", index=False)
         audit = {"fold": 0, "val_fold": 1, "train_folds": json.dumps([2, 3, 4]),
                  "train_pos_fold_counts": json.dumps({"2": 1, "3": 1, "4": 1}),
@@ -77,7 +78,8 @@ def verification_check():
         with open(os.path.join(directory, "best.pt"), "wb") as handle:
             handle.write(b"checkpoint")
         atomic_json(os.path.join(directory, "metadata.json"),
-                    {"training_device": {"device": "cuda:0"}, "n_eval": 2})
+                    {"training_device": {"device": "cuda:0"}, "n_eval": 2,
+                     "experiment": "RBP_Cell", "fold": 0, "track": "neg1c"})
         atomic_npz(os.path.join(directory, "validation_predictions.npz"),
                    window_id=np.asarray(["a", "b"]), label=np.asarray([0, 1]), score=np.asarray([0.2, 0.8]))
         assert verify_run(run)["train_passed"] is True
