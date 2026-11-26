@@ -1,36 +1,27 @@
 {
+  "completed_modern_runs": 15,
   "completed_knn_folds": [
     0,
     1,
-    3
-  ],
-  "running_knn_folds": [
-    2
-  ],
-  "failed_pending_knn_folds": [],
-  "pending_knn_folds": [
+    2,
+    3,
     4
   ],
-  "f1_run_rows": 584,
-  "f1_validation_rows": 876,
-  "f1_selected_k": {
-    "neg1c": 20,
-    "neg2": 20
-  },
-  "f1_cuda0": true,
-  "f1_train_ids_match_modern": true,
-  "f3_run_rows": 584,
-  "f3_validation_rows": 876,
-  "f3_selected_k": {
-    "neg1c": 20,
-    "neg2": 20
-  },
-  "f3_cuda0": true,
-  "f3_train_ids_match_modern": true,
-  "fold0_previous_rc137_recovered_past_failure_point": true,
-  "resume_driver_pid": 3904925,
+  "running_knn_folds": [],
+  "failed_pending_knn_folds": [],
+  "pending_knn_folds": [],
+  "training_driver_status": "ALL_DONE 2026-11-26T11:26:23+08:00",
+  "data_version": "e0-v2-id90-strict3train-main",
   "post_driver_pid": 3904926,
-  "knn_jobs": 1,
+  "post_audit_started_at": "2026-11-26T11:26:35+08:00",
+  "post_steps": {
+    "audit": "RUNNING",
+    "combine_cv_predictions": "PENDING",
+    "cv_summary": "PENDING",
+    "paired_bootstrap_10000": "PENDING",
+    "low_homology_stratification": "PENDING",
+    "independent_verification": "PENDING"
+  },
   "f0_run_rows": 584,
   "f0_validation_rows": 876,
   "f0_selected_k": {
@@ -39,5 +30,49 @@
   },
   "f0_cuda0": true,
   "f0_train_ids_match_modern": true,
-  "f0_complete": true
+  "f0_strict3train": true,
+  "f0_complete": true,
+  "f1_run_rows": 584,
+  "f1_validation_rows": 876,
+  "f1_selected_k": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "f1_cuda0": true,
+  "f1_train_ids_match_modern": true,
+  "f1_strict3train": true,
+  "f1_complete": true,
+  "f2_run_rows": 584,
+  "f2_validation_rows": 876,
+  "f2_selected_k": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "f2_cuda0": true,
+  "f2_train_ids_match_modern": true,
+  "f2_strict3train": true,
+  "f2_complete": true,
+  "f3_run_rows": 584,
+  "f3_validation_rows": 876,
+  "f3_selected_k": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "f3_cuda0": true,
+  "f3_train_ids_match_modern": true,
+  "f3_strict3train": true,
+  "f3_complete": true,
+  "f4_run_rows": 584,
+  "f4_validation_rows": 876,
+  "f4_selected_k": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "f4_cuda0": true,
+  "f4_train_ids_match_modern": true,
+  "f4_strict3train": true,
+  "f4_complete": true,
+  "fold0_previous_rc137_recovered_past_failure_point": true,
+  "resume_driver_pid": 3904925,
+  "knn_jobs": 1
 }
