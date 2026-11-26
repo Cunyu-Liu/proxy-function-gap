@@ -487,6 +487,9 @@ def freeze(args):
             "code_commit": args.code_commit, "code_sha256": sha256_file(os.path.abspath(__file__)),
             "contract_sha256": sha256_file(args.contract),
             "inputs": inputs, "normalized_scan": norm_scan, "design_controls": controls,
+            "alignment": {"matrix_ids_not_design": 0, "design_ids_not_matrix": int((~matched).sum()),
+                          "setAB_design_ids_not_matrix": int(((~matched) &
+                                                             merged.probe_set.isin(["SetA", "SetB"])).sum())},
             "experiments_total": len(master),
             "experiments_sequence_track_included": int(master.sequence_track_included.sum()),
             "experiments_excluded": master.loc[~master.sequence_track_included,
@@ -494,7 +497,8 @@ def freeze(args):
             "rbp_groups": len(group_sizes), "probes_main": len(probes), "probes_excluded": len(excluded),
             "unique_rna_main": len(sequence_table), "clusters": len(cluster_sizes),
             "sequence_fold_unique_rna": fold_loads, "rbp_fold_experiment_counts": rbp_fold_loads,
-            "frequency_tier_counts": master.frequency_tier.value_counts().to_dict(),
+            "frequency_tier_counts": {str(key): int(value) for key, value in
+                                      master.frequency_tier.value_counts().items()},
             "frequency_quantiles": {str(key): float(value) for key, value in
                                     master.loc[master.sequence_track_included, "n_finite_unique"].quantile(
                                         [0, 0.25, 0.5, 0.75, 1]).items()},
