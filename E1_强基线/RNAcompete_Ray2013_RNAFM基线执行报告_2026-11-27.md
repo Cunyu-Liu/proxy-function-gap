@@ -84,3 +84,7 @@ RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±
 历史run未回填或伪造start/end：`derived_from_artifacts_manifest.json`在本节形成时包含42条只读派生记录，显式`derived_from_artifacts=true`、`historical_start_end_fabricated=false`，所有历史start/end均为null，仅以完成标记和观察到的产物为证据；报告指针为本文件仓库路径。
 
 新日志已在真实`evaluate_rbp_ood_linear_f2_s1`生效并验收：completed记录具有真实start/end、CUDA passed、代码/数据SHA以及history/checkpoint/validation/test预测和指标路径。另以“重复evaluate已完成run”作受控保护探针，命令在任何新test计算前被`.eval_complete`阻断，failed JSONL正确记录`FileExistsError`及真实start/end，未重训或修改既有预测。五折队列继续从断点运行。
+
+## 8. 五折扩展进度与新日志复核
+
+截至07:12，完成33/60神经eval、5/10 kNN，fold2 RBP-OOD MLP seed0训练中，最终门禁未形成。fold2 RBP-OOD linear三seed全部独立重放通过：best/stop分别为`24/44、15/35、28/48`；每个run的147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测和selection SHA一致。seed2新任务JSONL的completed状态、真实start/end及test产物路径也已核验。以上为新增run验收，不是五折统计。
