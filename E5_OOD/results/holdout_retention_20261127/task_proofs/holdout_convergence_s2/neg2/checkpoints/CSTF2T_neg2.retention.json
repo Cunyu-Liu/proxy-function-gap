@@ -1,0 +1,19 @@
+{
+  "status": "retained_full",
+  "policy": "one_lexicographically_first_holdout_per_seed_track_retained_full__others_gzip9_bitwise_recovery",
+  "plan_sha256": "de5e867ec703898c2f9fa351f9cdb2334c789c4b231057a782cdfdd8feab1753",
+  "task": {
+    "seed": 2,
+    "track": "neg2",
+    "holdout": "CSTF2T"
+  },
+  "original": {
+    "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/checkpoints/CSTF2T_neg2.pt",
+    "bytes": 743913,
+    "sha256": "980578c67efb225aaeb4885cfaf306041560d63e0c11c0078ff2a7eaa9963194",
+    "device": 92,
+    "inode": 1347313
+  },
+  "torch_load_verified": true,
+  "verified_at": "2026-11-27T04:39:40+0800"
+}

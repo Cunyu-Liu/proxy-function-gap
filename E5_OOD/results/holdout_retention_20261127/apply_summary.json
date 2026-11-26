@@ -1,0 +1,7 @@
+{
+  "status": "applied",
+  "plan_sha256": "de5e867ec703898c2f9fa351f9cdb2334c789c4b231057a782cdfdd8feab1753",
+  "applied_at": "2026-11-27T04:39:41+0800",
+  "representatives_retained": 6,
+  "originals_removed": 66
+}

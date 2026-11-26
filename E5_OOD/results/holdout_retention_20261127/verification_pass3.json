@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "pass_index": 3,
+  "plan_sha256": "de5e867ec703898c2f9fa351f9cdb2334c789c4b231057a782cdfdd8feab1753",
+  "verified_at": "2026-11-27T04:41:16+0800",
+  "tasks_verified": 72,
+  "representatives_verified": 6,
+  "compressed_checkpoints_verified": 66,
+  "artifact_sha256_verified": true,
+  "bitwise_recovery_verified": true,
+  "torch_load_verified": true,
+  "original_removed_bytes": 49097934,
+  "compressed_retained_bytes": 42912967,
+  "net_file_bytes_released": 6184967
+}

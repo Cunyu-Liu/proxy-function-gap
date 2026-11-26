@@ -1,0 +1,66 @@
+{
+  "status": "compressed_original_removed",
+  "policy": "one_lexicographically_first_holdout_per_seed_track_retained_full__others_gzip9_bitwise_recovery",
+  "plan_sha256": "de5e867ec703898c2f9fa351f9cdb2334c789c4b231057a782cdfdd8feab1753",
+  "task": {
+    "seed": 2,
+    "track": "neg2",
+    "holdout": "LIN28B"
+  },
+  "original": {
+    "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/checkpoints/LIN28B_neg2.pt",
+    "bytes": 743913,
+    "sha256": "8b8b1ddd7157abb5afca53768f66bcf3946fbfb49429c87c30cfa05d43654626",
+    "device": 92,
+    "inode": 1347071
+  },
+  "compressed": {
+    "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/checkpoints/LIN28B_neg2.pt.gz",
+    "bytes": 649878,
+    "sha256": "dd2944c2f3305dff0c73a672589bf54d884ce9cb627a71e31d6348dec089123c",
+    "device": 92,
+    "inode": 4590016
+  },
+  "bitwise_recovery_verified": true,
+  "torch_load_verified": true,
+  "artifacts": {
+    "checkpoint": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/checkpoints/LIN28B_neg2.pt",
+      "bytes": 743913,
+      "sha256": "8b8b1ddd7157abb5afca53768f66bcf3946fbfb49429c87c30cfa05d43654626",
+      "device": 92,
+      "inode": 1347071
+    },
+    "manifest": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/manifests/LIN28B_neg2.json",
+      "bytes": 97570,
+      "sha256": "d031a746693cfe071b967365fe452c5efd6e951214431bcde8532ac0d800fe30",
+      "device": 92,
+      "inode": 1347079
+    },
+    "history": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/history/LIN28B_neg2.tsv",
+      "bytes": 3790,
+      "sha256": "bf6765422c5105d1224bff62d278f0cf321162118b8b1706f6fb1244308f55e3",
+      "device": 92,
+      "inode": 1347070
+    },
+    "pair": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/pairs/LIN28B_neg2.tsv",
+      "bytes": 1239,
+      "sha256": "e4a2fcc3bfab986f867bff1161aa1c059556fbd8c0a50b21ace9bfa1a0f181d8",
+      "device": 92,
+      "inode": 1347077
+    },
+    "scores": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e5/holdout_convergence/holdout_convergence_s2/neg2/scores/LIN28B_neg2.npz",
+      "bytes": 25875153,
+      "sha256": "818aaaa5ae6269a2c9396bcf678e9218daa1f0821fe85bcd9313b1af5bf5816b",
+      "device": 92,
+      "inode": 1347072
+    }
+  },
+  "prepared_at": "2026-11-27T04:39:38+0800",
+  "original_removed": true,
+  "cleaned_at": "2026-11-27T04:39:39+0800"
+}

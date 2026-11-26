@@ -13,6 +13,7 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 
 from e1_frozen_baselines import stable_seed
 from e5_rbp_holdout import TRAIN_FOLD_POLICY
+from e5_holdout_retention import materialize_checkpoint
 from log_run import RunLogger, sha256_file
 
 
@@ -132,7 +133,8 @@ def verify_run(run_dir, seed, track, holdouts):
         pair = pd.read_csv(pair_path, sep="\t")
         if len(pair) != 3 or set(pair.method) != {"msp", "energy", "deep_knn"}:
             raise ValueError(f"{pair_path}: invalid pair rows")
-        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+        with materialize_checkpoint(checkpoint_path, manifest["artifacts"]["checkpoint_sha256"]) as resolved_checkpoint:
+            checkpoint = torch.load(resolved_checkpoint, map_location="cpu", weights_only=True)
         for key, value in checkpoint["state_dict"].items():
             if not torch.isfinite(value).all():
                 raise ValueError(f"{checkpoint_path}: non-finite state {key}")
@@ -149,7 +151,7 @@ def verify_run(run_dir, seed, track, holdouts):
         if checkpoint["selection"] != selection or checkpoint["test_used_for_selection"]:
             raise ValueError(f"{checkpoint_path}: selection metadata mismatch")
         for name, artifact in (("pair_sha256", pair_path), ("history_sha256", history_path),
-                               ("checkpoint_sha256", checkpoint_path), ("scores_sha256", score_path)):
+                               ("scores_sha256", score_path)):
             if manifest["artifacts"][name] != sha256_file(artifact):
                 raise ValueError(f"{manifest_path}: {name} mismatch")
         recheck_window_scores(score_path, pair, manifest)
