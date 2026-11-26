@@ -559,12 +559,20 @@ def cmd_evaluate(args):
                                    [train_metadata["val_auroc"], train_metadata["val_auprc"]], atol=1e-12):
                     raise RuntimeError("Checkpoint validation reproduction failed")
                 test_auroc, test_auprc = metrics(arrays[2][2], test_score)
-                atomic_npz(os.path.join(test_dir, "test_predictions.npz"),
-                           window_id=np.asarray(arrays[2][0]), label=arrays[2][2], score=test_score)
+                test_prediction_path = os.path.join(test_dir, "test_predictions.npz")
+                atomic_npz(test_prediction_path, window_id=np.asarray(arrays[2][0]),
+                           label=arrays[2][2], score=test_score)
+                checkpoint_manifest = json.load(open(os.path.join(task_dir(args.out, task),
+                                                                  "checkpoint_manifest.json")))
                 atomic_json(test_metadata_path, {"auroc": test_auroc, "auprc": test_auprc,
                                                  "n_eval": len(test_score), "split": "test",
                                                  "training_device": checkpoint["training_device"],
-                                                 "evaluation_device": device_info})
+                                                 "evaluation_device": device_info,
+                                                 "checkpoint_validation_reproduced": True,
+                                                 "checkpoint_used_for_test": True,
+                                                 "checkpoint_raw_sha256": checkpoint_manifest["raw_sha256"],
+                                                 "checkpoint_compressed_sha256": checkpoint_manifest["compressed_sha256"],
+                                                 "test_predictions_sha256": file_sha256(test_prediction_path)})
                 del model, head, checkpoint
                 gc.collect()
                 torch.cuda.empty_cache()

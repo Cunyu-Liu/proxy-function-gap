@@ -48,18 +48,29 @@ train_run() {
 }
 
 eval_run() {
-  local DIR=$1 LOGFILE=$2
-  if [ -f "$DIR/.eval_complete" ]; then echo "SKIP eval $DIR"; return 0; fi
-  resource_gate "eval_${DIR##*/}" 12000 || return 1
-  echo "EVAL_START $DIR $(date -Is)"
-  if [[ "$DIR" == *lora* ]]; then
-    "$PY" e1_finetune.py evaluate --out "$DIR" --selection "$SELECTION" --log "$LOG" >"$LOGFILE" 2>&1
-  else
-    "$PY" e1_finetune.py evaluate --out "$DIR" --log "$LOG" >"$LOGFILE" 2>&1
+  local DIR=$1 LOGFILE=$2 RC
+  if [ ! -f "$DIR/.eval_complete" ]; then
+    resource_gate "eval_${DIR##*/}" 12000 || return 1
+    echo "EVAL_START $DIR $(date -Is)"
+    if [[ "$DIR" == *lora* ]]; then
+      "$PY" e1_finetune.py evaluate --out "$DIR" --selection "$SELECTION" --log "$LOG" >"$LOGFILE" 2>&1
+    else
+      "$PY" e1_finetune.py evaluate --out "$DIR" --log "$LOG" >"$LOGFILE" 2>&1
+    fi
+    RC=$?
+    echo "EVAL_END $DIR rc=$RC $(date -Is)"
+    [ "$RC" -eq 0 ] || return "$RC"
   fi
-  local RC=$?
-  echo "EVAL_END $DIR rc=$RC $(date -Is)"
-  return "$RC"
+  if [ -f "$DIR/.retention_complete" ]; then echo "SKIP retention $DIR"; return 0; fi
+  "$PY" e1_finetune_verify.py --runs "$DIR" --require-eval \
+    --out "$DIR/pre_retention_verification.json" >"$LOGFILE.pre_retention_verify" 2>&1 || return 1
+  if [[ "$DIR" == *lora* ]]; then
+    "$PY" e1_finetune_retention.py --run "$DIR" --verification "$DIR/pre_retention_verification.json" \
+      --selection "$SELECTION" --log "$LOG" >"$LOGFILE.retention" 2>&1 || return 1
+  else
+    "$PY" e1_finetune_retention.py --run "$DIR" --verification "$DIR/pre_retention_verification.json" \
+      --log "$LOG" >"$LOGFILE.retention" 2>&1 || return 1
+  fi
 }
 
 lora_fold0_dir() {

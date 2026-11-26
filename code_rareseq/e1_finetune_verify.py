@@ -58,8 +58,29 @@ def verify_run(run, require_eval=False, expected_rank=None):
         assert manifest["contains_optimizer_state"] is False
         assert manifest["contains_old_epoch_weights"] is False
         assert manifest["roundtrip_sha256_verified"] is True
-        assert os.path.getsize(checkpoint_path) == manifest["compressed_bytes"]
-        assert sha256_file(checkpoint_path) == manifest["compressed_sha256"]
+        retention_path = os.path.join(directory, "retention.json")
+        if os.path.isfile(retention_path):
+            retention = json.load(open(retention_path))
+            assert retention["raw_sha256"] == manifest["raw_sha256"]
+            assert retention["compressed_sha256"] == manifest["compressed_sha256"]
+            assert retention["checkpoint_validation_reproduced"] is True
+            assert retention["checkpoint_used_for_test"] is True
+            head_path = os.path.join(directory, "head.pt")
+            assert sha256_file(head_path) == retention["head"]["sha256"]
+            for artifact in retention["artifact_hashes"].values():
+                artifact_path = os.path.join(run, artifact["path"])
+                assert os.path.getsize(artifact_path) == artifact["bytes"]
+                assert sha256_file(artifact_path) == artifact["sha256"]
+            if retention["status"] == "retained_proof_only":
+                assert not os.path.exists(checkpoint_path)
+            else:
+                assert retention["status"] == "retained_full_checkpoint"
+                assert os.path.isfile(checkpoint_path)
+        else:
+            assert os.path.isfile(checkpoint_path)
+        if os.path.isfile(checkpoint_path):
+            assert os.path.getsize(checkpoint_path) == manifest["compressed_bytes"]
+            assert sha256_file(checkpoint_path) == manifest["compressed_sha256"]
         assert not glob.glob(os.path.join(directory, "best.restore.*"))
         assert not os.path.exists(os.path.join(directory, "best.pt.tmp"))
         assert not os.path.exists(os.path.join(directory, "best.pt.zlib.tmp"))
@@ -89,6 +110,9 @@ def verify_run(run, require_eval=False, expected_rank=None):
             assert np.isfinite(prediction["score"]).all()
             auroc, auprc = metrics(prediction["label"], prediction["score"])
             metadata = json.load(open(os.path.join(directory, "metadata.json")))
+            assert metadata["checkpoint_validation_reproduced"] is True
+            assert metadata["checkpoint_used_for_test"] is True
+            assert sha256_file(os.path.join(directory, "test_predictions.npz")) == metadata["test_predictions_sha256"]
             assert np.allclose([auroc, auprc], [metadata["auroc"], metadata["auprc"]], atol=1e-12)
         if args["mode"] == "lora":
             eval_config = json.load(open(os.path.join(run, "finetune_eval_config.json")))
