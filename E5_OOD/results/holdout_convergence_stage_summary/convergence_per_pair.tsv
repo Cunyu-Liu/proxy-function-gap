@@ -47,3 +47,4 @@ seed	track	holdout	best_epoch	epochs_run	stop_reason
 1	neg2	UPF1	3	23	validation_early_stop
 1	neg2	CSTF2T	6	26	validation_early_stop
 1	neg2	YBX3	4	24	validation_early_stop
+2	neg1c	HNRNPC	6	26	validation_early_stop

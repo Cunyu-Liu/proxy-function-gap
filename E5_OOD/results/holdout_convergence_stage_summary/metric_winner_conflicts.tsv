@@ -1,3 +1,3 @@
 track	auroc_ood_winner	auroc_ood_value	fpr95_winner	fpr95_value	aurc_winner	aurc_value	winner_conflict
-neg1c	deep_knn	0.5079560052033292	deep_knn	0.947239922061452	energy	0.15500532746904772	True
+neg1c	deep_knn	0.5376175696981288	deep_knn	0.9413000626362672	msp	0.1541761935451393	True
 neg2	deep_knn	0.508359180464712	deep_knn	0.9461084864636626	msp	0.4729607842665671	True

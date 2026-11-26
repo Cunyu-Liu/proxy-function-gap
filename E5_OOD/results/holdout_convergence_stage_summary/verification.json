@@ -1,14 +1,14 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261126-014847-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261126-021432-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 48,
+  "n_pairs_completed": 49,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
   "pass1_schema_finite_checkpoint": true,
   "pass2_config_split_seed_alignment": true,
   "cross_seed_window_npz_alignment": {
-    "comparisons": 24,
+    "comparisons": 25,
     "per_task_validation_test_ids_and_positives": true,
     "npz_keys_window_occurrence_roles_labels_shapes_finite": true,
     "model_scores_compared_for_equality": false
@@ -21,7 +21,68 @@
     {
       "seed": 2,
       "track": "neg1c",
-      "reason": "missing results"
+      "holdout": "PTBP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "U2AF2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "SRSF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "RBFOX2",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "QKI",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "IGF2BP1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "LIN28B",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "TAF15",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "UPF1",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "CSTF2T",
+      "reason": "incomplete pair"
+    },
+    {
+      "seed": 2,
+      "track": "neg1c",
+      "holdout": "YBX3",
+      "reason": "incomplete pair"
     },
     {
       "seed": 2,
@@ -35,9 +96,10 @@
     "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
     "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y",
     "E5-rbp-holdout-convergence-s1-neg2-20261125-205610-ZDLg6Y",
-    "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y"
+    "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s2-neg1c-20261126-014523-ZDLg6Y"
   ],
-  "n_source_runs": 6,
+  "n_source_runs": 7,
   "test_used_for_selection": false,
-  "input_digest": "151f19d06f11fd4d1743f45b8aa4e5d03fe9925ce3ef84c7adede6134b63cea7"
+  "input_digest": "1c13b0d14ed8d565b94e557b9108c2936ab9993715beeee106a88f7565af99c4"
 }
