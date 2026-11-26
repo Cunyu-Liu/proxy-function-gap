@@ -80,9 +80,17 @@ wait "$P0" || RC=1
 wait "$P1" || RC=1
 if [ "$RC" -ne 0 ]; then echo "FAILED modern $(date -Is)" > "$STATUS"; exit 1; fi
 
-knn_worker 0 2 4 & K0=$!
-knn_worker 1 3 & K1=$!
-wait "$K0" || RC=1
-wait "$K1" || RC=1
+KNN_JOBS=${KNN_JOBS:-2}
+if [ "$KNN_JOBS" = 2 ]; then
+  knn_worker 0 2 4 & K0=$!
+  knn_worker 1 3 & K1=$!
+  wait "$K0" || RC=1
+  wait "$K1" || RC=1
+elif [ "$KNN_JOBS" = 1 ]; then
+  knn_worker 0 1 2 3 4 || RC=1
+else
+  echo "INVALID KNN_JOBS=$KNN_JOBS" >&2
+  exit 1
+fi
 if [ "$RC" -ne 0 ]; then echo "FAILED knn $(date -Is)" > "$STATUS"; exit 1; fi
 echo "ALL_DONE $(date -Is)" > "$STATUS"

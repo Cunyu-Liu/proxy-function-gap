@@ -1,0 +1,23 @@
+{
+  "completed_knn_folds": [
+    1
+  ],
+  "running_knn_folds": [
+    3
+  ],
+  "failed_pending_knn_folds": [
+    0
+  ],
+  "pending_knn_folds": [
+    2,
+    4
+  ],
+  "f1_run_rows": 584,
+  "f1_validation_rows": 876,
+  "f1_selected_k": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "f1_cuda0": true,
+  "f1_train_ids_match_modern": true
+}

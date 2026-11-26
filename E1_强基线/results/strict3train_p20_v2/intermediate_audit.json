@@ -1,5 +1,5 @@
 {
-  "completed_modern_runs": 12,
+  "completed_modern_runs": 15,
   "failed": false,
   "checks": [
     {
@@ -143,6 +143,42 @@
       "best_epoch_min": 1,
       "best_epoch_max": 15,
       "stopped_epoch_max": 35,
+      "cuda0": true,
+      "strict3train": true
+    },
+    {
+      "run": "f4_modern_bce_s0",
+      "run_id": "E1-frozen-modern-20261125-193913-ZDLg6Y",
+      "code_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+      "history_rows": 7755,
+      "checkpoints": 292,
+      "best_epoch_min": 1,
+      "best_epoch_max": 27,
+      "stopped_epoch_max": 47,
+      "cuda0": true,
+      "strict3train": true
+    },
+    {
+      "run": "f4_modern_bce_s1",
+      "run_id": "E1-frozen-modern-20261125-193856-ZDLg6Y",
+      "code_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+      "history_rows": 7818,
+      "checkpoints": 292,
+      "best_epoch_min": 1,
+      "best_epoch_max": 24,
+      "stopped_epoch_max": 44,
+      "cuda0": true,
+      "strict3train": true
+    },
+    {
+      "run": "f4_modern_bce_s2",
+      "run_id": "E1-frozen-modern-20261125-212655-ZDLg6Y",
+      "code_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+      "history_rows": 7741,
+      "checkpoints": 292,
+      "best_epoch_min": 1,
+      "best_epoch_max": 28,
+      "stopped_epoch_max": 48,
       "cuda0": true,
       "strict3train": true
     }
