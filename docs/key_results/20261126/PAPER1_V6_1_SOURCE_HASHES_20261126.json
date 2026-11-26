@@ -1,0 +1,52 @@
+{
+  "schema": "paper1-v6-1-source-hashes-1",
+  "release_date": "2026-11-26",
+  "current_release": "PAPER1_TCELL_DECISION_V6_1_20261126",
+  "historical_release": "PAPER1_TCELL_DECISION_V6_20261126",
+  "records": [
+    {
+      "source": "deliverables/paper/PAPER1_TCELL_DECISION_V6_1_20261126.md",
+      "archive": "paper/v6_1_20261126/PAPER1_TCELL_DECISION_V6_1_20261126.md",
+      "source_sha256": "9efce0188d16b80d051f89901098e1e63f96fa531c40adf4a0dcc4b992e28923",
+      "archive_sha256": "9efce0188d16b80d051f89901098e1e63f96fa531c40adf4a0dcc4b992e28923",
+      "archive_bytes": 51392,
+      "relation": "byte_identical_to_local_source"
+    },
+    {
+      "source": "deliverables/paper/build_paper1_tcell_decision_v6_1.py",
+      "archive": "paper/v6_1_20261126/build_paper1_tcell_decision_v6_1.py",
+      "source_sha256": "36e6299e5fe198d98d666e57e394461ed29689d0754f20154884476f74e10a48",
+      "archive_sha256": "93d744009ece75363f347b975394fcd8821819bc28ec3fd8b914f5dabd495b9f",
+      "archive_bytes": 7170,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/reports/docs/verify_paper1_tcell_decision_v6_1.py",
+      "archive": "paper/v6_1_20261126/verify_paper1_tcell_decision_v6_1.py",
+      "source_sha256": "41a067eb086003db241925aa2c4c7c5139c4dbb4fa2870ec6835e700b40c5f73",
+      "archive_sha256": "f5236633ab107073e6d4be4c1b45efadcde87cd435a449856c1e09276653e694",
+      "archive_bytes": 40134,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/reports/docs/PAPER1_TCELL_DECISION_V6_1_CLAIM_EVIDENCE_LEDGER_20261126.md",
+      "archive": "docs/PAPER1_TCELL_DECISION_V6_1_CLAIM_EVIDENCE_LEDGER_20261126.md",
+      "source_sha256": "097f5f2fc950ebefaf89a3f2b2c3516a1a6210849c6c0e83a8be558201a6dc59",
+      "archive_sha256": "d30570742f75a47ddd6afc7b01dd6b1bf0ae3044e3f232c8b020b738f218b5f9",
+      "archive_bytes": 12700,
+      "relation": "trailing_whitespace_only"
+    },
+    {
+      "source": "deliverables/reports/docs/PAPER1_V6_INDEPENDENT_REVIEW_20261126.md",
+      "archive": "docs/PAPER1_V6_INDEPENDENT_REVIEW_20261126.md",
+      "source_sha256": "4fef41d4eb37186401b92f671d6d1cc57060565b9d44d43a00c67d98f7ed0cb3",
+      "archive_sha256": "7f6160a5836d03a91735e742859e857bf7e92421ae73513b197109943d0f4087",
+      "archive_bytes": 11355,
+      "relation": "trailing_whitespace_only"
+    }
+  ],
+  "record_count": 5,
+  "byte_identical_to_local_source": 1,
+  "portable_archive_adaptations": 4,
+  "adaptation_scope": "Configurable evidence/output paths and output report locations for two scripts; trailing-whitespace removal only on two ledger lines and seven independent-review lines. Main manuscript, scientific values, review conclusions, gates and claims are unchanged."
+}
