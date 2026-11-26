@@ -75,3 +75,4 @@ RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±
 扩展首个`sequence_linear_f1_s0`已完成并独立重放：732行指标一致、43,998×244 ID正确、checkpoint CUDA预测一致，best/stop `45/65`，沿用fold0冻结selection SHA。该单run不与fold0或其他fold混写；驱动已进入fold1 seed1，最终门禁和五折汇总尚未形成。
 - `sequence_linear_f1_s1`随后完成并独立重放通过：732行指标、ID、checkpoint CUDA预测及selection SHA一致，best/stop `16/36`。05:53进度为14/60神经eval、2/10 kNN，fold1 seed2训练中；最终门禁不存在，五折汇总未生成。
 - 06:35扩展进度为28/60神经eval、4/10 kNN，fold2 MLP seed1训练中。fold2 linear三seed均独立重放通过，best/stop分别为`29/49、5/25、27/47`；fold1 sequence kNN与RBP-OOD kNN分别重放732/147行指标一致，test ID/任务数正确。上述为新增run验收，不是五折汇总；最终门禁仍未形成。
+- `sequence_mlp_f2_s0`已独立重放通过：732行指标、ID、checkpoint CUDA预测及MLP selection SHA `41b3aca63c4e7b30eac512b876ede96eb4975a79985b9052aaf12239730a32d3`一致，best/stop `31/51`。当前仍28/60神经eval、4/10 kNN，fold2 MLP seed1继续运行。
