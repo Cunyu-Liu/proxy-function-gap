@@ -1,9 +1,9 @@
 {
   "stage": "E1_RiNALMo_main_146",
   "status": "waiting_storage_quota",
-  "updated_at": "2026-11-27T05:48:05+08:00",
+  "updated_at": "2026-11-27T06:28:15+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
-  "driver_pid": 4182332,
+  "driver_pid": 5410,
   "smoke_experiment": "SUPV3L1_K562",
   "main_experiments": 146,
   "planned_bce_runs": 15,
@@ -74,6 +74,8 @@
     "embedding_gate_required_gib": 3,
     "per_model_run_gate_required_gib": 1,
     "driver_waiting": true,
+    "current_gate_available_gib": 2,
+    "offline_model_snapshot_loading_verified": true,
     "files_deleted": false,
     "temporary_files_preserved": true,
     "evidence": ["storage_failure_2026-11-27.json", "storage_status_2026-11-27.json"]

@@ -73,6 +73,7 @@ def main():
     parser.add_argument("--exps-file", required=True)
     parser.add_argument("--out", required=True)
     parser.add_argument("--reuse-from")
+    parser.add_argument("--model-path")
     parser.add_argument("--log", required=True)
     parser.add_argument("--batch", type=int, default=64)
     parser.add_argument("--max-length", type=int, default=103)
@@ -95,7 +96,7 @@ def main():
         import torch
         from multimolecule import AutoModel, AutoTokenizer
         device, device_info = require_cuda()
-        repo = "multimolecule/rinalmo-giga"
+        repo = args.model_path or "multimolecule/rinalmo-giga"
         tokenizer = AutoTokenizer.from_pretrained(repo, trust_remote_code=True)
         model = AutoModel.from_pretrained(repo, trust_remote_code=True).to(device).eval()
         if model.config.hidden_size != args.dim:

@@ -74,6 +74,7 @@ run_embed() {
   PYTHONPATH=/root/rnaft/pypath:/root/rareseq/pydeps "$PY" e1_rinalmo_embed.py \
     --windows-dir "$E0/windows" --neg-dir "$E0/neg" --exps-file "$exps" \
     --out "$EMB" --reuse-from "$PILOT_EMB" --batch 64 --max-length 103 --dim 1280 \
+    --model-path /root/hf_home/hub/models--multimolecule--rinalmo-giga/snapshots/2a71f6f98fb41dd2e6542a5e131d3778111d1468 \
     --log "$LOG" --data-version "$DATA_VERSION" > "$log" 2>&1
 }
 
