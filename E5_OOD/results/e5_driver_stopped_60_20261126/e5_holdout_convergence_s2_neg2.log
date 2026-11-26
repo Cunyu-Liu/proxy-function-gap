@@ -1,0 +1,14 @@
+
+===== 2026-11-26T13:41:18+08:00 seed=2 track=neg2 =====
+CUDA_PROBE {"device": "cuda:0", "name": "NVIDIA GeForce RTX 5090", "capability": [12, 0], "torch_version": "2.11.0+cu128", "numerical_probe": "passed"}
+HOST_MEMORY_GATE_PASSED {"available_kib": 52550544}
+HOST_MEMORY {"phase": "before_load", "peak_rss_kib": 2055000, "VmHWM": "2055000 kB", "VmRSS": "1810032 kB", "holdout": "HNRNPC", "track": "neg2"}
+HOST_MEMORY {"phase": "after_load", "peak_rss_kib": 23551912, "VmHWM": "23551912 kB", "VmRSS": "17489944 kB", "holdout": "HNRNPC", "track": "neg2"}
+Traceback (most recent call last):
+  File "/root/rareseq/work/e5_rbp_holdout.py", line 609, in <module>
+    main()
+  File "/root/rareseq/work/e5_rbp_holdout.py", line 582, in main
+    model, mean, std, history, selection = train_shared(
+  File "/root/rareseq/work/e5_rbp_holdout.py", line 242, in train_shared
+    xt = torch.from_numpy(x).to(device)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 6.09 GiB. GPU 0 has a total capacity of 31.36 GiB of which 5.69 MiB is free. Including non-PyTorch memory, this process has 530.00 MiB memory in use. Process 3988787 has 5.99 GiB memory in use. Process 3988785 has 4.29 GiB memory in use. Process 3989510 has 612.00 MiB memory in use. Process 3989628 has 712.00 MiB memory in use. Process 3989623 has 712.00 MiB memory in use. Process 3989633 has 710.00 MiB memory in use. Process 3989620 has 3.27 GiB memory in use. Process 3989630 has 734.00 MiB memory in use. Process 3989629 has 712.00 MiB memory in use. Process 3989614 has 1.42 GiB memory in use. Process 3989612 has 734.00 MiB memory in use. Process 3989616 has 1.35 GiB memory in use. Process 3989622 has 812.00 MiB memory in use. Process 3989619 has 818.00 MiB memory in use. Process 3989613 has 820.00 MiB memory in use. Process 3989627 has 818.00 MiB memory in use. Process 3989632 has 820.00 MiB memory in use. Process 3989624 has 816.00 MiB memory in use. Process 3989626 has 814.00 MiB memory in use. Process 3989625 has 814.00 MiB memory in use. Process 3989631 has 818.00 MiB memory in use. Process 3989615 has 816.00 MiB memory in use. Process 3989608 has 816.00 MiB memory in use. Process 3989621 has 814.00 MiB memory in use. Of the allocated memory 8.12 MiB is allocated by PyTorch, and 11.88 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

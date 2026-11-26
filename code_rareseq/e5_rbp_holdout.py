@@ -24,6 +24,7 @@ COMPATIBLE_TRAIN_CODE_HASHES = {
     "cb180b4299633c485c4bb5a2d3801b520c2d9a88114b7b2b492011dbc326f9c6",
     "192b77cadda6d566e45254f99489aa55c6a59fd9d6f70c7fa4b9cfe3a0fedee8",
     "273ce650a7dc7cd87a21fa61b57259e77f69db628a6c9b819fc098886da5dddf",
+    "c1f3d051b0c619af6e221fdae08e81f2efc768d428f57cd6eba5ff80a124be6c",
 }
 
 
@@ -95,6 +96,19 @@ def wait_for_host_memory(minimum_available_kib=36 * 1024 * 1024):
             return
         print("HOST_MEMORY_GATE_WAIT", json.dumps({
             "available_kib": available_kib, "required_kib": minimum_available_kib}), flush=True)
+        time.sleep(60)
+
+
+def wait_for_cuda_memory(device, minimum_free_bytes=12 * 1024 ** 3):
+    import torch
+    while True:
+        free_bytes, total_bytes = torch.cuda.mem_get_info(device)
+        if free_bytes >= minimum_free_bytes:
+            print("CUDA_MEMORY_GATE_PASSED", json.dumps({
+                "free_bytes": free_bytes, "total_bytes": total_bytes}), flush=True)
+            return
+        print("CUDA_MEMORY_GATE_WAIT", json.dumps({
+            "free_bytes": free_bytes, "required_bytes": minimum_free_bytes}), flush=True)
         time.sleep(60)
 
 
@@ -551,6 +565,7 @@ def main():
                         os.replace(path, os.path.join(quarantine, os.path.basename(path)))
                 print("QUARANTINED_INCOMPLETE_OR_INVALID", heldout, track, quarantine, flush=True)
             wait_for_host_memory()
+            wait_for_cuda_memory(device)
             if loader is None:
                 loader = TaskLoader(args)
                 base_tasks = list(loader.tasks())

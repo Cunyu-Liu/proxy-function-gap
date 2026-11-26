@@ -1,6 +1,6 @@
 {
   "status": "partial",
-  "n_pairs_completed": 53,
+  "n_pairs_completed": 60,
   "n_pairs_expected": 72,
   "pass1_schema_hashes_checkpoint": true,
   "pass2_independent_vector_recalculation": true,
