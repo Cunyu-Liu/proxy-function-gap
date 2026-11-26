@@ -143,7 +143,7 @@ run_fold() {
 }
 
 run_fold 0 || { echo "FOLD0_FAILED_OR_BLOCKED $(date -Is)" >"$STATUS"; exit 1; }
-run_cpu verify_fold0 "$LOGDIR/verify_fold0.log" rnacompete_ray2013_baselines.py verify-fold0 "${BASE[@]}" || {
+run_cuda verify_fold0 2500 "$LOGDIR/verify_fold0.log" rnacompete_ray2013_baselines.py verify-fold0 "${BASE[@]}" || {
   echo "FOLD0_VERIFY_FAILED $(date -Is)" >"$STATUS"; exit 1; }
 echo "FOLD0_GATE_PASSED $(date -Is)" >"$STATUS"
 if [ "$MODE" = fold0 ]; then
@@ -156,7 +156,7 @@ fi
 for FOLD in 1 2 3 4; do
   run_fold "$FOLD" || { echo "EXPANSION_FAILED_OR_BLOCKED fold=$FOLD $(date -Is)" >"$STATUS"; exit 1; }
 done
-run_cpu verify_final "$LOGDIR/verify_final.log" rnacompete_ray2013_baselines.py verify-final "${BASE[@]}" || {
+run_cuda verify_final 2500 "$LOGDIR/verify_final.log" rnacompete_ray2013_baselines.py verify-final "${BASE[@]}" || {
   echo "FINAL_VERIFY_FAILED $(date -Is)" >"$STATUS"; exit 1; }
 run_cpu summarize "$LOGDIR/summarize.log" rnacompete_ray2013_baselines.py summarize "${BASE[@]}" || {
   echo "SUMMARY_FAILED $(date -Is)" >"$STATUS"; exit 1; }

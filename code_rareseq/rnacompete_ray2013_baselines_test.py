@@ -6,7 +6,8 @@ import tempfile
 import numpy as np
 import pandas as pd
 
-from rnacompete_ray2013_baselines import (ARCHES, BenchmarkData, aligned_prediction, better_candidate,
+from rnacompete_ray2013_baselines import (ARCHES, BenchmarkData, aligned_prediction,
+                                          audit_selection_boundaries, better_candidate,
                                           label_placeholders, macro_metrics, masked_mse, metrics_table,
                                           regression_metrics, replay_run, save_test_products, split_roles)
 from rnacompete_ray2013_rnafm_embed import validate_cache
@@ -116,6 +117,26 @@ def main():
         try:
             validate_cache(emb_path, ids_path, data.sequences.sequence_id.tolist())
             raise AssertionError("non-finite embedding was not rejected")
+        except ValueError:
+            pass
+
+        gate_root = os.path.join(root, "selection_audit")
+        os.makedirs(os.path.join(gate_root, "selections"))
+        for track in ("sequence", "rbp_ood"):
+            for arch in ("linear", "mlp", "knn"):
+                with open(os.path.join(gate_root, "selections", f"{track}_{arch}.json"), "w") as handle:
+                    json.dump({"status": "frozen", "test_used": False, "selection_fold": 0}, handle)
+        candidate = os.path.join(gate_root, "selection_runs", "candidate")
+        os.makedirs(candidate)
+        with open(os.path.join(candidate, "config.json"), "w") as handle:
+            json.dump({"test_read_during_training": False}, handle)
+        audited = audit_selection_boundaries(gate_root)
+        assert audited["n_selections"] == 6 and audited["selection_tree_test_artifacts"] == 0
+        with open(os.path.join(candidate, "test_predictions.npz"), "wb") as handle:
+            handle.write(b"forbidden")
+        try:
+            audit_selection_boundaries(gate_root)
+            raise AssertionError("test artifact in selection tree was not rejected")
         except ValueError:
             pass
 

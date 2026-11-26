@@ -627,6 +627,59 @@ def evaluate_knn(data, track, fold, args, device_info):
     print("KNN_EVALUATE_OK " + json.dumps({"run": out, "rows": len(table)}), flush=True)
 
 
+def audit_selection_boundaries(root):
+    selection_dir = os.path.join(root, "selections")
+    expected = [f"{track}_{arch}.json" for track in TRACKS for arch in (*ARCHES, "knn")]
+    for name in expected:
+        path = os.path.join(selection_dir, name)
+        with open(path) as handle:
+            selection = json.load(handle)
+        if selection["status"] != "frozen" or selection["test_used"] is not False:
+            raise ValueError(f"Invalid test-free selection: {path}")
+        if selection["selection_fold"] != 0:
+            raise ValueError(f"Selection is not restricted to fold0: {path}")
+    selection_runs = os.path.join(root, "selection_runs")
+    for directory, _, files in os.walk(selection_runs):
+        if any(name.startswith("test_") or name == ".eval_complete" for name in files):
+            raise ValueError(f"Test artifact found in selection tree: {directory}")
+        if "config.json" in files:
+            with open(os.path.join(directory, "config.json")) as handle:
+                config = json.load(handle)
+            if config.get("test_read_during_training") is not False:
+                raise ValueError(f"Selection training read test: {directory}")
+    return {"n_selections": len(expected), "test_used_for_selection": False,
+            "selection_tree_test_artifacts": 0}
+
+
+def replay_neural_checkpoint(data, run, track, arch, fold, context, saved_prediction, eval_config):
+    import torch
+    checkpoint, _ = load_neural_checkpoint(run, track, arch, fold)
+    if checkpoint["stopped_epoch"] - checkpoint["best_epoch"] != 20:
+        raise ValueError(f"Checkpoint patience mismatch: {run}")
+    history = pd.read_csv(os.path.join(run, "validation_history.tsv"), sep="\t")
+    if len(history) != checkpoint["stopped_epoch"]:
+        raise ValueError(f"Checkpoint history length mismatch: {run}")
+    selection_path = os.path.join(os.path.dirname(os.path.dirname(run)), "selections", f"{track}_{arch}.json")
+    if eval_config.get("selection_sha256") != sha256_file(selection_path):
+        raise ValueError(f"Frozen selection SHA mismatch: {run}")
+    rows = context["rows"]["test"]
+    x = np.asarray(data.embeddings[rows], dtype=np.float32)
+    x = (x - checkpoint["feature_mean"]) / checkpoint["feature_std"]
+    device = torch.device("cuda:0")
+    model = make_model(arch, 640, checkpoint["output_dim"]).to(device)
+    model.load_state_dict(checkpoint["model_state"])
+    model.eval()
+    prediction = predict_neural(model, torch.from_numpy(x).to(device))
+    prediction = prediction * checkpoint["label_std"] + checkpoint["label_mean"]
+    prediction = aligned_prediction(prediction, len(context["tasks"]["test"]))
+    if not np.allclose(prediction, saved_prediction, rtol=1e-6, atol=1e-6):
+        raise ValueError(f"Checkpoint test prediction replay mismatch: {run}")
+    del model
+    torch.cuda.empty_cache()
+    return {"checkpoint_replay_passed": True, "best_epoch": checkpoint["best_epoch"],
+            "stopped_epoch": checkpoint["stopped_epoch"], "selection_sha256": eval_config["selection_sha256"]}
+
+
 def replay_run(data, track, arch, fold, seed, root):
     if arch == "knn":
         run = os.path.join(root, "knn", f"{track}_f{fold}")
@@ -661,11 +714,15 @@ def replay_run(data, track, arch, fold, seed, root):
         config = json.load(handle)
     if config["test_used_for_selection"] is not False or config["evaluation_only"] is not True:
         raise ValueError(f"Test selection boundary missing: {run}")
-    return {"run": run, "n_metric_rows": len(saved), "replay_passed": True,
-            "test_rows": len(rows), "test_tasks": len(tasks)}
+    result = {"run": run, "n_metric_rows": len(saved), "replay_passed": True,
+              "test_rows": len(rows), "test_tasks": len(tasks)}
+    if arch != "knn":
+        result.update(replay_neural_checkpoint(data, run, track, arch, fold, context, prediction, config))
+    return result
 
 
 def verify_gate(data, root, fold0_only=True):
+    selection_audit = audit_selection_boundaries(root)
     records = []
     folds = [0] if fold0_only else list(range(5))
     seeds = SEEDS if fold0_only else SEEDS
@@ -676,6 +733,7 @@ def verify_gate(data, root, fold0_only=True):
                     records.append(replay_run(data, track, arch, fold, seed, root))
             records.append(replay_run(data, track, "knn", fold, None, root))
     result = {"status": "passed", "scope": "fold0_three_seed" if fold0_only else "five_fold_three_seed",
+              "selection_audit": selection_audit,
               "runs": records, "n_evaluations": len(records), "model_performance_claim": False,
               "expansion_allowed": fold0_only, "version": VERSION}
     path = os.path.join(root, "fold0_gate.json" if fold0_only else "final_gate.json")
@@ -770,6 +828,8 @@ def main():
                  code_version=sha256_file(os.path.abspath(__file__)))
     try:
         if args.command in ("verify-fold0", "verify-final", "summarize"):
+            if args.command != "summarize":
+                require_cuda()
             data = data_from_args(args)
             if args.command == "verify-fold0":
                 verify_gate(data, args.out, fold0_only=True)
