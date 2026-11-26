@@ -17,10 +17,19 @@ def sha256_file(path):
     return digest.hexdigest()
 
 
+def validation_checkpoint(history, min_delta=1e-4):
+    best_loss, best_epoch = np.inf, None
+    for row in history.sort_values("epoch").itertuples():
+        if row.validation_bce < best_loss - min_delta:
+            best_loss, best_epoch = row.validation_bce, row.epoch
+    return best_loss, best_epoch
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-root", required=True)
     parser.add_argument("--data-dir", required=True)
+    parser.add_argument("--allow-partial", action="store_true")
     args = parser.parse_args()
     root, data = Path(args.run_root), Path(args.data_dir)
     manifest = json.loads((data / "frozen_manifest.json").read_text())
@@ -41,6 +50,8 @@ def main():
             for ontology in ("MFO", "BPO", "CCO"):
                 path = root / f"runs/fold{fold}/{track}/{ontology}"
                 if not (path / ".complete").exists():
+                    if args.allow_partial:
+                        continue
                     raise ValueError(f"Incomplete run: {path}")
                 summary = json.loads((path / "summary.json").read_text())
                 if summary["seeds"] != [0, 1, 2] or summary["deep_knn"]["seed"] != "deterministic":
@@ -52,7 +63,9 @@ def main():
                 for seed in summary["bce"]:
                     history = pd.read_csv(path / "validation_history.tsv", sep="\t")
                     history = history[history.seed == seed["seed"]]
-                    if len(history) > 1000 or history.validation_bce.min() != seed["validation_bce"]:
+                    best_loss, best_epoch = validation_checkpoint(history)
+                    if (len(history) > 1000 or not np.isclose(best_loss, seed["validation_bce"], rtol=0, atol=1e-12) or
+                            best_epoch != seed["best_epoch"]):
                         raise ValueError(f"Epoch/validation history mismatch: {path} seed {seed['seed']}")
                     grid = pd.read_csv(path / f"validation_thresholds_seed{seed['seed']}.tsv", sep="\t")
                     if len(grid) != 100 or not np.allclose(grid.threshold, np.round(np.arange(.01, 1.001, .01), 2)):
@@ -73,7 +86,7 @@ def main():
                     nk = t1[(t1.role == "NK") & (t1.model == "deep_knn")]
                     if not ((nk.official_role_proteins == 849) & (nk.n_proteins == 848)).all():
                         raise ValueError("BPO NK 848/849 coverage contract failed")
-                per_label = pd.read_csv(path / "per_label_metrics.tsv.gz", sep="\t")
+                per_label = pd.read_csv(path / "per_label_metrics.tsv.gz", sep="\t", low_memory=False)
                 for (model, seed, split, role), group in per_label.groupby(["model", "seed", "split", "role"]):
                     observed = group.auprc.mean()
                     selected = metrics[(metrics.model == model) & (metrics.seed.astype(str) == str(seed)) &
@@ -83,7 +96,9 @@ def main():
                         raise ValueError(f"Macro AUPRC recomputation failed: {path} {model} {seed} {split} {role}")
                 checked.append({"fold": fold, "track": track, "ontology": ontology,
                                 "summary_sha256": sha256_file(path / "summary.json")})
-    report = {"status": "passed", "runs": len(checked), "bce_seed_runs": len(checked) * 3,
+    if not checked:
+        raise ValueError("No complete runs to audit")
+    report = {"status": "passed", "partial": args.allow_partial, "runs": len(checked), "bce_seed_runs": len(checked) * 3,
               "deep_knn_runs": len(checked), "embeddings": expected_rows,
               "t0_proxy_boundary": "held-out fold also selects parameters; not independent test or all-homology isolation",
               "t1": "final temporal OOD only; validation-selected tau and thresholds", "checked": checked}

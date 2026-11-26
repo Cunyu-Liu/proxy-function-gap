@@ -4,8 +4,10 @@ import tempfile
 import unittest
 
 import numpy as np
+import pandas as pd
 from scipy import sparse
 
+from cafa3_esmc_audit import validation_checkpoint
 from cafa3_esmc_baselines import (ancestor_closure, frequency_bucket, macro_auprc,
                                   metric_at_threshold, read_whitelist, validation_thresholds)
 
@@ -48,6 +50,12 @@ class Cafa3BaselineMetricTest(unittest.TestCase):
         self.assertEqual(grid.threshold.iloc[-1], 1.0)
         self.assertTrue(0.01 <= fmax <= 1.0)
         self.assertTrue(0.01 <= smin <= 1.0)
+
+    def test_checkpoint_replay_respects_min_delta_not_history_minimum(self):
+        history = pd.DataFrame({"epoch": [1, 2, 3], "validation_bce": [0.5, 0.49995, 0.4999]})
+        loss, epoch = validation_checkpoint(history)
+        self.assertEqual(epoch, 1)
+        self.assertEqual(loss, 0.5)
 
     def test_frozen_whitelist_header_is_not_a_protein(self):
         with tempfile.TemporaryDirectory() as directory:

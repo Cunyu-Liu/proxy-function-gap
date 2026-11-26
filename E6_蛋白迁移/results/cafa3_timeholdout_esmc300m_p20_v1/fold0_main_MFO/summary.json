@@ -1,0 +1,58 @@
+{
+  "schema_version": "cafa3-esmc-baseline-run-v1",
+  "fold": 0,
+  "track": "main",
+  "ontology": "MFO",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "selected_tau": 0.5,
+  "bce": [
+    {
+      "seed": 0,
+      "best_epoch": 124,
+      "validation_bce": 0.004062994725313553,
+      "tau": 0.5,
+      "fmax_threshold": 0.95,
+      "smin_threshold": 0.97
+    },
+    {
+      "seed": 1,
+      "best_epoch": 124,
+      "validation_bce": 0.00406313112405197,
+      "tau": 0.5,
+      "fmax_threshold": 0.95,
+      "smin_threshold": 0.97
+    },
+    {
+      "seed": 2,
+      "best_epoch": 124,
+      "validation_bce": 0.004062953805455006,
+      "tau": 0.5,
+      "fmax_threshold": 0.95,
+      "smin_threshold": 0.97
+    }
+  ],
+  "deep_knn": {
+    "k": 20,
+    "seed": "deterministic"
+  },
+  "n_train": 44296,
+  "n_validation": 22545,
+  "n_labels": 10260,
+  "n_active_labels": 5711,
+  "t1_official_role_proteins": {
+    "NK": 454,
+    "LK": 647
+  },
+  "t1_evaluable": {
+    "NK": 454,
+    "LK": 647
+  },
+  "t0_proxy_test_warning": "same held-out fold used for validation selection; not independent test",
+  "t1_selection": "none; thresholds and tau frozen on t0 validation before t1 prediction",
+  "data_manifest_sha256": "324dc8f93aa66780734717f6d05d7e3768d8e0e89093a953d973998744da84d6",
+  "code_sha256": "60b4639688829304c903599c2ee8ae0f22500db9fc675b11861eac529cf3d980"
+}

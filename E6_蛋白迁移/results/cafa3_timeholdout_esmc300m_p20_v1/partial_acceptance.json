@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "partial": true,
+  "runs": 1,
+  "bce_seed_runs": 3,
+  "deep_knn_runs": 1,
+  "embeddings": {
+    "t0": 66841,
+    "t1": 3328
+  },
+  "t0_proxy_boundary": "held-out fold also selects parameters; not independent test or all-homology isolation",
+  "t1": "final temporal OOD only; validation-selected tau and thresholds",
+  "checked": [
+    {
+      "fold": 0,
+      "track": "main",
+      "ontology": "MFO",
+      "summary_sha256": "2c42bff4ffc51c1757ea4f332d2174bc297338defc5b4d60fd4ca5f22f5df699"
+    }
+  ]
+}
