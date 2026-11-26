@@ -100,3 +100,9 @@ RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±
 ### 07:26 fold2完成与fold3启动
 
 fold2的12个神经run及双kNN已全部完成。新增`rbp_ood_mlp_f2_s2`独立重放通过：147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测和selection SHA一致，best/stop `13/33`。fold2 sequence kNN与RBP-OOD kNN分别重放732/147行指标一致，ID/任务数正确。原队列于07:26启动`sequence_linear_f3_s0`，累计36/60神经eval、6/10 kNN；新任务JSONL的seed2 evaluate、kNN completed与fold3 train running衔接一致。最终门禁未形成。
+
+### 07:50 fold3恢复与新增验收
+
+fold3 seed0首次train在checkpoint写入时失败，重试train成功后首次eval又遇`Errno 122 Disk quota exceeded`；这些失败均未形成eval完成标记，64B checkpoint和0B预测临时文件未纳入验收。确认`/teams`实际1MiB写入+fsync探针成功后，从断点恢复，已成功run不重训。任务日志保留真实running/completed状态；配额导致的日志写入失败不作成功记录。
+
+恢复后`sequence_linear_f3_s0/s1`均完成并独立重放通过：best/stop分别`14/34、9/29`，各732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致。当前38/60神经eval、6/10 kNN，fold3 seed2 train running，最终门禁未形成。
