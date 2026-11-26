@@ -1,0 +1,58 @@
+{
+  "n_experiments": 1,
+  "n_files": 2,
+  "n_rows": 2301,
+  "generated_files": 0,
+  "reused_or_existing_files": 2,
+  "pool": "mean-masked",
+  "autocast": "bf16",
+  "cache_dtype": "fp16",
+  "dim": 1280,
+  "cuda": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ]
+  },
+  "code_sha256": "bf97d3e9c95b14f630817a6abceba28efab17980dc6952ec99bc52bcf0d3cc81",
+  "files": [
+    {
+      "experiment": "SUPV3L1_K562",
+      "kind": "pos",
+      "source": "existing",
+      "elapsed_seconds": 8.502,
+      "cuda": {
+        "device": "cuda:0",
+        "name": "NVIDIA GeForce RTX 5090",
+        "numeric_probe": [
+          2.5,
+          -6.0
+        ]
+      },
+      "rows": 561,
+      "dim": 1280,
+      "dtype": "float16",
+      "ids_sha256": "345415c4fe1ae53b86ad1d75f6b102fe6fa74dd9e09e6c2e43c52f5dd79a2a8c"
+    },
+    {
+      "experiment": "SUPV3L1_K562",
+      "kind": "neg",
+      "source": "existing",
+      "elapsed_seconds": 8.529,
+      "cuda": {
+        "device": "cuda:0",
+        "name": "NVIDIA GeForce RTX 5090",
+        "numeric_probe": [
+          2.5,
+          -6.0
+        ]
+      },
+      "rows": 1740,
+      "dim": 1280,
+      "dtype": "float16",
+      "ids_sha256": "103661260d138adf6debe212e0a58f2ac0c69d44b5b42ffa3a2229799826f772"
+    }
+  ]
+}

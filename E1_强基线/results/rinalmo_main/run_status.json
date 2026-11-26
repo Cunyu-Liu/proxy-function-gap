@@ -1,0 +1,37 @@
+{
+  "stage": "E1_RiNALMo_main_146",
+  "status": "running_main_embedding",
+  "updated_at": "2026-11-26T20:45:29+08:00",
+  "remote_host": "px2-jcy.matpool.com:29375",
+  "driver_pid": 4080653,
+  "smoke_experiment": "SUPV3L1_K562",
+  "main_experiments": 146,
+  "planned_bce_runs": 15,
+  "planned_knn_runs": 5,
+  "static_acceptance": {
+    "python_compile": "passed",
+    "bash_syntax": "passed",
+    "strict3train_fold_contract": "passed",
+    "fold_minus1_excluded": true
+  },
+  "smoke_acceptance": {
+    "status": "passed",
+    "embedding_rows": 2301,
+    "embedding_dim": 1280,
+    "cache_dtype": "float16",
+    "cuda_numeric_probe": [2.5, -6.0],
+    "bce_tasks": 2,
+    "knn_tasks": 2,
+    "strict_train_three_folds": true,
+    "no_fold_minus1_in_train": true,
+    "history_checkpoints_aligned": true,
+    "prediction_keys_and_raw_splits_aligned": true,
+    "evidence": ["smoke_audit.json", "smoke_run_manifest.tsv", "smoke_embedding_manifest.json"]
+  },
+  "remote_status": "/home/ProxyFunctionGap/logs/e1_rinalmo_main/driver.status",
+  "remote_driver_log": "/home/ProxyFunctionGap/logs/e1_rinalmo_main/driver.log",
+  "remote_run_log": "/home/ProxyFunctionGap/logs/e1_rinalmo_main/experiments.jsonl",
+  "remote_output": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rinalmo_main_strict3train_p20_v1",
+  "matrix_complete": false,
+  "sota_claim": false
+}
