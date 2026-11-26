@@ -92,3 +92,7 @@ RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±
 ### 07:17新增验收
 
 `rbp_ood_mlp_f2_s0`完成并独立重放通过：147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测及selection SHA一致，best/stop `28/48`；驱动evaluate `rc=0`。累计34/60神经eval、5/10 kNN，下一run为fold2 RBP-OOD MLP seed1，最终门禁未形成。
+
+### 07:22新增验收
+
+`rbp_ood_mlp_f2_s1`完成并独立重放通过：147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测及selection SHA一致，best/stop `31/51`。新任务JSONL的evaluate completed与后续seed2 train running衔接正确。累计35/60神经eval、5/10 kNN，最终门禁未形成。
