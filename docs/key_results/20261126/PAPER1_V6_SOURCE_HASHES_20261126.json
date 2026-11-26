@@ -1,0 +1,90 @@
+{
+  "schema": "paper1-v6-source-hashes-1",
+  "release_date": "2026-11-26",
+  "records": [
+    {
+      "source": "deliverables/paper/PAPER1_TCELL_DECISION_V6_20261126.md",
+      "archive": "paper/v6_20261126/PAPER1_TCELL_DECISION_V6_20261126.md",
+      "source_sha256": "4ae7e57a63b5622b3da1b9286e711a8f1ec4dce467b8169cacf6c73ad15033b7",
+      "archive_sha256": "4ae7e57a63b5622b3da1b9286e711a8f1ec4dce467b8169cacf6c73ad15033b7",
+      "archive_bytes": 51015,
+      "relation": "byte_identical_to_local_source"
+    },
+    {
+      "source": "deliverables/paper/build_paper1_tcell_decision_v6.py",
+      "archive": "paper/v6_20261126/build_paper1_tcell_decision_v6.py",
+      "source_sha256": "b86e48d2942f3e0551f84539de1759639dc8d940ba85cb78f1cfe4e9daa24c86",
+      "archive_sha256": "14661281a562ac1908b84ea575817f647a65e0271662ec68353703e8dfa92a33",
+      "archive_bytes": 7156,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/reports/docs/verify_paper1_tcell_decision_v6.py",
+      "archive": "paper/v6_20261126/verify_paper1_tcell_decision_v6.py",
+      "source_sha256": "e3edb0da000b6b947067cc9c8caa8a8952c529c25875c0527d96a8e33fe413b9",
+      "archive_sha256": "2a204950b1116ed01d740c6c0e100bc357f0d807fe1b4e1f1b6badb33bd4bbc2",
+      "archive_bytes": 39504,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/reports/docs/PAPER1_TCELL_DECISION_V6_CLAIM_EVIDENCE_LEDGER_20261126.md",
+      "archive": "docs/PAPER1_TCELL_DECISION_V6_CLAIM_EVIDENCE_LEDGER_20261126.md",
+      "source_sha256": "3777c2f2c5b9cb4bc7e139e046e8a59cb0d594ddbdff983fef6a2652f3e004be",
+      "archive_sha256": "2f35523e6d4e29835a373b703586d0f8452081b8776640708d378473a7618a74",
+      "archive_bytes": 12297,
+      "relation": "portable_archive_adaptation_trailing_whitespace_only"
+    },
+    {
+      "source": "deliverables/figures/v4/build_paper1_figures_16_17.py",
+      "archive": "figures/v4/build_paper1_figures_16_17.py",
+      "source_sha256": "f60bfce6ed90ddd954b4771e4975ce8e86592f7cefe2fb42f2d4272dd84c4a4c",
+      "archive_sha256": "4ab9f35e15c13685b3dde0fb2f98de4031c8435ebcd8a74dba02472e353bba6a",
+      "archive_bytes": 18319,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/figures/v4/verify_paper1_figures_16_17.py",
+      "archive": "figures/v4/verify_paper1_figures_16_17.py",
+      "source_sha256": "117b6e53abeb4eed4062334b763e76388a68355054c80a1e4c915e8c427a88aa",
+      "archive_sha256": "024cd1a0bb0c91542ce1f6e814d28008b4f68b0f17e60f86e4cb3bac21ccb431",
+      "archive_bytes": 9366,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/figures/v4/paper1_figures_16_17_config.json",
+      "archive": "figures/v4/paper1_figures_16_17_config.json",
+      "source_sha256": "3820286ce49503006cd8d5861bda1b49468d4a07a306dcf83bf7bee393fb4f82",
+      "archive_sha256": "3820286ce49503006cd8d5861bda1b49468d4a07a306dcf83bf7bee393fb4f82",
+      "archive_bytes": 4159,
+      "relation": "byte_identical_to_local_source"
+    },
+    {
+      "source": "deliverables/ppt/paper1_v4/build_paper1_deck.py",
+      "archive": "ppt/paper1_v4/build_paper1_deck.py",
+      "source_sha256": "6759f1ab9cfd53787d715c232146b31cc8377600b3456b69067a6df7e694225f",
+      "archive_sha256": "d59c0b831432f336e3f7c18334c0a55176f8458729d01b318f909039732183c1",
+      "archive_bytes": 19943,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/ppt/paper1_v4/verify_paper1_deck.py",
+      "archive": "ppt/paper1_v4/verify_paper1_deck.py",
+      "source_sha256": "1fba753bb5f79e0fe7c00e5c4f7b63f58bb4c8f1c8b342eab19e3f6434715150",
+      "archive_sha256": "a68bc8d581333e6d8d668ad60c22b7ae635eab89a0cd60c7d52f3972268bd00c",
+      "archive_bytes": 9585,
+      "relation": "portable_archive_adaptation"
+    },
+    {
+      "source": "deliverables/ppt/paper1_v4/paper1_tcell_proxy_decision_20261126_config.json",
+      "archive": "ppt/paper1_v4/paper1_tcell_proxy_decision_20261126_config.json",
+      "source_sha256": "0d7ad158a18db82e5a2dd46949e25f0a4e842d76e8538ca6feea2bb712dfafe3",
+      "archive_sha256": "0d7ad158a18db82e5a2dd46949e25f0a4e842d76e8538ca6feea2bb712dfafe3",
+      "archive_bytes": 2650,
+      "relation": "byte_identical_to_local_source"
+    }
+  ],
+  "record_count": 10,
+  "byte_identical_to_local_source": 3,
+  "portable_archive_adaptations": 7,
+  "adaptation_scope": "Configurable evidence/output paths, optional canonical interpreter, separate reference PDF/PPT locations, output-report locations, and removal of four trailing spaces on two ledger lines. Scientific source text, numerical values, gates and claims are unchanged."
+}

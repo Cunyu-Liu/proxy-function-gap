@@ -1,0 +1,63 @@
+{
+  "deck": "paper1_tcell_proxy_decision_20261126.pptx",
+  "slides": 9,
+  "size_inches": [
+    13.333,
+    7.5
+  ],
+  "font": "PingFang SC",
+  "runtime": {
+    "python": "3.13.5",
+    "python_pptx": "1.0.2"
+  },
+  "story": "valid equal-budget baseline -> tail bottleneck -> regression-decision decoupling -> design metrics",
+  "evidence_boundary": "retrospective; test-v1/test-v2 separated; auxiliary failures target evaluation=0; no failed method presented as improvement",
+  "sources": [
+    {
+      "path": "deliverables/reports/source_data/tcell_error_diagnosis_v1/analysis/summary.json",
+      "sha256": "72af41c718d6ac0c31011f78ede47cfab4d34b5be182ad1679e2ea341212426f"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_target_adaptation_v1/target/primary.json",
+      "sha256": "b6c8cbf0358cdede290dc2ad133a6c0895a2af5bff1ac05f8bb3630b4777d4f3"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_target_adaptation_v1/target/secondary.json",
+      "sha256": "f3d18ff4aa801bd89e27f3228bd55e1610b752ce06972328280084a49e6689a0"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_listnet_adaptation_v2/target_v2/primary.json",
+      "sha256": "8bb479e684ace2b7419b8d8d01b1f7774065ca8acc5702898ffccf1d58fe3c8f"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_listnet_adaptation_v2/target_v2/results.json",
+      "sha256": "a9c65339990142950c719453e84246c3a8e245dd8b37e30f1be35219b335e21e"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_cross_cell_anchor_v1/target/primary.json",
+      "sha256": "e0e51439d8dae3832fbb4e3d52c4129292f6f0075e9eb99d63c9e46a68a5636f"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_cross_cell_anchor_v1/target/secondary.json",
+      "sha256": "7e40c7edbd71bf0a222673649383da591c4ddd1a328955a6d6fc4c8616ee0bfb"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_rank_bstrict_v2/artifacts/auxiliary_gate.json",
+      "sha256": "a5eb908315fd50d60ae038c8af5920323df921f35aee5bbec97015e730db17ec"
+    },
+    {
+      "path": "deliverables/reports/source_data/tcell_multicontext_backbone_v1/auxiliary_gate.json",
+      "sha256": "6039bbf82df8aee9b78f8bb084548159286a9f00bb01fbd5a52219ebec4e52dc"
+    }
+  ],
+  "figures": [
+    {
+      "path": "deliverables/figures/v4/Figure16_v4_tcell_global_value_tail_bottleneck.png",
+      "sha256": "00b79853b702034adaaac231cc72a834ab1b3cfacaf09fbbb1d80d42e5e65894"
+    },
+    {
+      "path": "deliverables/figures/v4/Figure17_v4_tcell_regression_decision_decoupling.png",
+      "sha256": "49e6ad1e416ebf99c35a9af1ab8497895536bf96ff02767a85673be487352c08"
+    }
+  ]
+}
