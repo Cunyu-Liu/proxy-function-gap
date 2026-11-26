@@ -65,7 +65,7 @@ def audited_checkpoint_path(run, directory, manifest):
     return checkpoint
 
 
-def retain_run(run, verification, selection=None):
+def retain_run(run, verification, selection=None, representative_file=None):
     report = json.load(open(verification))
     if report.get("status") != "passed" or not report.get("require_eval"):
         raise ValueError("Independent pre-retention evaluation verification is required")
@@ -81,7 +81,12 @@ def retain_run(run, verification, selection=None):
         if not selection or int(json.load(open(selection))["selected_rank"]) != int(args["lora_r"]):
             raise ValueError("LoRA retention requires the matching frozen rank selection")
     validation = pd.read_csv(os.path.join(run, "finetune_validation_results.tsv"), sep="\t")
-    representatives, representative_policy = representative_tasks(run, validation)
+    if representative_file:
+        representative_doc = json.load(open(representative_file))
+        representatives = {(row["experiment"], row["track"]) for row in representative_doc["tasks"]}
+        representative_policy = representative_doc["policy"]
+    else:
+        representatives, representative_policy = representative_tasks(run, validation)
     counts = {"retained_full_checkpoint": 0, "retained_proof_only": 0}
     bytes_cleaned = 0
     for directory in sorted(os.path.join(run, "tasks", name) for name in os.listdir(os.path.join(run, "tasks"))):
@@ -174,13 +179,15 @@ def main():
     parser.add_argument("--run", required=True)
     parser.add_argument("--verification", required=True)
     parser.add_argument("--selection")
+    parser.add_argument("--representative-file")
     parser.add_argument("--log", required=True)
     args = parser.parse_args()
     lg = RunLogger(args.log, stage="E1", kind="finetune-artifact-retention")
     lg.start(config=vars(args), data_version="e0-v2-id90-strict3train-main",
              inputs=[args.verification], code_version=sha256_file(os.path.abspath(__file__)))
     try:
-        result = retain_run(os.path.abspath(args.run), os.path.abspath(args.verification), args.selection)
+        result = retain_run(os.path.abspath(args.run), os.path.abspath(args.verification), args.selection,
+                            args.representative_file)
         lg.finish(metrics=result, outputs=[args.run])
         print("E1_FINETUNE_RETENTION_DONE " + json.dumps(result))
     except Exception as exc:

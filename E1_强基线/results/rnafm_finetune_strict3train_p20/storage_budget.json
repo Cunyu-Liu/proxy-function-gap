@@ -1,8 +1,8 @@
 {
-  "observed_at": "2026-11-26T22:08:59+0800",
+  "observed_at": "2026-11-27T04:19:48+0800",
   "authoritative_scope": "retention_lifecycle",
   "teams_path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap",
-  "free_bytes_at_observation": 158288838656,
+  "free_bytes_at_observation": 21839740928,
   "checkpoint_policy": {
     "required": "every task best FP32 encoder/head weights",
     "optimizer_state_saved": false,
@@ -14,7 +14,7 @@
     "raw_bytes": 398117588,
     "zlib1_bytes": 249910990,
     "ratio": 0.6277315987355977,
-    "planning_ratio_on_420MB": 0.7,
+    "planning_ratio_on_420MB": 1.0,
     "reserve_bytes": 21474836480
   },
   "scopes": {
@@ -22,43 +22,43 @@
       "tasks": 2,
       "raw_best_weight_bytes": 796235176,
       "measured_zlib1_best_weight_bytes": 499821980,
-      "planning_bytes_with_reserve": 22062836480,
-      "planning_deficit_bytes_at_observation": 0,
-      "capacity_ready_at_observation": true
+      "planning_bytes_with_reserve": 22314836480,
+      "planning_deficit_bytes_at_observation": 475095552,
+      "capacity_ready_at_observation": false
     },
     "main_fold0_one_seed": {
       "tasks": 292,
       "raw_best_weight_bytes": 116250335696,
       "measured_zlib1_best_weight_bytes": 72974009080,
-      "planning_bytes_with_reserve": 107322836480,
-      "planning_deficit_bytes_at_observation": 0,
-      "capacity_ready_at_observation": true
+      "planning_bytes_with_reserve": 144114836480,
+      "planning_deficit_bytes_at_observation": 122275095552,
+      "capacity_ready_at_observation": false
     },
     "main_fold0_three_seeds": {
       "tasks": 876,
       "raw_best_weight_bytes": 348751007088,
       "measured_zlib1_best_weight_bytes": 218922027240,
-      "planning_bytes_with_reserve": 279018836480,
-      "planning_deficit_bytes_at_observation": 120729997824,
+      "planning_bytes_with_reserve": 389394836480,
+      "planning_deficit_bytes_at_observation": 367555095552,
       "capacity_ready_at_observation": false
     },
     "main_five_fold_three_seeds": {
       "tasks": 4380,
       "raw_best_weight_bytes": 1743755035440,
       "measured_zlib1_best_weight_bytes": 1094610136200,
-      "planning_bytes_with_reserve": 1309194836480,
-      "planning_deficit_bytes_at_observation": 1150905997824,
+      "planning_bytes_with_reserve": 1861074836480,
+      "planning_deficit_bytes_at_observation": 1839235095552,
       "capacity_ready_at_observation": false
     },
     "retention_lifecycle": {
       "permanent_complete_checkpoints": 16,
       "matrix_small_heads": 8760,
-      "active_full_run_tasks": 292,
-      "peak_bytes_with_reserve": 149546836480,
-      "steady_bytes_with_reserve": 63698836480,
-      "peak_deficit_bytes_at_observation": 0,
-      "capacity_ready_at_observation": true,
-      "includes": "one active full run + permanent representatives + all small heads + 20GB predictions/history + 20GiB reserve"
+      "active_full_chunk_tasks": 16,
+      "peak_bytes_with_reserve": 72434836480,
+      "steady_bytes_with_reserve": 65714836480,
+      "peak_deficit_bytes_at_observation": 50595095552,
+      "capacity_ready_at_observation": false,
+      "includes": "one active 16-task full chunk + permanent representatives + all small heads + 20GB predictions/history + 20GiB reserve"
     }
   },
   "matrix_policy": "retain permanent representatives and proofs; clean only independently accepted non-representative new task weights after path/SHA audit; never shrink matrix or delete existing data"

@@ -32,22 +32,29 @@ def main():
              inputs=[os.path.join(args.root, "final_matrix_verification.json")],
              code_version=sha256_file(os.path.abspath(__file__)))
     frames, manifest = [], []
+    logical_runs = 0
     for mode in ("lora", "full"):
         for fold in range(5):
             for seed in range(3):
                 directory = run_dir(args.root, mode, fold, seed, rank)
-                config = json.load(open(os.path.join(directory, "finetune_config.json")))
-                frame = pd.read_csv(os.path.join(directory, "finetune_results.tsv"), sep="\t")
-                frame["mode"] = mode
-                frame["seed"] = seed
-                frame["lora_r"] = rank if mode == "lora" else 0
-                frames.append(frame)
-                manifest.append({"mode": mode, "fold": fold, "seed": seed, "lora_r": frame.lora_r.iloc[0],
-                                 "run_dir": directory, "n_rows": len(frame),
-                                 "config_sha256": sha256_file(os.path.join(directory, "finetune_config.json")),
-                                 "code_sha256": config["code_sha256"]})
-    if len(frames) != 30:
-        raise ValueError(f"Expected 30 runs, got {len(frames)}")
+                chunk_root = os.path.join(directory, "chunks")
+                directories = ([os.path.join(chunk_root, name) for name in sorted(os.listdir(chunk_root))]
+                               if mode == "full" else [directory])
+                logical_runs += 1
+                for chunk_directory in directories:
+                    config = json.load(open(os.path.join(chunk_directory, "finetune_config.json")))
+                    frame = pd.read_csv(os.path.join(chunk_directory, "finetune_results.tsv"), sep="\t")
+                    frame["mode"] = mode
+                    frame["seed"] = seed
+                    frame["lora_r"] = rank if mode == "lora" else 0
+                    frames.append(frame)
+                    manifest.append({"mode": mode, "fold": fold, "seed": seed,
+                                     "lora_r": frame.lora_r.iloc[0], "run_dir": chunk_directory,
+                                     "n_rows": len(frame),
+                                     "config_sha256": sha256_file(os.path.join(chunk_directory, "finetune_config.json")),
+                                     "code_sha256": config["code_sha256"]})
+    if logical_runs != 30:
+        raise ValueError(f"Expected 30 logical runs, got {logical_runs}")
     results = pd.concat(frames, ignore_index=True)
     results.to_csv(os.path.join(args.root, "final_results.tsv"), sep="\t", index=False)
     pd.DataFrame(manifest).to_csv(os.path.join(args.root, "final_run_manifest.tsv"), sep="\t", index=False)
@@ -56,14 +63,15 @@ def main():
     results.groupby(["mode", "fold", "seed", "track", "split", "tier"])[["auroc", "auprc"]].mean().round(6).to_csv(
         os.path.join(args.root, "final_fold_seed_summary.tsv"), sep="\t")
     atomic_json(os.path.join(args.root, "final_summary_config.json"),
-                {"n_runs": len(frames), "n_result_rows": len(results), "selected_rank": rank,
+                {"n_runs": logical_runs, "n_chunk_runs": len(frames),
+                 "n_result_rows": len(results), "selected_rank": rank,
                  "selection_sha256": sha256_file(os.path.join(args.root, "fold0_lora_rank_selection.json")),
                  "data_version": "e0-v2-id90-strict3train-main",
                  "scope": "descriptive RNA-FM LoRA/full matrix; no SOTA claim",
                  "selection": "fold0/seed0 validation only; test excluded from all configuration choices"})
-    lg.finish(metrics={"n_runs": len(frames), "n_result_rows": len(results), "selected_rank": rank},
-              outputs=[args.root])
-    print("E1_FINETUNE_MATRIX_SUMMARY_DONE", len(frames), len(results))
+    lg.finish(metrics={"n_runs": logical_runs, "n_chunk_runs": len(frames),
+                       "n_result_rows": len(results), "selected_rank": rank}, outputs=[args.root])
+    print("E1_FINETUNE_MATRIX_SUMMARY_DONE", logical_runs, len(frames), len(results))
 
 
 if __name__ == "__main__":

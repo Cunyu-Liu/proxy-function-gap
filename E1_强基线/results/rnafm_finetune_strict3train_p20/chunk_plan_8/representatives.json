@@ -1,0 +1,29 @@
+{
+  "policy": "fold0_seed0_tier_lexicographic_permanent",
+  "tasks": [
+    {
+      "experiment": "AGGF1_HepG2",
+      "track": "neg1c"
+    },
+    {
+      "experiment": "AGGF1_HepG2",
+      "track": "neg2"
+    },
+    {
+      "experiment": "AKAP1_HepG2",
+      "track": "neg1c"
+    },
+    {
+      "experiment": "AKAP1_HepG2",
+      "track": "neg2"
+    },
+    {
+      "experiment": "DDX52_HepG2",
+      "track": "neg1c"
+    },
+    {
+      "experiment": "DDX52_HepG2",
+      "track": "neg2"
+    }
+  ]
+}

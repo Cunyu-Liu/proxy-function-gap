@@ -48,10 +48,28 @@ cuda_lock_acquire() {
   return 1
 }
 
+storage_gate() {
+  local MODE=$1 EXPS=$2 ATTEMPT TASKS PER FREE REQUIRED
+  TASKS=$(( $(wc -l < "$EXPS") * 2 ))
+  if [ "$MODE" = full ]; then PER=420000000; else PER=4000000; fi
+  REQUIRED=$((TASKS * PER + 21474836480))
+  for ATTEMPT in $(seq 1 36); do
+    FREE=$(df -B1 "$ROOT" | awk 'NR==2 {print $4}')
+    if [ "$FREE" -ge "$REQUIRED" ]; then
+      echo "STORAGE_OK tasks=$TASKS free=$FREE required=$REQUIRED"
+      return 0
+    fi
+    echo "STORAGE_WAIT tasks=$TASKS attempt=$ATTEMPT free=$FREE required=$REQUIRED"
+    sleep 300
+  done
+  return 1
+}
+
 train_run() {
-  local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 MIN_FREE=14000 LOGFILE=$6
+  local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 MIN_FREE=14000 LOGFILE=$6 EXPS=${7:-$E0/main_exps.txt}
   if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=16000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP train $DIR"; return 0; fi
+  storage_gate "$MODE" "$EXPS" || return 1
   resource_gate "train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE" || return 1
   cuda_lock_acquire "train_f${FOLD}_s${SEED}_${MODE}" || return 1
   if ! resource_gate "locked_train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE"; then
@@ -59,7 +77,7 @@ train_run() {
   fi
   echo "TRAIN_START $DIR $(date -Is)"
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --folds "$FOLD" --seed "$SEED" \
-    --encoder-lr "$LR" --lora-r "$RANK" --out "$DIR" >"$LOGFILE" 2>&1
+    --encoder-lr "$LR" --lora-r "$RANK" --exps-file "$EXPS" --out "$DIR" >"$LOGFILE" 2>&1
   local RC=$?
   rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null || RC=1
   echo "TRAIN_END $DIR rc=$RC $(date -Is)"
@@ -84,7 +102,7 @@ validate_run() {
 }
 
 eval_run() {
-  local DIR=$1 LOGFILE=$2 RC
+  local DIR=$1 LOGFILE=$2 REPRESENTATIVE_FILE=${3:-} RC
   if [ ! -f "$DIR/.eval_complete" ]; then
     resource_gate "eval_${DIR##*/}" 12000 || return 1
     cuda_lock_acquire "eval_${DIR##*/}" || return 1
@@ -105,12 +123,14 @@ eval_run() {
   if [ -f "$DIR/.retention_complete" ]; then echo "SKIP retention $DIR"; return 0; fi
   "$PY" e1_finetune_verify.py --runs "$DIR" --require-eval \
     --out "$DIR/pre_retention_verification.json" >"$LOGFILE.pre_retention_verify" 2>&1 || return 1
+  local REP_ARGS=()
+  if [ -n "$REPRESENTATIVE_FILE" ]; then REP_ARGS=(--representative-file "$REPRESENTATIVE_FILE"); fi
   if [[ "$DIR" == *lora* ]]; then
     "$PY" e1_finetune_retention.py --run "$DIR" --verification "$DIR/pre_retention_verification.json" \
-      --selection "$SELECTION" --log "$LOG" >"$LOGFILE.retention" 2>&1 || return 1
+      --selection "$SELECTION" "${REP_ARGS[@]}" --log "$LOG" >"$LOGFILE.retention" 2>&1 || return 1
   else
     "$PY" e1_finetune_retention.py --run "$DIR" --verification "$DIR/pre_retention_verification.json" \
-      --log "$LOG" >"$LOGFILE.retention" 2>&1 || return 1
+      "${REP_ARGS[@]}" --log "$LOG" >"$LOGFILE.retention" 2>&1 || return 1
   fi
 }
 
@@ -147,13 +167,36 @@ lora_worker() {
   echo "LORA_FOLD0_DONE $(date -Is)"
 }
 
+chunked_full_run() {
+  local FOLD=$1 SEED=$2 PLAN_DIR=$ROOT/chunk_plan_8 EXPS IDX DIR LOGFILE REP
+  if [ ! -f "$PLAN_DIR/chunk_manifest.json" ]; then
+    "$PY" e1_finetune_chunk_plan.py --windows-dir "$E0/windows" --neg-dir "$E0/neg" \
+      --positives-audit "$E0/positives_audit.tsv" --exps-file "$E0/main_exps.txt" \
+      --folds 0 --seed 0 --tracks neg1c,neg2 --chunk-experiments 8 --out "$PLAN_DIR" \
+      >"$LOGDIR/e1_finetune_chunk_plan.log" 2>&1 || return 1
+  fi
+  for EXPS in $("$PY" -c 'import json,sys; print(" ".join(x["exps_file"] for x in json.load(open(sys.argv[1]))["chunks"]))' "$PLAN_DIR/chunk_manifest.json"); do
+    IDX=$(basename "$EXPS" .exps.txt)
+    DIR=$ROOT/f${FOLD}_full_s${SEED}/chunks/$IDX
+    LOGFILE=$LOGDIR/e1_finetune_f${FOLD}_full_s${SEED}_${IDX}.log
+    REP=""
+    if [ "$FOLD" -eq 0 ] && [ "$SEED" -eq 0 ]; then REP=$PLAN_DIR/representatives.json; fi
+    train_run full "$FOLD" "$SEED" 8 "$DIR" "$LOGFILE.train" "$EXPS" || return 1
+    eval_run "$DIR" "$LOGFILE.eval" "$REP" || return 1
+  done
+  date -Is > "$ROOT/f${FOLD}_full_s${SEED}/.chunks_complete"
+}
+
+full_chunk_runs() {
+  local FOLD=$1 SEED=$2
+  "$PY" -c 'import json,sys,os; p=sys.argv[1]; root=sys.argv[2]; print(",".join(os.path.join(root,"chunks","chunk_%03d"%x["index"]) for x in json.load(open(p))["chunks"]))' \
+    "$ROOT/chunk_plan_8/chunk_manifest.json" "$ROOT/f${FOLD}_full_s${SEED}"
+}
+
 full_worker() {
   local SEED DIR LOGFILE
   for SEED in 0 1 2; do
-    DIR=$ROOT/f0_full_s${SEED}
-    LOGFILE=$LOGDIR/e1_finetune_f0_full_s${SEED}.log
-    train_run full 0 "$SEED" 8 "$DIR" "$LOGFILE.train" || return 1
-    eval_run "$DIR" "$LOGFILE.eval" || return 1
+    chunked_full_run 0 "$SEED" || return 1
   done
 }
 
@@ -162,13 +205,27 @@ expansion_worker() {
   RANK=$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1]))["selected_rank"])' "$SELECTION")
   for FOLD in 1 2 3 4; do
     for SEED in 0 1 2; do
-      DIR=$ROOT/f${FOLD}_${MODE}_s${SEED}
-      LOGFILE=$LOGDIR/e1_finetune_f${FOLD}_${MODE}_s${SEED}.log
-      train_run "$MODE" "$FOLD" "$SEED" "$RANK" "$DIR" "$LOGFILE.train" || return 1
-      eval_run "$DIR" "$LOGFILE.eval" || return 1
+      if [ "$MODE" = full ]; then
+        chunked_full_run "$FOLD" "$SEED" || return 1
+      else
+        DIR=$ROOT/f${FOLD}_${MODE}_s${SEED}
+        LOGFILE=$LOGDIR/e1_finetune_f${FOLD}_${MODE}_s${SEED}.log
+        train_run "$MODE" "$FOLD" "$SEED" "$RANK" "$DIR" "$LOGFILE.train" || return 1
+        eval_run "$DIR" "$LOGFILE.eval" || return 1
+      fi
     done
   done
 }
+
+if [ "${E1_FINETUNE_CHUNK_SMOKE:-0}" = 1 ]; then
+  SMOKE_DIR=$ROOT/chunk_retention_smoke_full_f1
+  train_run full 1 0 8 "$SMOKE_DIR" "$LOGDIR/e1_finetune_chunk_smoke.log.train" "$E0/e1_smoke_exp.txt" || exit 1
+  eval_run "$SMOKE_DIR" "$LOGDIR/e1_finetune_chunk_smoke.log.eval" || exit 1
+  "$PY" e1_finetune_verify.py --runs "$SMOKE_DIR" --require-eval \
+    --out "$SMOKE_DIR/post_retention_verification.json" >"$LOGDIR/e1_finetune_chunk_smoke.log.verify" 2>&1 || exit 1
+  echo "CHUNK_SMOKE_PASSED $(date -Is)" > "$STATUS"
+  exit 0
+fi
 
 if [ ! -f "$ROOT/pilot_cuda_verification.json" ]; then
   echo "PILOT_GATE_MISSING" > "$STATUS"
@@ -187,7 +244,8 @@ if [ "$RC" -ne 0 ]; then
 fi
 RANK=$("$PY" -c 'import json,sys; print(json.load(open(sys.argv[1]))["selected_rank"])' "$SELECTION")
 L0=$(lora_fold0_dir 0)
-RUNS="$L0,$ROOT/f0_lora_s1,$ROOT/f0_lora_s2,$ROOT/f0_full_s0,$ROOT/f0_full_s1,$ROOT/f0_full_s2"
+FULL_RUNS="$(full_chunk_runs 0 0),$(full_chunk_runs 0 1),$(full_chunk_runs 0 2)"
+RUNS="$L0,$ROOT/f0_lora_s1,$ROOT/f0_lora_s2,$FULL_RUNS"
 "$PY" e1_finetune_verify.py --runs "$RUNS" --require-eval --out "$ROOT/fold0_gate_verification.json" \
   >"$LOGDIR/e1_finetune_fold0_gate.log" 2>&1 || {
   date -Is > "$ROOT/.fold0_gate_failed"; echo "FOLD0_VERIFY_FAILED $(date -Is)" > "$STATUS"; exit 1; }
@@ -203,7 +261,7 @@ for F in 0 1 2 3 4; do
   for S in 0 1 2; do
     if [ "$F" -eq 0 ] && [ "$S" -eq 0 ]; then D=$L0; else D=$ROOT/f${F}_lora_s${S}; fi
     ALL_RUNS="$ALL_RUNS,$D"
-    ALL_RUNS="$ALL_RUNS,$ROOT/f${F}_full_s${S}"
+    ALL_RUNS="$ALL_RUNS,$(full_chunk_runs "$F" "$S")"
   done
 done
 ALL_RUNS=${ALL_RUNS#,}

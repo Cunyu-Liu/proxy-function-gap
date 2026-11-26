@@ -1,0 +1,330 @@
+{
+  "source_exps_file": "/root/rareseq/data/e0/main_exps.txt",
+  "source_exps_sha256": "7606d2ab3e77d878757c4a19b5819a868b7bb9c4c7b58417cfab76a79c2c7240",
+  "folds": "0",
+  "seed": 0,
+  "tracks": "neg1c,neg2",
+  "chunk_experiments": 8,
+  "n_experiments": 146,
+  "n_tasks": 292,
+  "n_chunks": 19,
+  "chunks": [
+    {
+      "index": 0,
+      "experiment_start": 0,
+      "experiments": [
+        "AGGF1_K562",
+        "AGGF1_HepG2",
+        "AKAP1_K562",
+        "AKAP1_HepG2",
+        "AQR_K562",
+        "AQR_HepG2",
+        "BUD13_K562",
+        "BUD13_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_000.exps.txt",
+      "exps_sha256": "c751c8ca172fb59fcadf3b416b80f084f65def683d00237fc9812dc137654932"
+    },
+    {
+      "index": 1,
+      "experiment_start": 8,
+      "experiments": [
+        "CSTF2T_K562",
+        "CSTF2T_HepG2",
+        "DDX3X_K562",
+        "DDX3X_HepG2",
+        "DDX52_K562",
+        "DDX52_HepG2",
+        "DDX55_K562",
+        "DDX55_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_001.exps.txt",
+      "exps_sha256": "185895d7a1b5b6334a465baa413dabb552ba6d0e4c772cdc48716906e7824740"
+    },
+    {
+      "index": 2,
+      "experiment_start": 16,
+      "experiments": [
+        "DDX6_K562",
+        "DDX6_HepG2",
+        "DGCR8_K562",
+        "DGCR8_HepG2",
+        "DHX30_K562",
+        "DHX30_HepG2",
+        "DROSHA_K562",
+        "DROSHA_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_002.exps.txt",
+      "exps_sha256": "a1bad7dd3b5e7460077c408b6d481660aa8396711a2817e589566ab3f39e01b8"
+    },
+    {
+      "index": 3,
+      "experiment_start": 24,
+      "experiments": [
+        "EFTUD2_K562",
+        "EFTUD2_HepG2",
+        "EXOSC5_K562",
+        "EXOSC5_HepG2",
+        "FAM120A_K562",
+        "FAM120A_HepG2",
+        "FASTKD2_K562",
+        "FASTKD2_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_003.exps.txt",
+      "exps_sha256": "0697838efb89a821285321c6913cf27a71879a4e0c447ac45e451ab537d6a685"
+    },
+    {
+      "index": 4,
+      "experiment_start": 32,
+      "experiments": [
+        "FTO_K562",
+        "FTO_HepG2",
+        "FUS_K562",
+        "FUS_HepG2",
+        "FXR2_K562",
+        "FXR2_HepG2",
+        "GRWD1_K562",
+        "GRWD1_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_004.exps.txt",
+      "exps_sha256": "87de8faf02dbc2c1a696820ee34fd779628b81196018507b33cbd6fce682e3c6"
+    },
+    {
+      "index": 5,
+      "experiment_start": 40,
+      "experiments": [
+        "GTF2F1_K562",
+        "GTF2F1_HepG2",
+        "HLTF_K562",
+        "HLTF_HepG2",
+        "HNRNPA1_K562",
+        "HNRNPA1_HepG2",
+        "HNRNPC_K562",
+        "HNRNPC_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_005.exps.txt",
+      "exps_sha256": "d540f5d6bec2d5157e46d3c86bfa00da54aa296d2457c3fa45b78b4b6de97095"
+    },
+    {
+      "index": 6,
+      "experiment_start": 48,
+      "experiments": [
+        "HNRNPK_K562",
+        "HNRNPK_HepG2",
+        "HNRNPL_K562",
+        "HNRNPL_HepG2",
+        "HNRNPM_K562",
+        "HNRNPM_HepG2",
+        "HNRNPU_K562",
+        "HNRNPU_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_006.exps.txt",
+      "exps_sha256": "9b5599218e7ea6497b326b5dc68cc381e27af5e79e0437c33468d6b4ab5eec6e"
+    },
+    {
+      "index": 7,
+      "experiment_start": 56,
+      "experiments": [
+        "HNRNPUL1_K562",
+        "HNRNPUL1_HepG2",
+        "IGF2BP1_K562",
+        "IGF2BP1_HepG2",
+        "ILF3_K562",
+        "ILF3_HepG2",
+        "KHSRP_K562",
+        "KHSRP_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_007.exps.txt",
+      "exps_sha256": "c0a4575d69e0628a3ea4501b9512975ca97f20d78638f8b538aa535523aa10d9"
+    },
+    {
+      "index": 8,
+      "experiment_start": 64,
+      "experiments": [
+        "LARP4_K562",
+        "LARP4_HepG2",
+        "LARP7_K562",
+        "LARP7_HepG2",
+        "LIN28B_K562",
+        "LIN28B_HepG2",
+        "LSM11_K562",
+        "LSM11_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_008.exps.txt",
+      "exps_sha256": "4ba557d78c9a9ea4c9fd899f45ed49e6a2f15c65604665a3a4f50b9aa575c029"
+    },
+    {
+      "index": 9,
+      "experiment_start": 72,
+      "experiments": [
+        "MATR3_K562",
+        "MATR3_HepG2",
+        "NCBP2_K562",
+        "NCBP2_HepG2",
+        "NOLC1_K562",
+        "NOLC1_HepG2",
+        "PCBP1_K562",
+        "PCBP1_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_009.exps.txt",
+      "exps_sha256": "4f15c7803f9b940a317ba54bc84ffa894e526d0cdcb2261849bd6944bf8e0c1b"
+    },
+    {
+      "index": 10,
+      "experiment_start": 80,
+      "experiments": [
+        "PRPF8_K562",
+        "PRPF8_HepG2",
+        "PTBP1_K562",
+        "PTBP1_HepG2",
+        "QKI_K562",
+        "QKI_HepG2",
+        "RBFOX2_K562",
+        "RBFOX2_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_010.exps.txt",
+      "exps_sha256": "a17cf97de86281b4e97bb9f7b42b6cd6b61cfcc0e55c5f0f43955a79fc6e24d9"
+    },
+    {
+      "index": 11,
+      "experiment_start": 88,
+      "experiments": [
+        "RBM15_K562",
+        "RBM15_HepG2",
+        "RBM22_K562",
+        "RBM22_HepG2",
+        "RPS3_K562",
+        "RPS3_HepG2",
+        "SAFB_K562",
+        "SAFB_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_011.exps.txt",
+      "exps_sha256": "500d2b74c1283f57cc976eb229364f7e8a92ac6f38b6ff898d45d4686aaf43d3"
+    },
+    {
+      "index": 12,
+      "experiment_start": 96,
+      "experiments": [
+        "SDAD1_K562",
+        "SDAD1_HepG2",
+        "SF3B4_K562",
+        "SF3B4_HepG2",
+        "SLTM_K562",
+        "SLTM_HepG2",
+        "SMNDC1_K562",
+        "SMNDC1_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_012.exps.txt",
+      "exps_sha256": "5dd4ce93cded85037def39f5eb8556ec04be6531436e20be8e17c9d178db1dd3"
+    },
+    {
+      "index": 13,
+      "experiment_start": 104,
+      "experiments": [
+        "SND1_K562",
+        "SND1_HepG2",
+        "SRSF1_K562",
+        "SRSF1_HepG2",
+        "SRSF7_K562",
+        "SRSF7_HepG2",
+        "SSB_K562",
+        "SSB_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_013.exps.txt",
+      "exps_sha256": "3d2a5b75a2c6db78ca6a9fa4a2aefe57aed208b81ce212b05272ac7b602303b4"
+    },
+    {
+      "index": 14,
+      "experiment_start": 112,
+      "experiments": [
+        "SUPV3L1_K562",
+        "SUPV3L1_HepG2",
+        "TAF15_K562",
+        "TAF15_HepG2",
+        "TBRG4_K562",
+        "TBRG4_HepG2",
+        "TIA1_K562",
+        "TIA1_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_014.exps.txt",
+      "exps_sha256": "d46c4bc934c682421223a2ad7d2c7aea0d8f176203099a8b4e8a15209e1220a6"
+    },
+    {
+      "index": 15,
+      "experiment_start": 120,
+      "experiments": [
+        "TRA2A_K562",
+        "TRA2A_HepG2",
+        "TROVE2_K562",
+        "TROVE2_HepG2",
+        "U2AF1_K562",
+        "U2AF1_HepG2",
+        "U2AF2_K562",
+        "U2AF2_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_015.exps.txt",
+      "exps_sha256": "c862fa5365be4d5a78781910a8cd836d90b67fd8dae8c544f347396c2b68eb34"
+    },
+    {
+      "index": 16,
+      "experiment_start": 128,
+      "experiments": [
+        "UCHL5_K562",
+        "UCHL5_HepG2",
+        "UPF1_K562",
+        "UPF1_HepG2",
+        "UTP18_K562",
+        "UTP18_HepG2",
+        "WDR43_K562",
+        "WDR43_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_016.exps.txt",
+      "exps_sha256": "3fe55d61e8a329cffe6b4f0518e07fefc6068884b500e7cc91108cce40171718"
+    },
+    {
+      "index": 17,
+      "experiment_start": 136,
+      "experiments": [
+        "XRCC6_K562",
+        "XRCC6_HepG2",
+        "XRN2_K562",
+        "XRN2_HepG2",
+        "YBX3_K562",
+        "YBX3_HepG2",
+        "ZC3H11A_K562",
+        "ZC3H11A_HepG2"
+      ],
+      "n_tasks": 16,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_017.exps.txt",
+      "exps_sha256": "294177498b2913c7e334404ed7f3a66b1a5446875d457bb74dd48ca2d39588ed"
+    },
+    {
+      "index": 18,
+      "experiment_start": 144,
+      "experiments": [
+        "ZNF800_K562",
+        "ZNF800_HepG2"
+      ],
+      "n_tasks": 4,
+      "exps_file": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_plan_8/chunk_018.exps.txt",
+      "exps_sha256": "3a3a897db5fd519352430d8d64876b8039cd46f90fe5bb9ae24736c428696c7d"
+    }
+  ]
+}

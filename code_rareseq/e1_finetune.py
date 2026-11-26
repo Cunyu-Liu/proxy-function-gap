@@ -416,13 +416,13 @@ def train_task(task, arrays, args, tokenizer, fast_encode, device, device_info):
 def preflight_storage(args, tasks):
     remaining = [task for task in tasks
                  if not os.path.isfile(os.path.join(task_dir(args.out, task), ".complete"))]
-    per_task = 4_000_000 if args.mode == "lora" else int(420_000_000 * 0.70)
+    per_task = 4_000_000 if args.mode == "lora" else 420_000_000
     prediction_bytes = sum(len(task["splits"][1][0]) for task in remaining) * 80
     required = ((len(remaining) * per_task + prediction_bytes + 20 * 1024**3)
                 if remaining else 0)
     free = shutil.disk_usage(args.out).free
     report = {"remaining_tasks": len(remaining), "estimated_checkpoint_bytes_per_task": per_task,
-              "checkpoint_format": "FP32 torch.save + zlib-1; planning ratio<=0.70",
+              "checkpoint_format": "FP32 torch.save + zlib-1; planning ratio=1.0",
               "reserve_bytes": 20 * 1024**3, "required_bytes_including_reserve": required,
               "free_bytes": free, "passed": free >= required}
     atomic_json(os.path.join(args.out, "storage_preflight.json"), report)
