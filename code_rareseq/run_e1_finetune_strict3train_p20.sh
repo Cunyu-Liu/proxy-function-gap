@@ -10,6 +10,7 @@ LOGDIR=/home/ProxyFunctionGap/logs
 LOG=$LOGDIR/experiments.jsonl
 STATUS=$LOGDIR/e1_finetune_main.status
 SELECTION=$ROOT/fold0_lora_rank_selection.json
+CUDA_LOCK=$LOGDIR/e1_finetune_cuda_train.lock
 mkdir -p "$ROOT" "$LOGDIR"
 cd "$W" || exit 1
 COMMON=(train --windows-dir "$E0/windows" --neg-dir "$E0/neg"
@@ -34,15 +35,33 @@ resource_gate() {
   return 1
 }
 
+cuda_lock_acquire() {
+  local LABEL=$1 ATTEMPT
+  for ATTEMPT in $(seq 1 36); do
+    if mkdir "$CUDA_LOCK" 2>/dev/null; then
+      echo "$LABEL $HOSTNAME $$" > "$CUDA_LOCK/owner"
+      return 0
+    fi
+    echo "CUDA_LOCK_WAIT $LABEL attempt=$ATTEMPT owner=$(cat "$CUDA_LOCK/owner" 2>/dev/null)"
+    sleep 300
+  done
+  return 1
+}
+
 train_run() {
   local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 MIN_FREE=16000 LOGFILE=$6
-  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=20000; fi
+  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=16000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP train $DIR"; return 0; fi
   resource_gate "train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE" || return 1
+  cuda_lock_acquire "train_f${FOLD}_s${SEED}_${MODE}" || return 1
+  if ! resource_gate "locked_train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE"; then
+    rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null; return 1
+  fi
   echo "TRAIN_START $DIR $(date -Is)"
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --folds "$FOLD" --seed "$SEED" \
     --encoder-lr "$LR" --lora-r "$RANK" --out "$DIR" >"$LOGFILE" 2>&1
   local RC=$?
+  rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null || RC=1
   echo "TRAIN_END $DIR rc=$RC $(date -Is)"
   return "$RC"
 }
@@ -51,6 +70,10 @@ eval_run() {
   local DIR=$1 LOGFILE=$2 RC
   if [ ! -f "$DIR/.eval_complete" ]; then
     resource_gate "eval_${DIR##*/}" 12000 || return 1
+    cuda_lock_acquire "eval_${DIR##*/}" || return 1
+    if ! resource_gate "locked_eval_${DIR##*/}" 12000; then
+      rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null; return 1
+    fi
     echo "EVAL_START $DIR $(date -Is)"
     if [[ "$DIR" == *lora* ]]; then
       "$PY" e1_finetune.py evaluate --out "$DIR" --selection "$SELECTION" --log "$LOG" >"$LOGFILE" 2>&1
@@ -58,6 +81,7 @@ eval_run() {
       "$PY" e1_finetune.py evaluate --out "$DIR" --log "$LOG" >"$LOGFILE" 2>&1
     fi
     RC=$?
+    rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null || RC=1
     echo "EVAL_END $DIR rc=$RC $(date -Is)"
     [ "$RC" -eq 0 ] || return "$RC"
   fi

@@ -1,0 +1,12 @@
+{
+  "format": "torch.save FP32 weights + zlib-1 stream",
+  "checkpoint": "best.pt.zlib",
+  "raw_sha256": "681a524f90948d4c65eeff07b4a8ce2cb772e18d6c7937508e4de9d930477976",
+  "compressed_sha256": "d204b4513f52e98cff9065627304681b7137e660e0362b6d91c20c46091cdad8",
+  "raw_bytes": 1660615,
+  "compressed_bytes": 1534097,
+  "compression_ratio": 0.92381256341777,
+  "contains_optimizer_state": false,
+  "contains_old_epoch_weights": false,
+  "roundtrip_sha256_verified": true
+}

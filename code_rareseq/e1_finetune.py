@@ -241,6 +241,9 @@ def build_model(args, repo, device, lora_r=None):
     else:
         for parameter in model.parameters():
             parameter.requires_grad_(True)
+        model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+        if hasattr(model.config, "use_cache"):
+            model.config.use_cache = False
     head = torch.nn.Sequential(torch.nn.Linear(model.config.hidden_size, args.hidden), torch.nn.GELU(),
                                torch.nn.Dropout(args.dropout), torch.nn.Linear(args.hidden, 1)).to(device)
     if next(model.parameters()).device.type != "cuda" or next(head.parameters()).device.type != "cuda":
@@ -374,6 +377,7 @@ def train_task(task, arrays, args, tokenizer, fast_encode, device, device_info):
                   "task": {key: task[key] for key in
                            ("experiment", "rbp", "tier", "fold", "val_fold", "train_folds", "track")},
                   "seed": seed, "base_seed": args.seed, "mode": args.mode, "lora_r": args.lora_r,
+                  "gradient_checkpointing": args.mode == "full",
                   "model": args.model, "hidden": args.hidden, "dropout": args.dropout,
                   "encoder_lr": args.encoder_lr, "head_lr": args.head_lr,
                   "split_audit": split_audit_rows(task), "training_device": device_info,
@@ -481,6 +485,7 @@ def cmd_train(args):
         run_config = {"args": vars(args).copy(), "code_sha256": config["code_sha256"],
                       "cuda": device_info, "fast_tokenizer_verified": fast_ok,
                       "selection": "per-task validation AUPRC; test excluded",
+                      "gradient_checkpointing": args.mode == "full",
                       "strict_train_folds": True, "data_version": args.data_version}
         atomic_json(os.path.join(args.out, "finetune_config.json"), run_config)
         for i, task in enumerate(tasks, 1):

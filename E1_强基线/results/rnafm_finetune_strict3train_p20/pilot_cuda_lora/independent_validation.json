@@ -1,0 +1,61 @@
+{
+  "n_tasks": 2,
+  "test_used": false,
+  "cuda": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ],
+    "backward_probe": "passed",
+    "optimizer_probe": "passed",
+    "torch": "2.11.0+cu128"
+  },
+  "tasks": [
+    {
+      "experiment": "SSB_K562",
+      "fold": 0,
+      "track": "neg1c",
+      "auroc": 0.7710550319245972,
+      "auprc": 0.7789456553690336,
+      "checkpoint_raw_sha256": "681a524f90948d4c65eeff07b4a8ce2cb772e18d6c7937508e4de9d930477976",
+      "checkpoint_compressed_sha256": "d204b4513f52e98cff9065627304681b7137e660e0362b6d91c20c46091cdad8",
+      "validation_predictions_sha256": "09dae74b5398c41288a3520b06a77804cc824371efde15ae81ee9bc3a27394df",
+      "evaluation_device": {
+        "device": "cuda:0",
+        "name": "NVIDIA GeForce RTX 5090",
+        "numeric_probe": [
+          2.5,
+          -6.0
+        ],
+        "backward_probe": "passed",
+        "optimizer_probe": "passed",
+        "torch": "2.11.0+cu128"
+      },
+      "test_used": false
+    },
+    {
+      "experiment": "SSB_K562",
+      "fold": 0,
+      "track": "neg2",
+      "auroc": 0.7762997871693523,
+      "auprc": 0.7744591160032532,
+      "checkpoint_raw_sha256": "2f47432d3e99f0c62a9dcb8eb58cdd361ae22e37a445d73ca7e77722abfcb707",
+      "checkpoint_compressed_sha256": "8a58ebe833fe86a2aff6c15cfee1beb2c34e5ade1142b76be6e9e5d4e1489ee9",
+      "validation_predictions_sha256": "b9cd9f9fb74e314a12967d89a1720f8ce35cd1c7aabb84e4cdd798fcebece30f",
+      "evaluation_device": {
+        "device": "cuda:0",
+        "name": "NVIDIA GeForce RTX 5090",
+        "numeric_probe": [
+          2.5,
+          -6.0
+        ],
+        "backward_probe": "passed",
+        "optimizer_probe": "passed",
+        "torch": "2.11.0+cu128"
+      },
+      "test_used": false
+    }
+  ]
+}

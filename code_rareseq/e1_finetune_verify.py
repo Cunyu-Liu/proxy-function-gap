@@ -124,16 +124,46 @@ def verify_run(run, require_eval=False, expected_rank=None):
     return result
 
 
+def verify_independent_validation(run):
+    path = os.path.join(run, "independent_validation.json")
+    report = json.load(open(path))
+    assert report["test_used"] is False and report["n_tasks"] > 0
+    validation = pd.read_csv(os.path.join(run, "finetune_validation_results.tsv"), sep="\t")
+    for row in report["tasks"]:
+        task = f"{row['experiment']}.f{row['fold']}.{row['track']}"
+        manifest = json.load(open(os.path.join(run, "tasks", task, "checkpoint_manifest.json")))
+        assert row["checkpoint_raw_sha256"] == manifest["raw_sha256"]
+        assert row["checkpoint_compressed_sha256"] == manifest["compressed_sha256"]
+        checkpoint = os.path.join(run, "tasks", task, "best.pt.zlib")
+        assert os.path.isfile(checkpoint) and sha256_file(checkpoint) == manifest["compressed_sha256"]
+        prediction_path = os.path.join(run, "independent_validation_tasks", task, "validation_predictions.npz")
+        assert sha256_file(prediction_path) == row["validation_predictions_sha256"]
+        prediction = np.load(prediction_path)
+        auroc, auprc = metrics(prediction["label"], prediction["score"])
+        assert np.allclose([auroc, auprc], [row["auroc"], row["auprc"]], atol=1e-12)
+        selected = validation[(validation.experiment == row["experiment"]) &
+                              (validation.fold == row["fold"]) & (validation.track == row["track"])]
+        assert len(selected) == 1
+        assert np.allclose([auroc, auprc], selected.iloc[0][["auroc", "auprc"]].astype(float), atol=1e-12)
+    return {"n_tasks": report["n_tasks"], "test_used": False, "passed": True}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--runs", required=True, help="Comma-separated run directories")
     parser.add_argument("--require-eval", action="store_true")
     parser.add_argument("--expected-rank", type=int)
+    parser.add_argument("--require-independent-validation", action="store_true")
     parser.add_argument("--out", required=True)
     args = parser.parse_args()
     runs = [path for path in args.runs.split(",") if path]
+    run_reports = [verify_run(run, args.require_eval, args.expected_rank) for run in runs]
+    if args.require_independent_validation:
+        for run, run_report in zip(runs, run_reports):
+            run_report["independent_validation"] = verify_independent_validation(run)
     report = {"status": "passed", "require_eval": args.require_eval,
-              "runs": [verify_run(run, args.require_eval, args.expected_rank) for run in runs]}
+              "require_independent_validation": args.require_independent_validation,
+              "runs": run_reports}
     atomic_json(args.out, report)
     print("E1_FINETUNE_VERIFY_PASSED " + json.dumps({"n_runs": len(runs), "out": args.out}))
 

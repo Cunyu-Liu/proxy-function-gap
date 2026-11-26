@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "require_eval": false,
+  "runs": [
+    {
+      "run": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/pilot_cuda_lora",
+      "mode": "lora",
+      "fold": "0",
+      "seed": 0,
+      "lora_r": 8,
+      "n_tasks": 2,
+      "train_passed": true,
+      "eval_passed": false
+    }
+  ]
+}

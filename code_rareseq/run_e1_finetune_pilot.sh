@@ -34,20 +34,30 @@ resource_gate() {
 
 run_pilot() {
   local MODE=$1 LR=3e-4 MIN_FREE=14000 DIR="$ROOT/pilot_cuda_$1" LOG="$LOGDIR/e1_finetune_pilot_$1.log"
-  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=18000; fi
+  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=16000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP pilot $MODE"; return 0; fi
   resource_gate "$MIN_FREE" || return 1
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --encoder-lr "$LR" --lora-r 8 --out "$DIR" >"$LOG" 2>&1
 }
 
+validate_pilot() {
+  local MODE=$1 MIN_FREE=10000 DIR="$ROOT/pilot_cuda_$1" LOG="$LOGDIR/e1_finetune_pilot_$1.independent_validation.log"
+  if [ "$MODE" = full ]; then MIN_FREE=14000; fi
+  if [ -f "$DIR/.independent_validation_complete" ]; then echo "SKIP validation $MODE"; return 0; fi
+  resource_gate "$MIN_FREE" || return 1
+  "$PY" e1_finetune_validate.py --out "$DIR" --log "$LOGDIR/experiments.jsonl" >"$LOG" 2>&1
+}
+
 echo "RUNNING $(date -Is)" > "$STATUS"
-run_pilot lora & P0=$!
-run_pilot full & P1=$!
-RC=0
-wait "$P0" || RC=1
-wait "$P1" || RC=1
-if [ "$RC" -ne 0 ]; then echo "FAILED $(date -Is)" > "$STATUS"; exit 1; fi
-"$PY" e1_finetune_verify.py --runs "$ROOT/pilot_cuda_lora,$ROOT/pilot_cuda_full" \
+run_pilot lora || { echo "FAILED $(date -Is)" > "$STATUS"; exit 1; }
+validate_pilot lora || { echo "FAILED $(date -Is)" > "$STATUS"; exit 1; }
+run_pilot full || { echo "FAILED $(date -Is)" > "$STATUS"; exit 1; }
+validate_pilot full || { echo "FAILED $(date -Is)" > "$STATUS"; exit 1; }
+for MODE in lora full; do
+  [ -f "$ROOT/pilot_cuda_$MODE/.independent_validation_complete" ] || {
+    echo "VERIFY_FAILED missing_independent_validation_$MODE $(date -Is)" > "$STATUS"; exit 1; }
+done
+"$PY" e1_finetune_verify.py --runs "$ROOT/pilot_cuda_lora,$ROOT/pilot_cuda_full" --require-independent-validation \
   --out "$ROOT/pilot_cuda_verification.json" >>"$LOGDIR/e1_finetune_pilot_driver.log" 2>&1 || {
   echo "VERIFY_FAILED $(date -Is)" > "$STATUS"; exit 1; }
 echo "PILOT_PASSED $(date -Is)" > "$STATUS"
