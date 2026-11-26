@@ -2,11 +2,14 @@
 import json
 import os
 import tempfile
+import hashlib
+import zlib
 
 import numpy as np
 import pandas as pd
 
-from e1_finetune import EarlyStopping, atomic_json, atomic_marker, atomic_npz
+from e1_finetune import (EarlyStopping, atomic_json, atomic_marker, atomic_npz,
+                         load_checkpoint_compressed, save_checkpoint_compressed)
 from e1_finetune_select import select_rank
 from e1_finetune_verify import verify_run
 
@@ -75,8 +78,17 @@ def verification_check():
         pd.DataFrame([audit]).to_csv(os.path.join(run, "split_audit.tsv"), sep="\t", index=False)
         directory = os.path.join(run, "tasks", "RBP_Cell.f0.neg1c")
         os.makedirs(directory)
-        with open(os.path.join(directory, "best.pt"), "wb") as handle:
-            handle.write(b"checkpoint")
+        raw = b"checkpoint"
+        packed = zlib.compress(raw, level=1)
+        with open(os.path.join(directory, "best.pt.zlib"), "wb") as handle:
+            handle.write(packed)
+        atomic_json(os.path.join(directory, "checkpoint_manifest.json"),
+                    {"format": "torch.save FP32 weights + zlib-1 stream", "checkpoint": "best.pt.zlib",
+                     "raw_sha256": hashlib.sha256(raw).hexdigest(),
+                     "compressed_sha256": hashlib.sha256(packed).hexdigest(),
+                     "raw_bytes": len(raw), "compressed_bytes": len(packed),
+                     "contains_optimizer_state": False, "contains_old_epoch_weights": False,
+                     "roundtrip_sha256_verified": True})
         atomic_json(os.path.join(directory, "metadata.json"),
                     {"training_device": {"device": "cuda:0"}, "n_eval": 2,
                      "experiment": "RBP_Cell", "fold": 0, "track": "neg1c"})
@@ -85,11 +97,25 @@ def verification_check():
         assert verify_run(run)["train_passed"] is True
 
 
+def compression_roundtrip_check():
+    import torch
+    with tempfile.TemporaryDirectory() as directory:
+        checkpoint = {"encoder_state": {"weight": torch.tensor([1.25, -2.0], dtype=torch.float32)},
+                      "head_state": {"bias": torch.tensor([0.5], dtype=torch.float32)},
+                      "training_device": {"torch": str(torch.__version__)}}
+        save_checkpoint_compressed(directory, checkpoint)
+        recovered = load_checkpoint_compressed(directory)
+        assert torch.equal(recovered["encoder_state"]["weight"], checkpoint["encoder_state"]["weight"])
+        assert torch.equal(recovered["head_state"]["bias"], checkpoint["head_state"]["bias"])
+        assert not [name for name in os.listdir(directory) if name.endswith(".tmp") or "best.restore." in name]
+
+
 def main():
     early_stopping_check()
     selection_check()
     verification_check()
-    print("E1_FINETUNE_CONTRACT_OK: convergence, validation-only selection, independent artifact verification")
+    compression_roundtrip_check()
+    print("E1_FINETUNE_CONTRACT_OK: convergence, selection, artifact verification, lossless checkpoint recovery")
 
 
 if __name__ == "__main__":

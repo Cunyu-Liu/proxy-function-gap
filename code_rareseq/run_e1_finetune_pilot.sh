@@ -33,8 +33,8 @@ resource_gate() {
 }
 
 run_pilot() {
-  local MODE=$1 LR=3e-4 MIN_FREE=9000 DIR="$ROOT/pilot_cuda_$1" LOG="$LOGDIR/e1_finetune_pilot_$1.log"
-  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=14000; fi
+  local MODE=$1 LR=3e-4 MIN_FREE=14000 DIR="$ROOT/pilot_cuda_$1" LOG="$LOGDIR/e1_finetune_pilot_$1.log"
+  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=18000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP pilot $MODE"; return 0; fi
   resource_gate "$MIN_FREE" || return 1
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --encoder-lr "$LR" --lora-r 8 --out "$DIR" >"$LOG" 2>&1

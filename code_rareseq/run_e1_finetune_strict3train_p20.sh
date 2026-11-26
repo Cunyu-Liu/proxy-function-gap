@@ -19,11 +19,11 @@ COMMON=(train --windows-dir "$E0/windows" --neg-dir "$E0/neg"
   --data-version e0-v2-id90-strict3train-main --log "$LOG")
 
 resource_gate() {
-  local LABEL=$1 FREE_MIB AVAIL_KIB ATTEMPT
+  local LABEL=$1 MIN_FREE=$2 FREE_MIB AVAIL_KIB ATTEMPT
   for ATTEMPT in $(seq 1 36); do
     FREE_MIB=$(nvidia-smi --query-gpu=memory.free --format=csv,noheader,nounits -i 0)
     AVAIL_KIB=$(awk '/MemAvailable:/ {print $2}' /proc/meminfo)
-    if [ "$FREE_MIB" -ge 12000 ] && [ "$AVAIL_KIB" -ge 12582912 ]; then
+    if [ "$FREE_MIB" -ge "$MIN_FREE" ] && [ "$AVAIL_KIB" -ge 12582912 ]; then
       echo "RESOURCE_OK $LABEL free_mib=$FREE_MIB mem_available_kib=$AVAIL_KIB"
       return 0
     fi
@@ -35,10 +35,10 @@ resource_gate() {
 }
 
 train_run() {
-  local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 LOGFILE=$6
-  [ "$MODE" = full ] && LR=1e-5
+  local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 MIN_FREE=16000 LOGFILE=$6
+  if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=20000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP train $DIR"; return 0; fi
-  resource_gate "train_f${FOLD}_s${SEED}_${MODE}" || return 1
+  resource_gate "train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE" || return 1
   echo "TRAIN_START $DIR $(date -Is)"
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --folds "$FOLD" --seed "$SEED" \
     --encoder-lr "$LR" --lora-r "$RANK" --out "$DIR" >"$LOGFILE" 2>&1
@@ -50,7 +50,7 @@ train_run() {
 eval_run() {
   local DIR=$1 LOGFILE=$2
   if [ -f "$DIR/.eval_complete" ]; then echo "SKIP eval $DIR"; return 0; fi
-  resource_gate "eval_${DIR##*/}" || return 1
+  resource_gate "eval_${DIR##*/}" 12000 || return 1
   echo "EVAL_START $DIR $(date -Is)"
   if [[ "$DIR" == *lora* ]]; then
     "$PY" e1_finetune.py evaluate --out "$DIR" --selection "$SELECTION" --log "$LOG" >"$LOGFILE" 2>&1

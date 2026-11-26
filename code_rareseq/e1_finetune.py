@@ -7,7 +7,9 @@ import json
 import os
 import shutil
 import sys
+import tempfile
 import time
+import zlib
 from types import SimpleNamespace
 
 import numpy as np
@@ -51,6 +53,95 @@ def atomic_marker(path):
 
 def file_sha256(path):
     return sha256_file(path)
+
+
+def save_checkpoint_compressed(directory, checkpoint):
+    import torch
+    raw_path = os.path.join(directory, "best.pt.tmp")
+    compressed_path = os.path.join(directory, "best.pt.zlib")
+    compressed_tmp = compressed_path + ".tmp"
+    torch.save(checkpoint, raw_path)
+    raw_sha256 = hashlib.sha256()
+    compressed_sha256 = hashlib.sha256()
+    compressor = zlib.compressobj(1)
+    raw_bytes = 0
+    compressed_bytes = 0
+    with open(raw_path, "rb") as source, open(compressed_tmp, "wb") as target:
+        while True:
+            chunk = source.read(8 * 1024 * 1024)
+            if not chunk:
+                break
+            raw_sha256.update(chunk)
+            raw_bytes += len(chunk)
+            packed = compressor.compress(chunk)
+            target.write(packed)
+            compressed_sha256.update(packed)
+            compressed_bytes += len(packed)
+        packed = compressor.flush()
+        target.write(packed)
+        compressed_sha256.update(packed)
+        compressed_bytes += len(packed)
+        target.flush()
+        os.fsync(target.fileno())
+    os.replace(compressed_tmp, compressed_path)
+    roundtrip_sha256 = hashlib.sha256()
+    roundtrip_bytes = 0
+    decompressor = zlib.decompressobj()
+    with open(compressed_path, "rb") as handle:
+        while True:
+            chunk = handle.read(8 * 1024 * 1024)
+            if not chunk:
+                break
+            unpacked = decompressor.decompress(chunk)
+            roundtrip_sha256.update(unpacked)
+            roundtrip_bytes += len(unpacked)
+    unpacked = decompressor.flush()
+    roundtrip_sha256.update(unpacked)
+    roundtrip_bytes += len(unpacked)
+    if (roundtrip_bytes != raw_bytes or roundtrip_sha256.digest() != raw_sha256.digest()):
+        raise RuntimeError("Checkpoint compression roundtrip failed")
+    manifest = {"format": "torch.save FP32 weights + zlib-1 stream",
+                "checkpoint": "best.pt.zlib", "raw_sha256": raw_sha256.hexdigest(),
+                "compressed_sha256": compressed_sha256.hexdigest(),
+                "raw_bytes": raw_bytes, "compressed_bytes": compressed_bytes,
+                "compression_ratio": compressed_bytes / raw_bytes,
+                "contains_optimizer_state": False, "contains_old_epoch_weights": False,
+                "roundtrip_sha256_verified": True}
+    atomic_json(os.path.join(directory, "checkpoint_manifest.json"), manifest)
+    os.remove(raw_path)
+    return manifest
+
+
+def load_checkpoint_compressed(directory):
+    import torch
+    manifest_path = os.path.join(directory, "checkpoint_manifest.json")
+    if not os.path.isfile(manifest_path):
+        return torch.load(os.path.join(directory, "best.pt"), map_location="cpu", weights_only=True)
+    manifest = json.load(open(manifest_path))
+    compressed_path = os.path.join(directory, manifest["checkpoint"])
+    if file_sha256(compressed_path) != manifest["compressed_sha256"]:
+        raise RuntimeError("Compressed checkpoint SHA256 mismatch")
+    decompressor = zlib.decompressobj()
+    raw_sha256 = hashlib.sha256()
+    fd, raw_path = tempfile.mkstemp(prefix="best.restore.", suffix=".pt", dir=directory)
+    try:
+        with os.fdopen(fd, "wb") as target, open(compressed_path, "rb") as source:
+            while True:
+                chunk = source.read(8 * 1024 * 1024)
+                if not chunk:
+                    break
+                unpacked = decompressor.decompress(chunk)
+                target.write(unpacked)
+                raw_sha256.update(unpacked)
+            unpacked = decompressor.flush()
+            target.write(unpacked)
+            raw_sha256.update(unpacked)
+        if raw_sha256.hexdigest() != manifest["raw_sha256"]:
+            raise RuntimeError("Restored checkpoint SHA256 mismatch")
+        return torch.load(raw_path, map_location="cpu", weights_only=True)
+    finally:
+        if os.path.exists(raw_path):
+            os.remove(raw_path)
 
 
 class SequenceLoader(TaskLoader):
@@ -130,7 +221,7 @@ def require_cuda():
     torch.cuda.synchronize(device)
     info = {"device": "cuda:0", "name": torch.cuda.get_device_name(device),
             "numeric_probe": observed.tolist(), "backward_probe": "passed",
-            "optimizer_probe": "passed", "torch": torch.__version__}
+            "optimizer_probe": "passed", "torch": str(torch.__version__)}
     print("DEVICE_PROBE " + json.dumps(info), flush=True)
     del x, y, before, probe
     torch.cuda.empty_cache()
@@ -231,7 +322,7 @@ def train_task(task, arrays, args, tokenizer, fast_encode, device, device_info):
     stopping = EarlyStopping(args.patience, args.min_delta)
     best_encoder = None
     best_head = None
-    history_path = os.path(directory, "history.jsonl")
+    history_path = os.path.join(directory, "history.jsonl")
     epoch = 0
     with open(history_path, "w", buffering=1) as history_handle:
         for epoch in range(1, args.epochs + 1):
@@ -287,17 +378,28 @@ def train_task(task, arrays, args, tokenizer, fast_encode, device, device_info):
                   "encoder_lr": args.encoder_lr, "head_lr": args.head_lr,
                   "split_audit": split_audit_rows(task), "training_device": device_info,
                   "fast_tokenizer_verified": fast_encode is not None, **info}
-    checkpoint_path = os.path.join(directory, "best.pt")
-    tmp = checkpoint_path + ".tmp"
-    torch.save(checkpoint, tmp)
-    os.replace(tmp, checkpoint_path)
+    checkpoint_manifest = save_checkpoint_compressed(directory, checkpoint)
+    recovered = load_checkpoint_compressed(directory)
+    if set(recovered["encoder_state"]) != set(best_encoder) or set(recovered["head_state"]) != set(best_head):
+        raise RuntimeError("Recovered checkpoint keys differ")
+    for name, value in best_encoder.items():
+        if not torch.equal(value, recovered["encoder_state"][name]):
+            raise RuntimeError(f"Recovered encoder tensor differs: {name}")
+    for name, value in best_head.items():
+        if not torch.equal(value, recovered["head_state"][name]):
+            raise RuntimeError(f"Recovered head tensor differs: {name}")
+    del recovered
     val_ids = arrays[1][0]
     prediction_path = os.path.join(directory, "validation_predictions.npz")
     atomic_npz(prediction_path, window_id=np.asarray(val_ids), label=yva, score=val_score)
     metadata = {**{key: task[key] for key in TASK_KEYS}, **info, "n_train": len(ytr),
                 "n_eval": len(yva), "val_auroc": val_auroc, "val_auprc": val_auprc,
-                "checkpoint": "best.pt", "history": "history.jsonl",
-                "validation_predictions": "validation_predictions.npz",
+                "checkpoint": checkpoint_manifest["checkpoint"],
+                "checkpoint_manifest": "checkpoint_manifest.json",
+                "checkpoint_compressed_bytes": checkpoint_manifest["compressed_bytes"],
+                "checkpoint_raw_sha256": checkpoint_manifest["raw_sha256"],
+                "checkpoint_compressed_sha256": checkpoint_manifest["compressed_sha256"],
+                "history": "history.jsonl", "validation_predictions": "validation_predictions.npz",
                 "training_device": device_info, "stable_seed": seed}
     atomic_json(metadata_path, metadata)
     atomic_marker(os.path.join(directory, ".complete"))
@@ -310,12 +412,13 @@ def train_task(task, arrays, args, tokenizer, fast_encode, device, device_info):
 def preflight_storage(args, tasks):
     remaining = [task for task in tasks
                  if not os.path.isfile(os.path.join(task_dir(args.out, task), ".complete"))]
-    per_task = 4_000_000 if args.mode == "lora" else 420_000_000
+    per_task = 4_000_000 if args.mode == "lora" else int(420_000_000 * 0.70)
     prediction_bytes = sum(len(task["splits"][1][0]) for task in remaining) * 80
     required = ((len(remaining) * per_task + prediction_bytes + 20 * 1024**3)
                 if remaining else 0)
     free = shutil.disk_usage(args.out).free
     report = {"remaining_tasks": len(remaining), "estimated_checkpoint_bytes_per_task": per_task,
+              "checkpoint_format": "FP32 torch.save + zlib-1; planning ratio<=0.70",
               "reserve_bytes": 20 * 1024**3, "required_bytes_including_reserve": required,
               "free_bytes": free, "passed": free >= required}
     atomic_json(os.path.join(args.out, "storage_preflight.json"), report)
@@ -442,8 +545,7 @@ def cmd_evaluate(args):
             os.makedirs(test_dir, exist_ok=True)
             test_metadata_path = os.path.join(test_dir, "metadata.json")
             if not os.path.isfile(test_metadata_path):
-                checkpoint = torch.load(os.path.join(task_dir(args.out, task), "best.pt"),
-                                        map_location="cpu", weights_only=True)
+                checkpoint = load_checkpoint_compressed(task_dir(args.out, task))
                 model, head = build_model(train_args, train_args.model, device)
                 restore_state(model, head, checkpoint)
                 arrays = loader.arrays(task, include_test=True)

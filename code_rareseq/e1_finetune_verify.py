@@ -10,6 +10,7 @@ import pandas as pd
 
 from e1_frozen_baselines import metrics
 from e1_finetune import DATA_VERSION, atomic_json
+from log_run import sha256_file
 
 
 def verify_run(run, require_eval=False, expected_rank=None):
@@ -51,7 +52,17 @@ def verify_run(run, require_eval=False, expected_rank=None):
     task_dirs = sorted(glob.glob(os.path.join(run, "tasks", "*")))
     assert len(task_dirs) == len(validation)
     for directory in task_dirs:
-        assert os.path.getsize(os.path.join(directory, "best.pt")) > 0
+        manifest = json.load(open(os.path.join(directory, "checkpoint_manifest.json")))
+        checkpoint_path = os.path.join(directory, manifest["checkpoint"])
+        assert manifest["format"] == "torch.save FP32 weights + zlib-1 stream"
+        assert manifest["contains_optimizer_state"] is False
+        assert manifest["contains_old_epoch_weights"] is False
+        assert manifest["roundtrip_sha256_verified"] is True
+        assert os.path.getsize(checkpoint_path) == manifest["compressed_bytes"]
+        assert sha256_file(checkpoint_path) == manifest["compressed_sha256"]
+        assert not glob.glob(os.path.join(directory, "best.restore.*"))
+        assert not os.path.exists(os.path.join(directory, "best.pt.tmp"))
+        assert not os.path.exists(os.path.join(directory, "best.pt.zlib.tmp"))
         metadata = json.load(open(os.path.join(directory, "metadata.json")))
         assert metadata["training_device"]["device"] == "cuda:0"
         prediction = np.load(os.path.join(directory, "validation_predictions.npz"))

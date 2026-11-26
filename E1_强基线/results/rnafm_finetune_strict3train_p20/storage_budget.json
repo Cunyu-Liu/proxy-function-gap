@@ -1,0 +1,54 @@
+{
+  "observed_at": "2026-11-26T21:43:27+0800",
+  "teams_path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap",
+  "free_bytes_at_observation": 159610044416,
+  "checkpoint_policy": {
+    "required": "every task best FP32 encoder/head weights",
+    "optimizer_state_saved": false,
+    "old_epoch_weights_saved": false,
+    "temporary_restore_weights_retained": false,
+    "format": "torch.save + zlib-1 + dual SHA256 manifest + bitwise recovery check"
+  },
+  "benchmark": {
+    "raw_bytes": 398117588,
+    "zlib1_bytes": 249910990,
+    "ratio": 0.6277315987355977,
+    "planning_ratio_on_420MB": 0.7,
+    "reserve_bytes": 21474836480
+  },
+  "scopes": {
+    "pilot_two_tasks": {
+      "tasks": 2,
+      "raw_best_weight_bytes": 796235176,
+      "measured_zlib1_best_weight_bytes": 499821980,
+      "planning_bytes_with_reserve": 22062836480,
+      "planning_deficit_bytes_at_observation": 0,
+      "capacity_ready_at_observation": true
+    },
+    "main_fold0_one_seed": {
+      "tasks": 292,
+      "raw_best_weight_bytes": 116250335696,
+      "measured_zlib1_best_weight_bytes": 72974009080,
+      "planning_bytes_with_reserve": 107322836480,
+      "planning_deficit_bytes_at_observation": 0,
+      "capacity_ready_at_observation": true
+    },
+    "main_fold0_three_seeds": {
+      "tasks": 876,
+      "raw_best_weight_bytes": 348751007088,
+      "measured_zlib1_best_weight_bytes": 218922027240,
+      "planning_bytes_with_reserve": 279018836480,
+      "planning_deficit_bytes_at_observation": 119408792064,
+      "capacity_ready_at_observation": false
+    },
+    "main_five_fold_three_seeds": {
+      "tasks": 4380,
+      "raw_best_weight_bytes": 1743755035440,
+      "measured_zlib1_best_weight_bytes": 1094610136200,
+      "planning_bytes_with_reserve": 1309194836480,
+      "planning_deficit_bytes_at_observation": 1149584792064,
+      "capacity_ready_at_observation": false
+    }
+  },
+  "matrix_policy": "never shrink matrix, delete existing data, or omit checkpoints; block when capacity is insufficient"
+}
