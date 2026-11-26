@@ -6,6 +6,8 @@ import gzip
 import hashlib
 import json
 import os
+import shutil
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -537,6 +539,18 @@ class Cafa3Run:
         return metrics, labels
 
 
+def wait_for_storage(path, ontology):
+    required_gib = {"BPO": 18, "MFO": 8, "CCO": 6}[ontology]
+    path.mkdir(parents=True, exist_ok=True)
+    while True:
+        available_gib = shutil.disk_usage(path).free / (1024 ** 3)
+        if available_gib >= required_gib:
+            print(f"STORAGE_OK required={required_gib}GiB available={available_gib:.2f}GiB", flush=True)
+            return
+        print(f"STORAGE_WAIT required={required_gib}GiB available={available_gib:.2f}GiB", flush=True)
+        time.sleep(300)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data-dir", required=True)
@@ -557,6 +571,7 @@ def main():
     args = parser.parse_args()
     if args.patience != 20 or args.min_delta != 1e-4 or args.epochs != 1000 or args.seeds != "0,1,2":
         raise ValueError("Formal CAFA3 runs require seeds=0,1,2, patience=20, min_delta=1e-4 and 1000-epoch failsafe")
+    wait_for_storage(Path(args.out), args.ontology)
     Cafa3Run(args).run()
 
 
