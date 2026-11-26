@@ -297,9 +297,10 @@ def freeze(args):
         merged.loc[~matched, "exclusion_reason"] = "absent_from_normalized"
         merged.loc[merged.probe_set == "other", "exclusion_reason"] = "not_SetA_B"
         excluded = merged[merged.exclusion_reason != ""].copy()
-        assert len(excluded) == 102
+        assert len(excluded) == 42
         assert (excluded.exclusion_reason == "not_SetA_B").sum() == 42
-        assert (excluded.exclusion_reason == "absent_from_normalized").sum() == 60
+        assert (excluded.exclusion_reason == "absent_from_normalized").sum() == 0
+        assert merged.loc[matched, "probe_set"].isin(["SetA", "SetB"]).all()
         excluded_columns = ["probe_id", "probe_set", "rna_seq", "description", "exclusion_reason"]
         write_table(excluded[excluded_columns], os.path.join(out, "excluded_probes.tsv"))
 
@@ -544,18 +545,57 @@ def verify_frozen(out):
     for name, expected in manifest["output_sha256"].items():
         assert sha256_file(os.path.join(out, name)) == expected, name
     sequence = pd.read_csv(os.path.join(out, "sequence_folds.tsv.gz"), sep="\t")
+    probes = pd.read_csv(os.path.join(out, "probes.tsv.gz"), sep="\t",
+                         usecols=["probe_id", "sequence_id", "rna_seq", "fold"])
+    experiments = pd.read_csv(os.path.join(out, "experiments.tsv"), sep="\t")
+    rbp_folds = pd.read_csv(os.path.join(out, "rbp_folds.tsv"), sep="\t")
+    availability = pd.read_csv(os.path.join(out, "label_availability.tsv.gz"), sep="\t")
+    leakage = pd.read_csv(os.path.join(out, "leakage_audit.tsv"), sep="\t")
+    excluded = pd.read_csv(os.path.join(out, "excluded_probes.tsv"), sep="\t")
+    assert len(experiments) == manifest["experiments_total"] == 244
+    assert experiments.Motif_ID.is_unique and rbp_folds.Motif_ID.is_unique
+    assert len(excluded) == 42 and excluded.exclusion_reason.value_counts().to_dict() == {
+        "not_SetA_B": 42}
     assert sequence.sequence_id.is_unique and sequence.rna_seq.is_unique
+    assert probes.probe_id.is_unique and len(probes) == 241357
     assert sequence.groupby("cluster_id").fold.nunique().max() == 1
+    probe_sequence = probes.merge(sequence[["sequence_id", "rna_seq", "fold"]],
+                                  on="sequence_id", suffixes=("", "_frozen"),
+                                  how="left", validate="many_to_one")
+    assert (probe_sequence.rna_seq == probe_sequence.rna_seq_frozen).all()
+    assert (probe_sequence.fold == probe_sequence.fold_frozen).all()
+    assert (availability.n_finite_unique + availability.n_all_nan_unique ==
+            availability.n_unique_rna).all()
+    all_counts = availability[availability.probe_set == "All"]
+    set_counts = availability[availability.probe_set.isin(["SetA", "SetB"])].groupby(
+        ["Motif_ID", "fold"])[["n_unique_rna", "n_finite_unique", "n_all_nan_unique"]].sum()
+    indexed_all = all_counts.set_index(["Motif_ID", "fold"])
+    for column in ("n_unique_rna", "n_finite_unique", "n_all_nan_unique"):
+        assert (indexed_all[column] == set_counts[column]).all()
+    observed = all_counts.groupby("Motif_ID").n_finite_unique.sum()
+    expected_observed = experiments.set_index("Motif_ID").n_finite_unique
+    assert (observed == expected_observed).all()
+    for row in experiments[experiments.sequence_track_included].itertuples():
+        counts = all_counts[all_counts.Motif_ID == row.Motif_ID].n_finite_unique
+        assert len(counts) == 5 and counts.min() >= MIN_FINITE_PER_FOLD
+    assert rbp_folds.groupby("species_gene").rbp_fold.nunique().max() == 1
+    assert (leakage.n_exact_overlap.fillna(0) == 0).all()
+    assert (leakage.n_cluster_overlap.fillna(0) == 0).all()
+    assert (leakage.n_group_overlap == 0).all()
     for fold in range(N_FOLDS):
         roles = manifest["split_roles"][str(fold)]
         assert roles == split_roles(fold)
         frames = {role: sequence[sequence.fold.isin(folds)] for role, folds in roles.items()}
+        groups = {role: set(rbp_folds.loc[rbp_folds.rbp_fold.isin(folds), "species_gene"])
+                  for role, folds in roles.items()}
         for left, right in (("train", "validation"), ("train", "test"), ("validation", "test")):
             assert not (set(frames[left].rna_seq) & set(frames[right].rna_seq))
             assert not (set(frames[left].cluster_id) & set(frames[right].cluster_id))
+            assert not (groups[left] & groups[right])
     print("RNACOMPETE_FROZEN_VERIFICATION_OK", json.dumps({
         "version": manifest["version"], "files": len(names),
-        "unique_rna": len(sequence), "clusters": int(sequence.cluster_id.nunique())}))
+        "experiments": len(experiments), "unique_rna": len(sequence),
+        "clusters": int(sequence.cluster_id.nunique())}))
 
 
 def main():

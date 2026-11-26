@@ -3,6 +3,8 @@
 日期：2026-11-26 ｜ 数据版本：`ray2013_nature12311` ｜ benchmark 版本：`rnacompete-ray2013-v1.0-id90-strict3train`
 
 > 本合同在任何 RNAcompete 序列聚类、实验纳入筛选、split 或模型训练之前冻结。当前交付仅为数据审计、任务定义与 split 冻结，不是模型结果。合同变更必须升级版本并保留旧 manifest，不得根据 test 表现回改。
+>
+> 计数修订（尚未生成任何 split）：初稿依据旧 `norm_data_audit.json` 写入“另缺 60 个 SetA/B ID”。首次执行在排除数断言处阻断；独立逐 ID 重算证明旧字段有误，实际仅 42 个非 SetA/B ID 缺失，241,357 个 SetA/B ID 全部对齐。本修订只修正可复现的连接事实，不改变纳入规则、聚类、划分或指标。
 
 ## 1. 固定输入与证据边界
 
@@ -23,7 +25,7 @@
 1. 主表第二工作表的一行是一个实验，以 `Motif_ID` 连接 normalized 矩阵实验列；不以列位置或行号猜测连接。244 个矩阵实验必须与 244 个主表 ID 双向一一对应。
 2. 设计文件首行是 10 列控制行 schema；`ControlType=false` 的 14 列非对照行追加 `DNA_Seq/RNA_Seq/Structure/MFE`。只纳入 `ControlType=false`，阳性/阴性控制不进入模型任务。
 3. 以 `Probe_ID`（矩阵）= `ID`（设计）连接，RNA 输入取设计的第 12 列 `RNA_Seq`。矩阵和设计中的 Probe_Set、RNA_Seq 必须逐行一致；不一致即阻断，不自动修复。
-4. 主任务只含 `SetA/SetB` 且存在于 normalized 矩阵的探针。不属于这两个集合的 42 个非对照探针（21 条唯一 RNA）与 60 个缺失于 normalized 的 SetA/B 探针分别以 `not_SetA_B/absent_from_normalized` 原因进入 `excluded_probes.tsv`，不得随机分配集合、填补标签或删除后隐匿不计。
+4. 主任务只含 `SetA/SetB` 且存在于 normalized 矩阵的探针。逐 ID 连接确认：42 个 `RBD_Control_*` 非对照探针（21 条唯一 RNA）不属于 SetA/B 且不在 normalized 中，以 `not_SetA_B` 为主原因进入 `excluded_probes.tsv`；全部 241,357 个 SetA/B 探针均在矩阵中。不得随机分配集合、填补标签或删除后隐匿不计。
 5. RNA 统一为去首尾空白的大写 `ACGU`；只允许为聚类工具临时将 `U` 写成 `T`，输出仍保存 RNA。出现其他非空字符、空序列、重复 Probe_ID 或重复实验 ID 即阻断，不推测修正。
 6. 实验初始候选为全部 244 个对齐实验。划分后，某实验若在任一 fold 的 train/validation/test 角色中有限、去重 RNA 标签数 `<100`，或全数据有限标签不足 2 个不同值，则从**闭集序列轨**排除并记录原因；不得按模型分数、 motif 是否已知或标签方向筛选。RBP-OOD 另要求 `Species` 和 `Gene_systematic_ID` 非空，缺失即阻断而非新建猜测基因。
 
