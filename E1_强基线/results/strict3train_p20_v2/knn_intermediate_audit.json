@@ -14,8 +14,18 @@
   "data_version": "e0-v2-id90-strict3train-main",
   "post_driver_pid": 3904926,
   "post_audit_started_at": "2026-11-26T11:26:35+08:00",
+  "post_audit_progress": "4/5",
+  "post_audit_completed_folds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "post_audit_running_folds": [
+    4
+  ],
   "post_steps": {
-    "audit": "RUNNING",
+    "audit": "RUNNING_4_OF_5",
     "combine_cv_predictions": "PENDING",
     "cv_summary": "PENDING",
     "paired_bootstrap_10000": "PENDING",

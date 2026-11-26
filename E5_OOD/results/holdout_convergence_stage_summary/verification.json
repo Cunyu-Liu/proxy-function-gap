@@ -1,14 +1,14 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261126-021432-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261126-041020-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 49,
+  "n_pairs_completed": 53,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
   "pass1_schema_finite_checkpoint": true,
   "pass2_config_split_seed_alignment": true,
   "cross_seed_window_npz_alignment": {
-    "comparisons": 25,
+    "comparisons": 29,
     "per_task_validation_test_ids_and_positives": true,
     "npz_keys_window_occurrence_roles_labels_shapes_finite": true,
     "model_scores_compared_for_equality": false
@@ -18,30 +18,6 @@
     "passed": true
   },
   "missing": [
-    {
-      "seed": 2,
-      "track": "neg1c",
-      "holdout": "PTBP1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 2,
-      "track": "neg1c",
-      "holdout": "U2AF2",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 2,
-      "track": "neg1c",
-      "holdout": "SRSF1",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 2,
-      "track": "neg1c",
-      "holdout": "RBFOX2",
-      "reason": "incomplete pair"
-    },
     {
       "seed": 2,
       "track": "neg1c",
