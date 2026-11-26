@@ -1,0 +1,16 @@
+{
+  "observed_at": "2026-11-27T05:44:36+08:00",
+  "status": "STORAGE_WAIT",
+  "smoke_tasks": 2,
+  "required_bytes_including_20GiB_reserve": 22314836480,
+  "teams_free_bytes": 981467136,
+  "gpu_free_mib": 28163,
+  "smoke_directory_created": false,
+  "train_complete": false,
+  "eval_complete": false,
+  "retention_complete": false,
+  "post_retention_verification": false,
+  "fold0_resumed": false,
+  "driver_log_sha256": "5113ba24d7b10c3763fee2ed83fdb0410144d18fc90103e936f67383edfe877b",
+  "policy": "wait without deleting protected artifacts, lowering reserve, or using CPU fallback"
+}

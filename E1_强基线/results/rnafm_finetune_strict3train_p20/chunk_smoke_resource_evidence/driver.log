@@ -1,0 +1,10 @@
+STORAGE_WAIT tasks=2 attempt=1 free=9550430208 required=22314836480
+STORAGE_WAIT tasks=2 attempt=2 free=3800039424 required=22314836480
+STORAGE_WAIT tasks=2 attempt=3 free=0 required=22314836480
+STORAGE_WAIT tasks=2 attempt=4 free=2604662784 required=22314836480
+STORAGE_WAIT tasks=2 attempt=5 free=2457862144 required=22314836480
+STORAGE_WAIT tasks=2 attempt=6 free=2332033024 required=22314836480
+STORAGE_WAIT tasks=2 attempt=7 free=2109734912 required=22314836480
+STORAGE_WAIT tasks=2 attempt=8 free=1090519040 required=22314836480
+STORAGE_WAIT tasks=2 attempt=9 free=1061158912 required=22314836480
+STORAGE_WAIT tasks=2 attempt=10 free=981467136 required=22314836480
