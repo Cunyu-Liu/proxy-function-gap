@@ -1,0 +1,54 @@
+{
+  "stage": "bootstrap_running",
+  "data_version": "e0-v2-id90-strict3train-main",
+  "audit_run_id": "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+  "audit_checks": {
+    "source_log_malformed_lines": 1,
+    "n_experiments": 146,
+    "n_modern_runs": 15,
+    "n_knn_runs": 5,
+    "n_tracks": 2,
+    "n_folds": 5,
+    "n_seeds": 3,
+    "all_early_stopped_below_1000": true,
+    "all_cuda0_numeric_probes_passed": true,
+    "all_train_strict_three_folds": true,
+    "no_fold_minus1_in_train": true,
+    "all_prediction_keys_aligned": true,
+    "all_raw_splits_aligned": true,
+    "all_scores_finite": true
+  },
+  "run_ids": {
+    "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/audit": "E1-main-independent-audit-20261126-032635-ZDLg6Y",
+    "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_combined": "E1-cv-prediction-combine-20261126-064253-ZDLg6Y",
+    "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_summary": "E1-cv-summary-20261126-065042-ZDLg6Y"
+  },
+  "combined_rows": {
+    "modern_s0": 8692659,
+    "modern_s1": 8692659,
+    "modern_s2": 8692659,
+    "knn": 8692659
+  },
+  "cv_test_tail_folds": 10,
+  "cv_test_tail_all_d_auroc_positive": true,
+  "cv_test_tail_all_d_auprc_positive": true,
+  "bootstrap_completed_slices": {
+    "neg1c_tail": {
+      "shape": [
+        10000,
+        2
+      ],
+      "all_finite": true,
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_bootstrap/bootstrap_neg1c_tail.npz"
+    },
+    "neg1c_mid": {
+      "shape": [
+        10000,
+        2
+      ],
+      "all_finite": true,
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_bootstrap/bootstrap_neg1c_mid.npz"
+    }
+  },
+  "bootstrap_overall_conclusion": null
+}
