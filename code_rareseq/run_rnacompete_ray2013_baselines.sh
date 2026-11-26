@@ -90,7 +90,7 @@ if [ ! -f "$ROOT/smoke/smoke_cuda.json" ]; then
       echo "SMOKE_FAILED $(date -Is)" >"$STATUS"; exit 1; }
 fi
 if [ ! -f "$ROOT/embeddings/embedding_manifest.json" ]; then
-  run_cuda shared_embedding 6000 "$LOGDIR/embedding.log" rnacompete_ray2013_rnafm_embed.py \
+  run_cuda shared_embedding 2500 "$LOGDIR/embedding.log" rnacompete_ray2013_rnafm_embed.py \
     --frozen-root "$FROZEN" --out "$ROOT/embeddings" --log "$LOG" --batch 128 \
     --model-path "$MODEL" --revision "$REVISION" || {
       echo "EMBEDDING_FAILED_OR_BLOCKED $(date -Is)" >"$STATUS"; exit 1; }
@@ -103,13 +103,13 @@ fi
 for TRACK in sequence rbp_ood; do
   for ARCH in linear mlp; do
     if [ ! -f "$ROOT/selections/${TRACK}_${ARCH}.json" ]; then
-      run_cuda "select_${TRACK}_${ARCH}" 8000 "$LOGDIR/select_${TRACK}_${ARCH}.log" \
+      run_cuda "select_${TRACK}_${ARCH}" 2500 "$LOGDIR/select_${TRACK}_${ARCH}.log" \
         rnacompete_ray2013_baselines.py select --track "$TRACK" --arch "$ARCH" --fold 0 --seed 0 "${BASE[@]}" || {
           echo "SELECTION_FAILED ${TRACK}_${ARCH} $(date -Is)" >"$STATUS"; exit 1; }
     fi
   done
   if [ ! -f "$ROOT/selections/${TRACK}_knn.json" ]; then
-    run_cuda "select_${TRACK}_knn" 8000 "$LOGDIR/select_${TRACK}_knn.log" \
+    run_cuda "select_${TRACK}_knn" 2500 "$LOGDIR/select_${TRACK}_knn.log" \
       rnacompete_ray2013_baselines.py knn-select --track "$TRACK" --fold 0 "${BASE[@]}" || {
         echo "KNN_SELECTION_FAILED $TRACK $(date -Is)" >"$STATUS"; exit 1; }
   fi
@@ -122,13 +122,13 @@ run_fold() {
       for SEED in 0 1 2; do
         RUN=$ROOT/runs/${TRACK}_${ARCH}_f${FOLD}_s${SEED}
         if [ ! -f "$RUN/.train_complete" ]; then
-          run_cuda "train_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 8000 \
+          run_cuda "train_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 2500 \
             "$LOGDIR/train_${TRACK}_${ARCH}_f${FOLD}_s${SEED}.log" \
             rnacompete_ray2013_baselines.py train --track "$TRACK" --arch "$ARCH" \
             --fold "$FOLD" --seed "$SEED" "${BASE[@]}" || return 1
         fi
         if [ ! -f "$RUN/.eval_complete" ]; then
-          run_cuda "evaluate_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 8000 \
+          run_cuda "evaluate_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 2500 \
             "$LOGDIR/evaluate_${TRACK}_${ARCH}_f${FOLD}_s${SEED}.log" \
             rnacompete_ray2013_baselines.py evaluate --track "$TRACK" --arch "$ARCH" \
             --fold "$FOLD" --seed "$SEED" "${BASE[@]}" || return 1
@@ -136,7 +136,7 @@ run_fold() {
       done
     done
     if [ ! -f "$ROOT/knn/${TRACK}_f${FOLD}/.eval_complete" ]; then
-      run_cuda "knn_evaluate_${TRACK}_f${FOLD}" 8000 "$LOGDIR/knn_evaluate_${TRACK}_f${FOLD}.log" \
+      run_cuda "knn_evaluate_${TRACK}_f${FOLD}" 2500 "$LOGDIR/knn_evaluate_${TRACK}_f${FOLD}.log" \
         rnacompete_ray2013_baselines.py knn-evaluate --track "$TRACK" --fold "$FOLD" "${BASE[@]}" || return 1
     fi
   done

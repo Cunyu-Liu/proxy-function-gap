@@ -165,6 +165,8 @@ def main():
                   "model_weight_sha256": sha256_file(weight_path) if weight_path else None,
                   "pool": "mean-masked", "special_tokens_in_pool": True, "truncation": False,
                   "max_tokens": max_tokens, "cuda": device_info, "cache": cache,
+                  "cuda_memory": {"max_allocated_bytes": int(torch.cuda.max_memory_allocated(device)),
+                                  "max_reserved_bytes": int(torch.cuda.max_memory_reserved(device))},
                   "frozen_manifest_sha256": config["frozen_manifest_sha256"],
                   "code_sha256": config["code_sha256"], "elapsed_seconds": time.time() - started}
         result_path = os.path.join(args.out, "smoke_cuda.json" if args.limit else "embedding_manifest.json")

@@ -44,5 +44,7 @@ RNACOMPETE_MODEL_CONTRACT_TEST_OK: NaN mask, metrics, split boundaries, IDs, rep
 - 独立nohup驱动已于00:23 +08:00启动，PID `4008443`；状态与日志为`/home/ProxyFunctionGap/logs/rnacompete_ray2013/`。驱动当前等待固定快照完整，之后依次执行真实模型CUDA smoke、6GB空闲显存门控的正式共享嵌入、validation选参与fold0三seed；默认不自动扩五折。
 - 固定RNA-FM权重已组装并核验：398,175,831字节，SHA256 `a0ff096b19510a0d2ef020c171611ce592a527a829c1a4ba29ffffe4422c35d4`。
 - **真实模型CUDA smoke通过并已独立重放**：RTX 5090，`cuda:0`数值/反向/优化器探针通过；16条冻结RNA的ID逐字匹配，`16×640`、fp16、全有限值，最大token长度40。ID SHA256为`d38c7e9db32c761bec0a356444f493b0df601bdd5211fe8510cf5cd0a657847a`，嵌入SHA256为`15af8c867815d9aa401c21e3d5e759fe8c1538e86cd662f65e781aebee412f14`。证据：`/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/rnacompete_ray2013_model_baselines_v1/smoke/smoke_cuda.json`。
-- smoke于00:39 +08:00完成后，正式共享嵌入进入6GB空闲显存门控；首次等待记录为4,525MiB空闲、约54.8GB RAM可用，未降低门限或抢占其他任务。驱动继续存活，后续将自动执行正式嵌入、validation选参与fold0三seed。
-- 当前尚无可报告test指标；smoke、标签缓存、合成训练门控均未被当作性能结果。
+- smoke于00:39 +08:00完成。此后将资源门控视为工程校准而非科学协议：保持batch、模型、损失和指标不变，将正式嵌入及小型头/检索门限调整为2.5GB，并新增CUDA peak记录；未抢占或停止其他模型任务。
+- **正式共享嵌入已完成并独立验收**：00:58 +08:00生成219,990×640 fp16缓存，所有ID与冻结`sequence_folds`逐字一致、所有行有限。ID SHA256 `977ba15917446585fc790fa470ad7b4d9c8d1e6987d783330ce869771e711019`，嵌入SHA256 `4e697e2d0031ed137fb42b68ff7d2447b93dea38af5e8b9b8f4a4743deea8b32`。实测CUDA peak allocated 618,245,632B、reserved 809,500,672B，正式前向耗时178.77秒。
+- fold0/seed0序列linear正则搜索已于00:59启动；首个epoch validation宏Spearman为0.3863347，仅作为训练轨迹，不是test或五折结论。后续候选选择文件、双轨三seed和fold0门控继续由独立驱动执行。
+- 当前尚无可报告test指标；smoke、标签缓存、嵌入缓存和合成训练门控均未被当作性能结果。
