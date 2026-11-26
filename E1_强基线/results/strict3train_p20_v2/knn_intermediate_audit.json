@@ -1,13 +1,12 @@
 {
   "completed_knn_folds": [
-    1
-  ],
-  "running_knn_folds": [
+    1,
     3
   ],
-  "failed_pending_knn_folds": [
+  "running_knn_folds": [
     0
   ],
+  "failed_pending_knn_folds": [],
   "pending_knn_folds": [
     2,
     4
@@ -19,5 +18,17 @@
     "neg2": 20
   },
   "f1_cuda0": true,
-  "f1_train_ids_match_modern": true
+  "f1_train_ids_match_modern": true,
+  "f3_run_rows": 584,
+  "f3_validation_rows": 876,
+  "f3_selected_k": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "f3_cuda0": true,
+  "f3_train_ids_match_modern": true,
+  "fold0_previous_rc137_recovered_past_failure_point": true,
+  "resume_driver_pid": 3904925,
+  "post_driver_pid": 3904926,
+  "knn_jobs": 1
 }

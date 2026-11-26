@@ -1,14 +1,14 @@
 {
-  "run_id": "E5-holdout-convergence-summary-20261125-201118-ZDLg6Y",
+  "run_id": "E5-holdout-convergence-summary-20261126-001947-ZDLg6Y",
   "status": "partial",
-  "n_pairs_completed": 31,
+  "n_pairs_completed": 45,
   "n_pairs_expected": 72,
   "train_fold_policy": "assigned-folds-only-v1",
   "evidence_level": "pilot fold0 test descriptive; not a final conclusion",
   "pass1_schema_finite_checkpoint": true,
   "pass2_config_split_seed_alignment": true,
   "cross_seed_window_npz_alignment": {
-    "comparisons": 7,
+    "comparisons": 21,
     "per_task_validation_test_ids_and_positives": true,
     "npz_keys_window_occurrence_roles_labels_shapes_finite": true,
     "model_scores_compared_for_equality": false
@@ -20,38 +20,21 @@
   "missing": [
     {
       "seed": 1,
-      "track": "neg1c",
-      "holdout": "LIN28B",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 1,
-      "track": "neg1c",
-      "holdout": "TAF15",
-      "reason": "incomplete pair"
-    },
-    {
-      "seed": 1,
-      "track": "neg1c",
+      "track": "neg2",
       "holdout": "UPF1",
       "reason": "incomplete pair"
     },
     {
       "seed": 1,
-      "track": "neg1c",
+      "track": "neg2",
       "holdout": "CSTF2T",
       "reason": "incomplete pair"
     },
     {
       "seed": 1,
-      "track": "neg1c",
+      "track": "neg2",
       "holdout": "YBX3",
       "reason": "incomplete pair"
-    },
-    {
-      "seed": 1,
-      "track": "neg2",
-      "reason": "missing results"
     },
     {
       "seed": 2,
@@ -68,9 +51,10 @@
     "E5-rbp-holdout-convergence-s0-neg1c-20261125-142458-ZDLg6Y",
     "E5-rbp-holdout-convergence-s0-neg2-20261125-142458-ZDLg6Y",
     "E5-rbp-holdout-convergence-s0-neg2-20261125-172933-ZDLg6Y",
-    "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y"
+    "E5-rbp-holdout-convergence-s1-neg1c-20261125-185026-ZDLg6Y",
+    "E5-rbp-holdout-convergence-s1-neg2-20261125-205610-ZDLg6Y"
   ],
-  "n_source_runs": 4,
+  "n_source_runs": 5,
   "test_used_for_selection": false,
-  "input_digest": "1d0b45d1ec4951a047614f3d2a9d75718ebbb6376151db5c0925d26258aa4d85"
+  "input_digest": "e17a3fe36c097f40bee3afe3822c10f4005086eea049db8fee424e00ccc13cc8"
 }

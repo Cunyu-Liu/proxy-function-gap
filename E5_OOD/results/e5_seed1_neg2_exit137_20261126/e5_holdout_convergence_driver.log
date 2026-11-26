@@ -1,0 +1,12 @@
+SUMMARY_STATUS partial runs 3 missing 4
+track   method  auroc_ood_mean  auroc_ood_std  fpr95_mean  fpr95_std  aurc_mean  aurc_std  ece_mean  ece_std  brier_mean  brier_std  n_seeds
+neg1c deep_knn        0.507877            NaN    0.947212        NaN   0.274054       NaN  0.070845      NaN    0.181563        NaN        1
+neg1c   energy        0.505767            NaN    0.947675        NaN   0.154519       NaN  0.070845      NaN    0.181563        NaN        1
+neg1c      msp        0.505767            NaN    0.947675        NaN   0.154519       NaN  0.070845      NaN    0.181563        NaN        1
+ neg2 deep_knn        0.508367            NaN    0.946037        NaN   0.489330       NaN  0.017496      NaN    0.250398        NaN        1
+ neg2   energy        0.456878            NaN    0.961106        NaN   0.473480       NaN  0.017496      NaN    0.250398        NaN        1
+ neg2      msp        0.456878            NaN    0.961106        NaN   0.473480       NaN  0.017496      NaN    0.250398        NaN        1
+track auroc_ood_winner  auroc_ood_value fpr95_winner  fpr95_value aurc_winner  aurc_value  winner_conflict
+neg1c         deep_knn         0.507877     deep_knn     0.947212      energy    0.154519             True
+ neg2         deep_knn         0.508367     deep_knn     0.946037         msp    0.473480             True
+run_e5_holdout_convergence.sh: line 22: 3775608 Killed                  "$PY" e5_rbp_holdout.py "${COMMON[@]}" --tracks "$track" --seed "$seed" --out "$out" "${extra[@]}" >> "$log" 2>&1

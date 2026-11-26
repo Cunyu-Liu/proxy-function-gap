@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import resource
+import time
 
 import numpy as np
 import pandas as pd
@@ -22,6 +23,7 @@ COMPATIBLE_TRAIN_CODE_HASHES = {
     "bbe4b60734d26c98ab040ad7491f1a75a7126f492e62632fb25f5256569cd909",
     "cb180b4299633c485c4bb5a2d3801b520c2d9a88114b7b2b492011dbc326f9c6",
     "192b77cadda6d566e45254f99489aa55c6a59fd9d6f70c7fa4b9cfe3a0fedee8",
+    "273ce650a7dc7cd87a21fa61b57259e77f69db628a6c9b819fc098886da5dddf",
 }
 
 
@@ -81,6 +83,19 @@ def log_host_memory(phase, metadata=None):
     if metadata:
         values.update(metadata)
     print("HOST_MEMORY", json.dumps(values), flush=True)
+
+
+def wait_for_host_memory(minimum_available_kib=36 * 1024 * 1024):
+    while True:
+        with open("/proc/meminfo") as handle:
+            fields = {line.split(":", 1)[0]: line.split(":", 1)[1].strip() for line in handle}
+        available_kib = int(fields["MemAvailable"].split()[0])
+        if available_kib >= minimum_available_kib:
+            print("HOST_MEMORY_GATE_PASSED", json.dumps({"available_kib": available_kib}), flush=True)
+            return
+        print("HOST_MEMORY_GATE_WAIT", json.dumps({
+            "available_kib": available_kib, "required_kib": minimum_available_kib}), flush=True)
+        time.sleep(60)
 
 
 def binary_metrics(y, score):
@@ -505,8 +520,8 @@ def main():
         atomic_json(run_config, os.path.join(args.out, "config.json"))
         if args.resume:
             atomic_json(run_config, os.path.join(args.out, f"resume_{run_id}.json"))
-        loader = TaskLoader(args)
-        base_tasks = list(loader.tasks())
+        loader = None
+        base_tasks = None
         expected = [(heldout, track) for heldout in holdouts for track in tracks]
         for heldout, track in expected:
             prefix = f"{heldout}_{track}"
@@ -535,6 +550,10 @@ def main():
                     if os.path.exists(path):
                         os.replace(path, os.path.join(quarantine, os.path.basename(path)))
                 print("QUARANTINED_INCOMPLETE_OR_INVALID", heldout, track, quarantine, flush=True)
+            wait_for_host_memory()
+            if loader is None:
+                loader = TaskLoader(args)
+                base_tasks = list(loader.tasks())
             log_host_memory("before_load", {"holdout": heldout, "track": track})
             data, current_manifest = load_pair(loader, base_tasks, heldout, track, int(args.folds))
             log_host_memory("after_load", {"holdout": heldout, "track": track})
