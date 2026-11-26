@@ -1,7 +1,7 @@
 {
   "stage": "E1_RiNALMo_main_146",
   "status": "running_main_embedding",
-  "updated_at": "2026-11-26T20:45:29+08:00",
+  "updated_at": "2026-11-26T21:32:33+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
   "driver_pid": 4080653,
   "smoke_experiment": "SUPV3L1_K562",
@@ -28,6 +28,32 @@
     "prediction_keys_and_raw_splits_aligned": true,
     "evidence": ["smoke_audit.json", "smoke_run_manifest.tsv", "smoke_embedding_manifest.json"]
   },
+  "embedding_progress": {
+    "generated_files": 18,
+    "pilot_cache_reused_files": 4,
+    "existing_smoke_files": 2,
+    "driver_alive": true,
+    "error_log_matches": 0,
+    "last_resource_gate": {
+      "required_free_gpu_mib": 9000,
+      "actual_free_gpu_mib": 12402,
+      "required_available_ram_gib": 16,
+      "actual_available_ram_gib": 41
+    },
+    "main_embedding_complete": false
+  },
+  "generated_cache_acceptance": {
+    "status": "passed",
+    "files": 18,
+    "rows": 561730,
+    "all_ids_exact": true,
+    "all_shape_1280": true,
+    "all_fp16": true,
+    "all_finite": true,
+    "all_ids_sha256_match": true,
+    "evidence": "cache_audit_latest.json"
+  },
+  "formal_fold0_started": false,
   "remote_status": "/home/ProxyFunctionGap/logs/e1_rinalmo_main/driver.status",
   "remote_driver_log": "/home/ProxyFunctionGap/logs/e1_rinalmo_main/driver.log",
   "remote_run_log": "/home/ProxyFunctionGap/logs/e1_rinalmo_main/experiments.jsonl",
