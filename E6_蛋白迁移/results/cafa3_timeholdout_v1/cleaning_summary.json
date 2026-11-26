@@ -1,0 +1,271 @@
+{
+  "artifact_policy": "large_inputs_outputs_only_under_teams_repository_contains_code_small_summary_and_frozen_manifest",
+  "bpo_nk_anomaly": {
+    "policy": "retain_membership_and_report_zero_leaf_pairs_never_impute_or_silently_delete",
+    "present_in_official_leaf_truth": false,
+    "present_in_official_nk_list": true,
+    "protein_id": "T2089630000462"
+  },
+  "cleaning_contract": {
+    "leaf_truth": "all_official_leaf_rows_preserved_exact_protein_GO_duplicates_audited_evaluation_labels_never_filtered_by_OBO_unknown_or_nonpropagatable_terms_are_self_only_no_current_GO_or_GOA_backfill",
+    "role_semantics": "NK_type1_no_prior_experimental_knowledge_in_that_ontology_LK_type2_partial_prior_knowledge_LK_t0_rows_remain_in_faithful_training",
+    "sequence_filter": "no_sequence_record_dropped_empty_and_nonstandard_sequences_counted",
+    "training_filter": "retain_only_wellformed_organizer_experimental_rows_with_training_sequence_and_valid_same_namespace_nonobsolete_GO_alt_IDs_mapped_once_duplicates_audited"
+  },
+  "dataset_version": "cafa3_timeholdout_v1",
+  "evaluation_contract": {
+    "bpo_anomaly": "official_NK_membership_remains_849_protein_centric_metrics_use_only_848_with_leaf_truth_and_report_coverage_848_of_849_never_synthesize_an_all_zero_truth",
+    "frequency_buckets": [
+      "0",
+      "1-4",
+      "5-19",
+      "20-99",
+      "100-499",
+      ">=500"
+    ],
+    "future_model_requirements": "explicit_CUDA_no_CPU_fallback_patience_20",
+    "grimm_boundary": "GRIMM_EC_v2_is_a_different_task_and_never_a_CAFA3_substitute",
+    "macro_auprc": "unweighted_mean_over_labels_with_at_least_one_positive_in_the_reported_slice_report_label_count_never_impute_undefined_to_zero",
+    "negative_semantics": "absence_of_annotation_is_not_experimental_negative",
+    "ood_slices": "ontology_x_NK_LK_x_frequency_bucket_x_exact_overlap_x_homology_bucket_with_coverage_and_evaluable_protein_counts",
+    "primary": "CAFA_protein_centric_Fmax_and_Smin_over_thresholds_0.01_to_1.00_threshold_selected_on_t0_validation_only",
+    "test_use": "t1_only_after_model_and_threshold_freeze_no_test_selection_unlisted_groundtruth_rows_audited_but_never_assigned_to_NK_or_LK",
+    "validation": "strict_three_fold_group_exclusive_t0_proxy_validation_not_a_second_time_split"
+  },
+  "evidence_level": "data_and_protocol_only_no_model_results",
+  "folds": {
+    "0": {
+      "train_annotations": 255140,
+      "train_proteins": 44296,
+      "validation_annotations": 131057,
+      "validation_proteins": 22545
+    },
+    "1": {
+      "train_annotations": 257716,
+      "train_proteins": 44581,
+      "validation_annotations": 128481,
+      "validation_proteins": 22260
+    },
+    "2": {
+      "train_annotations": 259538,
+      "train_proteins": 44805,
+      "validation_annotations": 126659,
+      "validation_proteins": 22036
+    }
+  },
+  "homology": {
+    "approximation_boundary": "BLASTP_max_target_seqs_1000_and_heuristic_search_make_this_a_reproducible_approximate_audit_not_a_proof_of_absence_of_homology",
+    "benchmark_identity_buckets": {
+      "100": 1907,
+      "20-<30": 134,
+      "30-<50": 311,
+      "50-<90": 501,
+      "90-<100": 222,
+      "no_detected_hit": 253
+    },
+    "blastp_binary_sha256": "b87374d258e020c2f84af80bc4daff575899fe58a4c8c9c3e7183ac4757e18d9",
+    "blastp_version": "blastp: 2.9.0+",
+    "coverage_definition": "min(alnlen/qlen,alnlen/tlen)",
+    "fold_cluster_definition": "exact_sequence_MD5_only_no_claim_of_t0_all_vs_all_homology_clustering",
+    "identity_thresholds": [
+      30,
+      50,
+      90
+    ],
+    "makeblastdb_binary_sha256": "cf68120929c8ab57de39b608fc6d0fb82911ba99bbb66f03323af86d799a9091",
+    "role_exact_sequence_overlap": {
+      "BPO:LK": {
+        "false": 169,
+        "true": 1127
+      },
+      "BPO:NK": {
+        "false": 818,
+        "true": 31
+      },
+      "CCO:LK": {
+        "false": 121,
+        "true": 337
+      },
+      "CCO:NK": {
+        "false": 631,
+        "true": 8
+      },
+      "MFO:LK": {
+        "false": 75,
+        "true": 572
+      },
+      "MFO:NK": {
+        "false": 450,
+        "true": 4
+      }
+    },
+    "role_identity_buckets": {
+      "BPO:LK": {
+        "100": 1127,
+        "20-<30": 13,
+        "30-<50": 41,
+        "50-<90": 71,
+        "90-<100": 25,
+        "no_detected_hit": 19
+      },
+      "BPO:NK": {
+        "100": 32,
+        "20-<30": 79,
+        "30-<50": 174,
+        "50-<90": 289,
+        "90-<100": 128,
+        "no_detected_hit": 147
+      },
+      "CCO:LK": {
+        "100": 338,
+        "20-<30": 11,
+        "30-<50": 25,
+        "50-<90": 33,
+        "90-<100": 24,
+        "no_detected_hit": 27
+      },
+      "CCO:NK": {
+        "100": 9,
+        "20-<30": 53,
+        "30-<50": 121,
+        "50-<90": 238,
+        "90-<100": 106,
+        "no_detected_hit": 112
+      },
+      "MFO:LK": {
+        "100": 574,
+        "20-<30": 6,
+        "30-<50": 26,
+        "50-<90": 16,
+        "90-<100": 7,
+        "no_detected_hit": 18
+      },
+      "MFO:NK": {
+        "100": 4,
+        "20-<30": 39,
+        "30-<50": 102,
+        "50-<90": 160,
+        "90-<100": 76,
+        "no_detected_hit": 73
+      }
+    },
+    "search_definition": "t1_vs_all_t0_BLASTP_evalue_10_max_target_seqs_1000",
+    "status": "completed",
+    "stress_coverage_threshold": 0.5,
+    "stress_train_exclusions": {
+      "30": 17537,
+      "50": 8500,
+      "90": 4551
+    }
+  },
+  "ontology": {
+    "alt_ids": 1875,
+    "ambiguous_alt_ids_excluded": [],
+    "propagation_edges": "is_a_and_part_of_only_same_namespace_non_obsolete",
+    "terms": 44797
+  },
+  "schema_version": "cafa3-timeholdout-summary-v1",
+  "sequences": {
+    "benchmark_proteins": 3328,
+    "exact_groups_crossing_t0_folds": 0,
+    "exact_groups_spanning_t0_and_benchmark": 1902,
+    "t0_empty_sequences": 0,
+    "t0_proteins": 66841,
+    "t0_records_with_nonstandard_aa": 210,
+    "t0_unique_sequences": 65945,
+    "target_empty_sequences": 0,
+    "target_mapped_external_ids": 130827,
+    "target_mapping_note": "official_external_ID_preserved_not_assumed_to_be_UniProt_accession",
+    "target_proteins": 130827,
+    "target_records_with_nonstandard_aa": 457,
+    "target_unique_sequences": 126138
+  },
+  "t1": {
+    "BPO": {
+      "LK": 1296,
+      "NK": 849,
+      "evaluation_proteins": 2145,
+      "leaf_rows": 3608,
+      "leaf_status_counts": {
+        "accepted": 3505,
+        "duplicate_official_protein_go": 30,
+        "official_leaf_unknown_go_self_only": 73
+      },
+      "leaf_truth_proteins_including_unlisted": 2145,
+      "leaf_truth_proteins_without_role": [
+        "T2089630003090"
+      ],
+      "role_proteins_with_leaf_truth": 2144,
+      "roles_without_leaf_truth": [
+        "T2089630000462"
+      ],
+      "unique_official_leaf_pairs": 3578
+    },
+    "CCO": {
+      "LK": 458,
+      "NK": 639,
+      "evaluation_proteins": 1097,
+      "leaf_rows": 1800,
+      "leaf_status_counts": {
+        "accepted": 1771,
+        "duplicate_official_protein_go": 15,
+        "official_leaf_unknown_go_self_only": 14
+      },
+      "leaf_truth_proteins_including_unlisted": 1097,
+      "leaf_truth_proteins_without_role": [],
+      "role_proteins_with_leaf_truth": 1097,
+      "roles_without_leaf_truth": [],
+      "unique_official_leaf_pairs": 1785
+    },
+    "MFO": {
+      "LK": 647,
+      "NK": 454,
+      "evaluation_proteins": 1101,
+      "leaf_rows": 1765,
+      "leaf_status_counts": {
+        "accepted": 1658,
+        "duplicate_official_protein_go": 74,
+        "official_leaf_unknown_go_self_only": 33
+      },
+      "leaf_truth_proteins_including_unlisted": 1101,
+      "leaf_truth_proteins_without_role": [],
+      "role_proteins_with_leaf_truth": 1101,
+      "roles_without_leaf_truth": [],
+      "unique_official_leaf_pairs": 1691
+    }
+  },
+  "t1_leaf_rows_by_t0_direct_frequency_bucket": {
+    "BPO": {
+      "0": 203,
+      "1-4": 424,
+      "100-499": 984,
+      "20-99": 1018,
+      "5-19": 756,
+      ">=500": 193
+    },
+    "CCO": {
+      "0": 43,
+      "1-4": 29,
+      "100-499": 376,
+      "20-99": 248,
+      "5-19": 86,
+      ">=500": 1003
+    },
+    "MFO": {
+      "0": 284,
+      "1-4": 166,
+      "100-499": 451,
+      "20-99": 305,
+      "5-19": 252,
+      ">=500": 233
+    }
+  },
+  "training_annotations": {
+    "annotated_proteins": 66841,
+    "clean_unique_rows": 386197,
+    "evidence_codes": "organizer_prefiltered_experimental_no_per_row_codes_available",
+    "reject_counts": {},
+    "rejected_or_duplicate_rows": 0,
+    "source_rows": 386197
+  }
+}

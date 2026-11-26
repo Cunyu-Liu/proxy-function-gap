@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "checked_inputs": 16,
+  "checked_outputs": 41,
+  "checked_whitelists": 6,
+  "checked_assignment_groups": 65945,
+  "failures": [],
+  "model_results": false
+}

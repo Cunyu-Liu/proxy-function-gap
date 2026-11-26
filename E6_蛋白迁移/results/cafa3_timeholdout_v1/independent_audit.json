@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "leaf_rows": 7173,
+  "unique_leaf_pairs": 7054,
+  "bpo_nk_membership": 849,
+  "bpo_nk_with_leaf": 848,
+  "homology_rows": 3328,
+  "blast_rows": 888699,
+  "model_results": false
+}
