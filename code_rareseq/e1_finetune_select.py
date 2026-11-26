@@ -17,6 +17,11 @@ def select_rank(run_by_rank):
         run = run_by_rank[rank]
         if not os.path.isfile(os.path.join(run, ".train_complete")):
             raise ValueError(f"Rank {rank}: training incomplete")
+        if not os.path.isfile(os.path.join(run, ".independent_validation_complete")):
+            raise ValueError(f"Rank {rank}: independent checkpoint validation missing")
+        independent = json.load(open(os.path.join(run, "independent_validation.json")))
+        if independent.get("test_used") is not False:
+            raise ValueError(f"Rank {rank}: independent validation used test")
         forbidden = ["finetune_results.tsv", "finetune_test_predictions.tsv.gz", ".eval_complete"]
         if any(os.path.exists(os.path.join(run, name)) for name in forbidden):
             raise ValueError(f"Rank {rank}: test artifact found in selection input")

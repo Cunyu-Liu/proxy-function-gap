@@ -43,6 +43,8 @@ def selection_check():
                           "auprc": [score, 0.0]}).to_csv(
                 os.path.join(run, "finetune_validation_results.tsv"), sep="\t", index=False)
             atomic_marker(os.path.join(run, ".train_complete"))
+            atomic_json(os.path.join(run, "independent_validation.json"), {"test_used": False})
+            atomic_marker(os.path.join(run, ".independent_validation_complete"))
             runs[rank] = run
         selected = select_rank(runs)
         assert selected["selected_rank"] == 8 and selected["test_used"] is False

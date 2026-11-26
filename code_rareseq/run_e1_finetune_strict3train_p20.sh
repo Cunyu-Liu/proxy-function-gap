@@ -49,7 +49,7 @@ cuda_lock_acquire() {
 }
 
 train_run() {
-  local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 MIN_FREE=16000 LOGFILE=$6
+  local MODE=$1 FOLD=$2 SEED=$3 RANK=$4 DIR=$5 LR=3e-4 MIN_FREE=14000 LOGFILE=$6
   if [ "$MODE" = full ]; then LR=1e-5; MIN_FREE=16000; fi
   if [ -f "$DIR/.train_complete" ]; then echo "SKIP train $DIR"; return 0; fi
   resource_gate "train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE" || return 1
@@ -64,6 +64,23 @@ train_run() {
   rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null || RC=1
   echo "TRAIN_END $DIR rc=$RC $(date -Is)"
   return "$RC"
+}
+
+validate_run() {
+  local DIR=$1 LOGFILE=$2 RC
+  if [ ! -f "$DIR/.independent_validation_complete" ]; then
+    resource_gate "validate_${DIR##*/}" 12000 || return 1
+    cuda_lock_acquire "validate_${DIR##*/}" || return 1
+    if ! resource_gate "locked_validate_${DIR##*/}" 12000; then
+      rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null; return 1
+    fi
+    "$PY" e1_finetune_validate.py --out "$DIR" --log "$LOG" >"$LOGFILE" 2>&1
+    RC=$?
+    rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null || RC=1
+    [ "$RC" -eq 0 ] || return "$RC"
+  fi
+  "$PY" e1_finetune_verify.py --runs "$DIR" --require-independent-validation \
+    --out "$DIR/validation_only_verification.json" >"$LOGFILE.verify" 2>&1
 }
 
 eval_run() {
@@ -113,7 +130,11 @@ lora_worker() {
     DIR=$ROOT/f0_lora_r${R}_s0
     LOGFILE=$LOGDIR/e1_finetune_f0_lora_r${R}_s0.log
     train_run lora 0 0 "$R" "$DIR" "$LOGFILE" || return 1
+    validate_run "$DIR" "$LOGFILE.independent_validation" || return 1
   done
+  "$PY" e1_finetune_verify.py --runs "$ROOT/f0_lora_r4_s0,$ROOT/f0_lora_r8_s0,$ROOT/f0_lora_r16_s0" \
+    --require-independent-validation --out "$ROOT/fold0_lora_rank_search_verification.json" \
+    >"$LOGDIR/e1_finetune_rank_search_verification.log" 2>&1 || return 1
   "$PY" e1_finetune_select.py --rank4 "$ROOT/f0_lora_r4_s0" --rank8 "$ROOT/f0_lora_r8_s0" \
     --rank16 "$ROOT/f0_lora_r16_s0" --out "$SELECTION" >"$LOGDIR/e1_finetune_rank_selection.log" 2>&1 || return 1
   for SEED in 0 1 2; do
