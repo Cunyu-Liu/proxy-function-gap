@@ -1,10 +1,13 @@
+import gzip
+from pathlib import Path
+import tempfile
 import unittest
 
 import numpy as np
 from scipy import sparse
 
 from cafa3_esmc_baselines import (ancestor_closure, frequency_bucket, macro_auprc,
-                                  metric_at_threshold, validation_thresholds)
+                                  metric_at_threshold, read_whitelist, validation_thresholds)
 
 
 class Cafa3BaselineMetricTest(unittest.TestCase):
@@ -45,6 +48,13 @@ class Cafa3BaselineMetricTest(unittest.TestCase):
         self.assertEqual(grid.threshold.iloc[-1], 1.0)
         self.assertTrue(0.01 <= fmax <= 1.0)
         self.assertTrue(0.01 <= smin <= 1.0)
+
+    def test_frozen_whitelist_header_is_not_a_protein(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "whitelist.txt.gz"
+            with gzip.open(path, "wt") as handle:
+                handle.write("protein_id\nP1\nP2\n")
+            self.assertEqual(read_whitelist(path), ["P1", "P2"])
 
     def test_frequency_boundaries_and_ontology_cycle(self):
         expected = {0: "0", 1: "1-4", 4: "1-4", 5: "5-19", 19: "5-19",

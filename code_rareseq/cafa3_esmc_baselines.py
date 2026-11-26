@@ -27,7 +27,9 @@ def read_tsv(path):
 def read_whitelist(path):
     with gzip.open(path, "rt", encoding="utf-8") as handle:
         identifiers = [line.strip() for line in handle if line.strip()]
-    if len(set(identifiers)) != len(identifiers):
+    if identifiers and identifiers[0] == "protein_id":
+        identifiers = identifiers[1:]
+    if not identifiers or len(set(identifiers)) != len(identifiers):
         raise ValueError(f"Duplicate identifiers in {path}")
     return identifiers
 

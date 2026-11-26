@@ -1,0 +1,39 @@
+{
+  "schema_version": "cafa3-esmc300m-embedding-v1",
+  "repo": "esmc_300m",
+  "esm_version": "3.2.1",
+  "torch_version": "2.14.1+cu132",
+  "cuda_device": "NVIDIA GeForce RTX 5090",
+  "embedding_dim": 960,
+  "pooling": "final_layer_amino_acid_only_mean_no_bos_eos_pad",
+  "max_length": 512,
+  "limit": 0,
+  "splits": [
+    {
+      "split": "t0",
+      "rows": 66841,
+      "shape": [
+        66841,
+        960
+      ],
+      "sha256": "a48afca26574a7036fdafe164123cd8366bfb7c28324e5a253233e0be703ac1b",
+      "reused": true,
+      "fasta_sha256": "83a8a5fb24dfca5ca7bb159e1afbfa0382376351b06f3db81a97d4f6eb505142",
+      "truncated_rows": 24097,
+      "truncation_rate": 0.3605122604389521
+    },
+    {
+      "split": "t1",
+      "rows": 3328,
+      "shape": [
+        3328,
+        960
+      ],
+      "sha256": "925bbf8d7cac26547e5cf792f91e3777ed5b81a4b1e30830d77a956bde3cc3e1",
+      "reused": true,
+      "fasta_sha256": "e41e0645753493c3c4d0e03ebf694d89100791c4bc9a3cbeb17bffb96cb0dda0",
+      "truncated_rows": 1016,
+      "truncation_rate": 0.30528846153846156
+    }
+  ]
+}
