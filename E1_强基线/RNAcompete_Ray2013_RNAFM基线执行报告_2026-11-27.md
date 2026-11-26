@@ -88,3 +88,7 @@ RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±
 ## 8. 五折扩展进度与新日志复核
 
 截至07:12，完成33/60神经eval、5/10 kNN，fold2 RBP-OOD MLP seed0训练中，最终门禁未形成。fold2 RBP-OOD linear三seed全部独立重放通过：best/stop分别为`24/44、15/35、28/48`；每个run的147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测和selection SHA一致。seed2新任务JSONL的completed状态、真实start/end及test产物路径也已核验。以上为新增run验收，不是五折统计。
+
+### 07:17新增验收
+
+`rbp_ood_mlp_f2_s0`完成并独立重放通过：147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测及selection SHA一致，best/stop `28/48`；驱动evaluate `rc=0`。累计34/60神经eval、5/10 kNN，下一run为fold2 RBP-OOD MLP seed1，最终门禁未形成。
