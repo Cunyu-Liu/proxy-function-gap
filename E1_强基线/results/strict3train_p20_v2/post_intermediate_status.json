@@ -1,5 +1,5 @@
 {
-  "stage": "bootstrap_running",
+  "stage": "bootstrap_running_neg2_head",
   "data_version": "e0-v2-id90-strict3train-main",
   "audit_run_id": "E1-main-independent-audit-20261126-032635-ZDLg6Y",
   "audit_checks": {
@@ -48,7 +48,37 @@
       ],
       "all_finite": true,
       "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_bootstrap/bootstrap_neg1c_mid.npz"
+    },
+    "neg1c_head": {
+      "shape": [
+        10000,
+        2
+      ],
+      "all_finite": true,
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_bootstrap/bootstrap_neg1c_head.npz"
+    },
+    "neg2_tail": {
+      "shape": [
+        10000,
+        2
+      ],
+      "all_finite": true,
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_bootstrap/bootstrap_neg2_tail.npz"
+    },
+    "neg2_mid": {
+      "shape": [
+        10000,
+        2
+      ],
+      "all_finite": true,
+      "path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_main_strict3train_p20_v2/cv_bootstrap/bootstrap_neg2_mid.npz"
     }
   },
-  "bootstrap_overall_conclusion": null
+  "bootstrap_overall_conclusion": null,
+  "bootstrap_running_slices": [
+    "neg2_head"
+  ],
+  "bootstrap_completed_count": 5,
+  "low_hom_status": "pending",
+  "independent_verification_status": "pending"
 }

@@ -4,4 +4,4 @@ seed	track	n_pairs	n_early_stop	n_failsafe	min_epochs_run	median_epochs_run	max_
 1	neg1c	12	12	0	24	26.0	31	11
 1	neg2	12	12	0	22	26.5	29	9
 2	neg1c	12	12	0	23	27.0	39	19
-2	neg2	1	1	0	32	32.0	32	12
+2	neg2	2	2	0	29	30.5	32	12
