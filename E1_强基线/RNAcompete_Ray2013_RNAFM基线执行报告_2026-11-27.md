@@ -51,3 +51,23 @@ RNACOMPETE_MODEL_CONTRACT_TEST_OK: NaN mask, metrics, split boundaries, IDs, rep
 - kNN工程修复只处理缺失标签：在最多256个train近邻中逐任务取最多k个有限标签邻居，检索batch64避免广播OOM；预测有限性只在有真值的位置强制，NaN真值不进入指标。失败尝试未生成kNN selection或test产物。fold0/最终门禁另强化为selection SHA核验、history/patience核验、独立CUDA checkpoint重算test并与保存预测比对。
 - fold0正式训练于03:39启动。首个`sequence_linear_f0_s0`已于03:57完成train/evaluate并独立验收：732行逐实验指标重算一致，43,998×244 test ID正确，checkpoint CUDA重算与保存预测一致，best/stop `23/43`，selection SHA256 `c702d3e5bddf3e7fd3261ff4ddb6575291bb919327422e3f051cafc5d723ac2a`匹配。单run tail（80实验）Spearman/Pearson/MSE为`0.4273671/0.3601801/12.2443230`，仅证明该run产物可重放，**不是三seed或五折总结**。驱动随后进入sequence linear seed1；fold0完整门禁尚未形成，未启动五折。
 - `sequence_linear_f0_s1`已完成并通过同样独立重放：732行指标一致、checkpoint CUDA预测一致、best/stop `9/29`，selection SHA匹配。单run tail Spearman/Pearson/MSE为`0.4271312/0.3602961/12.2981157`，不与seed0混写为三seed结论。seed2 train已完成（best/stop `16/36`，validation宏Spearman `0.4165756`），但evaluate因1,553MiB空闲低于2,000MiB门限保持等待，尚无seed2 test产物。
+
+## 6. fold0门禁与五折扩展（非五折结果）
+
+fold0门基于05:42通过，12个神经run和2个kNN评价全部完成；统一selection零test审计、history/patience、selection SHA、独立CUDA checkpoint预测及732行/逐RBP指标重放均通过。`all`驱动PID `4041649`于05:45启动并再次通过fold0门禁，05:46开始fold1 sequence linear seed0，未重复fold0训练。
+
+完整fold0独立汇总保存于`/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/rnacompete_ray2013_model_baselines_v1/fold0_independent_summary.tsv`，SHA256 `a8d34192f662a0fa1d079d10b0cfdcafcc3ebbde4cba0bafda0362b3a6cdd616`。神经结果为三seed mean±SD；kNN为单次确定性run。
+
+| 轨/切片 | 模型 | Spearman | Pearson | MSE |
+|---|---|---:|---:|---:|
+| 序列 Overall | linear | 0.417303±0.000395 | 0.340733±0.000330 | 64.468618±0.033255 |
+| 序列 Overall | MLP | 0.459187±0.000468 | 0.405052±0.000861 | 62.573564±0.091634 |
+| 序列 Overall | kNN | 0.342253 | 0.250568 | 66.544919 |
+| 序列 tail | linear | 0.427857±0.001060 | 0.360603±0.000635 | 12.266298±0.028215 |
+| 序列 tail | MLP | 0.475213±0.001142 | 0.426579±0.000657 | 11.734165±0.007426 |
+| 序列 tail | kNN | 0.352484 | 0.263434 | 13.290196 |
+| RBP-OOD实验宏 | linear | 0.069643±0.004631 | 0.067406±0.004816 | 22.468351±0.058328 |
+| RBP-OOD实验宏 | MLP | 0.085236±0.007883 | 0.085477±0.007518 | 22.341350±0.032320 |
+| RBP-OOD实验宏 | kNN | 0.168446 | 0.129412 | 22.625864 |
+
+RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±0.007741`、kNN `0.156648`（40组）。这些仅是完整fold0门禁结果；fold1–4正在运行，**不得解释为五折性能、稳定外部泛化或SOTA结论**。
