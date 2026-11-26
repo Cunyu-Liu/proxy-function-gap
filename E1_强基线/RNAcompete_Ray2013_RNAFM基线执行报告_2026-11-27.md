@@ -76,3 +76,11 @@ RBP-OOD物种×基因宏Spearman为linear `0.064375±0.004697`、MLP `0.078851±
 - `sequence_linear_f1_s1`随后完成并独立重放通过：732行指标、ID、checkpoint CUDA预测及selection SHA一致，best/stop `16/36`。05:53进度为14/60神经eval、2/10 kNN，fold1 seed2训练中；最终门禁不存在，五折汇总未生成。
 - 06:35扩展进度为28/60神经eval、4/10 kNN，fold2 MLP seed1训练中。fold2 linear三seed均独立重放通过，best/stop分别为`29/49、5/25、27/47`；fold1 sequence kNN与RBP-OOD kNN分别重放732/147行指标一致，test ID/任务数正确。上述为新增run验收，不是五折汇总；最终门禁仍未形成。
 - `sequence_mlp_f2_s0`已独立重放通过：732行指标、ID、checkpoint CUDA预测及MLP selection SHA `41b3aca63c4e7b30eac512b876ede96eb4975a79985b9052aaf12239730a32d3`一致，best/stop `31/51`。当前仍28/60神经eval、4/10 kNN，fold2 MLP seed1继续运行。
+
+## 7. 并发安全任务日志与历史产物派生清单
+
+新增`code_rareseq/rnacompete_ray2013_tasklog.py`及合同测试，覆盖selection/train/evaluate/kNN/verify/summary。新JSONL为`/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/rnacompete_ray2013_model_baselines_v1/task_runs.jsonl`，通过`fcntl`排他锁、单次原子append和fsync保证并发写入。每个run包含run_id、代码SHA、组合数据SHA及冻结标签/嵌入SHA、seed/fold/track/arch、CUDA、真实start/end、status、history/checkpoint/validation/test预测和指标路径；running与终态以同一run_id关联，失败记录错误。
+
+历史run未回填或伪造start/end：`derived_from_artifacts_manifest.json`在本节形成时包含42条只读派生记录，显式`derived_from_artifacts=true`、`historical_start_end_fabricated=false`，所有历史start/end均为null，仅以完成标记和观察到的产物为证据；报告指针为本文件仓库路径。
+
+新日志已在真实`evaluate_rbp_ood_linear_f2_s1`生效并验收：completed记录具有真实start/end、CUDA passed、代码/数据SHA以及history/checkpoint/validation/test预测和指标路径。另以“重复evaluate已完成run”作受控保护探针，命令在任何新test计算前被`.eval_complete`阻断，failed JSONL正确记录`FileExistsError`及真实start/end，未重训或修改既有预测。五折队列继续从断点运行。
