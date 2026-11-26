@@ -11,6 +11,7 @@ import pandas as pd
 from scipy.stats import rankdata
 
 from log_run import RunLogger, sha256_file
+from rnacompete_ray2013_tasklog import TaskLogger
 
 VERSION = "rnacompete-ray2013-v1.0-id90-strict3train"
 ARCHES = ("linear", "mlp")
@@ -813,7 +814,11 @@ def main():
     parser.add_argument("--fold", type=int, default=0)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--log", required=True)
+    parser.add_argument("--task-log")
     args = parser.parse_args()
+    args.prog = os.path.abspath(__file__)
+    if args.task_log is None:
+        args.task_log = os.path.join(args.out, "task_runs.jsonl")
     if not args.out.startswith("/teams/"):
         raise ValueError("Large model artifacts must be under /teams")
     os.makedirs(args.out, exist_ok=True)
@@ -835,10 +840,16 @@ def main():
                  seed=args.seed, data_version=VERSION,
                  inputs=[os.path.join(args.frozen_root, "split_manifest.json")],
                  code_version=sha256_file(os.path.abspath(__file__)))
+    task_logger = TaskLogger(args.task_log, args)
+    task_logger.start(cuda_required=args.command != "summarize")
+    device_info = {"required": args.command != "summarize",
+                   "device": "cuda:0" if args.command != "summarize" else None,
+                   "probe": "not_completed" if args.command != "summarize" else "not_required"}
     try:
         if args.command in ("verify-fold0", "verify-final", "summarize"):
             if args.command != "summarize":
-                require_cuda()
+                _, device_info = require_cuda()
+                device_info.update({"required": True, "probe": "passed"})
             data = data_from_args(args)
             if args.command == "verify-fold0":
                 verify_gate(data, args.out, fold0_only=True)
@@ -848,6 +859,7 @@ def main():
                 summarize(data, args.out)
         else:
             _, device_info = require_cuda()
+            device_info.update({"required": True, "probe": "passed"})
             data = data_from_args(args)
             if args.command == "select":
                 select_neural(data, args.track, args.arch, args, device_info)
@@ -859,8 +871,10 @@ def main():
                 select_knn(data, args.track, args, device_info)
             else:
                 evaluate_knn(data, args.track, args.fold, args, device_info)
+        task_logger.finish("completed", device_info)
         logger.finish(metrics={"status": "passed", "command": args.command}, outputs=[args.out])
     except Exception as exc:
+        task_logger.finish("failed", device_info, exc)
         logger.finish(status="failed", notes=f"{type(exc).__name__}: {exc}", outputs=[args.out])
         raise
 
