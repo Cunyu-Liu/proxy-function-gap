@@ -1,9 +1,9 @@
 {
   "status": "passed",
   "partial": true,
-  "runs": 1,
-  "bce_seed_runs": 3,
-  "deep_knn_runs": 1,
+  "runs": 4,
+  "bce_seed_runs": 12,
+  "deep_knn_runs": 4,
   "embeddings": {
     "t0": 66841,
     "t1": 3328
@@ -16,6 +16,24 @@
       "track": "main",
       "ontology": "MFO",
       "summary_sha256": "2c42bff4ffc51c1757ea4f332d2174bc297338defc5b4d60fd4ca5f22f5df699"
+    },
+    {
+      "fold": 0,
+      "track": "main",
+      "ontology": "BPO",
+      "summary_sha256": "e5f1f938a21849c7b6396f970feea696fa84cf5d0832182bd0ae9ecad2461126"
+    },
+    {
+      "fold": 0,
+      "track": "main",
+      "ontology": "CCO",
+      "summary_sha256": "7db258618b64905ca805cda3c2ba302e3dbbbad1f2e2186463e782296b1b84cb"
+    },
+    {
+      "fold": 0,
+      "track": "id30",
+      "ontology": "MFO",
+      "summary_sha256": "5dd603addf820c1e441a9a03a576538e990f7d79c956bbdf956a6c08677786ab"
     }
   ]
 }
