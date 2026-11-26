@@ -1,0 +1,673 @@
+{
+  "timestamp": "2026-11-26T16:55:03.765101+00:00",
+  "scope": "generated RiNALMo caches added since previous audit",
+  "n_files": 66,
+  "n_rows": 2022160,
+  "all_ids_exact": true,
+  "all_shape_1280": true,
+  "all_fp16": true,
+  "all_finite": true,
+  "all_ids_sha256_match": true,
+  "files": [
+    {
+      "experiment": "EXOSC5_HepG2",
+      "kind": "neg",
+      "rows": 9710,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "EXOSC5_HepG2",
+      "kind": "pos",
+      "rows": 3200,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "EXOSC5_K562",
+      "kind": "neg",
+      "rows": 59082,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FAM120A_HepG2",
+      "kind": "neg",
+      "rows": 58884,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FAM120A_HepG2",
+      "kind": "pos",
+      "rows": 19710,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FAM120A_K562",
+      "kind": "neg",
+      "rows": 59560,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FAM120A_K562",
+      "kind": "pos",
+      "rows": 19761,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FASTKD2_HepG2",
+      "kind": "neg",
+      "rows": 46570,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FASTKD2_HepG2",
+      "kind": "pos",
+      "rows": 15416,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FASTKD2_K562",
+      "kind": "neg",
+      "rows": 19461,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FASTKD2_K562",
+      "kind": "pos",
+      "rows": 6452,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FTO_HepG2",
+      "kind": "neg",
+      "rows": 27096,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FTO_HepG2",
+      "kind": "pos",
+      "rows": 8921,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FTO_K562",
+      "kind": "neg",
+      "rows": 27975,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FTO_K562",
+      "kind": "pos",
+      "rows": 9189,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FXR2_HepG2",
+      "kind": "neg",
+      "rows": 57974,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FXR2_HepG2",
+      "kind": "pos",
+      "rows": 18754,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FXR2_K562",
+      "kind": "neg",
+      "rows": 59777,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "FXR2_K562",
+      "kind": "pos",
+      "rows": 19282,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "GTF2F1_HepG2",
+      "kind": "neg",
+      "rows": 58797,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "GTF2F1_HepG2",
+      "kind": "pos",
+      "rows": 19707,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "GTF2F1_K562",
+      "kind": "neg",
+      "rows": 58826,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "GTF2F1_K562",
+      "kind": "pos",
+      "rows": 19707,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HLTF_HepG2",
+      "kind": "neg",
+      "rows": 58712,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HLTF_HepG2",
+      "kind": "pos",
+      "rows": 19606,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HLTF_K562",
+      "kind": "neg",
+      "rows": 27135,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HLTF_K562",
+      "kind": "pos",
+      "rows": 8807,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPC_HepG2",
+      "kind": "neg",
+      "rows": 59257,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPC_HepG2",
+      "kind": "pos",
+      "rows": 19543,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPC_K562",
+      "kind": "neg",
+      "rows": 55404,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPC_K562",
+      "kind": "pos",
+      "rows": 17707,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPL_HepG2",
+      "kind": "neg",
+      "rows": 58707,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPL_HepG2",
+      "kind": "pos",
+      "rows": 19718,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPL_K562",
+      "kind": "neg",
+      "rows": 59094,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPL_K562",
+      "kind": "pos",
+      "rows": 19659,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPU_HepG2",
+      "kind": "neg",
+      "rows": 49906,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPU_HepG2",
+      "kind": "pos",
+      "rows": 16741,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPU_K562",
+      "kind": "neg",
+      "rows": 34767,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "HNRNPU_K562",
+      "kind": "pos",
+      "rows": 11666,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "IGF2BP1_HepG2",
+      "kind": "neg",
+      "rows": 59745,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "IGF2BP1_HepG2",
+      "kind": "pos",
+      "rows": 19312,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "IGF2BP1_K562",
+      "kind": "neg",
+      "rows": 59908,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "IGF2BP1_K562",
+      "kind": "pos",
+      "rows": 19537,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LARP7_HepG2",
+      "kind": "neg",
+      "rows": 3443,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LARP7_HepG2",
+      "kind": "pos",
+      "rows": 1114,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LARP7_K562",
+      "kind": "neg",
+      "rows": 4656,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LARP7_K562",
+      "kind": "pos",
+      "rows": 1482,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LIN28B_HepG2",
+      "kind": "neg",
+      "rows": 59809,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LIN28B_HepG2",
+      "kind": "pos",
+      "rows": 19186,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LIN28B_K562",
+      "kind": "neg",
+      "rows": 59793,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LIN28B_K562",
+      "kind": "pos",
+      "rows": 19052,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LSM11_HepG2",
+      "kind": "neg",
+      "rows": 59646,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LSM11_HepG2",
+      "kind": "pos",
+      "rows": 19536,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LSM11_K562",
+      "kind": "neg",
+      "rows": 32871,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "LSM11_K562",
+      "kind": "pos",
+      "rows": 10904,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "MATR3_HepG2",
+      "kind": "neg",
+      "rows": 58815,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "MATR3_HepG2",
+      "kind": "pos",
+      "rows": 19791,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "MATR3_K562",
+      "kind": "neg",
+      "rows": 59490,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "MATR3_K562",
+      "kind": "pos",
+      "rows": 19785,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NCBP2_HepG2",
+      "kind": "neg",
+      "rows": 56522,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NCBP2_HepG2",
+      "kind": "pos",
+      "rows": 19522,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NCBP2_K562",
+      "kind": "neg",
+      "rows": 24075,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NCBP2_K562",
+      "kind": "pos",
+      "rows": 8074,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NOLC1_K562",
+      "kind": "pos",
+      "rows": 14466,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NOLC1_K562",
+      "kind": "neg",
+      "rows": 43929,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "NOLC1_HepG2",
+      "kind": "pos",
+      "rows": 7457,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "stage": "E1_RiNALMo_main_146",
   "status": "running_main_embedding",
-  "updated_at": "2026-11-26T22:18:47+08:00",
+  "updated_at": "2026-11-27T00:55:27+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
   "driver_pid": 4080653,
   "smoke_experiment": "SUPV3L1_K562",
@@ -30,10 +30,10 @@
   },
   "embedding_progress": {
     "expected_cache_pairs": 292,
-    "audited_unique_cache_pairs": 55,
-    "observed_logged_cache_pairs_after_audit": 58,
-    "generated_files": 41,
-    "pilot_cache_reused_files": 12,
+    "audited_unique_cache_pairs": 121,
+    "observed_logged_cache_pairs_after_audit": 159,
+    "generated_files": 109,
+    "pilot_cache_reused_files": 48,
     "existing_smoke_files": 2,
     "driver_alive": true,
     "embedding_process_alive": true,
@@ -46,19 +46,20 @@
     },
     "main_embedding_complete": false
   },
-  "generated_cache_acceptance": {
+  "new_cache_acceptance": {
     "status": "passed",
-    "audit_timestamp": "2026-11-26T14:17:16.363695+00:00",
-    "scope": "55 unique completed cache pairs; later and in-flight records excluded",
-    "files": 55,
-    "rows": 1587750,
+    "audit_timestamp": "2026-11-27T00:55:27+08:00",
+    "scope": "121 unique completed generated or newly materialized pilot-reused cache pairs; later and in-flight records excluded",
+    "files": 121,
+    "rows": 3609910,
+    "this_increment_files": 66,
     "all_ids_exact": true,
     "all_shape_1280": true,
     "all_fp16": true,
     "all_finite": true,
     "all_ids_sha256_match": true,
     "all_cuda0_numeric_probes_passed": true,
-    "evidence": "cache_audit_latest.json"
+    "evidence": ["cache_audit_latest.json", "cache_audit_increment_2026-11-27.json"]
   },
   "formal_fold0_started": false,
   "formal_bce_started": false,
