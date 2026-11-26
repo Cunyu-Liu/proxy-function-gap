@@ -84,13 +84,13 @@ if [ "$MODEL_READY" -ne 1 ]; then
   exit 1
 fi
 if [ ! -f "$ROOT/smoke/smoke_cuda.json" ]; then
-  run_cuda smoke 2500 "$LOGDIR/smoke.log" rnacompete_ray2013_rnafm_embed.py \
+  run_cuda smoke 2000 "$LOGDIR/smoke.log" rnacompete_ray2013_rnafm_embed.py \
     --frozen-root "$FROZEN" --out "$ROOT/smoke" --log "$LOG" --batch 8 --limit 16 \
     --model-path "$MODEL" --revision "$REVISION" || {
       echo "SMOKE_FAILED $(date -Is)" >"$STATUS"; exit 1; }
 fi
 if [ ! -f "$ROOT/embeddings/embedding_manifest.json" ]; then
-  run_cuda shared_embedding 2500 "$LOGDIR/embedding.log" rnacompete_ray2013_rnafm_embed.py \
+  run_cuda shared_embedding 2000 "$LOGDIR/embedding.log" rnacompete_ray2013_rnafm_embed.py \
     --frozen-root "$FROZEN" --out "$ROOT/embeddings" --log "$LOG" --batch 128 \
     --model-path "$MODEL" --revision "$REVISION" || {
       echo "EMBEDDING_FAILED_OR_BLOCKED $(date -Is)" >"$STATUS"; exit 1; }
@@ -103,13 +103,13 @@ fi
 for TRACK in sequence rbp_ood; do
   for ARCH in linear mlp; do
     if [ ! -f "$ROOT/selections/${TRACK}_${ARCH}.json" ]; then
-      run_cuda "select_${TRACK}_${ARCH}" 2500 "$LOGDIR/select_${TRACK}_${ARCH}.log" \
+      run_cuda "select_${TRACK}_${ARCH}" 2000 "$LOGDIR/select_${TRACK}_${ARCH}.log" \
         rnacompete_ray2013_baselines.py select --track "$TRACK" --arch "$ARCH" --fold 0 --seed 0 "${BASE[@]}" || {
           echo "SELECTION_FAILED ${TRACK}_${ARCH} $(date -Is)" >"$STATUS"; exit 1; }
     fi
   done
   if [ ! -f "$ROOT/selections/${TRACK}_knn.json" ]; then
-    run_cuda "select_${TRACK}_knn" 2500 "$LOGDIR/select_${TRACK}_knn.log" \
+    run_cuda "select_${TRACK}_knn" 2000 "$LOGDIR/select_${TRACK}_knn.log" \
       rnacompete_ray2013_baselines.py knn-select --track "$TRACK" --fold 0 "${BASE[@]}" || {
         echo "KNN_SELECTION_FAILED $TRACK $(date -Is)" >"$STATUS"; exit 1; }
   fi
@@ -122,13 +122,13 @@ run_fold() {
       for SEED in 0 1 2; do
         RUN=$ROOT/runs/${TRACK}_${ARCH}_f${FOLD}_s${SEED}
         if [ ! -f "$RUN/.train_complete" ]; then
-          run_cuda "train_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 2500 \
+          run_cuda "train_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 2000 \
             "$LOGDIR/train_${TRACK}_${ARCH}_f${FOLD}_s${SEED}.log" \
             rnacompete_ray2013_baselines.py train --track "$TRACK" --arch "$ARCH" \
             --fold "$FOLD" --seed "$SEED" "${BASE[@]}" || return 1
         fi
         if [ ! -f "$RUN/.eval_complete" ]; then
-          run_cuda "evaluate_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 2500 \
+          run_cuda "evaluate_${TRACK}_${ARCH}_f${FOLD}_s${SEED}" 2000 \
             "$LOGDIR/evaluate_${TRACK}_${ARCH}_f${FOLD}_s${SEED}.log" \
             rnacompete_ray2013_baselines.py evaluate --track "$TRACK" --arch "$ARCH" \
             --fold "$FOLD" --seed "$SEED" "${BASE[@]}" || return 1
@@ -136,14 +136,14 @@ run_fold() {
       done
     done
     if [ ! -f "$ROOT/knn/${TRACK}_f${FOLD}/.eval_complete" ]; then
-      run_cuda "knn_evaluate_${TRACK}_f${FOLD}" 2500 "$LOGDIR/knn_evaluate_${TRACK}_f${FOLD}.log" \
+      run_cuda "knn_evaluate_${TRACK}_f${FOLD}" 2000 "$LOGDIR/knn_evaluate_${TRACK}_f${FOLD}.log" \
         rnacompete_ray2013_baselines.py knn-evaluate --track "$TRACK" --fold "$FOLD" "${BASE[@]}" || return 1
     fi
   done
 }
 
 run_fold 0 || { echo "FOLD0_FAILED_OR_BLOCKED $(date -Is)" >"$STATUS"; exit 1; }
-run_cuda verify_fold0 2500 "$LOGDIR/verify_fold0.log" rnacompete_ray2013_baselines.py verify-fold0 "${BASE[@]}" || {
+run_cuda verify_fold0 2000 "$LOGDIR/verify_fold0.log" rnacompete_ray2013_baselines.py verify-fold0 "${BASE[@]}" || {
   echo "FOLD0_VERIFY_FAILED $(date -Is)" >"$STATUS"; exit 1; }
 echo "FOLD0_GATE_PASSED $(date -Is)" >"$STATUS"
 if [ "$MODE" = fold0 ]; then
@@ -156,7 +156,7 @@ fi
 for FOLD in 1 2 3 4; do
   run_fold "$FOLD" || { echo "EXPANSION_FAILED_OR_BLOCKED fold=$FOLD $(date -Is)" >"$STATUS"; exit 1; }
 done
-run_cuda verify_final 2500 "$LOGDIR/verify_final.log" rnacompete_ray2013_baselines.py verify-final "${BASE[@]}" || {
+run_cuda verify_final 2000 "$LOGDIR/verify_final.log" rnacompete_ray2013_baselines.py verify-final "${BASE[@]}" || {
   echo "FINAL_VERIFY_FAILED $(date -Is)" >"$STATUS"; exit 1; }
 run_cpu summarize "$LOGDIR/summarize.log" rnacompete_ray2013_baselines.py summarize "${BASE[@]}" || {
   echo "SUMMARY_FAILED $(date -Is)" >"$STATUS"; exit 1; }

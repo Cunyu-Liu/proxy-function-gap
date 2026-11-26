@@ -20,7 +20,7 @@
 模型：
 1. `linear`：640→244线性多任务头。
 2. `mlp`：640→256→GELU→dropout0.1→244浅层多任务头。
-3. `knn`：训练序列嵌入L2归一化后的余弦检索；对邻居的该实验有限标签取相似度加权平均。权重为 `max(cosine,0)^2`；若全为零退化为等权。某邻居标签为NaN时跳过，不进入邻居权重分母；没有有限邻居标签才输出NaN并阻断正式评价。
+3. `knn`：训练序列嵌入L2归一化后的余弦检索；在最多256个最近序列中，逐实验取最多k个最近的有限标签邻居，再对其标签取相似度加权平均。权重为 `max(cosine,0)^2`；若全为零退化为等权。NaN邻居不占据k个有限邻居名额、不进入权重分母；256个候选内没有有限邻居标签时输出NaN，若该位置本身有有限评价标签则阻断正式评价，未观测标签位置不参与指标。该masked近邻规则只处理缺失标签，不使用validation/test标签选择序列。
 
 ### 2.2 整RBP-OOD轨
 
@@ -37,7 +37,7 @@
 - 神经模型固定AdamW、lr=`1e-3`、batch=`1024`、gradient clip=`1.0`；每个架构×轨在fold0/seed0仅搜索weight decay `{1e-4,1e-2,1}`。fold0/seed0搜索目录不生成test预测。
 - 每epoch在validation All序列上逐实验计算Spearman，再宏平均。主早停/选参指标为该宏Spearman；常数真实值或预测产生NaN时该实验不进入相关均值，同时记录有效实验数。所有实验均无效、训练损失或预测非有限均阻断。
 - `patience=20`、`min_delta=1e-4`，最多1000 epoch故障保险；到达1000 epoch视为失败而非accepted。恢复validation最佳checkpoint。正则并列时依次取validation宏MSE较小者、weight decay较小者；epoch并列保留最早最佳epoch。
-- kNN在fold0仅以validation宏Spearman选择 `k∈{1,5,20}`；并列依次取validation宏MSE较小者、k较小者。kNN无随机训练，不伪做三seed重复。
+- kNN在fold0仅以validation宏Spearman选择 `k∈{1,5,20}`；并列依次取validation宏MSE较小者、k较小者。某候选若在具有有限validation标签的位置产生无有限邻居标签的NaN，则该候选标记无效且不得冻结；只有观测位置全有限的候选参与比较，最终test在有限标签位置出现NaN仍阻断。kNN无随机训练，不伪做三seed重复。
 - 每个轨×架构的fold0/seed0选择结果写入独立selection JSON并冻结。其后所有fold/seed只使用该配置；每个fold仍由自身validation早停选epoch。fold扩展前必须完成fold0三seed train/evaluate和独立重放门控。
 - test只能由独立`evaluate`/`knn-evaluate`命令在checkpoint与selection冻结后读取，绝不参与正则、epoch、k、early stopping或模型选择。
 

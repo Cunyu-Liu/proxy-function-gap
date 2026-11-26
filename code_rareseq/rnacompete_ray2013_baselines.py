@@ -465,7 +465,7 @@ def metrics_table(data, context, split, prediction):
     prediction = np.asarray(prediction)
     if prediction.ndim == 1:
         prediction = np.tile(prediction[:, None], (1, len(tasks)))
-    if prediction.shape != labels.shape or not np.isfinite(prediction).all():
+    if prediction.shape != labels.shape or not np.isfinite(prediction[np.isfinite(labels)]).all():
         raise ValueError(f"Invalid prediction matrix {prediction.shape} versus {labels.shape}")
     records = []
     probe_sets = data.sequences.probe_set.to_numpy()[rows]
@@ -548,25 +548,24 @@ def knn_predict(data, context, split, k_values, device):
     xtr_t = torch.from_numpy(xtr).to(device)
     labels_t = torch.from_numpy(np.where(np.isfinite(labels), labels, 0)).to(device)
     mask_t = torch.from_numpy(np.isfinite(labels).astype(np.float32)).to(device)
-    max_k = max(k_values)
+    max_k = min(256, len(xtr))
     predictions = {k: [] for k in k_values}
     with torch.no_grad():
-        for start in range(0, len(xev), 256):
-            batch = torch.from_numpy(xev[start:start + 256]).to(device)
+        for start in range(0, len(xev), 64):
+            batch = torch.from_numpy(xev[start:start + 64]).to(device)
             similarity = batch @ xtr_t.T
             values, indices = similarity.topk(max_k, dim=1)
             neighbor_labels = labels_t[indices]
             neighbor_mask = mask_t[indices]
+            finite_rank = neighbor_mask.cumsum(dim=1)
             for k in k_values:
-                weights = values[:, :k].clamp(min=0) ** 2
-                masks = neighbor_mask[:, :k]
-                zero_weight = (weights * masks).sum(dim=1, keepdim=True) == 0
-                weights = torch.where(zero_weight, torch.ones_like(weights), weights)
-                denominator = (weights * masks).sum(dim=1, keepdim=True)
-                prediction = (weights.unsqueeze(-1) * neighbor_labels[:, :k] * masks.unsqueeze(-1)).sum(dim=1)
-                prediction = prediction / denominator
-                if (denominator == 0).any():
-                    raise ValueError("No finite neighbor labels")
+                masks = ((finite_rank > 0) & (finite_rank <= k)).float()
+                weights = values.clamp(min=0) ** 2
+                weighted_mask = weights.unsqueeze(-1) * masks
+                denominator = weighted_mask.sum(dim=1, keepdim=True)
+                weighted_mask = torch.where(denominator == 0, masks, weighted_mask)
+                denominator = weighted_mask.sum(dim=1, keepdim=True)
+                prediction = (weighted_mask * neighbor_labels).sum(dim=1) / denominator.squeeze(1)
                 predictions[k].append(prediction.float().cpu().numpy())
     del xtr_t, labels_t, mask_t
     torch.cuda.empty_cache()
@@ -578,13 +577,22 @@ def select_knn(data, track, args, device_info):
     predictions = knn_predict(data, context, "validation", K_VALUES, torch_device())
     _, labels = data.arrays(context, "validation")
     candidates = []
+    observed = np.isfinite(labels)
     for k, prediction in predictions.items():
-        row = {"k": k, "regularization": k, **macro_metrics(labels, prediction)}
+        aligned = aligned_prediction(prediction, labels.shape[1])
+        if not np.isfinite(aligned[observed]).all():
+            candidates.append({"k": k, "regularization": k, "macro_spearman": -1e300,
+                               "macro_pearson": None, "macro_mse": 1e300,
+                               "n_valid_spearman": 0, "valid_candidate": False})
+            continue
+        row = {"k": k, "regularization": k, "valid_candidate": True, **macro_metrics(labels, prediction)}
         candidates.append(row)
     best = None
     for candidate in candidates:
         if better_candidate(candidate, best):
             best = candidate
+    if best is None or not best["valid_candidate"]:
+        raise ValueError(f"No finite-at-observed-labels kNN validation candidate: {track}")
     out = os.path.join(args.out, "knn", f"{track}_f0")
     os.makedirs(out, exist_ok=True)
     save_validation_predictions(os.path.join(out, "validation_predictions.npz"), data, context, predictions[best["k"]])
@@ -672,7 +680,7 @@ def replay_neural_checkpoint(data, run, track, arch, fold, context, saved_predic
     prediction = predict_neural(model, torch.from_numpy(x).to(device))
     prediction = prediction * checkpoint["label_std"] + checkpoint["label_mean"]
     prediction = aligned_prediction(prediction, len(context["tasks"]["test"]))
-    if not np.allclose(prediction, saved_prediction, rtol=1e-6, atol=1e-6):
+    if not np.allclose(prediction, saved_prediction, rtol=1e-6, atol=1e-6, equal_nan=True):
         raise ValueError(f"Checkpoint test prediction replay mismatch: {run}")
     del model
     torch.cuda.empty_cache()
@@ -697,8 +705,9 @@ def replay_run(data, track, arch, fold, seed, root):
     if cache["experiment_ids"].tolist() != data.experiments.Motif_ID.to_numpy()[tasks].tolist():
         raise ValueError(f"Test experiment ID replay mismatch: {run}")
     prediction = cache["prediction"]
-    if not np.isfinite(prediction).all():
-        raise ValueError(f"Non-finite test prediction: {run}")
+    observed_labels = data.labels[np.ix_(rows, tasks)]
+    if not np.isfinite(prediction[np.isfinite(observed_labels)]).all():
+        raise ValueError(f"Non-finite test prediction at observed label: {run}")
     replay = metrics_table(data, context, "test", prediction)
     keys = ["Motif_ID", "species_gene", "frequency_tier", "split", "probe_set"]
     left = saved.sort_values(keys).reset_index(drop=True)

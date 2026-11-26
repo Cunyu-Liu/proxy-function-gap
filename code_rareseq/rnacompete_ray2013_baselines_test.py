@@ -6,9 +6,9 @@ import tempfile
 import numpy as np
 import pandas as pd
 
-from rnacompete_ray2013_baselines import (ARCHES, BenchmarkData, aligned_prediction,
+from rnacompete_ray2013_baselines import (ARCHES, K_VALUES, BenchmarkData, aligned_prediction,
                                           audit_selection_boundaries, better_candidate,
-                                          label_placeholders, macro_metrics, masked_mse, metrics_table,
+                                          knn_predict, label_placeholders, macro_metrics, masked_mse, metrics_table,
                                           regression_metrics, replay_run, save_test_products, split_roles)
 from rnacompete_ray2013_rnafm_embed import validate_cache
 
@@ -95,6 +95,15 @@ def main():
                 assert len(full["tasks"]["train"]) == 146
                 assert len(full["tasks"]["validation"]) == 49
                 assert len(full["tasks"]["test"]) == 49
+            knn = knn_predict(data, context, "validation", K_VALUES, torch.device("cpu"))
+            assert set(knn) == set(K_VALUES)
+            expected_width = 1 if track == "rbp_ood" else len(context["tasks"]["validation"])
+            expected_rows = len(context["rows"]["validation"])
+            for prediction in knn.values():
+                assert prediction.shape == (expected_rows, expected_width)
+                assert aligned_prediction(prediction, len(context["tasks"]["validation"])).shape == (
+                    expected_rows, len(context["tasks"]["validation"]))
+            assert all(np.isfinite(prediction).all() for prediction in knn.values())
 
         context = data.context("sequence", 0, include_test=True)
         prediction = np.asarray(data.embeddings[context["rows"]["test"], :244], dtype=np.float32)
