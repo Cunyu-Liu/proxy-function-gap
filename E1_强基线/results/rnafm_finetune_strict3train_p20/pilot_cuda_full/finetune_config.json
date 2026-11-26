@@ -1,0 +1,47 @@
+{
+  "args": {
+    "command": "train",
+    "windows_dir": "/root/rareseq/data/e0/windows",
+    "neg_dir": "/root/rareseq/data/e0/neg",
+    "positives_audit": "/root/rareseq/data/e0/positives_audit.tsv",
+    "split_clstr": "/root/rareseq/data/e0/splits/clusters.id90.clstr",
+    "exps_file": "/root/rareseq/data/e0/e1_smoke_exp.txt",
+    "out": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/pilot_cuda_full",
+    "model": "multimolecule/rnafm",
+    "mode": "full",
+    "folds": "0",
+    "tracks": "neg1c,neg2",
+    "seed": 0,
+    "epochs": 1000,
+    "patience": 20,
+    "min_delta": 0.0001,
+    "batch": 256,
+    "encoder_lr": 1e-05,
+    "head_lr": 0.001,
+    "weight_decay": 0.0001,
+    "hidden": 256,
+    "dropout": 0.1,
+    "label_smoothing": 0.02,
+    "lora_r": 8,
+    "lora_dropout": 0.0,
+    "data_version": "e0-v2-id90-strict3train-main",
+    "log": "/home/ProxyFunctionGap/logs/experiments.jsonl"
+  },
+  "code_sha256": "f628e8260b0a295beec230920131d32d9df6580fd2cb431f84b6076fad19b315",
+  "cuda": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ],
+    "backward_probe": "passed",
+    "optimizer_probe": "passed",
+    "torch": "2.11.0+cu128"
+  },
+  "fast_tokenizer_verified": true,
+  "selection": "per-task validation AUPRC; test excluded",
+  "gradient_checkpointing": true,
+  "strict_train_folds": true,
+  "data_version": "e0-v2-id90-strict3train-main"
+}

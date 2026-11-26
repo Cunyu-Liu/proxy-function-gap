@@ -1,0 +1,37 @@
+{
+  "experiment": "SSB_K562",
+  "rbp": "SSB",
+  "tier": "tail",
+  "fold": 0,
+  "track": "neg2",
+  "best_epoch": 9,
+  "stopped_epoch": 29,
+  "early_stopped": true,
+  "best_val_auprc": 0.765798273896946,
+  "best_val_auroc": 0.7747035573122528,
+  "patience": 20,
+  "min_delta": 0.0001,
+  "n_train": 1157,
+  "n_eval": 281,
+  "val_auroc": 0.7747035573122528,
+  "val_auprc": 0.765798273896946,
+  "checkpoint": "best.pt.zlib",
+  "checkpoint_manifest": "checkpoint_manifest.json",
+  "checkpoint_compressed_bytes": 370431748,
+  "checkpoint_raw_sha256": "02b830a990961b4971c973ec1fd51ab5d214b8c87549f7144f63116b64cffb33",
+  "checkpoint_compressed_sha256": "49ed7b7a26f7c01e8bc959ce2519f0b9fea70be43e598b445331cb650c5b31b3",
+  "history": "history.jsonl",
+  "validation_predictions": "validation_predictions.npz",
+  "training_device": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ],
+    "backward_probe": "passed",
+    "optimizer_probe": "passed",
+    "torch": "2.11.0+cu128"
+  },
+  "stable_seed": 4269157625
+}

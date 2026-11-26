@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "require_eval": false,
+  "require_independent_validation": true,
+  "runs": [
+    {
+      "run": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/pilot_cuda_lora",
+      "mode": "lora",
+      "fold": "0",
+      "seed": 0,
+      "lora_r": 8,
+      "n_tasks": 2,
+      "train_passed": true,
+      "eval_passed": false,
+      "independent_validation": {
+        "n_tasks": 2,
+        "test_used": false,
+        "passed": true
+      }
+    },
+    {
+      "run": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/pilot_cuda_full",
+      "mode": "full",
+      "fold": "0",
+      "seed": 0,
+      "lora_r": 8,
+      "n_tasks": 2,
+      "train_passed": true,
+      "eval_passed": false,
+      "independent_validation": {
+        "n_tasks": 2,
+        "test_used": false,
+        "passed": true
+      }
+    }
+  ]
+}
