@@ -1,0 +1,270 @@
+{
+  "timestamp": "2026-11-26T20:58:02.700914+00:00",
+  "scope": "all newly logged cache pairs since previous cumulative audit",
+  "n_files": 23,
+  "n_rows": 696943,
+  "source_counts": {
+    "generated": 19,
+    "pilot_cache_reused": 4
+  },
+  "all_ids_exact": true,
+  "all_shape_1280": true,
+  "all_fp16": true,
+  "all_finite": true,
+  "all_ids_sha256_match": true,
+  "files": [
+    {
+      "experiment": "TIA1_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59753,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TIA1_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19156,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TIA1_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59556,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TIA1_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19347,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TRA2A_HepG2",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 29442,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TRA2A_HepG2",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 9578,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TRA2A_K562",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 37494,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TRA2A_K562",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 12121,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TROVE2_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 18478,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TROVE2_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 6160,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TROVE2_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 12462,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "TROVE2_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 4050,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF1_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59432,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF1_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19552,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF1_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 56031,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF1_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 18126,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF2_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59401,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF2_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19531,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF2_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59616,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "U2AF2_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19009,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UCHL5_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19514,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UCHL5_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59894,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UCHL5_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19240,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    }
+  ]
+}

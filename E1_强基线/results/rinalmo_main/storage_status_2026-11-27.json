@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-11-26T20:58:02.700914+00:00",
+  "status": "warning_low_space_no_observed_write_failure",
+  "observed_write_failure": false,
+  "space": {
+    "/teams/HoulabData_1788502323/liucunyu": {
+      "free_GiB": 8.293
+    },
+    "/home": {
+      "free_GiB": 6.516
+    },
+    "/root": {
+      "free_GiB": 6.516
+    }
+  },
+  "embedding_records_at_check": 263,
+  "required_cache_pairs": 292,
+  "evidence_note": "No ENOSPC in current logs; capacity risk for remaining embeddings and 15+5 outputs. No files deleted."
+}
