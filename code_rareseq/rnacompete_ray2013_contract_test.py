@@ -65,7 +65,7 @@ def main():
         os.makedirs(source)
         probes.to_csv(os.path.join(frozen, "probes.tsv.gz"), sep="\t", index=False)
         with gzip.open(os.path.join(source, "norm_data.txt.gz"), "wt") as handle:
-            handle.write("Probe_ID\te1\np1\t1\np2\t3\np3\tNaN\np4\tNaN\np5\t2\n")
+            handle.write("Probe_ID\te1\np1\t1\np2\t3\np3\t NaN\np4\t NaN\np5\t2\n")
         probe_ids = pd.DataFrame({"probe_id": ["p1", "p2", "p3", "p4", "p5"]})
         merged = pd.concat([probes, probe_ids], axis=1)
         merged.to_csv(os.path.join(frozen, "probes.tsv.gz"), sep="\t", index=False)

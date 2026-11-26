@@ -230,7 +230,8 @@ def load_experiment_labels(input_root, frozen_root, motif_id):
     """Load one experiment as unique-RNA median labels without imputing NaN."""
     probes = pd.read_csv(os.path.join(frozen_root, "probes.tsv.gz"), sep="\t")
     values = pd.read_csv(os.path.join(input_root, "norm_data.txt.gz"), sep="\t",
-                         usecols=["Probe_ID", motif_id])
+                         usecols=["Probe_ID", motif_id], low_memory=False)
+    values[motif_id] = values[motif_id].to_numpy(dtype=np.float64)
     merged = probes.merge(values, left_on="probe_id", right_on="Probe_ID",
                           how="left", validate="one_to_one")
     assert merged[motif_id].notna().any(), motif_id
@@ -573,8 +574,8 @@ def verify_frozen(out):
             availability.n_unique_rna).all()
     all_counts = availability[availability.probe_set == "All"]
     set_counts = availability[availability.probe_set.isin(["SetA", "SetB"])].groupby(
-        ["Motif_ID", "fold"])[["n_unique_rna", "n_finite_unique", "n_all_nan_unique"]].sum()
-    indexed_all = all_counts.set_index(["Motif_ID", "fold"])
+        ["Motif_ID", "fold"])[["n_unique_rna", "n_finite_unique", "n_all_nan_unique"]].sum().sort_index()
+    indexed_all = all_counts.set_index(["Motif_ID", "fold"]).sort_index()
     for column in ("n_unique_rna", "n_finite_unique", "n_all_nan_unique"):
         assert (indexed_all[column] == set_counts[column]).all()
     observed = all_counts.groupby("Motif_ID").n_finite_unique.sum()
