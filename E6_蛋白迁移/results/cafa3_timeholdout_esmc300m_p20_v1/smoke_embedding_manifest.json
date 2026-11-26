@@ -1,0 +1,43 @@
+{
+  "schema_version": "cafa3-esmc300m-embedding-v1",
+  "repo": "esmc_300m",
+  "esm_version": "3.2.1",
+  "torch_version": "2.14.1+cu132",
+  "cuda_device": "NVIDIA GeForce RTX 5090",
+  "embedding_dim": 960,
+  "pooling": "final_layer_amino_acid_only_mean_no_bos_eos_pad",
+  "max_length": 512,
+  "limit": 4,
+  "splits": [
+    {
+      "split": "t0",
+      "rows": 4,
+      "shape": [
+        4,
+        960
+      ],
+      "sha256": "2670c2b63c6eee68aee8b490906598c092ee4c51cf793163759a490563636baa",
+      "reused": false,
+      "seconds": 0.5894248485565186,
+      "sequences_per_second": 6.786276502926309,
+      "fasta_sha256": "83a8a5fb24dfca5ca7bb159e1afbfa0382376351b06f3db81a97d4f6eb505142",
+      "truncated_rows": 2,
+      "truncation_rate": 0.5
+    },
+    {
+      "split": "t1",
+      "rows": 4,
+      "shape": [
+        4,
+        960
+      ],
+      "sha256": "0cba01e34f3aae36ffa7b2682d0df623a08cf202ecea999d6590968c3d4deb64",
+      "reused": false,
+      "seconds": 0.07810091972351074,
+      "sequences_per_second": 51.215786115715595,
+      "fasta_sha256": "e41e0645753493c3c4d0e03ebf694d89100791c4bc9a3cbeb17bffb96cb0dda0",
+      "truncated_rows": 1,
+      "truncation_rate": 0.25
+    }
+  ]
+}

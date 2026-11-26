@@ -1,0 +1,36 @@
+{
+  "cuda": true,
+  "device": "NVIDIA GeForce RTX 5090",
+  "splits": {
+    "t0": {
+      "ids": [
+        "A0A060X6Z0",
+        "A0A068FIK2",
+        "A0A075F932",
+        "A0A078CGE6"
+      ],
+      "shape": [
+        4,
+        960
+      ],
+      "all_finite": true
+    },
+    "t1": {
+      "ids": [
+        "T100900000026",
+        "T100900000046",
+        "T100900000115",
+        "T100900000116"
+      ],
+      "shape": [
+        4,
+        960
+      ],
+      "all_finite": true
+    }
+  },
+  "bce_backward": {
+    "loss": 0.7021912336349487,
+    "finite_gradients": true
+  }
+}
