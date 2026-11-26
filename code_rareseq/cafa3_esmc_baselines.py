@@ -17,6 +17,8 @@ from scipy import sparse
 from scipy.special import expit
 from sklearn.metrics import average_precision_score
 
+from cafa3_tasklog import TaskLogger, cuda_evidence
+
 FREQUENCY_BUCKETS = ["0", "1-4", "5-19", "20-99", "100-499", ">=500"]
 THRESHOLDS = np.round(np.arange(0.01, 1.001, 0.01), 2)
 
@@ -179,8 +181,10 @@ def subset_rows(matrix, indices):
 
 
 class Cafa3Run:
-    def __init__(self, args):
+    def __init__(self, args, task_logger=None, combo_event=None):
         self.args = args
+        self.tasks = task_logger
+        self.combo_event = combo_event
         self.data = Path(args.data_dir)
         self.emb = Path(args.emb_dir)
         self.out = Path(args.out)
@@ -426,8 +430,15 @@ class Cafa3Run:
         seeds = [int(value) for value in self.args.seeds.split(",")]
         fitted, histories = [], []
         for seed in seeds:
-            model, history, metadata = self.train_seed(torch, seed)
-            logits = self.predict_logits(model, torch, self.val_index, "t0", self.out / f".val_logits_seed{seed}.mmap")
+            seed_event = self.tasks.start("seed", self.fold, self.track, self.ontology,
+                                          parent_run_id=self.combo_event["run_id"], seed=seed)
+            try:
+                model, history, metadata = self.train_seed(torch, seed)
+                logits = self.predict_logits(model, torch, self.val_index, "t0", self.out / f".val_logits_seed{seed}.mmap")
+                self.tasks.finish(seed_event, "completed", [self.out / f"bce_seed{seed}.pt"])
+            except Exception as error:
+                self.tasks.finish(seed_event, "failed", error=error)
+                raise
             fitted.append({"model": model, "metadata": metadata, "logits": logits})
             histories.append(history)
         pd.concat(histories).to_csv(self.out / "validation_history.tsv", sep="\t", index=False)
@@ -469,7 +480,14 @@ class Cafa3Run:
                 os.remove(self.out / name)
             del item["model"]
             torch.cuda.empty_cache()
-        knn_metrics, knn_labels = self.run_knn(torch)
+        knn_event = self.tasks.start("knn", self.fold, self.track, self.ontology,
+                                     parent_run_id=self.combo_event["run_id"], seed="deterministic")
+        try:
+            knn_metrics, knn_labels = self.run_knn(torch)
+            self.tasks.finish(knn_event, "completed", [self.out / "validation_thresholds_knn.tsv"])
+        except Exception as error:
+            self.tasks.finish(knn_event, "failed", error=error)
+            raise
         all_metrics.append(knn_metrics)
         all_labels.extend(knn_labels)
         with gzip.open(self.out / "metrics.tsv.gz", "wt", encoding="utf-8", newline="") as handle:
@@ -488,6 +506,8 @@ class Cafa3Run:
         labels["go_id"] = [self.labels[index] for index in labels.label_index]
         labels["t0_direct_frequency"] = self.direct_frequency[labels.label_index]
         labels.drop(columns=["label_index"]).to_csv(self.out / "per_label_metrics.tsv.gz", sep="\t", index=False)
+        summary_event = self.tasks.start("summary", self.fold, self.track, self.ontology,
+                                         parent_run_id=self.combo_event["run_id"])
         summary = {"schema_version": "cafa3-esmc-baseline-run-v1", "fold": self.fold, "track": self.track,
                    "ontology": self.ontology, "seeds": seeds, "selected_tau": selected_tau,
                    "bce": seed_summaries, "deep_knn": {"k": self.args.k, "seed": "deterministic"},
@@ -498,8 +518,15 @@ class Cafa3Run:
                    "t0_proxy_test_warning": "same held-out fold used for validation selection; not independent test",
                    "t1_selection": "none; thresholds and tau frozen on t0 validation before t1 prediction",
                    "data_manifest_sha256": sha256_file(self.data / "frozen_manifest.json"),
-                   "code_sha256": sha256_file(os.path.abspath(__file__))}
-        (self.out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+                   "code_sha256": sha256_file(os.path.abspath(__file__)),
+                   "task_log": str(self.tasks.path), "combo_run_id": self.combo_event["run_id"]}
+        try:
+            (self.out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+            self.tasks.finish(summary_event, "completed", [self.out / "summary.json", self.out / "metrics.tsv.gz",
+                                                           self.out / "per_label_metrics.tsv.gz"])
+        except Exception as error:
+            self.tasks.finish(summary_event, "failed", error=error)
+            raise
         print("RUN_DONE", json.dumps(summary), flush=True)
 
     def run_knn(self, torch):
@@ -571,8 +598,19 @@ def main():
     args = parser.parse_args()
     if args.patience != 20 or args.min_delta != 1e-4 or args.epochs != 1000 or args.seeds != "0,1,2":
         raise ValueError("Formal CAFA3 runs require seeds=0,1,2, patience=20, min_delta=1e-4 and 1000-epoch failsafe")
-    wait_for_storage(Path(args.out), args.ontology)
-    Cafa3Run(args).run()
+    out = Path(args.out)
+    wait_for_storage(out, args.ontology)
+    task_logger = TaskLogger(out.parents[3] / "tasks.jsonl",
+                             {"cafa3_esmc_baselines.py": sha256_file(os.path.abspath(__file__)),
+                              "cafa3_tasklog.py": sha256_file(Path(__file__).with_name("cafa3_tasklog.py"))},
+                             sha256_file(Path(args.data_dir) / "frozen_manifest.json"), cuda_evidence())
+    combo_event = task_logger.start("combo", args.fold, args.track, args.ontology)
+    try:
+        Cafa3Run(args, task_logger, combo_event).run()
+        task_logger.finish(combo_event, "completed", [out / "summary.json"])
+    except Exception as error:
+        task_logger.finish(combo_event, "failed", error=error)
+        raise
 
 
 if __name__ == "__main__":

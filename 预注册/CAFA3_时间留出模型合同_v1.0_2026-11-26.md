@@ -33,6 +33,7 @@
 ## 5. 执行与验收
 
 - 产物：`/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/cafa3_timeholdout_esmc300m_p20_v1/`；代码、状态与日志在 `/home/ProxyFunctionGap/`。
-- 独立 `nohup`、独立 `flock`，每阶段前检查 GPU 空闲显存与 MemAvailable，不足每 300 秒重查；不得 kill、暂停、抢占或修改 RiNALMo、LoRA/full 及其他队列。
+- 独立 `nohup`、独立 `flock`，每阶段前检查 GPU 空闲显存与 MemAvailable，不足每 300 秒重查；不得 kill、暂停、抢占或修改 RiNALMo、LoRA/full 及其他队列。后续组合另按 ontology 检查磁盘余量，不足安全等待。
+- 后续 combo/seed/kNN/summary 以并发安全 JSONL 记录 run_id、代码/数据SHA、CUDA、真实 start/end、状态与产物SHA；资源等待不记 completed。日志功能部署前的完成组合只保留 derived_from_artifacts 清单，start/end 为 null，不伪造历史时间。
 - 正式组合为 3 folds×4 tracks（main/id30/id50/id90）×3 ontologies；每个组合含 BCE 三 seed 与一个 deterministic deep-kNN。逐组合原子完成标记与断点跳过，失败必须传播，禁止静默缺组合。
 - CUDA smoke 必须验证真实样本 ID 对齐、960 维、全部有限及 BCE 反向传播。最终审计检查全部 36 组合、108 个 BCE seed 和 36 个 kNN、白名单、阈值来源、有限值、t1 只读，以及从冻结阈值网格和逐标签结果重算选择值与 macro AUPRC。

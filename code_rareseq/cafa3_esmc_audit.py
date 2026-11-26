@@ -94,6 +94,29 @@ def main():
                                        (metrics.slice_type.isin(["all", "role"])) & (metrics.frequency_bucket == "overall")]
                     if len(selected) != 1 or not np.isclose(observed, selected.iloc[0].macro_auprc, equal_nan=True):
                         raise ValueError(f"Macro AUPRC recomputation failed: {path} {model} {seed} {split} {role}")
+                if "combo_run_id" in summary:
+                    records = [json.loads(line) for line in (root / "tasks.jsonl").read_text().splitlines()]
+                    combo_id = summary["combo_run_id"]
+                    terminal = [record for record in records if record["status"] == "completed" and
+                                (record["run_id"] == combo_id or record.get("parent_run_id") == combo_id)]
+                    counts = {kind: sum(record["task_type"] == kind for record in terminal)
+                              for kind in ("combo", "seed", "knn", "summary")}
+                    if counts != {"combo": 1, "seed": 3, "knn": 1, "summary": 1}:
+                        raise ValueError(f"Task JSONL matrix mismatch: {path} {counts}")
+                    for record in terminal:
+                        if (not record["start_utc"] or not record["end_utc"] or not record["cuda"]["available"] or
+                                record["data_sha256"] != summary["data_manifest_sha256"]):
+                            raise ValueError(f"Task JSONL evidence mismatch: {path} {record['run_id']}")
+                        for item in record["artifacts"]:
+                            if item["sha256"] != sha256_file(item["path"]):
+                                raise ValueError(f"Task artifact SHA mismatch: {item['path']}")
+                else:
+                    derived = [json.loads(line) for line in (root / "derived_from_artifacts.jsonl").read_text().splitlines()]
+                    key = f"derived-cafa3-fold{fold}-{track}-{ontology}"
+                    record = next((item for item in derived if item["run_id"] == key), None)
+                    if (record is None or record["status"] != "derived_from_artifacts" or
+                            record["start_utc"] is not None or record["end_utc"] is not None):
+                        raise ValueError(f"Derived artifact evidence mismatch: {path}")
                 checked.append({"fold": fold, "track": track, "ontology": ontology,
                                 "summary_sha256": sha256_file(path / "summary.json")})
     if not checked:
