@@ -75,6 +75,9 @@ train_run() {
   if ! resource_gate "locked_train_f${FOLD}_s${SEED}_${MODE}" "$MIN_FREE"; then
     rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null; return 1
   fi
+  if ! storage_gate "$MODE" "$EXPS"; then
+    rm -f "$CUDA_LOCK/owner"; rmdir "$CUDA_LOCK" 2>/dev/null; return 1
+  fi
   echo "TRAIN_START $DIR $(date -Is)"
   "$PY" e1_finetune.py "${COMMON[@]}" --mode "$MODE" --folds "$FOLD" --seed "$SEED" \
     --encoder-lr "$LR" --lora-r "$RANK" --exps-file "$EXPS" --out "$DIR" >"$LOGFILE" 2>&1
@@ -218,6 +221,7 @@ expansion_worker() {
 }
 
 if [ "${E1_FINETUNE_CHUNK_SMOKE:-0}" = 1 ]; then
+  echo "CHUNK_SMOKE_RUNNING $(date -Is)" > "$STATUS"
   SMOKE_DIR=$ROOT/chunk_retention_smoke_full_f1
   train_run full 1 0 8 "$SMOKE_DIR" "$LOGDIR/e1_finetune_chunk_smoke.log.train" "$E0/e1_smoke_exp.txt" || exit 1
   eval_run "$SMOKE_DIR" "$LOGDIR/e1_finetune_chunk_smoke.log.eval" || exit 1
