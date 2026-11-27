@@ -1,7 +1,7 @@
 {
   "stage": "E1_RiNALMo_main_146",
   "status": "waiting_gpu_remaining_matrix",
-  "updated_at": "2026-11-27T17:59:42+08:00",
+  "updated_at": "2026-11-27T18:11:27+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
   "driver_pid": 125463,
   "smoke_experiment": "SUPV3L1_K562",
@@ -113,9 +113,11 @@
     "fold0_reaudit_passed": true,
     "remaining_bce_workers_spawned": 2,
     "new_runs_completed": 0,
+    "new_run_started": false,
+    "preexisting_failed_run_checkpoints_each": 197,
     "gpu_gate": {
       "required_free_mib": 6000,
-      "latest_actual_free_mib": 5173,
+      "latest_actual_free_mib": 5153,
       "required_available_ram_gib": 12,
       "latest_available_ram_gib": 32,
       "waiting": true
