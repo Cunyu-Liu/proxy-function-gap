@@ -2,7 +2,12 @@
 
 日期：2026-11-24 ｜ 状态：**M1a 三种配方均未通过，共享残差方法线停止；不运行 M1b–M1f** ｜ 历史 G1/G3/G4 记录保持不变
 
-> **2026-11-26 纠错与当前状态（优先于下文历史正文）**
+> **2026-11-27 当前状态（优先于下文全部历史正文）**
+>
+> - **RNAcompete 五折 60/60 神经 eval + 10/10 kNN 已验收。**序列 tail Spearman：MLP **0.475605** > linear **0.430202** > kNN **0.352559**；RBP-OOD 实验宏 Spearman：kNN **0.185360** > MLP **0.111699** > linear **0.098188**，但绝对相关性均弱，支撑任务依赖而非统一赢家。70/70 eval、60 次 checkpoint replay、525 条 run 记录与 45 行统计通过；Fig. 6 与 15 页 `manuscript/preprint_draft.pdf` 已完成。见 [RNAcompete 最终报告](../E1_强基线/RNAcompete_Ray2013_RNAFM五折最终报告_2026-11-27.md)。
+> - **RiNALMo、CAFA3 与 full 仍不写完整性能。**RiNALMo 正式 fold0/seed0 BCE + fold0 kNN 首批审计通过（`E1-rinalmo-independent-audit-20261127-023724-ZDLg6Y`），全矩阵仍在恢复；CAFA3 仅 7/36 partial；full chunk smoke 仅工程通过、fold0 在跑。均不得升级为完整强基线、CAFA 或微调结论。
+>
+> **2026-11-26 纠错与当前状态（历史快照）**
 >
 > 本文以下是 2026-11-24 的“方法重启设计”历史原稿，**不是当前执行方案**。M1a 已止损，M1b–M1f 禁止运行；proxy function gap 至多是描述性现象命名，不是已验证机制。当前路线为泄漏受控基准（设计目标）+ 强基线 + 误差分层。
 >
