@@ -1,0 +1,3 @@
+experiment	rbp	tier	fold	track	split	best_epoch	stopped_epoch	early_stopped	best_val_auprc	best_val_auroc	patience	min_delta	n_train	n_eval	auroc	auprc
+SSB_K562	SSB	tail	1	neg1c	val	39	59	True	0.8527430619842711	0.8791614906832299	20	0.0001	1078	359	0.8791614906832299	0.8527430619842711
+SSB_K562	SSB	tail	1	neg2	val	22	42	True	0.7994569237311336	0.8279813664596273	20	0.0001	1078	359	0.8279813664596273	0.7994569237311336

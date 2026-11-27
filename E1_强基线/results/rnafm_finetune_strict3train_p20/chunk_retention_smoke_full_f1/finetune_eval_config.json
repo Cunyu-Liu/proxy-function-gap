@@ -1,0 +1,6 @@
+{
+  "train_config": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_retention_smoke_full_f1/finetune_config.json",
+  "train_code_sha256": "c8954fe2ddfc19ba794400bedf5778421e86a2804dfc0c58614344ff9c00e695",
+  "selection": null,
+  "selection_sha256": null
+}

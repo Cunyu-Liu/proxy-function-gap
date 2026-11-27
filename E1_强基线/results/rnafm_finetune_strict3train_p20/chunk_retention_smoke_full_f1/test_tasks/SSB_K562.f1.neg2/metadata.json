@@ -1,0 +1,33 @@
+{
+  "auroc": 0.773158001418871,
+  "auprc": 0.7458697754998407,
+  "n_eval": 281,
+  "split": "test",
+  "training_device": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ],
+    "backward_probe": "passed",
+    "optimizer_probe": "passed",
+    "torch": "2.11.0+cu128"
+  },
+  "evaluation_device": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ],
+    "backward_probe": "passed",
+    "optimizer_probe": "passed",
+    "torch": "2.11.0+cu128"
+  },
+  "checkpoint_validation_reproduced": true,
+  "checkpoint_used_for_test": true,
+  "checkpoint_raw_sha256": "bb6c0c524e0418d74065adacfa99a3750089b090ebf000dfbcb79153146c7556",
+  "checkpoint_compressed_sha256": "13f358675cec21f5962434413352cbeb512e1157eb3b919ec420e83bd1eb1a11",
+  "test_predictions_sha256": "f615caa8fc958ed5e84453344fda59afc009af511c1b385a558875a6a942eb45"
+}

@@ -1,0 +1,70 @@
+{
+  "status": "approved_for_single_file_cleanup",
+  "retention_policy": "matrix_proof_only",
+  "task": {
+    "experiment": "SSB_K562",
+    "rbp": "SSB",
+    "tier": "tail",
+    "fold": 1,
+    "track": "neg1c"
+  },
+  "mode": "full",
+  "seed": 0,
+  "lora_r": 8,
+  "checkpoint_format": "torch.save FP32 weights + zlib-1 stream",
+  "raw_sha256": "e95e80313d31309c50e854f60409cbb41f7b4e94f294e750094f4efecb166b86",
+  "compressed_sha256": "a570ac92f96b04c7a08019527cc46e89fc6895dc0e1f2bf14bfbdc859a3347c7",
+  "raw_bytes": 398811431,
+  "compressed_bytes": 370430590,
+  "compression_roundtrip_verified": true,
+  "bitwise_recovery_verified_at_save": true,
+  "checkpoint_validation_reproduced": true,
+  "checkpoint_used_for_test": true,
+  "head": {
+    "path": "head.pt",
+    "sha256": "1812bcac1f3e3b67f63f3173e6267e80c522d53e165ff9e4f0ef5761f0fce7bf",
+    "bytes": 659869
+  },
+  "scaler": "none_mean_masked_pooling",
+  "artifact_hashes": {
+    "history": {
+      "path": "tasks/SSB_K562.f1.neg1c/history.jsonl",
+      "sha256": "99d1d701ebd0bf5c62654bc4f5c45070f901426639cc81594d953ef4e6afba4c",
+      "bytes": 16896
+    },
+    "validation_predictions": {
+      "path": "tasks/SSB_K562.f1.neg1c/validation_predictions.npz",
+      "sha256": "c1a435c29a4246b66b2653e0a3713797eb9c12f2343510c9574660320aec2572",
+      "bytes": 4644
+    },
+    "test_predictions": {
+      "path": "test_tasks/SSB_K562.f1.neg1c/test_predictions.npz",
+      "sha256": "beef1ea2e1a2369d4fad2fda13ec16758a479e3cb22112859018e78c061cf992",
+      "bytes": 3926
+    },
+    "test_metadata": {
+      "path": "test_tasks/SSB_K562.f1.neg1c/metadata.json",
+      "sha256": "430383fd497c3c769262357c330696cb51368f9a80995660bef07f44331c87b7",
+      "bytes": 946
+    },
+    "finetune_config": {
+      "path": "finetune_config.json",
+      "sha256": "ac78daadda13c6338d0773cdf6e285d3cb1ce24acf686154c4ef93c77a9077e4",
+      "bytes": 1493
+    },
+    "finetune_eval_config": {
+      "path": "finetune_eval_config.json",
+      "sha256": "f9b78f1d42051b2349a2e79b31f7db3679088751bd1b251842145723b6babc20",
+      "bytes": 312
+    },
+    "pre_retention_verification": {
+      "path": "pre_retention_verification.json",
+      "sha256": "2f081934dbba2e5410507140607c3770b848b988037109f068d392be25a9a6c0",
+      "bytes": 415
+    }
+  },
+  "cleanup_path": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_retention_smoke_full_f1/tasks/SSB_K562.f1.neg1c/best.pt.zlib",
+  "cleanup_file": "best.pt.zlib",
+  "cleanup_sha256": "a570ac92f96b04c7a08019527cc46e89fc6895dc0e1f2bf14bfbdc859a3347c7",
+  "planned_at": "2026-11-27T16:25:58+0800"
+}

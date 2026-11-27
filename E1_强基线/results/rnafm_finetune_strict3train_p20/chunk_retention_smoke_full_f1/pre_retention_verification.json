@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "require_eval": true,
+  "require_independent_validation": false,
+  "runs": [
+    {
+      "run": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/chunk_retention_smoke_full_f1",
+      "mode": "full",
+      "fold": "1",
+      "seed": 0,
+      "lora_r": 8,
+      "n_tasks": 2,
+      "train_passed": true,
+      "eval_passed": true
+    }
+  ]
+}

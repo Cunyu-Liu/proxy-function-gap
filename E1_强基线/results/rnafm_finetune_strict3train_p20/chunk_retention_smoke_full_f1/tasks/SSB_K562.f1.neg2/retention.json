@@ -1,0 +1,69 @@
+{
+  "status": "retained_proof_only",
+  "retention_policy": "matrix_proof_only",
+  "task": {
+    "experiment": "SSB_K562",
+    "rbp": "SSB",
+    "tier": "tail",
+    "fold": 1,
+    "track": "neg2"
+  },
+  "mode": "full",
+  "seed": 0,
+  "lora_r": 8,
+  "checkpoint_format": "torch.save FP32 weights + zlib-1 stream",
+  "raw_sha256": "bb6c0c524e0418d74065adacfa99a3750089b090ebf000dfbcb79153146c7556",
+  "compressed_sha256": "13f358675cec21f5962434413352cbeb512e1157eb3b919ec420e83bd1eb1a11",
+  "raw_bytes": 398811431,
+  "compressed_bytes": 370432960,
+  "compression_roundtrip_verified": true,
+  "bitwise_recovery_verified_at_save": true,
+  "checkpoint_validation_reproduced": true,
+  "checkpoint_used_for_test": true,
+  "head": {
+    "path": "head.pt",
+    "sha256": "d713f952fad41c5ed9c63dac203ade23ff72e9f1306d49fb3b72265569d0a681",
+    "bytes": 659869
+  },
+  "scaler": "none_mean_masked_pooling",
+  "artifact_hashes": {
+    "history": {
+      "path": "tasks/SSB_K562.f1.neg2/history.jsonl",
+      "sha256": "8a61b8de3a4225c44386ca66ff6f2c08d94bc2b6f94ffc55e5b90048c1c9adff",
+      "bytes": 11988
+    },
+    "validation_predictions": {
+      "path": "tasks/SSB_K562.f1.neg2/validation_predictions.npz",
+      "sha256": "00f71b75cb5c0ce43df3ae0e3d35cc1e327287a149ddc29e5cb54e47ffe32ab2",
+      "bytes": 4907
+    },
+    "test_predictions": {
+      "path": "test_tasks/SSB_K562.f1.neg2/test_predictions.npz",
+      "sha256": "f615caa8fc958ed5e84453344fda59afc009af511c1b385a558875a6a942eb45",
+      "bytes": 4069
+    },
+    "test_metadata": {
+      "path": "test_tasks/SSB_K562.f1.neg2/metadata.json",
+      "sha256": "6dceaf626b5d999584cd3222bc9985195a3c19c1174854d63e99766bee8cd552",
+      "bytes": 947
+    },
+    "finetune_config": {
+      "path": "finetune_config.json",
+      "sha256": "ac78daadda13c6338d0773cdf6e285d3cb1ce24acf686154c4ef93c77a9077e4",
+      "bytes": 1493
+    },
+    "finetune_eval_config": {
+      "path": "finetune_eval_config.json",
+      "sha256": "f9b78f1d42051b2349a2e79b31f7db3679088751bd1b251842145723b6babc20",
+      "bytes": 312
+    },
+    "pre_retention_verification": {
+      "path": "pre_retention_verification.json",
+      "sha256": "2f081934dbba2e5410507140607c3770b848b988037109f068d392be25a9a6c0",
+      "bytes": 415
+    }
+  },
+  "cleaned_at": "2026-11-27T16:26:31+0800",
+  "cleaned_bytes": 370432960,
+  "cleaned_file": "best.pt.zlib"
+}

@@ -1,0 +1,9 @@
+{
+  "remaining_tasks": 2,
+  "estimated_checkpoint_bytes_per_task": 420000000,
+  "checkpoint_format": "FP32 torch.save + zlib-1; planning ratio=1.0",
+  "reserve_bytes": 21474836480,
+  "required_bytes_including_reserve": 22314893920,
+  "free_bytes": 276920532992,
+  "passed": true
+}
