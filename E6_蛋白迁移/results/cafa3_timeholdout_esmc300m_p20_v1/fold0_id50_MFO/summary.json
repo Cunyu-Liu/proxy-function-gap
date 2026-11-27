@@ -1,0 +1,60 @@
+{
+  "schema_version": "cafa3-esmc-baseline-run-v1",
+  "fold": 0,
+  "track": "id50",
+  "ontology": "MFO",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "selected_tau": 0.5,
+  "bce": [
+    {
+      "seed": 0,
+      "best_epoch": 142,
+      "validation_bce": 0.004057820121052175,
+      "tau": 0.5,
+      "fmax_threshold": 0.95,
+      "smin_threshold": 0.97
+    },
+    {
+      "seed": 1,
+      "best_epoch": 141,
+      "validation_bce": 0.0040615800320800395,
+      "tau": 0.5,
+      "fmax_threshold": 0.95,
+      "smin_threshold": 0.97
+    },
+    {
+      "seed": 2,
+      "best_epoch": 141,
+      "validation_bce": 0.004062085110524112,
+      "tau": 0.5,
+      "fmax_threshold": 0.95,
+      "smin_threshold": 0.97
+    }
+  ],
+  "deep_knn": {
+    "k": 20,
+    "seed": "deterministic"
+  },
+  "n_train": 43027,
+  "n_validation": 21896,
+  "n_labels": 10260,
+  "n_active_labels": 5699,
+  "t1_official_role_proteins": {
+    "NK": 454,
+    "LK": 647
+  },
+  "t1_evaluable": {
+    "NK": 454,
+    "LK": 647
+  },
+  "t0_proxy_test_warning": "same held-out fold used for validation selection; not independent test",
+  "t1_selection": "none; thresholds and tau frozen on t0 validation before t1 prediction",
+  "data_manifest_sha256": "324dc8f93aa66780734717f6d05d7e3768d8e0e89093a953d973998744da84d6",
+  "code_sha256": "3e5b00bf953ffa9a9130ab0928938636b3deab9b0bbac5fbbc92436f559ce866",
+  "task_log": "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/cafa3_timeholdout_esmc300m_p20_v1/tasks.jsonl",
+  "combo_run_id": "cafa3-combo-82896f8d424c499d8d65f8bbd956c9c4"
+}
