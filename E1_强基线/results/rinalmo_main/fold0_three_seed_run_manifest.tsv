@@ -1,0 +1,5 @@
+name	run_id	code_sha256	best_neg1c_min	best_neg1c_max	best_neg2_min	best_neg2_max	history_rows	result_rows	checkpoints	best_k	validation_rows
+f0_modern_bce_s0	E1-frozen-modern-20261127-010655-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	52.0	1.0	44.0	8401.0	584	292.0		
+f0_modern_bce_s1	E1-frozen-modern-20261127-101756-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	25.0	1.0	26.0	8258.0	584	292.0		
+f0_modern_bce_s2	E1-frozen-modern-20261127-101757-ZDLg6Y	0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24	2.0	35.0	1.0	29.0	8406.0	584	292.0		
+f0_knn	E1-frozen-knn-rinalmo-lowmem-20261127-020106-ZDLg6Y							584		{'neg1c': 20, 'neg2': 20}	876.0

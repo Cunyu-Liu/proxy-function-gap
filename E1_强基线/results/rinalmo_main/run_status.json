@@ -1,7 +1,7 @@
 {
   "stage": "E1_RiNALMo_main_146",
   "status": "running_matrix_and_fold0_three_seed_audit",
-  "updated_at": "2026-11-27T20:08:46+08:00",
+  "updated_at": "2026-11-27T21:29:41+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
   "driver_pid": 125463,
   "smoke_experiment": "SUPV3L1_K562",
@@ -122,7 +122,7 @@
     "new_checkpoints_overwrite_old_each": 292,
     "complete_history_or_complete_marker": true,
     "fold0_three_seed_audit": {
-      "status": "deep_checkpoint_audit_running",
+      "status": "passed",
       "pid": 185283,
       "histories_complete": true,
       "val_test_predictions_present": true,
@@ -134,7 +134,18 @@
       "cross_seed_prediction_keys_aligned": true,
       "all_early_stop_rules_recomputed": true,
       "all_scores_finite": true,
-      "evidence": "f0_s1_s2_history_prediction_audit.json"
+      "evidence": ["f0_s1_s2_history_prediction_audit.json", "fold0_three_seed_audit.json", "fold0_three_seed_run_manifest.tsv"],
+      "deep_audit_modern_runs": 3,
+      "deep_audit_knn_runs": 1,
+      "all_cuda0_numeric_probes_passed": true,
+      "all_train_strict_three_folds": true,
+      "no_fold_minus1_in_train": true,
+      "all_raw_splits_aligned": true
+    },
+    "fold1_progress": {
+      "f1_s0_checkpoints": 177,
+      "f1_s1_checkpoints": 177,
+      "complete": false
     },
     "beyond_196_checkpoint_audit": {
       "task_198_and_262_readable": true,
