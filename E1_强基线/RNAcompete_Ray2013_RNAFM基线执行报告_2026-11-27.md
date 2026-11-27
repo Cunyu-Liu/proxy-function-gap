@@ -138,3 +138,7 @@ fold3 seed0首次train在checkpoint写入时失败，重试train成功后首次e
 ### 08:37 fold3完成与fold4启动
 
 fold3的12个神经run及双kNN已全部完成。新增`rbp_ood_mlp_f3_s1/s2`独立重放通过，best/stop分别`8/28、18/38`，每个147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测和selection SHA一致；fold3 RBP-OOD kNN重放147行指标一致。原队列于08:36启动`sequence_linear_f4_s0`，当前48/60神经eval、8/10 kNN，最终门禁未形成。
+
+### 08:44 fold4新增验收
+
+`sequence_linear_f4_s0`完成并独立重放通过：732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致，best/stop `8/28`。当前49/60神经eval、8/10 kNN，fold4 linear seed1训练中，最终门禁未形成。
