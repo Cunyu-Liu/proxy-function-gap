@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-11-27T01:09:20.264066+00:00",
+  "scope": "final caches completing full 292",
+  "n_files": 3,
+  "n_rows": 139180,
+  "all_ids_exact": true,
+  "all_shape_1280": true,
+  "all_fp16": true,
+  "all_finite": true,
+  "all_ids_sha256_match": true,
+  "files": [
+    {
+      "experiment": "ZNF800_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59896,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19371,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59913,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    }
+  ]
+}

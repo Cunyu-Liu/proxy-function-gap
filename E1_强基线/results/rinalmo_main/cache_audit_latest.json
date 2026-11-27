@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-11-27T00:49:26.937781+00:00",
+  "timestamp": "2026-11-27T01:09:20.264066+00:00",
   "scope": "all newly generated and newly materialized pilot-reused RiNALMo caches accepted so far",
-  "n_files": 279,
-  "n_rows": 8279478,
-  "last_increment_files": 16,
+  "n_files": 292,
+  "n_rows": 8765523,
+  "last_increment_files": 3,
   "all_ids_exact": true,
   "all_shape_1280": true,
   "all_fp16": true,
@@ -3067,6 +3067,151 @@
       "dtype_fp16": true,
       "finite": true,
       "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRN2_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 58953,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_HepG2",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 59888,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_HepG2",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 19002,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_K562",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 59916,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_K562",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 18838,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 46993,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 15536,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 36528,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 12068,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19143,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59896,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19371,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59913,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
     }
-  ]
+  ],
+  "full_292_complete": true,
+  "manifest_crosscheck": true
 }

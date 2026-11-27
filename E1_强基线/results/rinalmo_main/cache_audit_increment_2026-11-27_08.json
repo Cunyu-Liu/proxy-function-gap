@@ -1,0 +1,123 @@
+{
+  "timestamp": "2026-11-27T01:01:28.099194+00:00",
+  "scope": "new unique completed caches toward full 292",
+  "n_files": 10,
+  "n_rows": 346865,
+  "all_ids_exact": true,
+  "all_shape_1280": true,
+  "all_fp16": true,
+  "all_finite": true,
+  "all_ids_sha256_match": true,
+  "files": [
+    {
+      "experiment": "XRN2_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 58953,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_HepG2",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 59888,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_HepG2",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 19002,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_K562",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 59916,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "YBX3_K562",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 18838,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 46993,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 15536,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 36528,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZC3H11A_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 12068,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "ZNF800_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19143,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    }
+  ]
+}
