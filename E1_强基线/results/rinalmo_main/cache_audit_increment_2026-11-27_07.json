@@ -1,0 +1,189 @@
+{
+  "timestamp": "2026-11-27T00:49:26.937781+00:00",
+  "scope": "new unique completed caches after storage recovery",
+  "n_files": 16,
+  "n_rows": 282194,
+  "all_ids_exact": true,
+  "all_shape_1280": true,
+  "all_fp16": true,
+  "all_finite": true,
+  "all_ids_sha256_match": true,
+  "files": [
+    {
+      "experiment": "UPF1_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 59579,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UTP18_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 9412,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UTP18_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 3088,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UTP18_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 7980,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "UTP18_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 2625,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "WDR43_HepG2",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 16121,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "WDR43_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 5280,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "WDR43_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 11430,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "WDR43_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 3747,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRCC6_HepG2",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 17450,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRCC6_HepG2",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 5788,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRCC6_K562",
+      "kind": "neg",
+      "source": "pilot_cache_reused",
+      "rows": 41581,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRCC6_K562",
+      "kind": "pos",
+      "source": "pilot_cache_reused",
+      "rows": 13707,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRN2_HepG2",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 19841,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRN2_K562",
+      "kind": "neg",
+      "source": "generated",
+      "rows": 48441,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    },
+    {
+      "experiment": "XRN2_K562",
+      "kind": "pos",
+      "source": "generated",
+      "rows": 16124,
+      "ids_exact": true,
+      "shape_exact": true,
+      "dtype_fp16": true,
+      "finite": true,
+      "ids_sha256_match": true
+    }
+  ]
+}
