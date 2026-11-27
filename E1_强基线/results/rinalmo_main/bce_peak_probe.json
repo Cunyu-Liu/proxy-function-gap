@@ -1,0 +1,35 @@
+{
+  "selection": "largest fold0 task by train+validation+test rows",
+  "experiment": "EFTUD2_HepG2",
+  "track": "neg2",
+  "fold": 0,
+  "split_rows": [
+    27108,
+    8640,
+    3976
+  ],
+  "input_dim": 1280,
+  "hidden": 256,
+  "batch": 512,
+  "epochs": 2,
+  "loss": "bce",
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "dropout": 0.1,
+  "label_smoothing": 0.02,
+  "baseline_allocated_mib": 0.0,
+  "baseline_reserved_mib": 2.0,
+  "peak_allocated_mib": 222.19970703125,
+  "peak_reserved_mib": 242.0,
+  "cuda": {
+    "device": "cuda:0",
+    "name": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [
+      2.5,
+      -6.0
+    ]
+  },
+  "scientific_config_changed": false,
+  "expected_probe_epoch_failsafe": true,
+  "calibration_only": true
+}

@@ -14,6 +14,9 @@ STATUS=$LOGDIR/driver.status
 SMOKE_EXPS=$LOGDIR/smoke_tail_exp.txt
 MAIN_EXPS=$E0/main_exps.txt
 DATA_VERSION=e0-v2-id90-strict3train-main
+BCE_GPU_FREE_MIB=${BCE_GPU_FREE_MIB:-6000}
+BCE_WORKERS=${BCE_WORKERS:-2}
+SKIP_VALIDATED_PREFLIGHT=${SKIP_VALIDATED_PREFLIGHT:-0}
 export PYTHONPATH=/root/rareseq/pydeps
 export HF_HOME=/root/hf_home
 export HF_HUB_OFFLINE=1
@@ -87,7 +90,7 @@ run_modern() {
   set_status "RUNNING modern $tag f$fold s$seed"
   storage_wait 1
   set_status "RUNNING modern $tag f$fold s$seed"
-  gpu_wait 6000 12
+  gpu_wait "$BCE_GPU_FREE_MIB" 12
   if "$PY" e1_rinalmo_frozen_baselines.py modern --windows-dir "$E0/windows" --neg-dir "$E0/neg" \
       --emb-dir "$EMB" --positives-audit "$E0/positives_audit.tsv" \
       --split-clstr "$E0/splits/clusters.id90.clstr" --exps-file "$exps" \
@@ -164,20 +167,23 @@ print("SMOKE_EXPERIMENT", experiment, rows)
 PY
 fi
 
-set_status "RUNNING smoke embedding $(cat "$SMOKE_EXPS")"
-run_embed "$SMOKE_EXPS" "$LOGDIR/smoke_embed.log"
-run_modern "$SMOKE_EXPS" "$SMOKE" smoke 0 0
-run_knn "$SMOKE_EXPS" "$SMOKE" smoke 0
-run_audit "$SMOKE_EXPS" "$SMOKE" "$SMOKE/audit" 0 0 "$LOGDIR/smoke_audit.log"
-echo "SMOKE_ACCEPTED $(date -Is) $(cat "$SMOKE_EXPS")" > "$SMOKE/ACCEPTED"
-set_status "SMOKE_ACCEPTED $(cat "$SMOKE_EXPS")"
-
-set_status "RUNNING main embedding 146 experiments"
-run_embed "$MAIN_EXPS" "$LOGDIR/main_embed.log"
+if [ "$SKIP_VALIDATED_PREFLIGHT" != 1 ]; then
+  set_status "RUNNING smoke embedding $(cat "$SMOKE_EXPS")"
+  run_embed "$SMOKE_EXPS" "$LOGDIR/smoke_embed.log"
+  run_modern "$SMOKE_EXPS" "$SMOKE" smoke 0 0
+  run_knn "$SMOKE_EXPS" "$SMOKE" smoke 0
+  run_audit "$SMOKE_EXPS" "$SMOKE" "$SMOKE/audit" 0 0 "$LOGDIR/smoke_audit.log"
+  echo "SMOKE_ACCEPTED $(date -Is) $(cat "$SMOKE_EXPS")" > "$SMOKE/ACCEPTED"
+  set_status "SMOKE_ACCEPTED $(cat "$SMOKE_EXPS")"
+  set_status "RUNNING main embedding 146 experiments"
+  run_embed "$MAIN_EXPS" "$LOGDIR/main_embed.log"
+fi
 run_modern "$MAIN_EXPS" "$ROOT" main 0 0
 run_knn "$MAIN_EXPS" "$ROOT" main 0
-run_audit "$MAIN_EXPS" "$ROOT" "$BASE/acceptance/fold0_seed0" 0 0 "$LOGDIR/main_fold0_seed0_audit.log"
-echo "FIRST_MAIN_ACCEPTED $(date -Is)" > "$BASE/acceptance/first_main_accepted"
+if [ ! -f "$BASE/acceptance/first_main_accepted" ]; then
+  run_audit "$MAIN_EXPS" "$ROOT" "$BASE/acceptance/fold0_seed0" 0 0 "$LOGDIR/main_fold0_seed0_audit.log"
+  echo "FIRST_MAIN_ACCEPTED $(date -Is)" > "$BASE/acceptance/first_main_accepted"
+fi
 
 PAIRS=()
 for fold in 0 1 2 3 4; do
@@ -190,15 +196,22 @@ modern_worker() {
   while [ "$index" -lt "${#PAIRS[@]}" ]; do
     pair=${PAIRS[$index]}; fold=${pair%%:*}; seed=${pair##*:}
     run_modern "$MAIN_EXPS" "$ROOT" main "$fold" "$seed" || return 1
-    index=$((index + 2))
+    index=$((index + BCE_WORKERS))
   done
 }
-set_status "RUNNING remaining BCE matrix"
-modern_worker 0 & worker0=$!
-modern_worker 1 & worker1=$!
+set_status "RUNNING remaining BCE matrix workers=$BCE_WORKERS"
 rc=0
-wait "$worker0" || rc=1
-wait "$worker1" || rc=1
+if [ "$BCE_WORKERS" = 1 ]; then
+  modern_worker 0 || rc=1
+elif [ "$BCE_WORKERS" = 2 ]; then
+  modern_worker 0 & worker0=$!
+  modern_worker 1 & worker1=$!
+  wait "$worker0" || rc=1
+  wait "$worker1" || rc=1
+else
+  echo "INVALID BCE_WORKERS=$BCE_WORKERS" >&2
+  exit 1
+fi
 if [ "$rc" -ne 0 ]; then exit 1; fi
 for fold in 1 2 3 4; do run_knn "$MAIN_EXPS" "$ROOT" main "$fold"; done
 
