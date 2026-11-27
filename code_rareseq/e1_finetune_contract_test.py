@@ -3,12 +3,14 @@ import json
 import os
 import tempfile
 import hashlib
+from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
 
-from e1_finetune import (EarlyStopping, atomic_json, atomic_marker, atomic_npz,
+from e1_finetune import (EarlyStopping, SequenceLoader, atomic_json, atomic_marker, atomic_npz,
                          load_checkpoint_compressed, save_checkpoint_compressed)
+from e1_frozen_baselines import TaskLoader
 from e1_finetune_select import select_rank
 from e1_finetune_verify import verify_run
 
@@ -160,12 +162,49 @@ def compression_roundtrip_check():
         assert not [name for name in os.listdir(directory) if name.endswith(".tmp") or "best.restore." in name]
 
 
+def sequence_loader_check():
+    with tempfile.TemporaryDirectory() as root:
+        windows = os.path.join(root, "windows")
+        negatives = os.path.join(root, "neg")
+        os.makedirs(windows)
+        os.makedirs(negatives)
+        experiment = "RBP_Cell"
+        ids = [f"p{fold}" for fold in (-1, 0, 1, 2, 3, 4)]
+        pd.DataFrame({"window_id": ids, "seq": ["A"] * len(ids), "unused": list(range(len(ids)))}).to_csv(
+            os.path.join(windows, f"{experiment}.windows.tsv"), sep="\t", index=False)
+        pd.DataFrame({"window_id": ids, "fold": [-1, 0, 1, 2, 3, 4]}).to_csv(
+            os.path.join(negatives, "window_fold_map.tsv"), sep="\t", index=False)
+        rows = []
+        for track in ("neg1c", "neg2"):
+            for fold in (-1, 0, 1, 2, 3, 4):
+                rows.append({"window_id": f"{track}-n{fold}", "track": track, "fold": fold, "seq": "U"})
+        pd.DataFrame(rows).to_csv(os.path.join(negatives, f"{experiment}.negatives.tsv"), sep="\t", index=False)
+        audit = os.path.join(root, "positives_audit.tsv")
+        pd.DataFrame({"rbp": ["RBP"], "n_sites": [5]}).to_csv(audit, sep="\t", index=False)
+        exps = os.path.join(root, "exps.txt")
+        with open(exps, "w") as handle:
+            handle.write(experiment + "\n")
+        args = SimpleNamespace(windows_dir=windows, neg_dir=negatives, positives_audit=audit,
+                               exps_file=exps, folds="0", tracks="neg1c,neg2")
+        reference = list(TaskLoader(args).tasks())
+        optimized = list(SequenceLoader(args).tasks())
+        assert len(reference) == len(optimized) == 2
+        for expected, actual in zip(reference, optimized):
+            assert expected["train_folds"] == actual["train_folds"] == [2, 3, 4]
+            assert expected["fold_counts"] == actual["fold_counts"]
+            for (expected_ids, expected_y), (actual_ids, actual_y) in zip(expected["splits"], actual["splits"]):
+                assert expected_ids == actual_ids
+                assert expected_y.tolist() == actual_y.tolist()
+                assert "p-1" not in actual_ids and f"{actual['track']}-n-1" not in actual_ids
+
+
 def main():
     early_stopping_check()
     selection_check()
     verification_check()
     representative_selection_check()
     compression_roundtrip_check()
+    sequence_loader_check()
     print("E1_FINETUNE_CONTRACT_OK: convergence, selection, artifact verification, lossless checkpoint recovery")
 
 

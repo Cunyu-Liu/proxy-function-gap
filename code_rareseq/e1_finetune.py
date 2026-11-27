@@ -17,8 +17,8 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from e0_g0_models import _fast_tokenizer_setup  # noqa: E402
-from e1_frozen_baselines import (TaskLoader, metrics, prediction_rows, split_audit_rows,  # noqa: E402
-                                 stable_seed)
+from e1_frozen_baselines import (TaskLoader, metrics, prediction_rows, read_exps, rbp_of,  # noqa: E402
+                                 split_audit_rows, stable_seed)
 from e1_locked_logger import E1RunLogger as RunLogger  # noqa: E402
 from log_run import sha256_file  # noqa: E402
 
@@ -148,6 +148,46 @@ class SequenceLoader(TaskLoader):
     def __init__(self, args):
         super().__init__(args)
         self.cache = {}
+
+    def tasks(self):
+        for name in read_exps(self.args.exps_file):
+            pos = pd.read_csv(os.path.join(self.args.windows_dir, f"{name}.windows.tsv"), sep="\t",
+                              usecols=["window_id"])
+            neg = pd.read_csv(os.path.join(self.args.neg_dir, f"{name}.negatives.tsv"), sep="\t",
+                              usecols=["window_id", "track", "fold"])
+            pos_fold = pos.window_id.map(self.fold_by_wid)
+            if pos_fold.isna().any():
+                raise ValueError(f"{name}: positive windows missing frozen fold assignment")
+            for fold in [int(x) for x in self.args.folds.split(",")]:
+                val_fold = (fold + 1) % 5
+                train_folds = sorted(set(range(5)) - {fold, val_fold})
+                if len(train_folds) != 3:
+                    raise ValueError(f"fold{fold}: expected exactly three train folds")
+                for track in self.args.tracks.split(","):
+                    ntr = neg[(neg.track == track) & (neg.fold.isin(train_folds))]
+                    nva = neg[(neg.track == track) & (neg.fold == val_fold)]
+                    nte = neg[(neg.track == track) & (neg.fold == fold)]
+                    ptr = pos[pos_fold.isin(train_folds)]
+                    pva = pos[pos_fold == val_fold]
+                    pte = pos[pos_fold == fold]
+                    if (ptr.window_id.map(self.fold_by_wid) == -1).any():
+                        raise AssertionError(f"{name}/fold{fold}: fold=-1 entered train")
+                    splits = []
+                    fold_counts = []
+                    for p, n in ((ptr, ntr), (pva, nva), (pte, nte)):
+                        splits.append((p.window_id.tolist() + n.window_id.tolist(),
+                                       np.array([1] * len(p) + [0] * len(n), dtype=np.int64)))
+                        fold_counts.append({
+                            "positive": {str(int(k)): int(v) for k, v in
+                                         p.window_id.map(self.fold_by_wid).value_counts().sort_index().items()},
+                            "negative": {str(int(k)): int(v) for k, v in
+                                         n.fold.value_counts().sort_index().items()},
+                        })
+                    if any(len(s[0]) == 0 for s in splits):
+                        raise ValueError(f"{name}/fold{fold}/{track}: empty train/val/test split")
+                    yield {"experiment": name, "rbp": rbp_of(name), "tier": self.tiers[rbp_of(name)],
+                           "fold": fold, "val_fold": val_fold, "train_folds": train_folds,
+                           "track": track, "splits": splits, "fold_counts": fold_counts}
 
     def sequences(self, name):
         if name not in self.cache:
