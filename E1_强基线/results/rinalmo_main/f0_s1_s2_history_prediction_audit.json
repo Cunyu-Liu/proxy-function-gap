@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-11-27T12:15:58.222615+00:00",
+  "runs": [
+    {
+      "seed": 1,
+      "history_rows": 8258,
+      "result_rows": 584,
+      "checkpoints": 292,
+      "test_prediction_rows": 1778203,
+      "val_prediction_rows": 1728417,
+      "all_early_stop_rules": true,
+      "all_scores_finite": true,
+      "complete": true
+    },
+    {
+      "seed": 2,
+      "history_rows": 8406,
+      "result_rows": 584,
+      "checkpoints": 292,
+      "test_prediction_rows": 1778203,
+      "val_prediction_rows": 1728417,
+      "all_early_stop_rules": true,
+      "all_scores_finite": true,
+      "complete": true
+    }
+  ],
+  "cross_seed_prediction_keys_aligned": true,
+  "status": "passed"
+}

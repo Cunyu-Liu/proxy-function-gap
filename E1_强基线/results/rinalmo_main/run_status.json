@@ -122,11 +122,19 @@
     "new_checkpoints_overwrite_old_each": 292,
     "complete_history_or_complete_marker": true,
     "fold0_three_seed_audit": {
-      "status": "running",
+      "status": "deep_checkpoint_audit_running",
       "pid": 185283,
       "histories_complete": true,
       "val_test_predictions_present": true,
-      "complete_markers": true
+      "complete_markers": true,
+      "history_prediction_independent_audit": "passed",
+      "history_rows": {"seed1": 8258, "seed2": 8406},
+      "test_prediction_rows_each": 1778203,
+      "val_prediction_rows_each": 1728417,
+      "cross_seed_prediction_keys_aligned": true,
+      "all_early_stop_rules_recomputed": true,
+      "all_scores_finite": true,
+      "evidence": "f0_s1_s2_history_prediction_audit.json"
     },
     "beyond_196_checkpoint_audit": {
       "task_198_and_262_readable": true,
