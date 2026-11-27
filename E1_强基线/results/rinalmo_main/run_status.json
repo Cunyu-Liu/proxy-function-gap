@@ -1,7 +1,7 @@
 {
   "stage": "E1_RiNALMo_main_146",
-  "status": "running_matrix_and_fold0_three_seed_audit",
-  "updated_at": "2026-11-27T21:29:41+08:00",
+  "status": "running_f1_s2_and_remaining_matrix",
+  "updated_at": "2026-11-27T21:47:48+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
   "driver_pid": 125463,
   "smoke_experiment": "SUPV3L1_K562",
@@ -85,7 +85,7 @@
   "formal_bce_started": true,
   "formal_knn_started": true,
   "formal_fold0_audit_complete": true,
-  "completed_bce_runs": 3,
+  "completed_bce_runs": 5,
   "completed_knn_runs": 1,
   "first_main_acceptance": {
     "status": "passed",
@@ -143,9 +143,18 @@
       "all_raw_splits_aligned": true
     },
     "fold1_progress": {
-      "f1_s0_checkpoints": 177,
-      "f1_s1_checkpoints": 177,
-      "complete": false
+      "f1_s0_checkpoints": 292,
+      "f1_s1_checkpoints": 292,
+      "complete": true,
+      "f1_s2_started": true,
+      "history_prediction_independent_audit": "passed",
+      "history_rows": {"seed0": 8372, "seed1": 8350},
+      "test_prediction_rows_each": 1728417,
+      "val_prediction_rows_each": 1728904,
+      "cross_seed_prediction_keys_aligned": true,
+      "all_early_stop_rules_recomputed": true,
+      "all_scores_finite": true,
+      "evidence": "f1_s0_s1_history_prediction_audit.json"
     },
     "beyond_196_checkpoint_audit": {
       "task_198_and_262_readable": true,
