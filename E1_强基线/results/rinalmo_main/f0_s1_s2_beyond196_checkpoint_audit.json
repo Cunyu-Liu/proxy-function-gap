@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-11-27T11:55:36.076486+00:00",
+  "old_failure_task_196_passed": true,
+  "checkpoint_counts": [
+    262,
+    262
+  ],
+  "complete_history": false,
+  "complete_markers": false,
+  "checks": [
+    {
+      "seed": 1,
+      "task_index": 198,
+      "experiment": "SF3B4_K562",
+      "track": "neg2",
+      "checkpoint": "SF3B4_K562.f0.neg2.best.pt",
+      "readable": true,
+      "best_epoch": 8,
+      "stopped_epoch": 28,
+      "mean_dim": 1280,
+      "contract_ok": true
+    },
+    {
+      "seed": 1,
+      "task_index": 262,
+      "experiment": "UPF1_K562",
+      "track": "neg2",
+      "checkpoint": "UPF1_K562.f0.neg2.best.pt",
+      "readable": true,
+      "best_epoch": 8,
+      "stopped_epoch": 28,
+      "mean_dim": 1280,
+      "contract_ok": true
+    },
+    {
+      "seed": 2,
+      "task_index": 198,
+      "experiment": "SF3B4_K562",
+      "track": "neg2",
+      "checkpoint": "SF3B4_K562.f0.neg2.best.pt",
+      "readable": true,
+      "best_epoch": 7,
+      "stopped_epoch": 27,
+      "mean_dim": 1280,
+      "contract_ok": true
+    },
+    {
+      "seed": 2,
+      "task_index": 262,
+      "experiment": "UPF1_K562",
+      "track": "neg2",
+      "checkpoint": "UPF1_K562.f0.neg2.best.pt",
+      "readable": true,
+      "best_epoch": 9,
+      "stopped_epoch": 29,
+      "mean_dim": 1280,
+      "contract_ok": true
+    }
+  ]
+}

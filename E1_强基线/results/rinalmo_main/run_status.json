@@ -1,7 +1,7 @@
 {
   "stage": "E1_RiNALMo_main_146",
   "status": "running_remaining_matrix",
-  "updated_at": "2026-11-27T19:42:46+08:00",
+  "updated_at": "2026-11-27T19:55:50+08:00",
   "remote_host": "px2-jcy.matpool.com:29375",
   "driver_pid": 125463,
   "smoke_experiment": "SUPV3L1_K562",
@@ -117,10 +117,18 @@
     "active_bce_workers": 2,
     "third_worker_started": false,
     "preexisting_failed_run_checkpoints_each": 197,
-    "new_checkpoint_progress_beyond_196_confirmed": false,
-    "current_new_run_modern_tasks_each": 164,
-    "new_checkpoints_overwrite_old_each": 164,
+    "new_checkpoint_progress_beyond_196_confirmed": true,
+    "current_new_run_modern_tasks_each": 262,
+    "new_checkpoints_overwrite_old_each": 262,
     "complete_history_or_complete_marker": false,
+    "beyond_196_checkpoint_audit": {
+      "task_198_and_262_readable": true,
+      "best_and_stopped_epoch_match_logs": true,
+      "mean_dim_1280": true,
+      "cuda_probe_match": true,
+      "iostream_failure_recurred": false,
+      "evidence": "f0_s1_s2_beyond196_checkpoint_audit.json"
+    },
     "observation_cpu_time_advanced": true,
     "observation_io_advanced": true,
     "gpu_gate": {
