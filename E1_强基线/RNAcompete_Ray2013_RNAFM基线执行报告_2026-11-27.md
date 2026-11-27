@@ -150,3 +150,7 @@ fold3的12个神经run及双kNN已全部完成。新增`rbp_ood_mlp_f3_s1/s2`独
 ### 09:11 fold4新增验收
 
 `sequence_linear_f4_s2`完成并独立重放通过：732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致，best/stop `36/56`。此前完成标记缺失仅因长早停未结束，未计为失败或完成。当前51/60神经eval、8/10 kNN，fold4 MLP seed0已启动，最终门禁未形成。
+
+## 9. 最终五折报告指针
+
+五折已于10:44全部完成：60/60神经eval、10/10 kNN，`verify-final`与`summarize`均成功。独立聚合验收70/70评价、60个checkpoint重放、525条run级记录和45条最终统计行通过。正式结果及证据边界见`E1_强基线/RNAcompete_Ray2013_RNAFM五折最终报告_2026-11-27.md`；最终独立统计SHA256为`71a4b708120d8831acc7362da49a2a2f9159e4e486ad1cd82a4c610890b546f1`。
