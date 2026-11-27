@@ -114,3 +114,7 @@ fold3 seed0首次train在checkpoint写入时失败，重试train成功后首次e
 ### 08:04新增验收
 
 `sequence_mlp_f3_s0`完成并独立重放通过：732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致，best/stop `47/67`。当前40/60神经eval、6/10 kNN，fold3 MLP seed1训练中，最终门禁未形成。
+
+### 08:08新增验收
+
+`sequence_mlp_f3_s1`完成并独立重放通过：732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致，best/stop `58/78`。当前41/60神经eval、6/10 kNN，fold3 MLP seed2训练中，最终门禁未形成。
