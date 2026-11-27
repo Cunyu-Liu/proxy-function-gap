@@ -1,0 +1,53 @@
+{
+  "modern": [
+    {
+      "name": "f0_modern_bce_s0",
+      "run_id": "E1-frozen-modern-20261127-010655-ZDLg6Y",
+      "code_sha256": "0f9d9f624c87f0677a2a95c790e331a74afd328dd08444b3c67feb4fe0ce2c24",
+      "best_neg1c_min": 2,
+      "best_neg1c_max": 52,
+      "best_neg2_min": 1,
+      "best_neg2_max": 44,
+      "history_rows": 8401,
+      "result_rows": 584,
+      "checkpoints": 292
+    }
+  ],
+  "knn": [
+    {
+      "name": "f0_knn",
+      "run_id": "E1-frozen-knn-rinalmo-lowmem-20261127-020106-ZDLg6Y",
+      "best_k": {
+        "neg1c": 20,
+        "neg2": 20
+      },
+      "validation_rows": 876,
+      "result_rows": 584
+    }
+  ],
+  "prediction_folds": [
+    {
+      "fold": 0,
+      "split": "test",
+      "rows": 1778203,
+      "neg2_duplicate_ids": 2122
+    }
+  ],
+  "checks": {
+    "source_log_malformed_lines": 0,
+    "n_experiments": 146,
+    "n_modern_runs": 1,
+    "n_knn_runs": 1,
+    "n_tracks": 2,
+    "n_folds": 1,
+    "n_seeds": 1,
+    "all_early_stopped_below_1000": true,
+    "all_cuda0_numeric_probes_passed": true,
+    "all_train_strict_three_folds": true,
+    "no_fold_minus1_in_train": true,
+    "all_prediction_keys_aligned": true,
+    "all_raw_splits_aligned": true,
+    "all_scores_finite": true
+  },
+  "run_id": "E1-rinalmo-independent-audit-20261127-023724-ZDLg6Y"
+}
