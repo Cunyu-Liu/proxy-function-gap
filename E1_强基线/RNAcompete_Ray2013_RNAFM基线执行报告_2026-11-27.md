@@ -126,3 +126,7 @@ fold3 seed0首次train在checkpoint写入时失败，重试train成功后首次e
 ### 08:22新增验收
 
 `rbp_ood_linear_f3_s0`完成并独立重放通过：147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测和selection SHA一致，best/stop `3/23`。当前43/60神经eval、7/10 kNN，fold3 RBP-OOD linear seed1训练中，fold4尚未启动，最终门禁未形成。
+
+### 08:25新增验收
+
+`rbp_ood_linear_f3_s1/s2`均完成并独立重放通过：best/stop均为`3/23`，各147行指标、219,990条RNA、49个目标实验、checkpoint CUDA预测和selection SHA一致。当前45/60神经eval、7/10 kNN，fold3 RBP-OOD MLP seed0已启动，fold4尚未启动，最终门禁未形成。
