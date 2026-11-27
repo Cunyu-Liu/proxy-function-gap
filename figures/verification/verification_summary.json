@@ -5,7 +5,8 @@
     "fig2": "accepted_strict3train_main",
     "fig3": "external_descriptive",
     "fig4": "five_split_descriptive",
-    "fig5": "accepted_whole_rbp_holdout_descriptive"
+    "fig5": "accepted_whole_rbp_holdout_descriptive",
+    "fig6": "accepted_rnacompete_five_fold_descriptive"
   },
   "figures": {
     "fig1": {
@@ -66,6 +67,14 @@
       ],
       "evidence_level": "ACCEPTED E5 whole-RBP holdout pilot fold0 test; 12 RBPs × 2 tracks × 3 seeds; descriptive only; no unified winner or significance claim",
       "figure_stem": "Fig5_E5_whole_RBP_holdout_three_seed_OOD"
+    },
+    "fig6": {
+      "run_ids": [
+        "rnacompete-verify-final-all-all-f0-s0-2026-11-27T021412.509921Z0000-4099546",
+        "rnacompete-summarize-all-all-f0-s0-2026-11-27T024426.072076Z0000-4101649"
+      ],
+      "evidence_level": "ACCEPTED RNAcompete Ray2013 frozen RNA-FM five-fold; sequence ID90 and whole-RBP-OOD; descriptive only; low absolute OOD performance",
+      "figure_stem": "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD"
     }
   },
   "audit_history": {

@@ -26,6 +26,7 @@ FIGURES = {
     3: "Fig3_E5_PARCLIP_cross_protocol_300dpi.png",
     4: "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2_300dpi.png",
     5: "Fig5_E5_whole_RBP_holdout_three_seed_OOD_300dpi.png",
+    6: "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD_300dpi.png",
 }
 
 CSL = """<?xml version="1.0" encoding="utf-8"?>
@@ -144,7 +145,7 @@ def preamble(cutoff: str) -> str:
 \begin{minipage}{0.90\textwidth}
 \centering
 \small
-RNAcompete five-fold neural evaluation at the cutoff: \textbf{14/60 completed}. Incomplete results are excluded from every quantitative claim. RiNALMo, CAFA, and full fine-tuning matrices remain pending team compute availability and are not accepted evidence.
+RNAcompete five-fold evaluation at the cutoff: \textbf{60/60 neural and 10/10 deterministic kNN evaluations accepted}. RiNALMo, LoRA/full, and CAFA3 matrices remain ongoing and contribute no accepted results.
 \end{minipage}
 \vfill
 \begin{minipage}{0.90\textwidth}
@@ -233,13 +234,14 @@ def prepare_source(text: str) -> str:
 
 
 def prepare_latex(text: str) -> str:
-    ledger_start = text.index(r"\begin{longtable}[]{@{}ll@{}}")
+    ledger_start = text.rfind(r"\begin{longtable}")
+    ledger_end = text.index(r"\toprule", ledger_start)
     ledger_spec = (
         "\\begin{longtable}[]{@{}\n"
         "  >{\\raggedright\\arraybackslash}p{(\\columnwidth - 2\\tabcolsep) * \\real{0.24}}\n"
-        "  >{\\raggedright\\arraybackslash}p{(\\columnwidth - 2\\tabcolsep) * \\real{0.76}}@{}}"
+        "  >{\\raggedright\\arraybackslash}p{(\\columnwidth - 2\\tabcolsep) * \\real{0.76}}@{}}\n"
     )
-    text = text[:ledger_start] + ledger_spec + text[ledger_start + len(r"\begin{longtable}[]{@{}ll@{}}") :]
+    text = text[:ledger_start] + ledger_spec + text[ledger_end:]
 
     def normalize(match: re.Match[str]) -> str:
         header = match.group(0)
@@ -276,6 +278,11 @@ def spot_checks(source_text: str, pdf_text: str) -> list[str]:
     fig5 = read_tsv(ROOT / "figures/verification/data/fig5/macro_three_seed.tsv")
     fig4_function = read_tsv(ROOT / "figures/verification/data/fig4/function_split_summary.tsv")
     fig4_ood = read_tsv(ROOT / "figures/verification/data/fig4/ood_v2_split_summary.tsv")
+    rnacompete_report = (ROOT / "E1_强基线/RNAcompete_Ray2013_RNAFM五折最终报告_2026-11-27.md").read_text(encoding="utf-8")
+    rnacompete_values = ["0.475605", "0.430202", "0.352559", "0.185360", "0.111699", "0.098188"]
+    for value in rnacompete_values:
+        if value not in rnacompete_report:
+            raise ValueError(f"RNAcompete final report is missing {value}")
 
     def rounded(value: str, digits: int = 6) -> str:
         return f"{float(value):.{digits}f}"
@@ -312,6 +319,7 @@ def spot_checks(source_text: str, pdf_text: str) -> list[str]:
                 rounded(protein_msp["split_min"]),
             ],
         ),
+        ("pass 4: RNAcompete sequence and RBP-OOD", rnacompete_values),
     ]
     normalized_pdf = " ".join(pdf_text.split())
     messages = []
@@ -398,12 +406,12 @@ def validate_pdf(
     if len(image_xrefs) < len(FIGURES):
         raise ValueError(f"Only {len(image_xrefs)} unique embedded images were found")
 
-    for number in range(1, 7):
+    for number in range(1, 8):
         if f"Table {number}." not in full_text:
             raise ValueError(f"Table {number} caption is missing")
     table_count = latex_text.count(r"\begin{longtable}")
-    if table_count < 7:
-        raise ValueError(f"Expected at least seven longtables, found {table_count}")
+    if table_count < 8:
+        raise ValueError(f"Expected at least eight longtables, found {table_count}")
     missing_glyphs = re.findall(r"Missing character:[^\n]*", engine_log)
     if missing_glyphs:
         raise ValueError("LaTeX missing glyphs detected:\n" + "\n".join(missing_glyphs))

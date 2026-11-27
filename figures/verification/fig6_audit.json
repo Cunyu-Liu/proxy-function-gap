@@ -1,0 +1,181 @@
+{
+  "evidence_level": "ACCEPTED RNAcompete Ray2013 frozen RNA-FM five-fold; sequence ID90 and whole-RBP-OOD; descriptive only; low absolute OOD performance",
+  "sources": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/rnacompete_ray2013_final/final_independent_run_metrics.tsv.gz",
+      "bytes": 20139,
+      "sha256": "a276339a28b02a862a24c1edd48fed9cc3115c863a6b6f6e7fd3143acabba05c"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/rnacompete_ray2013_final/final_independent_summary.tsv",
+      "bytes": 6363,
+      "sha256": "71a4b708120d8831acc7362da49a2a2f9159e4e486ad1cd82a4c610890b546f1"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/rnacompete_ray2013_final/final_independent_verification.json",
+      "bytes": 715,
+      "sha256": "78ec55a4448af1668ce7c66eaa011535626acda0958bb951ddaa224c437088bf"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/data/rnacompete_ray2013_final/final_gate.json",
+      "bytes": 29681,
+      "sha256": "83ec4cfef1c25c91839e8e51d40dc34272bb901f76d681d61ad6c199b41fe15b"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/E1_强基线/RNAcompete_Ray2013_RNAFM五折最终报告_2026-11-27.md",
+      "bytes": 5506,
+      "sha256": "7500413bc34d895e14edee0edeee3abd86676d36525993dd832de39fa83a6bfa"
+    }
+  ],
+  "pass1_schema_finite": {
+    "run_rows": 525,
+    "summary_rows": 45,
+    "evaluations": 70,
+    "neural_checkpoint_replays": 60,
+    "source_sha256_match": true
+  },
+  "pass2_configuration_alignment": {
+    "folds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "neural_seeds": [
+      0,
+      1,
+      2
+    ],
+    "neural_runs_per_group": 15,
+    "knn_runs_per_group": 5,
+    "selection_test_used": false,
+    "sequence_all_experiments": 244,
+    "sequence_tail_experiments": 80,
+    "rbp_experiments_per_fold": [
+      48,
+      49
+    ],
+    "rbp_groups_per_fold": [
+      40,
+      42
+    ]
+  },
+  "pass3_report_recalculation": {
+    "all_45_summary_rows_recalculated": true,
+    "all_45_groups_fold0_4_support_consistent": true,
+    "sequence_effects": [
+      {
+        "tier": "Overall",
+        "metric": "spearman",
+        "effect": "mlp_minus_linear",
+        "delta_mean": 0.04178033838383386,
+        "delta_sd": 0.0012182115357409905,
+        "delta_min": 0.040047868673696974,
+        "delta_max": 0.0440203096742709,
+        "n_comparisons": 15
+      },
+      {
+        "tier": "Overall",
+        "metric": "spearman",
+        "effect": "mlp_minus_knn",
+        "delta_mean": 0.11522927233223905,
+        "delta_sd": 0.0009598447785027186,
+        "delta_min": 0.11467333104152089,
+        "delta_max": 0.11693408324592297,
+        "n_comparisons": 5
+      },
+      {
+        "tier": "Overall",
+        "metric": "pearson",
+        "effect": "mlp_minus_linear",
+        "delta_mean": 0.06435854595791937,
+        "delta_sd": 0.0020050858207229403,
+        "delta_min": 0.06011600460331079,
+        "delta_max": 0.06774332821247092,
+        "n_comparisons": 15
+      },
+      {
+        "tier": "Overall",
+        "metric": "pearson",
+        "effect": "mlp_minus_knn",
+        "delta_mean": 0.1559837867438994,
+        "delta_sd": 0.0037479837756466653,
+        "delta_min": 0.15250683310151153,
+        "delta_max": 0.16167364967679365,
+        "n_comparisons": 5
+      },
+      {
+        "tier": "tail",
+        "metric": "spearman",
+        "effect": "mlp_minus_linear",
+        "delta_mean": 0.04540324093463959,
+        "delta_sd": 0.0023290575947468935,
+        "delta_min": 0.040588221814652214,
+        "delta_max": 0.048908915105680184,
+        "n_comparisons": 15
+      },
+      {
+        "tier": "tail",
+        "metric": "spearman",
+        "effect": "mlp_minus_knn",
+        "delta_mean": 0.12304621647607691,
+        "delta_sd": 0.0008692155014240147,
+        "delta_min": 0.1217328713709872,
+        "delta_max": 0.12400059944804931,
+        "n_comparisons": 5
+      },
+      {
+        "tier": "tail",
+        "metric": "pearson",
+        "effect": "mlp_minus_linear",
+        "delta_mean": 0.06203399259837224,
+        "delta_sd": 0.0029717907497877755,
+        "delta_min": 0.05760031049616138,
+        "delta_max": 0.06715068684181968,
+        "n_comparisons": 15
+      },
+      {
+        "tier": "tail",
+        "metric": "pearson",
+        "effect": "mlp_minus_knn",
+        "delta_mean": 0.1585063258847828,
+        "delta_sd": 0.004715859535052034,
+        "delta_min": 0.1534190665123859,
+        "delta_max": 0.1631448453749189,
+        "n_comparisons": 5
+      }
+    ],
+    "rbp_knn_relative_spearman_advantage_over_mlp": 0.07366080282268965,
+    "rbp_max_experiment_spearman": 0.1853595261784063,
+    "reliable_ood_claim": false,
+    "significance_claim": false
+  },
+  "plot_data": [
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig6/run_metrics_525.tsv",
+      "bytes": 55215,
+      "sha256": "4a1d888ea7acb3f1ccb1dbab7974f0f1e2912cea4db0dd28682bb23b4ffc2f98"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig6/summary_45_recalculated.tsv",
+      "bytes": 8611,
+      "sha256": "42bd960abbdd99723609e7f5df92ff1291d20b9d39cdb0c025bba278f4d0e828"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig6/sequence_effects.tsv",
+      "bytes": 989,
+      "sha256": "59251e40f025308352621eb80deea471140f7a47a564acef7673f50f3055b8a1"
+    },
+    {
+      "path": "/Users/liucunyu/Documents/课题idea 数据 结论/浙江大学/生物长尾数据/proxy-function-gap/figures/verification/data/fig6/fold_seed_distribution.tsv",
+      "bytes": 11960,
+      "sha256": "82df7317d9fd43389def1c631dc17669121940887a87d7eb36d2def54af665dc"
+    }
+  ],
+  "figure_stem": "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD",
+  "run_ids": [
+    "rnacompete-verify-final-all-all-f0-s0-2026-11-27T021412.509921Z0000-4099546",
+    "rnacompete-summarize-all-all-f0-s0-2026-11-27T024426.072076Z0000-4101649"
+  ]
+}

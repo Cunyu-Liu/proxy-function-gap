@@ -83,6 +83,23 @@
         "Seed stability",
         "no bootstrap or unified winner"
       ]
+    },
+    "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD": {
+      "png300_size": [
+        4024,
+        2320
+      ],
+      "png600_size": [
+        8061,
+        4641
+      ],
+      "pdf_pages": 1,
+      "svg_xml": true,
+      "required_pdf_text": [
+        "Sequence Overall",
+        "Sequence tail",
+        "relative gain ≠ reliable OOD"
+      ]
     }
   },
   "archived_fig2_warning_verified": true,
@@ -92,9 +109,10 @@
       2940
     ],
     "grayscale_mode": "L",
-    "grayscale_std": 23.421906895167933,
+    "grayscale_std": 26.378403192248413,
     "grayscale_unique_values": 256,
     "fig2_included": true,
-    "fig5_included": true
+    "fig5_included": true,
+    "fig6_included": true
   }
 }

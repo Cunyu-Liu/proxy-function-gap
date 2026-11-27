@@ -32,6 +32,8 @@ E6 = PROJECT_ROOT / "E6_蛋白迁移"
 E5_REPORT = PROJECT_ROOT / "E5_OOD" / "PAR-CLIP跨协议评测报告_2026-11-25.md"
 E5_HOLDOUT = PROJECT_ROOT / "E5_OOD" / "results" / "holdout_convergence_final_summary"
 E5_HOLDOUT_REPORT = PROJECT_ROOT / "E5_OOD" / "E5_整RBP留出三seed双轨最终报告_2026-11-26.md"
+RNACOMPETE = DATA_ROOT / "rnacompete_ray2013_final"
+RNACOMPETE_REPORT = E1 / "RNAcompete_Ray2013_RNAFM五折最终报告_2026-11-27.md"
 
 RUNS = {
     "fig1": [
@@ -72,6 +74,10 @@ RUNS = {
         "E5-rbp-holdout-convergence-s1-neg2-20261126-002502-ZDLg6Y",
         "E5-rbp-holdout-convergence-s2-neg1c-20261126-014523-ZDLg6Y",
         "E5-rbp-holdout-convergence-s2-neg2-20261126-064623-ZDLg6Y",
+    ],
+    "fig6": [
+        "rnacompete-verify-final-all-all-f0-s0-2026-11-27T021412.509921Z0000-4099546",
+        "rnacompete-summarize-all-all-f0-s0-2026-11-27T024426.072076Z0000-4101649",
     ],
 }
 
@@ -907,6 +913,177 @@ def figure5() -> dict:
     }
 
 
+def figure6() -> dict:
+    runs_path = RNACOMPETE / "final_independent_run_metrics.tsv.gz"
+    summary_path = RNACOMPETE / "final_independent_summary.tsv"
+    verification_path = RNACOMPETE / "final_independent_verification.json"
+    gate_path = RNACOMPETE / "final_gate.json"
+    metrics = ["spearman", "pearson", "mse"]
+    keys = ["track", "arch", "probe_set", "tier"]
+    runs = read_tsv(
+        runs_path,
+        [*keys, "fold", "seed", "n_experiments", *metrics, "group_spearman", "group_pearson", "group_mse", "n_groups"],
+        ["fold", "n_experiments", *metrics],
+    )
+    published = read_tsv(summary_path, [*keys, "n_runs", "spearman_mean", "spearman_sd", "pearson_mean", "pearson_sd", "mse_mean", "mse_sd"], ["n_runs", "spearman_mean", "spearman_sd", "pearson_mean", "pearson_sd", "mse_mean", "mse_sd"])
+    verification = read_json(verification_path)
+    gate = read_json(gate_path)
+    assert verification["status"] == "passed" and verification["scope"] == "independent_five_fold_three_seed_aggregate"
+    assert verification["n_evaluations"] == 70 and verification["n_neural_checkpoint_replays"] == 60
+    assert verification["n_run_metric_rows"] == 525 and verification["n_summary_rows"] == 45
+    assert not verification["selection_test_used"]
+    assert sha256(gate_path) == verification["final_gate_sha256"] == "83ec4cfef1c25c91839e8e51d40dc34272bb901f76d681d61ad6c199b41fe15b"
+    assert sha256(runs_path) == verification["run_metrics_sha256"] == "a276339a28b02a862a24c1edd48fed9cc3115c863a6b6f6e7fd3143acabba05c"
+    assert sha256(summary_path) == verification["summary_sha256"] == "71a4b708120d8831acc7362da49a2a2f9159e4e486ad1cd82a4c610890b546f1"
+    assert gate["status"] == "passed" and gate["scope"] == "five_fold_three_seed"
+    assert gate["n_evaluations"] == 70 and len(gate["runs"]) == 70
+    assert gate["selection_audit"]["test_used_for_selection"] is False
+    assert all(record["replay_passed"] and record.get("checkpoint_replay_passed", True) for record in gate["runs"])
+    assert len(runs) == 525 and len(published) == 45 and set(runs["fold"]) == set(range(5))
+    assert set(runs["track"]) == {"sequence", "rbp_ood"} and set(runs["arch"]) == {"linear", "mlp", "knn"}
+
+    calculated_records = []
+    for group_keys, frame in runs.groupby(keys):
+        row = dict(zip(keys, group_keys))
+        row["n_runs"] = len(frame)
+        expected_runs = 5 if group_keys[1] == "knn" else 15
+        assert len(frame) == expected_runs and set(frame["fold"]) == set(range(5))
+        fold_counts = frame.groupby("fold").size()
+        assert (fold_counts == (1 if group_keys[1] == "knn" else 3)).all()
+        if group_keys[0] == "sequence":
+            assert frame["n_experiments"].nunique() == 1
+            row["n_experiments"] = int(frame["n_experiments"].iloc[0])
+        else:
+            row["n_experiments_min"] = int(frame["n_experiments"].min())
+            row["n_experiments_max"] = int(frame["n_experiments"].max())
+            row["n_groups_min"] = int(frame["n_groups"].min())
+            row["n_groups_max"] = int(frame["n_groups"].max())
+        for metric in metrics:
+            row[f"{metric}_mean"] = frame[metric].mean()
+            row[f"{metric}_sd"] = frame[metric].std(ddof=1)
+        if group_keys[0] == "rbp_ood":
+            for metric in ["group_spearman", "group_pearson", "group_mse"]:
+                row[f"{metric}_mean"] = frame[metric].mean()
+                row[f"{metric}_sd"] = frame[metric].std(ddof=1)
+        calculated_records.append(row)
+    calculated = pd.DataFrame(calculated_records).sort_values(keys).reset_index(drop=True)
+    published_index = published.set_index(keys)
+    assert len(calculated) == 45 and not calculated.duplicated(keys).any()
+    for _, row in calculated.iterrows():
+        index = tuple(row[key] for key in keys)
+        expected = published_index.loc[index]
+        assert row["n_runs"] == expected["n_runs"]
+        for metric in metrics:
+            assert np.isclose(row[f"{metric}_mean"], expected[f"{metric}_mean"], rtol=0, atol=5e-8)
+            assert np.isclose(row[f"{metric}_sd"], expected[f"{metric}_sd"], rtol=0, atol=5e-8)
+        if row["track"] == "sequence":
+            assert row["n_experiments"] == expected["n_experiments"]
+        else:
+            for field in ["n_experiments_min", "n_experiments_max", "n_groups_min", "n_groups_max"]:
+                assert row[field] == expected[field]
+            for metric in ["group_spearman", "group_pearson", "group_mse"]:
+                assert np.isclose(row[f"{metric}_mean"], expected[f"{metric}_mean"], rtol=0, atol=5e-8)
+                assert np.isclose(row[f"{metric}_sd"], expected[f"{metric}_sd"], rtol=0, atol=5e-8)
+    sequence_overall = calculated[(calculated["track"] == "sequence") & (calculated["probe_set"] == "All") & (calculated["tier"] == "Overall")]
+    sequence_tail = calculated[(calculated["track"] == "sequence") & (calculated["probe_set"] == "All") & (calculated["tier"] == "tail")]
+    assert sequence_overall["n_experiments"].eq(244).all() and sequence_tail["n_experiments"].eq(80).all()
+    assert calculated[calculated["track"] == "rbp_ood"]["n_experiments_min"].eq(48).all()
+    assert calculated[calculated["track"] == "rbp_ood"]["n_experiments_max"].eq(49).all()
+    assert calculated[calculated["track"] == "rbp_ood"]["n_groups_min"].eq(40).all()
+    assert calculated[calculated["track"] == "rbp_ood"]["n_groups_max"].eq(42).all()
+
+    effect_records = []
+    for tier in ["Overall", "tail"]:
+        subset = runs[(runs["track"] == "sequence") & (runs["probe_set"] == "All") & (runs["tier"] == tier)]
+        mlp = subset[subset["arch"] == "mlp"].set_index(["fold", "seed"])
+        linear = subset[subset["arch"] == "linear"].set_index(["fold", "seed"])
+        knn = subset[subset["arch"] == "knn"].set_index("fold")
+        for metric in ["spearman", "pearson"]:
+            neural_delta = mlp[metric] - linear[metric]
+            knn_delta = mlp[metric].groupby("fold").mean() - knn[metric]
+            assert len(neural_delta) == 15 and len(knn_delta) == 5
+            for comparator, values in [("linear", neural_delta), ("knn", knn_delta)]:
+                effect_records.append({"tier": tier, "metric": metric, "effect": f"mlp_minus_{comparator}", "delta_mean": values.mean(), "delta_sd": values.std(ddof=1), "delta_min": values.min(), "delta_max": values.max(), "n_comparisons": len(values)})
+    effects = pd.DataFrame(effect_records)
+    assert effects["delta_mean"].gt(0).all()
+    summary_index = calculated.set_index(keys)
+    rbp = calculated[(calculated["track"] == "rbp_ood") & (calculated["probe_set"] == "All")].set_index("arch")
+    for metric in ["spearman_mean", "pearson_mean", "group_spearman_mean"]:
+        assert rbp.loc["knn", metric] > rbp.loc["mlp", metric] > rbp.loc["linear", metric]
+    assert rbp["spearman_mean"].max() < 0.20 and rbp["group_spearman_mean"].max() < 0.18
+
+    styles = {"linear": (MID, "^", "Linear"), "mlp": (BLUE, "o", "MLP"), "knn": (ORANGE, "s", "kNN")}
+    fig, axes = plt.subplots(2, 3, figsize=(13.4, 7.7))
+    for column, tier in enumerate(["Overall", "tail"]):
+        ax = axes[0, column]
+        subset = runs[(runs["track"] == "sequence") & (runs["probe_set"] == "All") & (runs["tier"] == tier)]
+        for arch_index, arch in enumerate(["linear", "mlp", "knn"]):
+            color, marker, label = styles[arch]
+            for metric_index, metric in enumerate(["spearman", "pearson"]):
+                values = subset[subset["arch"] == arch][metric].to_numpy()
+                center = metric_index + (arch_index - 1) * 0.22
+                ax.scatter(center + np.linspace(-0.035, 0.035, len(values)), values, s=14, color=color, marker=marker, alpha=0.38, edgecolors="none")
+                mean = summary_index.loc[("sequence", arch, "All", tier), f"{metric}_mean"]
+                sd = summary_index.loc[("sequence", arch, "All", tier), f"{metric}_sd"]
+                ax.errorbar(center, mean, yerr=sd, fmt=marker, ms=6, color=color, lw=1.5, capsize=3, label=label if metric_index == 0 and column == 0 else None)
+        for metric_index, metric in enumerate(["spearman", "pearson"]):
+            deltas = effects[(effects["tier"] == tier) & (effects["metric"] == metric)].set_index("effect")["delta_mean"]
+            ax.text(metric_index, 0.505, f"MLP−linear {deltas['mlp_minus_linear']:+.3f}\nMLP−kNN {deltas['mlp_minus_knn']:+.3f}", ha="center", va="top", fontsize=7.5, fontweight="bold")
+        ax.set(xlim=(-0.52, 1.52), ylim=(0.20, 0.515), xticks=[0, 1], xticklabels=["Spearman", "Pearson"], ylabel="Correlation")
+        panel(ax, "a" if column == 0 else "b", f"Sequence {tier}: MLP advantage over both baselines")
+        if column == 0:
+            ax.legend(loc="lower left", fontsize=7, ncol=3, columnspacing=0.8)
+
+    ax = axes[0, 2]
+    rbp_runs = runs[(runs["track"] == "rbp_ood") & (runs["probe_set"] == "All")]
+    rbp_metrics = [("spearman", "Experiment\nSpearman", "spearman_mean", "spearman_sd"), ("pearson", "Experiment\nPearson", "pearson_mean", "pearson_sd"), ("group_spearman", "Gene-group\nSpearman", "group_spearman_mean", "group_spearman_sd")]
+    for arch_index, arch in enumerate(["linear", "mlp", "knn"]):
+        color, marker, label = styles[arch]
+        for metric_index, (run_metric, _, mean_field, sd_field) in enumerate(rbp_metrics):
+            values = rbp_runs[rbp_runs["arch"] == arch][run_metric].to_numpy()
+            center = metric_index + (arch_index - 1) * 0.22
+            ax.scatter(center + np.linspace(-0.035, 0.035, len(values)), values, s=14, color=color, marker=marker, alpha=0.38, edgecolors="none")
+            ax.errorbar(center, rbp.loc[arch, mean_field], yerr=rbp.loc[arch, sd_field], fmt=marker, ms=6, color=color, lw=1.5, capsize=3)
+    ax.text(0.97, 0.04, "relative gain ≠ reliable OOD", transform=ax.transAxes, ha="right", fontsize=8.5, color=ORANGE, fontweight="bold")
+    ax.set(xlim=(-0.52, 2.52), ylim=(0, 0.235), xticks=[0, 1, 2], xticklabels=[item[1] for item in rbp_metrics], ylabel="Correlation")
+    panel(ax, "c", "RBP-OOD: kNN relative gain, low absolute performance")
+
+    def fold_panel(ax: plt.Axes, track: str, tier: str, letter: str, title: str, ylim: tuple[float, float]) -> None:
+        subset = runs[(runs["track"] == track) & (runs["probe_set"] == "All") & (runs["tier"] == tier)]
+        for arch_index, arch in enumerate(["linear", "mlp", "knn"]):
+            color, marker, _ = styles[arch]
+            offset = (arch_index - 1) * 0.20
+            for metric in ["spearman", "pearson"]:
+                values = subset[subset["arch"] == arch]
+                centers = values["fold"].to_numpy() + offset
+                jitter = np.linspace(-0.025, 0.025, len(values))
+                ax.scatter(centers + jitter, values[metric], s=10, marker=marker, facecolors=color if metric == "spearman" else "none", edgecolors=color, linewidths=0.45, alpha=0.48)
+                fold_means = values.groupby("fold")[metric].mean()
+                ax.plot(fold_means.index + offset, fold_means, color=color, lw=1.25, ls="-" if metric == "spearman" else ":", marker=marker, ms=3.8)
+        ax.plot([], [], color=INK, lw=1.25, ls="-", label="Spearman")
+        ax.plot([], [], color=INK, lw=1.25, ls=":", label="Pearson")
+        ax.set(xticks=range(5), xlabel="Fold", ylabel="Correlation", ylim=ylim)
+        panel(ax, letter, title)
+        ax.legend(loc="lower left", fontsize=7, ncol=2)
+
+    fold_panel(axes[1, 0], "sequence", "Overall", "d", "Sequence Overall: fold/seed distribution", (0.20, 0.52))
+    fold_panel(axes[1, 1], "sequence", "tail", "e", "Sequence tail: fold/seed distribution", (0.20, 0.52))
+    fold_panel(axes[1, 2], "rbp_ood", "Overall", "f", "RBP-OOD: fold/seed distribution", (0, 0.31))
+    stem = "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD"
+    save_figure(fig, stem)
+    fold_distribution = runs[(runs["probe_set"] == "All") & (((runs["track"] == "sequence") & runs["tier"].isin(["Overall", "tail"])) | ((runs["track"] == "rbp_ood") & (runs["tier"] == "Overall")))].copy()
+    plot_files = write_plot_data("fig6", {"run_metrics_525": runs, "summary_45_recalculated": calculated, "sequence_effects": effects, "fold_seed_distribution": fold_distribution})
+    return {
+        "evidence_level": "ACCEPTED RNAcompete Ray2013 frozen RNA-FM five-fold; sequence ID90 and whole-RBP-OOD; descriptive only; low absolute OOD performance",
+        "sources": [source(p) for p in [runs_path, summary_path, verification_path, gate_path, RNACOMPETE_REPORT]],
+        "pass1_schema_finite": {"run_rows": len(runs), "summary_rows": len(calculated), "evaluations": 70, "neural_checkpoint_replays": 60, "source_sha256_match": True},
+        "pass2_configuration_alignment": {"folds": [0, 1, 2, 3, 4], "neural_seeds": [0, 1, 2], "neural_runs_per_group": 15, "knn_runs_per_group": 5, "selection_test_used": False, "sequence_all_experiments": 244, "sequence_tail_experiments": 80, "rbp_experiments_per_fold": [48, 49], "rbp_groups_per_fold": [40, 42]},
+        "pass3_report_recalculation": {"all_45_summary_rows_recalculated": True, "all_45_groups_fold0_4_support_consistent": True, "sequence_effects": effects.to_dict(orient="records"), "rbp_knn_relative_spearman_advantage_over_mlp": float(rbp.loc["knn", "spearman_mean"] - rbp.loc["mlp", "spearman_mean"]), "rbp_max_experiment_spearman": float(rbp["spearman_mean"].max()), "reliable_ood_claim": False, "significance_claim": False},
+        "plot_data": plot_files,
+        "figure_stem": stem,
+    }
+
+
 def make_contact_sheets(stems: list[str]) -> None:
     images = []
     for stem in stems:
@@ -967,6 +1144,7 @@ def validate_rendered_outputs() -> dict:
         "Fig3_E5_PARCLIP_cross_protocol": ["Three-seed macro AUROC", "PAR-CLIP matched neg2"],
         "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2": ["all 20 split", "FPR95", "ascending OOD score"],
         "Fig5_E5_whole_RBP_holdout_three_seed_OOD": ["23/24 groups have metric-winner conflicts", "Seed stability", "no bootstrap or unified winner"],
+        "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD": ["Sequence Overall", "Sequence tail", "relative gain ≠ reliable OOD"],
     }
     records = {}
     for stem, tokens in expected.items():
@@ -998,7 +1176,7 @@ def validate_rendered_outputs() -> dict:
         "status": "passed",
         "figures": records,
         "archived_fig2_warning_verified": True,
-        "contact_sheet": {"size": list(color.size), "grayscale_mode": gray.mode, "grayscale_std": float(gray_array.std()), "grayscale_unique_values": len(np.unique(gray_array)), "fig2_included": True, "fig5_included": True},
+        "contact_sheet": {"size": list(color.size), "grayscale_mode": gray.mode, "grayscale_std": float(gray_array.std()), "grayscale_unique_values": len(np.unique(gray_array)), "fig2_included": True, "fig5_included": True, "fig6_included": True},
     }
     (VERIFY_ROOT / "output_validation.json").write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
     return result
@@ -1006,10 +1184,10 @@ def validate_rendered_outputs() -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--figure", choices=["all", "fig1", "fig2", "fig3", "fig4", "fig5"], default="all")
+    parser.add_argument("--figure", choices=["all", "fig1", "fig2", "fig3", "fig4", "fig5", "fig6"], default="all")
     parser.add_argument("--contact-sheet", action="store_true")
     args = parser.parse_args()
-    functions = {"fig1": figure1, "fig2": figure2, "fig3": figure3, "fig4": figure4, "fig5": figure5}
+    functions = {"fig1": figure1, "fig2": figure2, "fig3": figure3, "fig4": figure4, "fig5": figure5, "fig6": figure6}
     selected = list(functions) if args.figure == "all" else [args.figure]
     audits = {}
     for name in selected:
@@ -1026,7 +1204,7 @@ def main() -> None:
             print("output validation: numeric/vector/DPI/grayscale checks passed")
         summary = {
             "status": "rendering_and_numeric_verification_passed",
-            "submission_status": {"fig1": "descriptive_current_contract_accepted", "fig2": "accepted_strict3train_main", "fig3": "external_descriptive", "fig4": "five_split_descriptive", "fig5": "accepted_whole_rbp_holdout_descriptive"},
+            "submission_status": {"fig1": "descriptive_current_contract_accepted", "fig2": "accepted_strict3train_main", "fig3": "external_descriptive", "fig4": "five_split_descriptive", "fig5": "accepted_whole_rbp_holdout_descriptive", "fig6": "accepted_rnacompete_five_fold_descriptive"},
             "figures": {name: {"run_ids": RUNS[name], "evidence_level": audits[name]["evidence_level"], "figure_stem": audits[name]["figure_stem"]} for name in selected},
             "audit_history": {"fig2": {"run_ids": ARCHIVED_FIG2_RUNS, "evidence_level": "Historical E1 pilot with fold=-1 training-use gap; retained only for audit", "figure_stem": "Fig2_E1_pilot_five_fold_baselines", "excluded_from_contact_sheet": True}},
         }

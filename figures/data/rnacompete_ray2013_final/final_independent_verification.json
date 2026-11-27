@@ -1,0 +1,14 @@
+{
+  "evidence_boundary": "Five-fold descriptive benchmark; not SOTA or mechanistic causal evidence",
+  "final_gate_sha256": "83ec4cfef1c25c91839e8e51d40dc34272bb901f76d681d61ad6c199b41fe15b",
+  "n_evaluations": 70,
+  "n_neural_checkpoint_replays": 60,
+  "n_run_metric_rows": 525,
+  "n_summary_rows": 45,
+  "report_pointer": "E1_\u5f3a\u57fa\u7ebf/RNAcompete_Ray2013_RNAFM\u4e94\u6298\u6700\u7ec8\u62a5\u544a_2026-11-27.md",
+  "run_metrics_sha256": "a276339a28b02a862a24c1edd48fed9cc3115c863a6b6f6e7fd3143acabba05c",
+  "scope": "independent_five_fold_three_seed_aggregate",
+  "selection_test_used": false,
+  "status": "passed",
+  "summary_sha256": "71a4b708120d8831acc7362da49a2a2f9159e4e486ad1cd82a4c610890b546f1"
+}
