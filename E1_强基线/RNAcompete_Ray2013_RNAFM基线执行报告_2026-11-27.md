@@ -106,3 +106,7 @@ fold2的12个神经run及双kNN已全部完成。新增`rbp_ood_mlp_f2_s2`独立
 fold3 seed0首次train在checkpoint写入时失败，重试train成功后首次eval又遇`Errno 122 Disk quota exceeded`；这些失败均未形成eval完成标记，64B checkpoint和0B预测临时文件未纳入验收。确认`/teams`实际1MiB写入+fsync探针成功后，从断点恢复，已成功run不重训。任务日志保留真实running/completed状态；配额导致的日志写入失败不作成功记录。
 
 恢复后`sequence_linear_f3_s0/s1`均完成并独立重放通过：best/stop分别`14/34、9/29`，各732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致。当前38/60神经eval、6/10 kNN，fold3 seed2 train running，最终门禁未形成。
+
+### 07:58新增验收
+
+`sequence_linear_f3_s2`完成并独立重放通过：732行指标、43,998×244 ID、checkpoint CUDA预测和selection SHA一致，best/stop `8/28`。当前39/60神经eval、6/10 kNN，`sequence_mlp_f3_s0`已启动，最终门禁未形成。
