@@ -86,7 +86,7 @@ def fig1():
     ax.set_xlabel("RBP rank (by total eCLIP sites)")
     ax.set_ylabel("Total sites per RBP (log)")
     ax.set_xlim(-1, len(per_rbp))
-    ax.text(0.97, 0.95, f"Gini = {dist['gini_per_rbp_total']:.3f}\nmax/min = {dist['imbalance_ratio_max_min']:.1f}×",
+    ax.text(0.97, 0.95, f"Gini = {dist['gini_per_rbp_total']:.3f}\nmax/min = {dist['imbalance_ratio_max_min']:.2f}×",
             transform=ax.transAxes, ha="right", va="top", fontsize=10,
             bbox=dict(boxstyle="round,pad=0.35", fc="white", ec=PALETTE["neutral"], lw=0.8))
     panel_label(ax, "a")
