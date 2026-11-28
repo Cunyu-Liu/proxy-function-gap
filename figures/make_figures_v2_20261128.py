@@ -387,7 +387,58 @@ def fig5():
     save(fig, "Fig6_rnacompete_dual_track_v2_20261128")
 
 
+# ---------------------------------------------------------------- Fig 3 (low homology)
+def fig3_lowhom():
+    """Low-homology descriptive stratification (accepted E1 report §6).
+
+    Source of truth: E1_强基线/E1_主集严格三折冻结基线最终报告_2026-11-26.md §6,
+    itself accepted via E1-stratified-analysis-20261126-104609-ZDLg6Y and the
+    independent recalculation run. Values are parsed from the report table and
+    cross-checked against constants; no bootstrap exists for this slice.
+    """
+    import re
+    report = (ROOT / "E1_强基线" / "E1_主集严格三折冻结基线最终报告_2026-11-26.md").read_text()
+    rows = {}
+    for track in ("neg1c", "neg2"):
+        m = re.search(rf"\| {track} \| ([0-9.]+) \| ([0-9.]+) \| \+([0-9.]+) \| ([0-9.]+) \| ([0-9.]+) \| \+([0-9.]+) \|", report)
+        assert m, f"low-homology row for {track} not found in accepted report"
+        rows[track] = [float(x) for x in m.groups()]
+    expected = {"neg1c": [0.875332, 0.830752, 0.044580, 0.781584, 0.697716, 0.083869],
+                "neg2": [0.790567, 0.751782, 0.038785, 0.653712, 0.585196, 0.068516]}
+    for track, vals in rows.items():
+        for got, want in zip(vals, expected[track]):
+            check(f"fig3_{track}_{want}", got, want)
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2), sharey=True)
+    metrics = [("AUROC", 0, 1, 2), ("AUPRC", 3, 4, 5)]
+    for ax, track, label in zip(axes, ["neg1c", "neg2"], ["a", "b"]):
+        vals = rows[track]
+        xpos = np.arange(2)
+        bce = [vals[0], vals[3]]
+        knn = [vals[1], vals[4]]
+        ax.bar(xpos - 0.18, bce, 0.34, color=PALETTE["blue_main"], alpha=0.88, label="frozen RNA-FM BCE")
+        ax.bar(xpos + 0.18, knn, 0.34, color=PALETTE["red_strong"], alpha=0.88, label="cluster-dedup cosine kNN")
+        for x, v in zip(xpos - 0.18, bce):
+            ax.text(x, v + 0.012, f"{v:.3f}", ha="center", fontsize=9.5)
+        for x, v in zip(xpos + 0.18, knn):
+            ax.text(x, v + 0.012, f"{v:.3f}", ha="center", fontsize=9.5)
+        for x, d in zip(xpos, [vals[2], vals[5]]):
+            ax.text(x, 0.06, f"Δ=+{d:.3f}", ha="center", fontsize=10, color=PALETTE["blue_main"], fontweight="bold")
+        ax.set_xticks(xpos); ax.set_xticklabels(["AUROC", "AUPRC"])
+        ax.set_title(f"{track} negatives", fontsize=12)
+        ax.set_ylim(0, 1.0)
+        ax.grid(axis="y", color="#EEEEEE", lw=0.7); ax.set_axisbelow(True)
+        panel_label(ax, label)
+    axes[0].set_ylabel("Experiment macro mean (3 seeds)")
+    axes[0].legend(loc="upper right", fontsize=9.5)
+    fig.suptitle("Low-homology slice (test positives d_hom < 0.60): direction persists, descriptive only",
+                 fontsize=12.5, y=1.03)
+    fig.tight_layout()
+    VERIFICATION["fig3_low_homology"] = rows
+    save(fig, "Fig3_low_homology_stratification_v2_20261128")
+
+
 if __name__ == "__main__":
-    fig1(); fig2(); fig3(); fig4(); fig5()
+    fig1(); fig2(); fig3_lowhom(); fig3(); fig4(); fig5()
     (OUT / "verification_v2_20261128.json").write_text(json.dumps(VERIFICATION, indent=2))
     print("ALL_FIGURES_DONE", len(VERIFICATION), "verification entries")
