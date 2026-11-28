@@ -1,0 +1,8 @@
+{
+  "figures": [
+    "Figure20_v6_decision_value_map",
+    "Figure21_v6_unified_protocol_governance"
+  ],
+  "source": "cross_scenario_tail_audit_v1/tail_audit.json",
+  "retrospective": true
+}

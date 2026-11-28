@@ -1,0 +1,175 @@
+{
+  "analysis": "cross_scenario_tail_audit_v1",
+  "purpose": "Unify scenarios by tail reliability and decision benefit, not by pooled raw effect size.",
+  "rows": [
+    {
+      "scenario": "T-cell MRL r1",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "global_spearman": 0.5910524812945454,
+      "tail_metric": "top16 Spearman",
+      "tail_value": 0.2060575502396873,
+      "within_tail_loss_fraction": 0.7479274767419737,
+      "relative_regret_reduction_pct": 32.42309444911089,
+      "cap16_delta": -1.7057596554698837,
+      "ci95": [
+        -2.163445256357177,
+        -1.2119135865532489
+      ],
+      "status": "positive"
+    },
+    {
+      "scenario": "T-cell MRL r2",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "global_spearman": 0.5292216226399566,
+      "tail_metric": "top16 Spearman",
+      "tail_value": 0.14398424206794905,
+      "within_tail_loss_fraction": 0.5201287176845079,
+      "relative_regret_reduction_pct": 17.73057786866743,
+      "cap16_delta": -1.086940681749869,
+      "ci95": [
+        -1.833685155478184,
+        -0.31858892616080403
+      ],
+      "status": "nominal"
+    },
+    {
+      "scenario": "GB1 binding",
+      "family": "protein",
+      "endpoint": "IgG-Fc lnW",
+      "global_spearman": 0.3478596529400488,
+      "tail_metric": "true top-decile recall",
+      "tail_value": 0.14234654234654237,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": 30.096283721593775,
+      "cap16_delta": -0.16089381057826665,
+      "ci95": [
+        -0.28285336364321556,
+        -0.05051518912930951
+      ],
+      "status": "positive"
+    },
+    {
+      "scenario": "GFP brightness",
+      "family": "protein",
+      "endpoint": "log brightness",
+      "global_spearman": 0.4604417787994951,
+      "tail_metric": "true top5% lift at B16",
+      "tail_value": 10.47,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": 88.27095599771282,
+      "cap16_delta": -0.28001600485859346,
+      "ci95": [
+        -0.30945332718720536,
+        -0.2520728025988946
+      ],
+      "status": "positive"
+    },
+    {
+      "scenario": "AAV9 production",
+      "family": "gene therapy",
+      "endpoint": "Production enrichment",
+      "global_spearman": 0.820908,
+      "tail_metric": "true top1% recall",
+      "tail_value": 0.1875,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": 65.49541532676167,
+      "cap16_delta": -4.206431097252901,
+      "ci95": [
+        -4.564111062543161,
+        -3.931098295982311
+      ],
+      "status": "positive"
+    },
+    {
+      "scenario": "TEM-1 Amp→Amp",
+      "family": "enzyme",
+      "endpoint": "relative resistance",
+      "global_spearman": 0.352772560132108,
+      "tail_metric": "source top10% Spearman",
+      "tail_value": 0.13745580091234874,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": 43.746676135596665,
+      "cap16_delta": -0.19871157373951007,
+      "ci95": null,
+      "status": "condition-dependent"
+    },
+    {
+      "scenario": "TEM-1 Amp→cefotaxime",
+      "family": "enzyme",
+      "endpoint": "relative resistance",
+      "global_spearman": -0.05861848456152641,
+      "tail_metric": "source top10% Spearman",
+      "tail_value": 0.012648040734346005,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": 1.800247200052279,
+      "cap16_delta": -0.0020504082729805354,
+      "ci95": null,
+      "status": "null"
+    },
+    {
+      "scenario": "HEK293T N50 MRL",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "global_spearman": 0.1558926968,
+      "tail_metric": "true top-decile recall",
+      "tail_value": 0.1160714286,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": -2.1297279398115347,
+      "cap16_delta": 0.1359392963,
+      "ci95": [
+        -0.9893056525,
+        1.1351243682
+      ],
+      "status": "null"
+    },
+    {
+      "scenario": "HepG2 defined-end MRL",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "global_spearman": 0.2140928883,
+      "tail_metric": "true top-decile recall",
+      "tail_value": 0.1517857143,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": 22.26934753205564,
+      "cap16_delta": -1.0868857332,
+      "ci95": [
+        -2.084375,
+        -0.1181050198
+      ],
+      "status": "nominal"
+    },
+    {
+      "scenario": "mRNA stability",
+      "family": "mRNA",
+      "endpoint": "integrated abundance",
+      "global_spearman": -0.7655677656,
+      "tail_metric": "true top-decile recall",
+      "tail_value": 0.0,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": -36.85242775288236,
+      "cap16_delta": 0.283767186261695,
+      "ci95": [
+        0.0824,
+        0.4435
+      ],
+      "status": "harmful"
+    },
+    {
+      "scenario": "Castillo indel",
+      "family": "mRNA",
+      "endpoint": "normalized indel",
+      "global_spearman": 0.18380916195,
+      "tail_metric": "true top-decile recall",
+      "tail_value": 0.05,
+      "within_tail_loss_fraction": null,
+      "relative_regret_reduction_pct": null,
+      "cap16_delta": null,
+      "ci95": null,
+      "status": "mixed/null"
+    }
+  ],
+  "interpretation": "Positive decision benefit coexists with heterogeneous global correlation; failures show low or negative tail reliability. Metrics are task-specific and not pooled inferentially.",
+  "retrospective": true
+}
