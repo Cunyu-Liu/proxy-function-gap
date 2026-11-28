@@ -148,6 +148,15 @@ def main() -> None:
          "测试正例 d_hom<0.60；三 seed 描述性、无 bootstrap；类别先验改变，不与闭集 AUPRC 横比。"],
         "证据等级：M-desc 低同源描述性分层；E1 最终报告 §6，独立回算已验收；不证明同源是因果来源。",
         "Run: E1-stratified-analysis-20261126-104609-ZDLg6Y · E1-main-independent-recalculation-20261126-105611-ZDLg6Y")
+    conv = prs.slides.add_slide(prs.slide_layouts[0])
+    build_fig_slide(
+        conv, 39, "补充图｜收敛合同证据：4,380 任务全部早停、无故障保险",
+        "Fig7_convergence_evidence_v2_20261128.png",
+        ["15 run × 292 任务：stop = best + 20，best 范围 1–43，最大 stop 63。",
+         "无一触及 1000 epoch 故障保险——训练到收敛，不以步数截断。",
+         "已验收 E1 主集工程证据；非性能结论。"],
+        "证据等级：已验收 strict3train 主集收敛合同证据（modern_results.tsv）。",
+        "数据：figures/data_20261128/e1_convergence/ · 核验：verification_v2_20261128.json")
     prs.save(str(TARGET))
     audit = {"target": str(TARGET), "source_sha256": sha256(SOURCE),
              "target_sha256": sha256(TARGET), "slides": len(prs.slides._sldIdLst),
