@@ -1,0 +1,70 @@
+{
+  "schema_version": "scenario_gfp_v1",
+  "frozen_at_utc": "2026-11-27T15:38:25Z",
+  "study_status": "retrospective_public_historical_measurements_not_new_blind_test",
+  "source": {
+    "dataset": "ProteinGym v1.3 GFP_AEQVI_Sarkisyan_2016",
+    "url": "https://marks.hms.harvard.edu/proteingym/ProteinGym_v1.3/DMS_ProteinGym_substitutions.zip",
+    "member": "DMS_ProteinGym_substitutions/GFP_AEQVI_Sarkisyan_2016.csv",
+    "expected_csv_bytes": 14347114,
+    "expected_csv_sha256": "05b97d36a23363331b271edc56f1496b9a539109fd006e65532f91e9903a0838",
+    "expected_rows": 51714,
+    "sequence_length": 238,
+    "label": "DMS_score",
+    "label_semantics": "historical_experiment_derived_log_scale_brightness_higher_better"
+  },
+  "roles": {
+    "train_orders": [1, 2],
+    "dev_orders": [1, 2],
+    "unused_pressure_orders": [3, 4],
+    "permanent_test_orders_min": 5,
+    "low_order_split_hash": "position-block split: positions sorted by sha256('gfp-position-v1:' + integer position), first ceil(30%) observed positions => dev and remainder => train; low-order variants are assigned only if all mutated positions share one role, cross-role records are excluded; targets approximately 70/30 positions, not rows",
+    "test_shuffle_seed": 20261127,
+    "test_pool_count": 16,
+    "test_pool_size": 1000,
+    "minimum_test_count_gate": 16000,
+    "minimum_cross_role_hamming_gate": 3
+  },
+  "models": {
+    "seeds": [11, 23, 37, 51, 73],
+    "cnn_grid": {
+      "channels": [32, 64],
+      "kernel_size": [5, 9],
+      "learning_rate": [0.001],
+      "weight_decay": [0.001],
+      "dropout": [0.1]
+    },
+    "batch_size": 128,
+    "max_epochs": 80,
+    "early_stopping_patience": 10,
+    "selection": "minimum mean dev MAE across all five seeds; ties >1e-12 broken by higher mean dev Spearman, then smaller channels, then smaller kernel",
+    "early_stopping": "best training-standardized dev MAE, minimum delta 1e-6",
+    "additive_ridge_alpha_grid": [0.1, 1.0, 10.0, 100.0, 1000.0],
+    "ensemble": "unweighted arithmetic mean of five seed predictions in original DMS_score units"
+  },
+  "evaluation": {
+    "budgets": [1, 4, 16, 64],
+    "random_replicates_per_pool_budget": 64,
+    "random_seed": 910247,
+    "regret": "pool maximum measured DMS_score minus maximum measured DMS_score among selected candidates",
+    "primary_difference": "BoN regret minus mean RandomN regret; negative favors BoN",
+    "tie_break": "proxy score descending then variant_id ascending; oracle maximum and ties use all measured labels without arbitrary oracle selection",
+    "bootstrap_pool_resamples": 10000,
+    "bootstrap_seed": 20261127,
+    "confidence_level": 0.95,
+    "top_tail_fractions": [0.01, 0.05, 0.1],
+    "metrics": ["MAE", "Spearman", "per-order MAE and Spearman", "top-tail hits and lift over RandomN", "hit@B oracle-maximum tie-aware"]
+  },
+  "paths": {
+    "code": "/home/proxy-function-gap-scenario-gfp",
+    "artifacts": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/scenario_gfp_v1"
+  },
+  "stop_conditions": [
+    "source hash, row count, sequence or label validation fails",
+    "fewer than 16000 eligible permanent-test variants",
+    "any exact/Hamming-1/Hamming-2 low-order-to-test overlap",
+    "fewer than 16 disjoint test pools of size 1000",
+    "CUDA unavailable or no observed CUDA training allocation",
+    "test labels accessed before all test predictions and code/config hashes are frozen"
+  ]
+}

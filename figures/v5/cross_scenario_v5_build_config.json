@@ -1,0 +1,17 @@
+{
+  "figures": [
+    "Figure18_v5_cross_scenario_functional_value",
+    "Figure19_v5_regression_decision_dissociation"
+  ],
+  "sources": [
+    "paper1_budget_matched_v1/results.json",
+    "scenario_gb1_v1/aggregate/test_aggregate.json",
+    "scenario_gfp_v1/results/primary.json",
+    "scenario_aav_v1/results/main_results.json",
+    "scenario_tem1_v1/results/direction_results.tsv",
+    "scenario_mrna_non_tcell_v1/artifact/results/decision_summary.tsv",
+    "scenario_mrna_non_tcell_v1/artifact/results/unified_scenario_metrics.json"
+  ],
+  "cross_task_pooled_effect": false,
+  "retrospective": true
+}

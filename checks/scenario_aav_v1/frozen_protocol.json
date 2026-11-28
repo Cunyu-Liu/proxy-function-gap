@@ -1,0 +1,14 @@
+{
+  "config": {
+    "bytes": 2798,
+    "sha256": "e7954022a4941376c013cc0b3a6bf6bd960380224cfcd2440bf286990f389fe9"
+  },
+  "experiment": "scenario_aav_v1",
+  "frozen_at": "2026-11-27T15:46:48.690339+00:00",
+  "frozen_before_training_or_test_evaluation": true,
+  "protocol": {
+    "bytes": 3677,
+    "sha256": "df330845278b56a6a79f1c1b852a0e734460e6418793e938cb2662f117d0e61f"
+  },
+  "result_driven_reconfiguration_allowed": false
+}

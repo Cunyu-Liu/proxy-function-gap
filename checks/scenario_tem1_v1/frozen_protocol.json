@@ -1,0 +1,77 @@
+{
+  "protocol_id": "scenario_tem1_v1",
+  "frozen_on": "2026-11-27",
+  "study_type": "retrospective_public_experimental_data",
+  "scientific_scope": "fixed-pool deployment-condition mismatch; not a new blinded prospective experiment and not a historical optimization trajectory",
+  "data": {
+    "source": "Stiffler 2015 MaveDB urn:mavedb:00000086",
+    "conditions": {
+      "amp10": "stiffler2015_a.csv",
+      "amp39": "stiffler2015_b.csv",
+      "amp156": "stiffler2015_c.csv",
+      "amp625": "stiffler2015_d.csv",
+      "amp2500": "stiffler2015_e.csv",
+      "cefotaxime0.15": "stiffler2015_f.csv"
+    },
+    "unselected_file": "stiffler2015_g.csv",
+    "unselected_role": "construction/growth-bias control only; excluded from directional regret",
+    "score_semantics": "experimentally derived log10 selected/unselected enrichment ratio corrected by WT; not direct enzyme activity, MIC, or clinical response",
+    "higher_score_is_better": true,
+    "missing_values": "NA/empty/NaN excluded; never imputed across conditions"
+  },
+  "split": {
+    "unit": "amino_acid_position",
+    "seed": 20261127,
+    "method": "sort positions by SHA256('scenario_tem1_v1|split|20261127|position'), then assign first 60% train, next 20% dev, remainder test",
+    "train_fraction": 0.6,
+    "dev_fraction": 0.2,
+    "all_variants_at_a_position_share_split": true,
+    "model_fitting": "none; one experimental condition is directly used as proxy",
+    "test_policy": "run once only after implementation and dev checks pass; no direction-dependent protocol revision"
+  },
+  "pools": {
+    "unit": "amino_acid_position",
+    "membership": "variants with nonmissing scores in all five Amp conditions and cefotaxime; same membership reused for every source-target direction",
+    "budgets": [4, 8, 16],
+    "replicates_per_position_and_budget": 20,
+    "sampling": "without replacement within position",
+    "seed": 20261128,
+    "rng": "NumPy default_rng seeded by the first 8 bytes of SHA256('scenario_tem1_v1|pool|20261128|position|N|replicate')",
+    "minimum_complete_variants": "N; otherwise no pool for that position and N",
+    "tie_break": "maximum score, then lexicographically smallest hgvs_pro"
+  },
+  "directions": {
+    "sources": ["amp10", "amp39", "amp156", "amp625", "amp2500"],
+    "targets": ["amp10", "amp39", "amp156", "amp625", "amp2500", "cefotaxime0.15"],
+    "exclude_same_source_target": true,
+    "expected_direction_count": 25,
+    "cefotaxime_as_source": false,
+    "absolute_regret_cross_concentration_comparison": "descriptive only because scale can change"
+  },
+  "estimands": {
+    "bon_regret": "maximum target score in the fixed N pool minus target score of the maximum-proxy pick",
+    "random_n_regret": "maximum target score minus the exact arithmetic mean of all N target scores; this is the expected regret of one uniform random pick from the same N candidates",
+    "primary_effect": "BoN regret minus RandomN regret; negative favors proxy BoN",
+    "selection_turnover_proxy_vs_oracle": "fraction of pools whose proxy pick differs from the deterministic target oracle pick",
+    "selection_turnover_source_oracle_vs_target_oracle": "fraction of pools whose source-condition oracle pick differs from target-condition oracle pick",
+    "global_correlation": "Pearson and Spearman over all split variants with paired nonmissing scores",
+    "top_tail_correlation": "Spearman within source-proxy top decile and within target top decile, using ceiling(0.1*n) and deterministic score/HGVS ranking"
+  },
+  "bootstrap": {
+    "method": "nonparametric percentile cluster bootstrap over complete amino-acid positions",
+    "resamples": 10000,
+    "seed": 20261129,
+    "confidence_level": 0.95,
+    "same_position_resample_shared_across_directions_and_budgets": "shared across all directions within each N; eligible position set is N-specific because positions with fewer than N complete variants cannot form a fixed-size pool",
+    "pool_replicates_within_position": "kept paired; cross-condition scores of a variant are never treated as independent"
+  },
+  "outputs": {
+    "detailed_remote_only": ["pool_membership.tsv.gz", "selections.tsv.gz", "bootstrap_effects.npz"],
+    "local_desensitized": ["aggregate TSV/JSON results", "verification JSON", "source hashes", "analysis code", "report without per-variant labels or raw files"]
+  },
+  "verification": [
+    "round 1: raw hashes, variant alignment, missingness, split isolation, pool size/membership and arithmetic fixtures",
+    "round 2: independent implementation recomputes all test selections, regrets, correlations and bootstrap intervals without importing production code",
+    "round 3: delivery hashes, report-number reconciliation, one-time test execution log and absence of local raw/per-variant files"
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "experiment": "scenario_aav_v1",
+  "frozen_on": "2026-11-27",
+  "source": {
+    "repository": "https://github.com/vector-engineering/fit4function",
+    "commit": "6bfc2ebfe4abcd45cc6fe737e4700242a5090fee",
+    "modeling_sha256": "6aabda2d7300dba4f2323135143147fa9f429221b81447fe464deda72fc87d41",
+    "assessment_sha256": "0ab5570b4d62e77c5aa0e2f17476f5862dfa69533baae67e7252cd8c379f5a07",
+    "expected_raw_exact_overlap": 9993
+  },
+  "endpoint": {
+    "column": "Production",
+    "direction": "higher_is_better",
+    "unit": "VRPM/DRPM enrichment ratio; not log2",
+    "semantics": "AAV9 nuclease-resistant viral-genome production, not tropism, infectivity, transgene expression, or clinical efficacy",
+    "zeros": "retain",
+    "nonfinite": "exclude_before_split; report_counts",
+    "sequence_level": "AA; two codon replicates remain aggregated in source row"
+  },
+  "isolation": {
+    "external_hamming_radius": 1,
+    "external_reference": "all modeling AAs including nonfinite Production",
+    "development_hamming_radius": 1,
+    "development_components": "connected components under Hamming <=1",
+    "dev_target_fraction": 0.15,
+    "component_shuffle_seed": 20261127,
+    "test_labels_used_for_split": false,
+    "result_driven_reconfiguration_allowed": false
+  },
+  "model": {
+    "alphabet": "ACDEFGHIKLMNPQRSTVWY",
+    "encoding": "integer tokens; differentiable one-hot; two position-preserving 1D convolutions; flattened MLP",
+    "channels": 64,
+    "hidden": 128,
+    "dropout": 0.1,
+    "loss": "MSE on train-mean/train-standard-deviation normalized measured Production",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 512,
+    "max_epochs": 300,
+    "early_stopping_patience": 20,
+    "early_stopping_min_delta": 1e-6,
+    "seeds": [11, 23, 37],
+    "ensemble": "arithmetic mean of three best-dev checkpoint scores",
+    "selection_metric": "development MSE only"
+  },
+  "evaluation": {
+    "primary_cap": 16,
+    "secondary_caps": [4, 64],
+    "sanity_cap": 1,
+    "pool_generation_seed_base": 20261127,
+    "random_choice_seed_base": 20261128,
+    "bootstrap_seed_base": 20261129,
+    "bootstrap_replicates": 2000,
+    "pools": "disjoint sequences within each cap; truncate remainder; identical candidates for BoN and RandomN",
+    "primary_estimand": "mean paired BoN regret minus RandomN regret in raw Production units",
+    "uncertainty": "two-sided 95% percentile bootstrap over disjoint pools",
+    "secondary_multiplicity": "Holm across caps 4 and 64",
+    "top_tail_quantiles": [0.01, 0.05, 0.1],
+    "test_used_for_model_or_pool_tuning": false
+  },
+  "retrospective": true,
+  "new_blinded_wet_lab_validation": false,
+  "meeting6_used": false,
+  "raw_sequences_synced_local": false
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "scenario_mrna_non_tcell_v1",
+  "frozen_date": "2026-11-28",
+  "evidence_boundary": "Retrospective analyses of public historical data and previously inspected frozen predictions. No new blind test, prospective validation, wet-lab experiment, model training, or T-cell analysis.",
+  "root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/scenario_mrna_non_tcell_v1",
+  "code_root": "/home/proxy-function-gap-scenario-mrna",
+  "raw": {
+    "editing": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/scenario_mrna_non_tcell_v1/raw/41467_2024_49508_MOESM4_ESM.xlsx",
+      "sha256": "dbfc40359d47cf8a154975845a5d63210cd6e227b969a2147c3ac6f756d0dd56",
+      "bytes": 66634,
+      "sheet_panel": "5'UTR sequences",
+      "cells": ["HepG2", "K562"],
+      "expected_panel_rows": 48,
+      "expected_raw_rows": {"HepG2": 672, "K562": 768}
+    },
+    "stability": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/scenario_mrna_non_tcell_v1/raw/41467_2024_49508_MOESM5_ESM.csv",
+      "sha256": "49e246beee542e98cec753c7eaa0545164da8d59e24c6cf2cf67e8b88dc659a5",
+      "bytes": 4591,
+      "expected_rows": 35,
+      "expected_experimental": 27,
+      "expected_spikein": 8
+    },
+    "author_summary": {
+      "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/scenario_mrna_non_tcell_v1/raw/author_summary_mean_std.csv",
+      "url": "https://raw.githubusercontent.com/castillohair/paper-5utr-design/main/megatal_gene_editing_analysis/summary_mean_std.csv",
+      "github_blob_sha": "ded91eba8b4bf6f8fe6d6357f4d8373a03d7974e",
+      "expected_rows": 192
+    },
+    "author_stability_notebook": {
+      "url": "https://github.com/castillohair/paper-5utr-design/blob/main/megatal_mrl_stability/analyze.ipynb",
+      "github_blob_sha": "2119289e2d750c28d1d6b08bf63ff4d3b51a4ff0"
+    }
+  },
+  "sample_exclusion": {
+    "roles": ["train", "dev", "calibration"],
+    "paths": {
+      "train": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/train.tsv.gz",
+      "dev": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/dev.tsv.gz",
+      "calibration": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/gate0_fresh_proxy_v1/build_a/learner/calibration.tsv.gz"
+    },
+    "sha256": {
+      "train": "3a58f2558cd1cffc55877bd940e5512fca62513d054c55da18a85fa8daf71677",
+      "dev": "6345bb51e0e1c9529235ff1ffb2e599a78a85a98007f1b9d247720629c40a60c",
+      "calibration": "f6d87787325e0918c802edf83f2b26e368a9f197f4e61b6f0e2684c1c1e86730"
+    },
+    "native_full_utr": "Exact match for any length; Hamming-1 only for equal-length native full UTRs.",
+    "n50_variable_region": "For every construct whose Description starts with N50 and whose native UTR length exceeds 50 nt, additionally audit the terminal 50 nt variable region against Sample. This includes the 72 nt and 73 nt N50 designs; do not strip any other sequence.",
+    "primary_pool": "Retain all 48 UTRs as frozen; disclose every conflict and run strict-H1 conflict-excluded sensitivity rather than rewriting the primary pool."
+  },
+  "model": {
+    "architecture": "Frozen 4-mer MLP ensemble: normalized 256 4-mer counts, GC fraction, binary uAUG, longest poly-U/50; Linear(259,32)-ReLU-Linear(32,1).",
+    "input": "Native full 5'UTR, no padding, truncation, or N50 prefix stripping for prediction.",
+    "aggregation": "Unweighted arithmetic mean on the original MRL scale.",
+    "training": "Forbidden",
+    "device": "CPU float32; one Torch thread; deterministic algorithms. CNN inference is not needed and forbidden for variable-length native UTRs.",
+    "checkpoints": [
+      {"seed": 101, "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_101/best.pt", "sha256": "147a86970d37cd58f0b8810b661d18c4c8eb1d8ac2a3cdd7c91b54af0654fcba", "model_hash": "b830b6a01126001968e437af28617a252a57529e2cf3342fb04abcf180942a47"},
+      {"seed": 202, "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_202/best.pt", "sha256": "9c1c1cbbff726b985a5a1bdbcf55b8f65458165c30bf8b9f634b35f048864a28", "model_hash": "0519824f352de2153a034ba27b1b9089dc0dbe81cb9a30e3304ba60de7655b2f"},
+      {"seed": 303, "path": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/kmer_proxy_v1_retry1/training/seed_303/best.pt", "sha256": "0b09912e887ce490089645512d742628f4df28dc347b90886486b00f241214f3", "model_hash": "204e25d62fec471b3d7e5fe12811ea85bee000dbb9e39ef04ce66676acbc7b35"}
+    ]
+  },
+  "indel": {
+    "candidate_pool": 48,
+    "contexts": ["HepG2|TGFBR2", "HepG2|PDCD1", "K562|TGFBR2", "K562|PDCD1"],
+    "primary_endpoint": "Kozak-normalized indel ratio, higher is better",
+    "normalization": "Within cell×target×dose, divide every retained biological-replicate indel fraction by the arithmetic mean of Strong Kozak (Sequence ID 48) across the two biological replicates at that same dose; then take the unweighted mean and sample SD over all retained dose×replicate ratios for each UTR×cell×target.",
+    "primary_flag_policy": "Reproduce author analysis by excluding rows with Flagged == 1 before both Strong Kozak reference calculation and candidate aggregation; explicitly report all 25 excluded K562 rows.",
+    "sensitivity": ["Include every flagged row and repeat the identical normalization", "Absolute unnormalized indel fraction at 2 pmol, averaged over two biological replicates"],
+    "author_summary_validation": "All 192 primary means and sample SDs must match the author CSV within absolute tolerance 1e-12 before decision metrics.",
+    "proxies": {
+      "kmer_mlp": {"n": 48, "role": "primary deployable retrospective proxy"},
+      "published_predicted_mrl": {"n": 45, "role": "secondary published prediction; missing VAT1/LAMA5/Strong Kozak remain missing and define a separate n=45 pool"},
+      "measured_mrl": {"n": 12, "role": "oracle-only diagnostic, not a deployable prediction; never impute missing values"}
+    },
+    "strong_kozak_baseline": "Sequence ID 48, fixed in every context; its normalized primary endpoint is exactly 1 only before flagged exclusions can alter dose references and is otherwise computed from the same retained rows."
+  },
+  "stability": {
+    "candidate_pool": 27,
+    "spikein_samples": 0,
+    "time_columns": ["stab_1", "stab_2", "stab_3", "stab_4", "stab_5", "stab_6"],
+    "times_hours": [0.5, 1.0, 2.0, 4.0, 8.0, 24.0],
+    "calibration": "At each timepoint fit scipy.stats.linregress of log10(spike-in concentration) on log10(UMI count) using spikein_1/2/3 only and concentrations [1,0.1,0.01]. Convert experimental counts as 10^(slope*log10(count)+intercept). Divide each sequence by IVT/mean(IVT across 27 experimental sequences).",
+    "integrated_abundance": "Linear interpolation in time and linear abundance, exact trapezoidal integral from 0.5 to 24 h; no single-exponential half-life.",
+    "free_to_total": "polprof_0/polprof_total; secondary mechanism diagnostic only.",
+    "mapping": "Map seq_<Sequence ID> to the panel. For N50 rows, the 51 nt stability key is the terminal 51 nt of the full 72 nt UTR; all 27 mappings must be unique and exact.",
+    "primary_endpoint": "Integrated normalized mRNA abundance, higher is better",
+    "cross_endpoint_indel": "Secondary oracle/mechanism analysis on the same 27 UTRs; no MRL-minus-abundance or MRL-minus-indel absolute error."
+  },
+  "selection": {
+    "caps": [1, 2, 4, 8, 16],
+    "caps_greater_than_pool": "Omit cap16 only for the measured-MRL oracle-only n=12 diagnostic; all primary and published-prediction pools (n=48/45/27) must evaluate every frozen cap.",
+    "algorithm_seeds": [20261127, 20261326],
+    "seed_range_inclusive": true,
+    "proposal": "PCG64 permutation using SeedSequence entropy 20261127 and spawn key (pool_code, seed_index); all methods and endpoints within a pool share the permutation.",
+    "bon": "Maximum proxy among the first N proposal rows; ties by ascending Sequence ID, then proposal position.",
+    "random_n": "One uniform prefix-position draw using PCG64 SeedSequence entropy 20261129 and spawn key (pool_code, seed_index, cap_index). UTR bootstrap reuses these 200 frozen proposal prefixes and prefix-position draws; it does not introduce new algorithmic random seeds per resample.",
+    "random1": "First proposal row.",
+    "oracle": "Best measured deployment endpoint in the full fixed/resampled pool with the same deterministic tie rule; not a population oracle.",
+    "regret": "For higher-is-better endpoints, oracle measured endpoint minus selected measured endpoint. BoN-minus-RandomN paired regret is primary; negative favors BoN.",
+    "strong_kozak": "Fixed Sequence ID 48 comparator where present, evaluated on the same endpoint and pool.",
+    "pool_codes": {"indel_kmer_48": 1, "indel_published_45": 2, "indel_measured_12": 3, "stability_kmer_27": 4, "stability_published_27": 5, "indel_strict_h1": 6}
+  },
+  "uncertainty": {
+    "primary_bootstrap_replicates": 10000,
+    "secondary_bootstrap_replicates": 2000,
+    "unit": "Whole UTR with replacement, carrying all cell×target contexts; duplicate copies remain distinct. Reuse the 200 frozen proposal-index prefixes and Random(N) positions, but rebuild BoN selection and measured oracle in every resampled pool.",
+    "cluster_seed": 20261130,
+    "proposal_bootstrap_entropy": "Not used: algorithmic proposals are conditionally fixed across UTR bootstrap replicates",
+    "interval": "Percentile 95% [2.5,97.5]; exploratory fixed-panel resampling, not prospective population inference.",
+    "p": "Two-sided bootstrap sign p with add-one correction, capped at 1.",
+    "multiplicity": "Holm within the 20 primary indel kmer context×cap tests and separately within the five primary stability kmer cap tests. Secondary/sensitivity results remain nominal and exploratory.",
+    "independence": "Algorithm seeds, doses, timepoints, and biological-replicate rows do not increase independent UTR n. Four editing contexts share the same UTRs."
+  },
+  "diagnostics": {
+    "same_endpoint_mrl": "MAE and Spearman only where measured MRL exists: n=12 in the 48 panel and n=8 in the 27 stability subset; never fill missing measured MRL with predictions.",
+    "cross_endpoint": "Spearman is descriptive. MAE is null/not applicable between MRL and indel, abundance, or TE.",
+    "top_tail": "Within each fixed pool, k=ceil(0.10*n); recall is the intersection of deterministic top-k proxy and top-k measured endpoint divided by k. Also report oracle-minus-best endpoint within proxy top-k and top/bottom proxy-tail mean measured endpoint.",
+    "frozen_mrl": "For HEK293T/HepG2 calculate diagnostics from the 16 frozen pools×64 candidates each; do not alter the existing equal-budget regret, seeds, intervals, or multiplicity results."
+  },
+  "historical_inputs": {
+    "budget_results": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_budget_matched_v1/analysis/results.json",
+    "budget_pools": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_budget_matched_v1/analysis/pool_effects.tsv",
+    "strict_h1_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_v3_strict_h1_retry1",
+    "strict_h1_pool_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1_retry1",
+    "leppek_summary": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/persist_mrl_external_v1/results/summary.json",
+    "schlusser_summary": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_hepg2_te_confirmatory_v1/evaluator_round_1/summary.json",
+    "schlusser_execution": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/schlusser2024_hepg2_te_confirmatory_v1/execution_complete.json",
+    "schlusser_policy": "Integrate historical one-time results only. Do not rerun model inference, selection, unblinding, bootstrap, robust endpoints, or relabel as blind."
+  },
+  "verification": {
+    "round1": "Raw hashes/counts, author summary identity, mapping, model hashes, synthetic unit tests, actual CPU inference and frozen execution.",
+    "round2": "Standalone independently written raw/numpy/statistical recomputation without importing the production analysis module.",
+    "round3": "Remote and local delivery hashes, report arithmetic, complete caps/contexts, evidence language and negative-result retention."
+  }
+}
