@@ -1,0 +1,12 @@
+{
+  "round": 2,
+  "status": "PASS",
+  "checks": {
+    "tcell_r1_cap16_effect": true,
+    "association_rho_tail": true,
+    "association_p_tail": true,
+    "upts_gate_failed": true,
+    "anchor_harmful": true,
+    "audit_rows_11": true
+  }
+}

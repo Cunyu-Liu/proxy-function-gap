@@ -1,0 +1,766 @@
+{
+  "tcell_equal_budget": {
+    "defined_tcell_r1": [
+      {
+        "cap": 2,
+        "effect": -0.7999489448180579,
+        "ci": [
+          -1.2010084788938793,
+          -0.4497295806349895
+        ],
+        "holm_p": 0.003999600039996,
+        "bon_regret": 4.1218072491858955,
+        "random_n_regret": 4.921756194003953
+      },
+      {
+        "cap": 4,
+        "effect": -1.4487561472291708,
+        "ci": [
+          -1.809148676482235,
+          -1.0945135857332682
+        ],
+        "holm_p": 0.003999600039996,
+        "bon_regret": 3.6424426444305946,
+        "random_n_regret": 5.091198791659766
+      },
+      {
+        "cap": 8,
+        "effect": -1.5793396544859084,
+        "ci": [
+          -1.9753751359210263,
+          -1.1830811700628017
+        ],
+        "holm_p": 0.003999600039996,
+        "bon_regret": 3.5993160094451992,
+        "random_n_regret": 5.178655663931107
+      },
+      {
+        "cap": 16,
+        "effect": -1.7057596554698837,
+        "ci": [
+          -2.163445256357177,
+          -1.2119135865532489
+        ],
+        "holm_p": 0.003999600039996,
+        "bon_regret": 3.5551806849011736,
+        "random_n_regret": 5.260940340371057
+      }
+    ],
+    "defined_tcell_r2": [
+      {
+        "cap": 2,
+        "effect": -0.6808242863206916,
+        "ci": [
+          -1.2480221324306318,
+          -0.13577053128630656
+        ],
+        "holm_p": 0.1775822417758224,
+        "bon_regret": 5.4213166545151665,
+        "random_n_regret": 6.102140940835859
+      },
+      {
+        "cap": 4,
+        "effect": -1.014875672224533,
+        "ci": [
+          -1.5444897125052945,
+          -0.4658324935132722
+        ],
+        "holm_p": 0.006399360063993601,
+        "bon_regret": 5.254170408648365,
+        "random_n_regret": 6.269046080872898
+      },
+      {
+        "cap": 8,
+        "effect": -0.9408734118573532,
+        "ci": [
+          -1.7383037411911109,
+          -0.1518003314280517
+        ],
+        "holm_p": 0.2221777822217778,
+        "bon_regret": 4.888535301457591,
+        "random_n_regret": 5.829408713314944
+      },
+      {
+        "cap": 16,
+        "effect": -1.086940681749869,
+        "ci": [
+          -1.833685155478184,
+          -0.31858892616080403
+        ],
+        "holm_p": 0.064993500649935,
+        "bon_regret": 5.043376614172306,
+        "random_n_regret": 6.1303172959221754
+      }
+    ]
+  },
+  "tcell_bottleneck": {
+    "defined_tcell_r1": {
+      "global_spearman": 0.5910524812945454,
+      "global_mae": 1.5674544802689514,
+      "top16_spearman": 0.2060575502396873,
+      "regret": 3.315826448847611,
+      "opportunity_loss": 0.8358287396467186,
+      "within_tail_ranking_loss": 2.4799977092008927,
+      "winner_flipped_within_tail": 0.9375,
+      "full_oracle_mrl": 9.694681200633855,
+      "tail_oracle_mrl": 8.858852460987137
+    },
+    "defined_tcell_r2": {
+      "global_spearman": 0.5292216226399566,
+      "global_mae": 1.543969499774867,
+      "top16_spearman": 0.14398424206794905,
+      "regret": 4.0705708474667865,
+      "opportunity_loss": 1.9533500523299472,
+      "within_tail_ranking_loss": 2.11722079513684,
+      "winner_flipped_within_tail": 0.9375,
+      "full_oracle_mrl": 11.9375,
+      "tail_oracle_mrl": 9.984149947670053
+    }
+  },
+  "adaptation": {
+    "mae": {
+      "defined_tcell_r1": {
+        "original_mae": 1.3521591065469438,
+        "adapted_mae": 0.914506247476038,
+        "original_spearman": 0.6979373265256638,
+        "adapted_spearman": 0.7037758024876051
+      },
+      "defined_tcell_r2": {
+        "original_mae": 1.0622726490779133,
+        "adapted_mae": 1.0187163057577855,
+        "original_spearman": 0.7191544463086708,
+        "adapted_spearman": 0.7289353222747343
+      }
+    },
+    "repeat_regret_delta": {
+      "defined_tcell_r1": 0.038928928838880016,
+      "defined_tcell_r2": 0.01255131774647562
+    },
+    "combined": {
+      "effect": 0.02574012329267782,
+      "ci_low": -0.07201905000880485,
+      "ci_high": 0.14099380381511187,
+      "p_two_sided": 0.6679332066793321,
+      "clusters": 16,
+      "replicates": 10000,
+      "seed": 20261126
+    },
+    "success": false
+  },
+  "listnet": {
+    "original_cnn": {
+      "effect": {
+        "effect": -0.03741547836992161,
+        "ci_low": -0.1832037112435067,
+        "ci_high": 0.1024938883642236,
+        "p_two_sided": 0.6145385461453855,
+        "clusters": 16,
+        "replicates": 10000,
+        "seed": 20261166,
+        "p_holm_10_comparison_cap_tests": 1.0
+      },
+      "baseline_regret": 1.766446900052982,
+      "min_reduction": 0.1
+    },
+    "v1_main": {
+      "effect": {
+        "effect": -0.007584567507243101,
+        "ci_low": -0.02869787621134999,
+        "ci_high": 0.012474118204131824,
+        "p_two_sided": 0.4811518848115188,
+        "clusters": 16,
+        "replicates": 10000,
+        "seed": 20262166,
+        "p_holm_10_comparison_cap_tests": 1.0
+      },
+      "baseline_regret": 1.736615989190304,
+      "min_reduction": 0.1
+    }
+  },
+  "anchor": {
+    "combined": {
+      "effect": 0.42889707759023665,
+      "ci_low": 0.2454604622370106,
+      "ci_high": 0.6164744196656033,
+      "p_two_sided": 0.00019998000199980003,
+      "clusters": 16,
+      "replicates": 10000,
+      "seed": 20261126
+    },
+    "repeat": {
+      "defined_tcell_r1": 0.463089560864378,
+      "defined_tcell_r2": 0.3947045943160952
+    },
+    "cnn_baseline_regret": 2.408230271391762
+  },
+  "upts": {
+    "all_directions_pass": false,
+    "directions": [
+      {
+        "direction": "n50_hek293t_r1_to_defined_hepg2_r1",
+        "gate_pass": true,
+        "chosen": {
+          "kappa": 0.5,
+          "dev_cap16_mean_regret": 4.086141261987607
+        },
+        "test": {
+          "cap16_mean_regret": 4.07026064193714,
+          "cap16_regret_improvement": 0.012174447952473244
+        },
+        "diagnostics": {
+          "surface": "destination dev pools, per-pool top16 by frozen proxy_mean, index tie-break",
+          "n": 298032,
+          "spearman_std_vs_signed_error": 0.003599123665844949,
+          "spearman_std_vs_abs_error": 0.0046850614426485115,
+          "mean_std_top16": 0.1102780064537617,
+          "used_for_selection": false
+        }
+      },
+      {
+        "direction": "defined_hepg2_r1_to_n50_hek293t_r1",
+        "gate_pass": false,
+        "chosen": {
+          "kappa": 4.0,
+          "dev_cap16_mean_regret": 5.793045400443217
+        },
+        "test": {
+          "cap16_mean_regret": 5.858227309538414,
+          "cap16_regret_improvement": -0.02955823918998668
+        },
+        "diagnostics": {
+          "surface": "destination dev pools, per-pool top16 by frozen proxy_mean, index tie-break",
+          "n": 55040,
+          "spearman_std_vs_signed_error": 0.00917248068023534,
+          "spearman_std_vs_abs_error": 0.017149740185783916,
+          "mean_std_top16": 0.12430016032381826,
+          "used_for_selection": false
+        }
+      }
+    ],
+    "target_mrl_read": false,
+    "target_evaluation_permitted": false,
+    "compute": "CPU-only; no training/inference"
+  },
+  "upts_selection": {
+    "n50_hek293t_r1_to_defined_hepg2_r1": {
+      "direction": "n50_hek293t_r1_to_defined_hepg2_r1",
+      "source": "n50_hek293t_r1",
+      "destination": "defined_hepg2_r1",
+      "member_mean_max_abs_diff": 0.0,
+      "kappa0_identity": {
+        "dev": 4.091180923266478,
+        "test": 4.082435089889613,
+        "exact_match_residual_v1": true
+      },
+      "baseline": {
+        "dev": {
+          "cap16_mean_regret": 4.091180923266478
+        },
+        "test": {
+          "cap16_mean_regret": 4.082435089889613
+        }
+      },
+      "candidates": [
+        {
+          "kappa": 0.0,
+          "dev_cap16_mean_regret": 4.091180923266478
+        },
+        {
+          "kappa": 0.5,
+          "dev_cap16_mean_regret": 4.086141261987607
+        },
+        {
+          "kappa": 1.0,
+          "dev_cap16_mean_regret": 4.0878683915914715
+        },
+        {
+          "kappa": 2.0,
+          "dev_cap16_mean_regret": 4.091256890937188
+        },
+        {
+          "kappa": 4.0,
+          "dev_cap16_mean_regret": 4.115204499670943
+        },
+        {
+          "kappa": 8.0,
+          "dev_cap16_mean_regret": 4.161172719010675
+        },
+        {
+          "kappa": 16.0,
+          "dev_cap16_mean_regret": 4.192927053756787
+        }
+      ],
+      "tie_rule": "smaller_kappa within tie_tolerance 1e-12",
+      "chosen": {
+        "kappa": 0.5,
+        "dev_cap16_mean_regret": 4.086141261987607
+      },
+      "test": {
+        "cap16_mean_regret": 4.07026064193714,
+        "cap16_regret_improvement": 0.012174447952473244
+      },
+      "gate_pass": true,
+      "diagnostics": {
+        "surface": "destination dev pools, per-pool top16 by frozen proxy_mean, index tie-break",
+        "n": 298032,
+        "spearman_std_vs_signed_error": 0.003599123665844949,
+        "spearman_std_vs_abs_error": 0.0046850614426485115,
+        "mean_std_top16": 0.1102780064537617,
+        "used_for_selection": false
+      },
+      "target_mrl_read": false,
+      "pools_sha256": {
+        "dev": "01a435d8bf9be9db5aea65b93f53c0c5b036ce4758ab80711edce486399a8c56",
+        "test": "7bb185dc31bc7e280a2d3d73fb7811e9ecebf628d35138601406d8db802719d2"
+      },
+      "proposals_sha256": {
+        "dev": "97aa72ede2ab0e5d2522566e7a6c57b533889797182fc8b294189a3a0203197b",
+        "test": "b860892a84b662303d0adfe999597c0970df160eb66df44105572757244cb13b"
+      }
+    },
+    "defined_hepg2_r1_to_n50_hek293t_r1": {
+      "direction": "defined_hepg2_r1_to_n50_hek293t_r1",
+      "source": "defined_hepg2_r1",
+      "destination": "n50_hek293t_r1",
+      "member_mean_max_abs_diff": 0.0,
+      "kappa0_identity": {
+        "dev": 5.800774442770002,
+        "test": 5.828669070348427,
+        "exact_match_residual_v1": true
+      },
+      "baseline": {
+        "dev": {
+          "cap16_mean_regret": 5.800774442770002
+        },
+        "test": {
+          "cap16_mean_regret": 5.828669070348427
+        }
+      },
+      "candidates": [
+        {
+          "kappa": 0.0,
+          "dev_cap16_mean_regret": 5.800774442770002
+        },
+        {
+          "kappa": 0.5,
+          "dev_cap16_mean_regret": 5.797403319572961
+        },
+        {
+          "kappa": 1.0,
+          "dev_cap16_mean_regret": 5.802233988654048
+        },
+        {
+          "kappa": 2.0,
+          "dev_cap16_mean_regret": 5.795600204969284
+        },
+        {
+          "kappa": 4.0,
+          "dev_cap16_mean_regret": 5.793045400443217
+        },
+        {
+          "kappa": 8.0,
+          "dev_cap16_mean_regret": 5.800777610488586
+        },
+        {
+          "kappa": 16.0,
+          "dev_cap16_mean_regret": 5.825576059758483
+        }
+      ],
+      "tie_rule": "smaller_kappa within tie_tolerance 1e-12",
+      "chosen": {
+        "kappa": 4.0,
+        "dev_cap16_mean_regret": 5.793045400443217
+      },
+      "test": {
+        "cap16_mean_regret": 5.858227309538414,
+        "cap16_regret_improvement": -0.02955823918998668
+      },
+      "gate_pass": false,
+      "diagnostics": {
+        "surface": "destination dev pools, per-pool top16 by frozen proxy_mean, index tie-break",
+        "n": 55040,
+        "spearman_std_vs_signed_error": 0.00917248068023534,
+        "spearman_std_vs_abs_error": 0.017149740185783916,
+        "mean_std_top16": 0.12430016032381826,
+        "used_for_selection": false
+      },
+      "target_mrl_read": false,
+      "pools_sha256": {
+        "dev": "511b8b764f36602807ab992037655a0705ab4917f58aa37414aa1c3a3fc00d48",
+        "test": "1dab4b85d2f89aae0346981dcd98cbe66d250018d9b4653232bdce20d26f670b"
+      },
+      "proposals_sha256": {
+        "dev": "9bbc9c74ae717ecfc3d49c52c66e6e79c14c3003269abaf9b3a6b65a3c27a019",
+        "test": "c0bb56c5854037c80ff69bbb7133cc76cbdf7489b5e2f637c450d8b5c175dfd8"
+      }
+    }
+  },
+  "tail_audit_v2": [
+    {
+      "scenario": "T-cell MRL r1",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "status": "positive",
+      "relative_regret_reduction_pct": 32.42309444911089,
+      "cap16_delta": -1.7057596554698837,
+      "ci95": [
+        -2.163445256357177,
+        -1.2119135865532489
+      ],
+      "v1_global_spearman": 0.5910524812945454,
+      "v1_tail_metric": "top16 Spearman",
+      "v1_tail_value": 0.2060575502396873,
+      "n_eval": 1024,
+      "k_decile": 103,
+      "global_spearman": 0.5910524812945454,
+      "tail_recall_decile": 0.20388349514563106,
+      "tail_spearman_pred_decile": 0.0757574931489235,
+      "tail_spearman_true_decile": -0.03917396457094206,
+      "top1pct_recall": 0.0,
+      "proxy": "cnn_ensemble_proxy_mean",
+      "metric_source": "paper1_v3_strict_h1_retry1 + castillo_fixed_pools_v3_strict_h1_retry1"
+    },
+    {
+      "scenario": "T-cell MRL r2",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "status": "nominal",
+      "relative_regret_reduction_pct": 17.73057786866743,
+      "cap16_delta": -1.086940681749869,
+      "ci95": [
+        -1.833685155478184,
+        -0.31858892616080403
+      ],
+      "v1_global_spearman": 0.5292216226399566,
+      "v1_tail_metric": "top16 Spearman",
+      "v1_tail_value": 0.14398424206794905,
+      "n_eval": 1024,
+      "k_decile": 103,
+      "global_spearman": 0.5292216226399566,
+      "tail_recall_decile": 0.1941747572815534,
+      "tail_spearman_pred_decile": 0.3233367871339827,
+      "tail_spearman_true_decile": -0.24083181275557583,
+      "top1pct_recall": 0.0,
+      "proxy": "cnn_ensemble_proxy_mean",
+      "metric_source": "paper1_v3_strict_h1_retry1 + castillo_fixed_pools_v3_strict_h1_retry1"
+    },
+    {
+      "scenario": "GB1 binding",
+      "family": "protein",
+      "endpoint": "IgG-Fc lnW",
+      "status": "positive",
+      "relative_regret_reduction_pct": 30.096283721593775,
+      "cap16_delta": -0.16089381057826665,
+      "ci95": [
+        -0.28285336364321556,
+        -0.05051518912930951
+      ],
+      "v1_global_spearman": 0.3478596529400488,
+      "v1_tail_metric": "true top-decile recall",
+      "v1_tail_value": 0.14234654234654237,
+      "n_eval": 20063,
+      "k_decile": 2007,
+      "global_spearman": 0.34228151526326445,
+      "tail_recall_decile": 0.18684603886397608,
+      "tail_spearman_pred_decile": 0.021567244596446673,
+      "tail_spearman_true_decile": 0.15173275374297948,
+      "top1pct_recall": 0.004975124378109453,
+      "proxy": "additive_ridge_seed_mean",
+      "metric_source": "scenario_gb1_v1/predictions/test_predictions.npz + data/evaluator/test_labels.csv"
+    },
+    {
+      "scenario": "GFP brightness",
+      "family": "protein",
+      "endpoint": "log brightness",
+      "status": "positive",
+      "relative_regret_reduction_pct": 88.27095599771282,
+      "cap16_delta": -0.28001600485859346,
+      "ci95": [
+        -0.30945332718720536,
+        -0.2520728025988946
+      ],
+      "v1_global_spearman": 0.4604417787994951,
+      "v1_tail_metric": "true top5% lift at B16",
+      "v1_tail_value": 10.47,
+      "n_eval": 16000,
+      "k_decile": 1600,
+      "global_spearman": 0.46044177879949505,
+      "tail_recall_decile": 0.54625,
+      "tail_spearman_pred_decile": 0.28433437055370997,
+      "tail_spearman_true_decile": 0.18220485744003576,
+      "top1pct_recall": 0.175,
+      "proxy": "additive_ridge",
+      "metric_source": "scenario_gfp_v1/predictions/additive.npz + evaluator/high_order_labels.csv"
+    },
+    {
+      "scenario": "AAV9 production",
+      "family": "gene therapy",
+      "endpoint": "Production enrichment",
+      "status": "positive",
+      "relative_regret_reduction_pct": 65.49541532676167,
+      "cap16_delta": -4.206431097252901,
+      "ci95": [
+        -4.564111062543161,
+        -3.931098295982311
+      ],
+      "v1_global_spearman": 0.820908,
+      "v1_tail_metric": "true top1% recall",
+      "v1_tail_value": 0.1875,
+      "n_eval": 63941,
+      "k_decile": 6395,
+      "global_spearman": 0.8209084839346245,
+      "tail_recall_decile": 0.6089132134480063,
+      "tail_spearman_pred_decile": 0.3072487603938872,
+      "tail_spearman_true_decile": 0.27030390489691775,
+      "top1pct_recall": 0.1875,
+      "proxy": "cnn_ensemble_scores",
+      "metric_source": "scenario_aav_v1/evaluation/test_predictions.npz"
+    },
+    {
+      "scenario": "HEK293T N50 MRL",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "status": "null",
+      "relative_regret_reduction_pct": -2.1297279398115347,
+      "cap16_delta": 0.1359392963,
+      "ci95": [
+        -0.9893056525,
+        1.1351243682
+      ],
+      "v1_global_spearman": 0.1558926968,
+      "v1_tail_metric": "true top-decile recall",
+      "v1_tail_value": 0.1160714286,
+      "n_eval": 1024,
+      "k_decile": 103,
+      "global_spearman": 0.1558926968,
+      "tail_recall_decile": 0.1160714286,
+      "tail_spearman_pred_decile": NaN,
+      "tail_spearman_true_decile": NaN,
+      "top1pct_recall": NaN,
+      "proxy": "frozen_CNN/kmer_mlp",
+      "metric_source": "scenario_mrna_non_tcell_v1/results/unified_scenario_metrics.json (stored frozen global top-decile recall)"
+    },
+    {
+      "scenario": "HepG2 defined-end MRL",
+      "family": "mRNA",
+      "endpoint": "measured MRL",
+      "status": "nominal",
+      "relative_regret_reduction_pct": 22.26934753205564,
+      "cap16_delta": -1.0868857332,
+      "ci95": [
+        -2.084375,
+        -0.1181050198
+      ],
+      "v1_global_spearman": 0.2140928883,
+      "v1_tail_metric": "true top-decile recall",
+      "v1_tail_value": 0.1517857143,
+      "n_eval": 1024,
+      "k_decile": 103,
+      "global_spearman": 0.2140928883,
+      "tail_recall_decile": 0.1517857143,
+      "tail_spearman_pred_decile": NaN,
+      "tail_spearman_true_decile": NaN,
+      "top1pct_recall": NaN,
+      "proxy": "frozen_CNN/kmer_mlp",
+      "metric_source": "scenario_mrna_non_tcell_v1/results/unified_scenario_metrics.json (stored frozen global top-decile recall)"
+    },
+    {
+      "scenario": "mRNA stability",
+      "family": "mRNA",
+      "endpoint": "integrated abundance",
+      "status": "harmful",
+      "relative_regret_reduction_pct": -36.85242775288236,
+      "cap16_delta": 0.283767186261695,
+      "ci95": [
+        0.0824,
+        0.4435
+      ],
+      "v1_global_spearman": -0.7655677656,
+      "v1_tail_metric": "true top-decile recall",
+      "v1_tail_value": 0.0,
+      "n_eval": 27,
+      "k_decile": 3,
+      "global_spearman": -0.7655677656,
+      "tail_recall_decile": 0.0,
+      "tail_spearman_pred_decile": NaN,
+      "tail_spearman_true_decile": NaN,
+      "top1pct_recall": NaN,
+      "proxy": "frozen_CNN/kmer_mlp",
+      "metric_source": "scenario_mrna_non_tcell_v1/results/unified_scenario_metrics.json (stored frozen global top-decile recall)"
+    },
+    {
+      "scenario": "Castillo indel",
+      "family": "mRNA",
+      "endpoint": "normalized indel",
+      "status": "mixed/null",
+      "relative_regret_reduction_pct": null,
+      "cap16_delta": null,
+      "ci95": null,
+      "v1_global_spearman": 0.18380916195,
+      "v1_tail_metric": "true top-decile recall",
+      "v1_tail_value": 0.05,
+      "n_eval": 48,
+      "k_decile": 5,
+      "global_spearman": 0.18380916195,
+      "tail_recall_decile": 0.05,
+      "tail_spearman_pred_decile": NaN,
+      "tail_spearman_true_decile": NaN,
+      "top1pct_recall": NaN,
+      "proxy": "frozen_CNN/kmer_mlp",
+      "metric_source": "scenario_mrna_non_tcell_v1/results/unified_scenario_metrics.json (stored frozen global top-decile recall)"
+    },
+    {
+      "scenario": "TEM-1 Amp\u2192Amp",
+      "family": "enzyme",
+      "endpoint": "relative resistance",
+      "status": "condition-dependent",
+      "relative_regret_reduction_pct": 43.746676135596665,
+      "cap16_delta": -0.19871157373951007,
+      "ci95": null,
+      "v1_global_spearman": 0.352772560132108,
+      "v1_tail_metric": "source top10% Spearman",
+      "v1_tail_value": 0.13745580091234874,
+      "n_eval": 1010,
+      "k_decile": 101,
+      "global_spearman": 0.3527725601321081,
+      "tail_recall_decile": 0.19255663430420708,
+      "tail_spearman_pred_decile": 0.13745580091234877,
+      "tail_spearman_true_decile": 0.13745580091234877,
+      "top1pct_recall": 0.11818181818181817,
+      "proxy": "source_condition_fitness",
+      "metric_source": "scenario_tem1_v1/raw/stiffler2015_*.csv + frozen_protocol.json (test split, recomputed)"
+    },
+    {
+      "scenario": "TEM-1 Amp\u2192cefotaxime",
+      "family": "enzyme",
+      "endpoint": "relative resistance",
+      "status": "null",
+      "relative_regret_reduction_pct": 1.800247200052279,
+      "cap16_delta": -0.0020504082729805354,
+      "ci95": null,
+      "v1_global_spearman": -0.05861848456152641,
+      "v1_tail_metric": "source top10% Spearman",
+      "v1_tail_value": 0.012648040734346005,
+      "n_eval": 1018,
+      "k_decile": 102,
+      "global_spearman": -0.05861848456152641,
+      "tail_recall_decile": 0.07643424536628421,
+      "tail_spearman_pred_decile": 0.012648040734346005,
+      "tail_spearman_true_decile": 0.13852429711106387,
+      "top1pct_recall": 0.0,
+      "proxy": "source_condition_fitness",
+      "metric_source": "scenario_tem1_v1/raw/stiffler2015_*.csv + frozen_protocol.json (test split, recomputed)"
+    }
+  ],
+  "association": {
+    "analysis": "cross_scenario_tail_association_v1",
+    "protocol_sha256": "eae5716ca8f9f090b27ac637549a033c5dd564cc3bf73bde64f78cf414c44388",
+    "data_sha256": "5117f7feb64765a7aac254d087ad165e2acd323ca30ccc8887d93d0b6cf3dc59",
+    "n_scenarios": 10,
+    "included": [
+      "T-cell MRL r1",
+      "T-cell MRL r2",
+      "GB1 binding",
+      "GFP brightness",
+      "AAV9 production",
+      "HEK293T N50 MRL",
+      "HepG2 defined-end MRL",
+      "mRNA stability",
+      "TEM-1 Amp\u2192Amp",
+      "TEM-1 Amp\u2192cefotaxime"
+    ],
+    "excluded": [
+      "Castillo indel"
+    ],
+    "rho_tail_recall": 0.8787878787878788,
+    "rho_global_spearman": 0.7696969696969697,
+    "permutation_p_tail": 0.0007599962000189999,
+    "permutation_p_global": 0.0062699686501567495,
+    "difference_rho_tail_minus_global": {
+      "mean": 0.10258531929969097,
+      "ci95": [
+        0.0,
+        0.4616129032258054
+      ]
+    },
+    "success_rule_met": false,
+    "leave_one_out": [
+      {
+        "dropped": "T-cell MRL r1",
+        "rho_tail": 0.8666666666666667,
+        "rho_global": 0.7833333333333333
+      },
+      {
+        "dropped": "T-cell MRL r2",
+        "rho_tail": 0.9500000000000001,
+        "rho_global": 0.9
+      },
+      {
+        "dropped": "GB1 binding",
+        "rho_tail": 0.8833333333333333,
+        "rho_global": 0.75
+      },
+      {
+        "dropped": "GFP brightness",
+        "rho_tail": 0.8499999999999999,
+        "rho_global": 0.8499999999999999
+      },
+      {
+        "dropped": "AAV9 production",
+        "rho_tail": 0.8499999999999999,
+        "rho_global": 0.7333333333333334
+      },
+      {
+        "dropped": "HEK293T N50 MRL",
+        "rho_tail": 0.8499999999999999,
+        "rho_global": 0.7
+      },
+      {
+        "dropped": "HepG2 defined-end MRL",
+        "rho_tail": 0.8833333333333333,
+        "rho_global": 0.75
+      },
+      {
+        "dropped": "mRNA stability",
+        "rho_tail": 0.8333333333333333,
+        "rho_global": 0.6833333333333333
+      },
+      {
+        "dropped": "TEM-1 Amp\u2192Amp",
+        "rho_tail": 0.9166666666666666,
+        "rho_global": 0.7999999999999999
+      },
+      {
+        "dropped": "TEM-1 Amp\u2192cefotaxime",
+        "rho_tail": 0.8499999999999999,
+        "rho_global": 0.7
+      }
+    ],
+    "secondary_predictors": {
+      "tail_spearman_pred_decile": {
+        "rho": 0.42857142857142866,
+        "n": 7
+      },
+      "tail_spearman_true_decile": {
+        "rho": 0.5714285714285715,
+        "n": 7
+      },
+      "top1pct_recall": {
+        "rho": 0.8524367141602663,
+        "n": 7
+      }
+    },
+    "subsets_descriptive": {
+      "positive_only": {
+        "n": 4,
+        "rho_tail": 0.7999999999999999
+      },
+      "boundary_only": {
+        "n": 6,
+        "rho_tail": 0.7714285714285715
+      }
+    },
+    "retrospective": true,
+    "interpretation": "Success rule not met; tail reliability remains a descriptive diagnostic, not a statistically tested cross-scenario mechanism."
+  }
+}

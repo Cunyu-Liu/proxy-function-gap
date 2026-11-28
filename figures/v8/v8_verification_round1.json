@@ -1,0 +1,9 @@
+{
+  "round": 1,
+  "status": "PASS",
+  "checks": {
+    "deterministic_rebuild_byte_identical": true,
+    "all_formats_present": true,
+    "figure_count": true
+  }
+}

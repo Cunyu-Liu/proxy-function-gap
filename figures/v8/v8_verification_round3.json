@@ -1,0 +1,21 @@
+{
+  "round": 3,
+  "status": "PASS",
+  "checks": {
+    "Figure1_v8_equal_budget_value_pdf_nonempty": true,
+    "Figure1_v8_equal_budget_value_svg_has_text": true,
+    "Figure2_v8_tail_bottleneck_pdf_nonempty": true,
+    "Figure2_v8_tail_bottleneck_svg_has_text": true,
+    "Figure3_v8_regression_decision_dissociation_pdf_nonempty": true,
+    "Figure3_v8_regression_decision_dissociation_svg_has_text": true,
+    "Figure4_v8_upts_falsification_pdf_nonempty": true,
+    "Figure4_v8_upts_falsification_svg_has_text": true,
+    "Figure5_v8_cross_scenario_forest_pdf_nonempty": true,
+    "Figure5_v8_cross_scenario_forest_svg_has_text": true,
+    "Figure6_v8_unified_tail_diagnostic_pdf_nonempty": true,
+    "Figure6_v8_unified_tail_diagnostic_svg_has_text": true,
+    "ED_Figure1_v8_label_distributions_pdf_nonempty": true,
+    "ED_Figure1_v8_label_distributions_svg_has_text": true,
+    "config_retrospective": true
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "release": "Paper 1 tail-reliability V10",
+  "release_commit": null,
+  "github_upload": "not_claimed",
+  "paper_markdown_sha256": "34012f15091246a3bdedb39ec4ec996b03ed620a9e29352edf7eac36d0c758c6",
+  "evidence_boundary": "All retrospective historical-data studies; grouped holdouts are not prospective blind tests. UPTS v1 failed its auxiliary gate; T-cell target not evaluated. Independent candidates (Cao endogenous TE, Ogden AAV2 tropism) qualified but access-barred and not evaluated. DRAFT_NOT_SUBMITTED.",
+  "statistical_boundary": "No cross-task pooled raw effect; endpoint-specific regret; cluster bootstrap; cross-scenario tail association is associational (n=10), difference CI touches zero; algorithm seeds are not biological replicates.",
+  "new_in_v10": "Seven-question narrative chain; unified top-decile tail-recall metric + pre-registered association (rho=0.879, p=0.00076); v8 journal-style figure set; data/baseline/OOD consolidated audit; Cao endpoint correction.",
+  "ppt_status": "updated_to_V10_20261128",
+  "manual_items_before_submission": [
+    "作者署名与顺序",
+    "单位/通讯作者",
+    "利益冲突声明",
+    "数据与代码许可（含各公开数据集原始许可）",
+    "目标期刊/仓库与投稿格式",
+    "是否需要公开数据/代码 DOI（Zenodo）",
+    "参考文献 [18] T3PO-mRNA 作者/年份补核（审计时 OpenReview 403）",
+    "独立数据评价（Cao 内源 TE / Ogden AAV2 tropism）需另立冻结协议与可行数据通道"
+  ],
+  "artifacts": [
+    {
+      "local_path": "deliverables/paper/PAPER1_TAIL_RELIABILITY_V10_20261128.md",
+      "bytes": 27619,
+      "sha256": "34012f15091246a3bdedb39ec4ec996b03ed620a9e29352edf7eac36d0c758c6"
+    },
+    {
+      "local_path": "deliverables/paper/PAPER1_TAIL_RELIABILITY_V10_20261128.pdf",
+      "bytes": 376170,
+      "sha256": "3f5e1aa3afeb5c9772f3574e1a4b645a1a528bdfb613bfbf80c9d0748afe6ea6"
+    },
+    {
+      "local_path": "deliverables/paper/build_paper1_tail_reliability_v10.py",
+      "bytes": 1048,
+      "sha256": "8ad600e53895d7e5e1763b3e73122383623e9f6ca7d951a9ac1e529a6626dcc1"
+    },
+    {
+      "local_path": "deliverables/reports/docs/PAPER1_TAIL_RELIABILITY_V10_VERIFICATION_ROUND1.json",
+      "bytes": 487,
+      "sha256": "39a2d73cc9e1a06816fdb2f35633bf8cb6c36a4614e561f881e6ef8fcfb56e1e"
+    },
+    {
+      "local_path": "deliverables/reports/docs/PAPER1_TAIL_RELIABILITY_V10_VERIFICATION_ROUND2.json",
+      "bytes": 487,
+      "sha256": "5727a56c6b0343550a40c74b0efba73fd6ff1b284f0438addc0e64bfaf1db040"
+    },
+    {
+      "local_path": "deliverables/reports/docs/PAPER1_TAIL_RELIABILITY_V10_VERIFICATION_ROUND3.json",
+      "bytes": 487,
+      "sha256": "5a9cd88bbeef5fea4f206a9e008a0e27e9b9f4e2cc0bbab5b24f2c21dc0fd0de"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure1_v8_equal_budget_value.pdf",
+      "bytes": 36799,
+      "sha256": "04ba591b9f13c649902b9f638a2d2d685f1ce5cb2a4f2e8fe5910032d995b48d"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure1_v8_equal_budget_value.png",
+      "bytes": 94444,
+      "sha256": "bdf041dc9c4bb20246d69829a59abd3123993e46176f356ef55f8e0ba166aaa7"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure1_v8_equal_budget_value.svg",
+      "bytes": 29501,
+      "sha256": "f7d181b0b52ffbcd1dc36596665cff2f4a6c097a1e8f382fc9236af9a5397d31"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure2_v8_tail_bottleneck.pdf",
+      "bytes": 34580,
+      "sha256": "891eeea54b5c971f23717ab7aba362902f6cc6275ccdfee7cb64c3b8c65d7080"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure2_v8_tail_bottleneck.png",
+      "bytes": 83655,
+      "sha256": "f5d654bf4bbc559e685a4f541488fd6cfae24cc3bbf58fd9a03e612ca6c0a0cd"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure2_v8_tail_bottleneck.svg",
+      "bytes": 24891,
+      "sha256": "2d8cfcc2bd7936ae4864487a6bca446fbda96d18b1f975f4a47b79c444675234"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure3_v8_regression_decision_dissociation.pdf",
+      "bytes": 35844,
+      "sha256": "000d43a96d142802252d7cf619b699886d90aa8273460012a38bc3f8a938c17a"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure3_v8_regression_decision_dissociation.png",
+      "bytes": 105078,
+      "sha256": "0198c8321efaa97e9ef61ad8d867750426112c886a0f84a2ee627f95c28fcb21"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure3_v8_regression_decision_dissociation.svg",
+      "bytes": 28647,
+      "sha256": "e4d34066caec084c855b081b5fcba8f60ed54263da2186791bd1117207ca99aa"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure4_v8_upts_falsification.pdf",
+      "bytes": 36818,
+      "sha256": "3dfa08a1ca37fbd5658edc0b24377132e33e46b0d4f1b1cbd9fc682d3def2f95"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure4_v8_upts_falsification.png",
+      "bytes": 127172,
+      "sha256": "a105e0cdbb686663951c838ab505165abc5f742fd27fd42ae5d99bdbd29d9a62"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure4_v8_upts_falsification.svg",
+      "bytes": 39123,
+      "sha256": "8e9f43be07b9164e3868b971dd4359f31ab82dd2074fc15eb85d4a55963cc31e"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure5_v8_cross_scenario_forest.pdf",
+      "bytes": 38272,
+      "sha256": "40676e02c33335ee394b8a760ad0d6fe645aaa21781578b412e2621c11cc675d"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure5_v8_cross_scenario_forest.png",
+      "bytes": 117167,
+      "sha256": "4647b67d64c7ec31d834287952eb1e9a9456df82dca492fb802e65fa786b9662"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure5_v8_cross_scenario_forest.svg",
+      "bytes": 46304,
+      "sha256": "82f635da0d5cb3e746e90e27c91ad79b0710f4688cbaab5cca8bf2dd655b2e50"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure6_v8_unified_tail_diagnostic.pdf",
+      "bytes": 39536,
+      "sha256": "c159c9af5ab74cba8a740ea83ade3416e53f5440942548a9e10aeaed5639c93e"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure6_v8_unified_tail_diagnostic.png",
+      "bytes": 116575,
+      "sha256": "db6658f3ef692e28fe57dfc162f052141d7d8e3208c78772529cf7ad2a882b04"
+    },
+    {
+      "local_path": "deliverables/figures/v8/Figure6_v8_unified_tail_diagnostic.svg",
+      "bytes": 48048,
+      "sha256": "88c38940d337a4388b235aaabbba675a393d5a743c6ee59d8e922c3f52e33e01"
+    },
+    {
+      "local_path": "deliverables/figures/v8/ED_Figure1_v8_label_distributions.pdf",
+      "bytes": 40532,
+      "sha256": "26ee1c5324bc5e1c1c9ff2bdbda1918374ecae463a4d49a18f64bea464b61573"
+    },
+    {
+      "local_path": "deliverables/figures/v8/ED_Figure1_v8_label_distributions.png",
+      "bytes": 121296,
+      "sha256": "2e02eeba6a0e8c157cfcbea7827a3db8f2639f85e02211c75bad545bc01633ad"
+    },
+    {
+      "local_path": "deliverables/figures/v8/ED_Figure1_v8_label_distributions.svg",
+      "bytes": 42844,
+      "sha256": "d792fbc484d703d261163313ef72a2d7d92d98b42c68e3772cbf723688d6df2c"
+    },
+    {
+      "local_path": "deliverables/figures/v8/figure_style_v8.py",
+      "bytes": 2811,
+      "sha256": "72bb6fcd71a3695f4dfcaa645dbb47423b24891fecda221595369ab608135693"
+    },
+    {
+      "local_path": "deliverables/figures/v8/prep_v8_data.py",
+      "bytes": 4307,
+      "sha256": "1a5d453f36bb42cb70b4f574518eee0bd75ea147add1addb745d972909caa4e0"
+    },
+    {
+      "local_path": "deliverables/figures/v8/build_v8_figures.py",
+      "bytes": 15157,
+      "sha256": "ed4a5685584473e107214375e21dbf08e6f6abd58694a5e9f8600728f07cf5f6"
+    },
+    {
+      "local_path": "deliverables/figures/v8/build_v8_extended.py",
+      "bytes": 2567,
+      "sha256": "974fd3510269c5980bda9a1d31f289bab6776233f58658964e6a1ce20dc16040"
+    },
+    {
+      "local_path": "deliverables/figures/v8/verify_v8_figures.py",
+      "bytes": 2846,
+      "sha256": "8cb66bca22a879f8677b466fbcfb0a4eed84f77001957f264f22c8c5c37d7f2d"
+    },
+    {
+      "local_path": "deliverables/figures/v8/figures_v8_data.json",
+      "bytes": 24144,
+      "sha256": "7b1e536050cdf17587a4dd7916244977432f442b9908a55741361b7e8f402d16"
+    },
+    {
+      "local_path": "deliverables/figures/v8/v8_build_config.json",
+      "bytes": 284,
+      "sha256": "f33e6c8479a26f5d7edf8e2795bef76bae12a9b4f90dc0830f31162a90d11707"
+    },
+    {
+      "local_path": "deliverables/figures/v8/v8_verification_round1.json",
+      "bytes": 164,
+      "sha256": "d523c021ac1051263168be8e9108fb4465f2107db6702331da655f89d9dbdf9f"
+    },
+    {
+      "local_path": "deliverables/figures/v8/v8_verification_round2.json",
+      "bytes": 241,
+      "sha256": "3891298b3b9023c8821e74c2e93461413a92f921a519ff120f9ca892dcaa4974"
+    },
+    {
+      "local_path": "deliverables/figures/v8/v8_verification_round3.json",
+      "bytes": 919,
+      "sha256": "5b432494c3fc0a781a11ea0281a15f4bab0f3037010d64826c4f7954fb911b2a"
+    },
+    {
+      "local_path": "deliverables/reports/docs/V10_P0_RECHECK_20261128.md",
+      "bytes": 1690,
+      "sha256": "2f644e716a81f0809444e80e75080a5776a3214f382c2d8d181e61658a68ae45"
+    },
+    {
+      "local_path": "deliverables/reports/docs/CROSS_SCENARIO_TAIL_ASSOCIATION_20261128.md",
+      "bytes": 4130,
+      "sha256": "a78da7bd4c5ad69f8743239a5e2bdb03c5b2a9f576b81d3f5ee916dd9871b891"
+    },
+    {
+      "local_path": "deliverables/reports/docs/DATA_BASELINE_OOD_AUDIT_V10_20261128.md",
+      "bytes": 9021,
+      "sha256": "2cda1b26e39ede15fb8bd37c71f9e4e1449cf22ee532b95f019eafb68cd855d9"
+    },
+    {
+      "local_path": "deliverables/reports/docs/SCENARIO_CAO2021_V1_20261128.md",
+      "bytes": 4154,
+      "sha256": "14064731429c4897bff648f609f0b3cc8c1d6b338505af3ebf87a7a2a5e7727e"
+    },
+    {
+      "local_path": "deliverables/reports/docs/CROSS_SCENARIO_EVIDENCE_SYNTHESIS_20261128.md",
+      "bytes": 7785,
+      "sha256": "7f7ef17d0d6f928bf7f3fdfc736860b1d418acf6e230f3c9fed748c9928c4dce"
+    },
+    {
+      "local_path": "deliverables/reports/docs/P4_BASELINE_OOD_AUDIT_20261128.md",
+      "bytes": 8701,
+      "sha256": "10d3ada53312fa77deb92b5986d41a9c20b7b41f640a5f23b0f60a8c55f863a4"
+    },
+    {
+      "local_path": "deliverables/reports/docs/TCELL_UPTS_V1_20261128.md",
+      "bytes": 6962,
+      "sha256": "1555ab39b6552ec75d2b1cb4ac7562a88b17ff2cfdec6da1faf19f1d8abf4314"
+    },
+    {
+      "local_path": "deliverables/reports/docs/verify_paper1_tail_reliability_v10.py",
+      "bytes": 3679,
+      "sha256": "3d1f97abf0db8f5d4162872345947834ffc3afe4731171a6240a1a6373036374"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/tail_audit_v2.json",
+      "bytes": 9750,
+      "sha256": "5117f7feb64765a7aac254d087ad165e2acd323ca30ccc8887d93d0b6cf3dc59"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/tail_audit_v2.tsv",
+      "bytes": 4012,
+      "sha256": "56095de9fe8f4df4610f0e26a965dcf5c536dd1698dc81755b09533c33c76425"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/input_hashes.json",
+      "bytes": 22026,
+      "sha256": "b18a69d440df5f62ff37201cdfd0ec395d51056592a515cc9b60e5e2bf393085"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/association_protocol_frozen.json",
+      "bytes": 2389,
+      "sha256": "eae5716ca8f9f090b27ac637549a033c5dd564cc3bf73bde64f78cf414c44388"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/association_results.json",
+      "bytes": 2758,
+      "sha256": "4aca6eecbbac8aee3e9a2148f0b2ad4ba5973f690eb97eba9fd2785fdfb1658d"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/run_association.py",
+      "bytes": 5286,
+      "sha256": "4c8689664fb74884bc74a7983e5a4c932af4e683f8cb438e325fcc4dde1e94ad"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/verify_association.py",
+      "bytes": 3820,
+      "sha256": "212a4b035afd95218050084937d8f235282aa489344c4b0baa66d3947f2f5245"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/label_distributions.json",
+      "bytes": 2662,
+      "sha256": "13b197d869a816e43d3a725e660626eb785fefca762e12af997f2842466b7c3a"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/association_verification_round1.json",
+      "bytes": 260,
+      "sha256": "0f1dfe85d1d2636c928de539b3204de2321ef53cae60cad884cd7dbd0e9dfa30"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/association_verification_round2.json",
+      "bytes": 409,
+      "sha256": "694c1995b77aae5a49176c46e8e95707599aacfd2bdd3bd3fc29b0f4896d7eeb"
+    },
+    {
+      "local_path": "deliverables/reports/source_data/cross_scenario_tail_audit_v2/association_verification_round3.json",
+      "bytes": 368,
+      "sha256": "04196010352cdd980c80f25f1af2a3604c76937c8b40c6823758d745280f020c"
+    },
+    {
+      "local_path": "deliverables/ppt/proxy_function_gap_paper1_v10_20261128.pptx",
+      "bytes": 626877,
+      "sha256": "dacc065c5531d8de587c4f85d72689ba86cc35548e2ce0a81aa894984d6ea356"
+    },
+    {
+      "local_path": "deliverables/ppt/build_paper1_v10_deck.py",
+      "bytes": 8210,
+      "sha256": "2f23e034aa9d3f1f162a0be5b262893b34d10beaf4090adcda47ec1ba358994c"
+    }
+  ]
+}

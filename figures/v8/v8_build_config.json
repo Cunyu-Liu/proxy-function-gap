@@ -1,0 +1,13 @@
+{
+  "figures": [
+    "Figure1_v8",
+    "Figure2_v8",
+    "Figure3_v8",
+    "Figure4_v8",
+    "Figure5_v8",
+    "Figure6_v8"
+  ],
+  "source": "figures_v8_data.json (frozen artifacts)",
+  "retrospective": true,
+  "style": "scientific-figure-making + plot-is-all-you-need house style"
+}
