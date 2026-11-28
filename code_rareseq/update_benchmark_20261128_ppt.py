@@ -139,10 +139,19 @@ def main() -> None:
         "证据等级：RNAcompete Ray2013 frozen RNA-FM 五折三 seed 描述性；非显著性、SOTA。",
         "Runs: rnacompete-verify-final-…-4099546 · rnacompete-summarize-…-4101649（final gate SHA 83ec4cfe…）")
     build_status(slides[36])
+    lowhom = prs.slides.add_slide(prs.slide_layouts[0])
+    build_fig_slide(
+        lowhom, 38, "补充图｜低同源切片：方向与主集一致（描述性）",
+        "Fig3_low_homology_stratification_v2_20261128.png",
+        ["neg1c：BCE/kNN AUROC 0.875332/0.830752（Δ+0.044580）；AUPRC 0.781584/0.697716（Δ+0.083869）。",
+         "neg2：AUROC 0.790567/0.751782（Δ+0.038785）；AUPRC 0.653712/0.585196（Δ+0.068516）。",
+         "测试正例 d_hom<0.60；三 seed 描述性、无 bootstrap；类别先验改变，不与闭集 AUPRC 横比。"],
+        "证据等级：M-desc 低同源描述性分层；E1 最终报告 §6，独立回算已验收；不证明同源是因果来源。",
+        "Run: E1-stratified-analysis-20261126-104609-ZDLg6Y · E1-main-independent-recalculation-20261126-105611-ZDLg6Y")
     prs.save(str(TARGET))
     audit = {"target": str(TARGET), "source_sha256": sha256(SOURCE),
              "target_sha256": sha256(TARGET), "slides": len(prs.slides._sldIdLst),
-             "rebuilt": [30, 31, 32, 33, 34, 35, 36],
+             "rebuilt": [30, 31, 32, 33, 34, 35, 36, 37],
              "figures": {n: sha256(FIG / n) for n in [
                  "Fig1_data_audit_v2_20261128.png", "Fig2_eclip_tail_forest_v2_20261128.png",
                  "Fig4_protein_crossprotocol_v2_20261128.png", "Fig5_ood_metric_conflicts_v2_20261128.png",

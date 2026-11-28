@@ -18,6 +18,7 @@ EXPECTED = {
     33: ["25/25", "0.646192", "0.607869", "0.655701"],
     34: ["0.507697", "0.508286", "0.155127", "0.473079", "23/24"],
     35: ["0.475605", "0.430202", "0.352559", "0.185360", "0.111699", "0.098188", "70/70"],
+    37: ["0.875332", "0.044580", "0.083869", "0.790567", "0.038785", "0.068516"],
     30: ["0.0713"],
 }
 REPORT_VALUES = {
@@ -49,7 +50,7 @@ def main():
     src = Presentation(str(SOURCE))
     tsl, ssl = list(tgt.slides), list(src.slides)
     fails = []
-    if len(tsl) != 37:
+    if len(tsl) != 38:
         fails.append(f"slide count {len(tsl)}")
     for i in range(30):
         if slide_text(tsl[i]) != slide_text(ssl[i]):
@@ -64,7 +65,8 @@ def main():
             fails.append(f"report rounding mismatch {token} vs {value}")
     figmap = {31: "Fig1_data_audit_v2_20261128.png", 32: "Fig2_eclip_tail_forest_v2_20261128.png",
               33: "Fig4_protein_crossprotocol_v2_20261128.png", 34: "Fig5_ood_metric_conflicts_v2_20261128.png",
-              35: "Fig6_rnacompete_dual_track_v2_20261128.png"}
+              35: "Fig6_rnacompete_dual_track_v2_20261128.png",
+              37: "Fig3_low_homology_stratification_v2_20261128.png"}
     for idx, name in figmap.items():
         want = hashlib.sha256((FIG / name).read_bytes()).hexdigest()
         got = slide_images(tsl[idx])
