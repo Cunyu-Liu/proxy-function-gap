@@ -16,6 +16,19 @@
 - driver：`run_rnacompete_ray2013_rinalmo.sh`（锁 `logs/rnacompete_ray2013_rinalmo/driver.lock`）；日志 `logs/rnacompete_ray2013_rinalmo/`、driver 汇总 `logs/rnacompete_ray2013_rinalmo_driver.log`。
 - 代码：`rnacompete_ray2013_rinalmo_embed.py`（新）、`rnacompete_ray2013_baselines.py` 参数化（`--encoder/--emb-dim`，默认 rnafm/640，合同测试通过）。
 
+## 冻结选择配置（fold0/seed0 validation-only，test 未触碰）
+
+| 轨 | 架构 | 选定配置 | val 宏 Spearman |
+|---|---|---|---:|
+| sequence | linear | weight_decay=1.0 | 0.4223 |
+| sequence | MLP | weight_decay=1.0 | 0.4639 |
+| sequence | kNN | k=20 | 0.1840 |
+| rbp_ood | linear | weight_decay=1.0 | 0.1219 |
+| rbp_ood | MLP | weight_decay=1e-4 | 0.1217 |
+| rbp_ood | kNN | k=1 | 0.1592 |
+
+注：val 指标为选择口径（fold0 validation 宏），不与 RNA-FM 已验收 test 数字横比；最终对照待全矩阵验收。
+
 ## 待办
 
 1. 逐 selection 配置与 val 指标摘录归档（下轮 SSH 窗口补取）。
