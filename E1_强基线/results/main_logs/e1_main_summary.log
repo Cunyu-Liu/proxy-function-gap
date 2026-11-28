@@ -1,0 +1,55 @@
+=== COMBINE Wed Nov 25 13:29:21 CST 2026 ===
+{'modern_s0': 8692659, 'modern_s1': 8692659, 'modern_s2': 8692659, 'knn': 8692659}
+=== CV_SUMMARY Wed Nov 25 13:35:50 CST 2026 ===
+ fold track split tier  auroc_modern  auprc_modern  auroc_knn  auprc_knn  d_auroc  d_auprc
+    0 neg1c  test head      0.897786      0.892501   0.857832   0.842089 0.039953 0.050411
+    0 neg1c  test tail      0.858010      0.852659   0.821827   0.806349 0.036183 0.046309
+    0  neg2  test head      0.838830      0.824542   0.802975   0.773437 0.035855 0.051105
+    0  neg2  test tail      0.738304      0.721739   0.712134   0.683874 0.026171 0.037865
+    1 neg1c  test head      0.903968      0.894926   0.866394   0.844962 0.037574 0.049964
+    1 neg1c  test tail      0.855649      0.843721   0.826699   0.803768 0.028950 0.039953
+    1  neg2  test head      0.835719      0.820441   0.800300   0.770363 0.035419 0.050079
+    1  neg2  test tail      0.713984      0.692343   0.683279   0.653476 0.030705 0.038866
+    2 neg1c  test head      0.905534      0.896924   0.867963   0.846179 0.037571 0.050745
+    2 neg1c  test tail      0.856310      0.845706   0.825349   0.801912 0.030961 0.043794
+    2  neg2  test head      0.836874      0.821150   0.802927   0.772025 0.033947 0.049125
+    2  neg2  test tail      0.718978      0.701314   0.691973   0.664770 0.027005 0.036544
+    3 neg1c  test head      0.903344      0.893721   0.867140   0.844756 0.036204 0.048965
+    3 neg1c  test tail      0.853592      0.839799   0.826524   0.801249 0.027068 0.038550
+    3  neg2  test head      0.833418      0.818086   0.799018   0.768975 0.034400 0.049110
+    3  neg2  test tail      0.708264      0.693294   0.682478   0.652003 0.025787 0.041291
+    4 neg1c  test head      0.903700      0.895116   0.865289   0.843585 0.038412 0.051531
+    4 neg1c  test tail      0.853771      0.840324   0.822314   0.796392 0.031456 0.043933
+    4  neg2  test head      0.837453      0.822206   0.802311   0.771973 0.035142 0.050233
+    4  neg2  test tail      0.723042      0.703166   0.690889   0.661404 0.032153 0.041762
+=== BOOTSTRAP Wed Nov 25 13:35:52 CST 2026 ===
+BOOT_DONE neg1c tail
+BOOT_DONE neg1c mid
+BOOT_DONE neg1c head
+BOOT_DONE neg2 tail
+BOOT_DONE neg2 mid
+BOOT_REUSED neg1c tail
+BOOT_DONE neg1c tail
+BOOT_REUSED neg1c mid
+BOOT_DONE neg1c mid
+BOOT_REUSED neg1c head
+BOOT_DONE neg1c head
+BOOT_REUSED neg2 tail
+BOOT_DONE neg2 tail
+BOOT_REUSED neg2 mid
+BOOT_DONE neg2 mid
+BOOT_DONE neg2 head
+track slice metric  n_experiments  n_seeds  n_boot  observed_delta   ci_low  ci_high  p_two_sided
+neg1c  tail  auroc             18        3   10000        0.031164 0.029225 0.033128       0.0002
+neg1c  tail  auprc             18        3   10000        0.043244 0.040788 0.045703       0.0002
+neg1c   mid  auroc             28        3   10000        0.034246 0.033508 0.034987       0.0002
+neg1c   mid  auprc             28        3   10000        0.044615 0.043623 0.045600       0.0002
+neg1c  head  auroc            100        3   10000        0.037535 0.037264 0.037807       0.0002
+neg1c  head  auprc            100        3   10000        0.049929 0.049560 0.050297       0.0002
+ neg2  tail  auroc             18        3   10000        0.027057 0.024290 0.029792       0.0002
+ neg2  tail  auprc             18        3   10000        0.038584 0.035483 0.041679       0.0002
+ neg2   mid  auroc             28        3   10000        0.031764 0.030788 0.032691       0.0002
+ neg2   mid  auprc             28        3   10000        0.044131 0.042933 0.045319       0.0002
+ neg2  head  auroc            100        3   10000        0.034795 0.034475 0.035110       0.0002
+ neg2  head  auprc            100        3   10000        0.049648 0.049218 0.050095       0.0002
+E1_SUMMARY_DONE Wed Nov 25 18:06:28 CST 2026 resumed-bootstrap

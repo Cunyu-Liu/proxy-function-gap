@@ -1,0 +1,49 @@
+=== STRATIFY Wed Nov 25 18:06:44 CST 2026 ===
+    model track        slice  n_experiments  auroc  auprc  auroc_sem  auprc_sem
+      knn neg1c         head            100 0.8640 0.8430     0.0063     0.0071
+      knn neg1c          mid             28 0.8503 0.8309     0.0111     0.0127
+      knn neg1c         tail             18 0.8225 0.7987     0.0110     0.0124
+      knn  neg2         head            100 0.7998 0.7689     0.0091     0.0099
+      knn  neg2          mid             28 0.7602 0.7339     0.0129     0.0143
+      knn  neg2         tail             18 0.6916 0.6613     0.0145     0.0140
+modern_s0 neg1c         head            100 0.9017 0.8933     0.0049     0.0053
+modern_s0 neg1c          mid             28 0.8845 0.8759     0.0091     0.0101
+modern_s0 neg1c         tail             18 0.8529 0.8409     0.0100     0.0114
+modern_s0  neg2         head            100 0.8347 0.8186     0.0082     0.0088
+modern_s0  neg2          mid             28 0.7916 0.7776     0.0120     0.0131
+modern_s0  neg2         tail             18 0.7190 0.7007     0.0132     0.0140
+modern_s1 neg1c         head            100 0.9012 0.8924     0.0049     0.0054
+modern_s1 neg1c          mid             28 0.8841 0.8747     0.0092     0.0103
+modern_s1 neg1c         tail             18 0.8535 0.8417     0.0101     0.0114
+modern_s1  neg2         head            100 0.8345 0.8184     0.0082     0.0088
+modern_s1  neg2          mid             28 0.7917 0.7777     0.0121     0.0131
+modern_s1  neg2         tail             18 0.7180 0.6992     0.0132     0.0140
+modern_s2 neg1c         head            100 0.9017 0.8931     0.0049     0.0053
+modern_s2 neg1c          mid             28 0.8852 0.8758     0.0091     0.0102
+modern_s2 neg1c         tail             18 0.8545 0.8433     0.0100     0.0114
+modern_s2  neg2         head            100 0.8346 0.8186     0.0082     0.0088
+modern_s2  neg2          mid             28 0.7925 0.7788     0.0119     0.0129
+modern_s2  neg2         tail             18 0.7190 0.6999     0.0131     0.0139
+      knn neg1c low_hom<0.60            146 0.8309 0.6978     0.0052     0.0084
+      knn  neg2 low_hom<0.60            146 0.7518 0.5852     0.0073     0.0090
+modern_s0 neg1c low_hom<0.60            146 0.8743 0.7805     0.0043     0.0072
+modern_s0  neg2 low_hom<0.60            146 0.7904 0.6534     0.0070     0.0094
+modern_s1 neg1c low_hom<0.60            146 0.8740 0.7794     0.0043     0.0072
+modern_s1  neg2 low_hom<0.60            146 0.7901 0.6530     0.0070     0.0094
+modern_s2 neg1c low_hom<0.60            146 0.8747 0.7808     0.0043     0.0072
+modern_s2  neg2 low_hom<0.60            146 0.7905 0.6536     0.0069     0.0094
+=== VERIFY Wed Nov 25 18:19:45 CST 2026 ===
+track slice metric  n_experiments  n_boot  observed_delta   ci_low  ci_high  p_two_sided
+neg1c  tail  auroc             18   10000        0.031164 0.029225 0.033128       0.0002
+neg1c  tail  auprc             18   10000        0.043244 0.040788 0.045703       0.0002
+neg1c   mid  auroc             28   10000        0.034246 0.033508 0.034987       0.0002
+neg1c   mid  auprc             28   10000        0.044615 0.043623 0.045600       0.0002
+neg1c  head  auroc            100   10000        0.037535 0.037264 0.037807       0.0002
+neg1c  head  auprc            100   10000        0.049929 0.049560 0.050297       0.0002
+ neg2  tail  auroc             18   10000        0.027057 0.024290 0.029792       0.0002
+ neg2  tail  auprc             18   10000        0.038584 0.035483 0.041679       0.0002
+ neg2   mid  auroc             28   10000        0.031764 0.030788 0.032691       0.0002
+ neg2   mid  auprc             28   10000        0.044131 0.042933 0.045319       0.0002
+ neg2  head  auroc            100   10000        0.034795 0.034475 0.035110       0.0002
+ neg2  head  auprc            100   10000        0.049648 0.049218 0.050095       0.0002
+E1_ANALYSIS_DONE Wed Nov 25 18:25:12 CST 2026

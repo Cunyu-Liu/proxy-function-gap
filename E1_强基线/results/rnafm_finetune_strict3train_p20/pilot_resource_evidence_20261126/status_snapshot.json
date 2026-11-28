@@ -1,0 +1,57 @@
+{
+  "observed_at": "2026-11-26T22:18:25+08:00",
+  "remote_host": "px2-jcy.matpool.com:29375",
+  "pilot_status": "RUNNING 2026-11-26T21:49:52+08:00",
+  "chain_status": "WAITING_PILOT 2026-11-26T21:08:43+08:00",
+  "pilot_driver_pid": 4090091,
+  "pilot_worker_pids": [4090096, 4090097],
+  "active_rnafm_training_processes": 0,
+  "resource_gate": {
+    "last_completed_attempt": 6,
+    "lora_min_free_mib": 14000,
+    "full_min_free_mib": 18000,
+    "observed_free_mib": 4161,
+    "observed_used_mib": 27951,
+    "observed_gpu_utilization_percent": 92,
+    "action": "waiting; no process killed, no CPU fallback, batch remains 256"
+  },
+  "artifact_acceptance": {
+    "pilot_cuda_verification_json_exists": false,
+    "train_complete_exists": false,
+    "aggregate_validation_history_exists": false,
+    "compressed_checkpoint_exists": false,
+    "full_run_directory_exists": false,
+    "accepted": false,
+    "reason": "Current attempt has not restarted Python training; previous 57-epoch attempt failed checkpoint deserialization and its successor failed CUDA OOM before epoch 1."
+  },
+  "cuda_evidence_from_failed_attempts": {
+    "device": "cuda:0",
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "numeric_probe": [2.5, -6.0],
+    "backward_probe": "passed",
+    "optimizer_probe": "passed",
+    "torch": "2.11.0+cu128",
+    "real_model_gradient_acceptance": "not established for an accepted complete pilot"
+  },
+  "capacity": {
+    "teams_free_bytes_at_2213": 158032986112,
+    "authoritative_retention_peak_bytes_with_reserve": 149546836480,
+    "reserve_bytes": 21474836480,
+    "capacity_gate_passed": true,
+    "retention_policy_changed": false
+  },
+  "local_remote_code_sha256_match": {
+    "e1_finetune.py": "e14db14e6b7b2de28a55fdcf6efc93ada1dac2911a2b2bbd77f6feca2d4b3005",
+    "e1_finetune_verify.py": "433216cb70a49c04fa5c2395c99e1171d15928109d9a784ef59e5481685839b6",
+    "e1_finetune_retention.py": "6ca58f666b24a09cc46640dbec4768874ee70ec6304b737a250cd00ad2f33f55",
+    "run_e1_finetune_pilot.sh": "6cd7bce024e0e2eb8373f4b7a0d48e4c8cf98c9050da57e96067ee1d703480be",
+    "run_e1_finetune_strict3train_p20.sh": "f2953d6601d5bab688f6152fae4aa8fd2fd980783507a631d58f9e9d0a06a466"
+  },
+  "evidence_sha256": {
+    "e1_finetune_pilot_driver.log": "fc180ad86ef7f957cfb7807eeda93669ef0ef39195a168571925f75795c5d0e1",
+    "e1_finetune_pilot_lora_attempt2_torchversion.log": "75573e18e49a059e70093f488ed04bf3576be03288aed70ba0c2912e2e9847f2",
+    "e1_finetune_pilot_lora_attempt3_cuda_oom.log": "582eeaaecb8e9deef162cfc81c8c6084ec20bc005c19e68a22195f8a25a1559c"
+  },
+  "test_metrics_produced": false,
+  "data_preparation_reported_as_model_result": false
+}

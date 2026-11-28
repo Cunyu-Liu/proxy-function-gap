@@ -1,0 +1,13 @@
+{
+  "selected_k_by_track": {
+    "neg1c": 20,
+    "neg2": 20
+  },
+  "selection": "tail-RBP mean validation AUPRC",
+  "dedup": "one training positive per frozen id90 cluster; negatives unchanged",
+  "ks": [
+    5,
+    10,
+    20
+  ]
+}

@@ -1,0 +1,4 @@
+torch 2.11.0+cu128
+cuda_available True
+device_count 1
+device0 NVIDIA GeForce RTX 5090

@@ -1,0 +1,13 @@
+track	split	tier	auroc	auprc
+neg1c	test	head	0.857832	0.842089
+neg1c	test	mid	0.846885	0.833422
+neg1c	test	tail	0.821827	0.806349
+neg1c	val	head	0.866644	0.845634
+neg1c	val	mid	0.853583	0.834045
+neg1c	val	tail	0.826615	0.803804
+neg2	test	head	0.802975	0.773437
+neg2	test	mid	0.770893	0.746834
+neg2	test	tail	0.712134	0.683874
+neg2	val	head	0.800742	0.770657
+neg2	val	mid	0.759144	0.734005
+neg2	val	tail	0.687435	0.658295
