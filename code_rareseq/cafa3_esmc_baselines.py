@@ -533,7 +533,7 @@ class Cafa3Run:
         active_indices = np.flatnonzero(self.active)
         train_x = torch.nn.functional.normalize(torch.from_numpy(
             np.asarray(self.x["t0"][self.train_index], dtype=np.float32)).cuda(), dim=1)
-        train_y = torch.from_numpy(self.y_train[:, self.active].toarray().astype(np.float32)).cuda()
+        train_y = self.y_train[:, self.active].toarray().astype(np.float32)  # CPU: avoid GPU OOM under contention
 
         def predict(indices, source, path):
             result = np.memmap(path, dtype=np.float32, mode="w+", shape=(len(indices), len(self.labels)))
@@ -544,9 +544,10 @@ class Cafa3Run:
                     array = np.asarray(self.x[source][selected], dtype=np.float32)
                     batch = torch.nn.functional.normalize(torch.from_numpy(array).cuda(), dim=1)
                     similarity, index = (batch @ train_x.T).topk(self.args.k, dim=1)
-                    weight = similarity.clamp(min=0) + 1e-6
-                    values = ((train_y[index] * weight.unsqueeze(-1)).sum(1) /
-                              weight.sum(1, keepdim=True)).float().cpu().numpy()
+                    weight = (similarity.clamp(min=0) + 1e-6).cpu().numpy()
+                    idx = index.cpu().numpy()
+                    values = ((train_y[idx] * weight[..., None]).sum(1) /
+                              weight.sum(1, keepdims=True)).astype(np.float32)
                     if not np.isfinite(values).all():
                         raise ValueError("NaN/Inf kNN probability")
                     result[start:start + len(selected), active_indices] = values

@@ -98,7 +98,7 @@ for fold in 0 1 2; do
         continue
       fi
       set_status "RUNNING fold=$fold track=$track ontology=$ontology"
-      gpu_wait 6000 12  # measured BPO probe: RSS 4.89GiB, GPU 3.9GB (resource_probe_BPO.json)
+      gpu_wait 2000 12  # CPU-kNN fix: GPU peak ~1GB; measured BPO probe: RSS 4.89GiB, GPU 3.9GB (resource_probe_BPO.json)
       "$PY" cafa3_esmc_baselines.py --data-dir "$DATA" --emb-dir "$EMB" --out "$out" \
         --fold "$fold" --track "$track" --ontology "$ontology" --seeds 0,1,2 \
         --epochs 1000 --patience 20 --min-delta 0.0001 --batch 512 \
