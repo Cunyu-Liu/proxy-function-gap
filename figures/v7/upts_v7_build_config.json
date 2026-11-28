@@ -1,0 +1,6 @@
+{
+  "figure": "Figure22_v7_upts_auxiliary_gate_falsification",
+  "source": "tcell_upts_v1/artifact/auxiliary/*/selection.json",
+  "retrospective": true,
+  "gate_passed": false
+}

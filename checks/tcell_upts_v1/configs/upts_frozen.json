@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "analysis_id": "tcell_upts_v1",
+  "frozen_date": "2026-11-28",
+  "audit_source": "EXECUTION_PROMPT_PAPER1_OPTIMIZATION_20261128.md P1; TCELL_AUXILIARY_SUPERVISION_AUDIT_20261126.md sections 8.2/8.3; P1_MECHANISM_PROTOCOL_DRAFT_20261128.md",
+  "evidence_boundary": "Retrospective method development/protocol sensitivity only. Historical T-cell outer labels were previously inspected. Not a new blind test, independent study, or prospective confirmation. No unviewed same-endpoint surface exists in current assets (Castillo 50nt contexts all inspected; N25 excluded by frozen external protocol; PERSIST-seq inspected).",
+  "hypothesis": "Within the identical frozen nested proposal prefix, selecting argmax(proxy_mean - kappa*proxy_std) with kappa>0 reduces cap16 measured-MRL regret relative to frozen BoN (kappa=0). Because the prefix is fixed, opportunity loss is unchanged by construction and any effect is purely within-tail ranking; because scores are frozen, global MAE/Spearman are unchanged by construction.",
+  "method": {
+    "score": "s_kappa = float64(proxy_mean) - kappa * proxy_std",
+    "proxy_mean_source_auxiliary": "cnn_predictions.npy (frozen three-member ensemble mean)",
+    "proxy_std_definition": "sample standard deviation ddof=1 across the three member predictions (matches src/proxy_function_gap/inference.py ensemble_std)",
+    "proxy_std_source_target": "frozen proxy_std field in paper1_v3_strict_h1_retry1 cnn_scores JSON records",
+    "selection_rule": "first occurrence of maximum s_kappa within the frozen proposal prefix (np.argmax, identical to frozen BoN tie rule)",
+    "kappa_grid": [0.0, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0],
+    "no_second_arm": true
+  },
+  "auxiliary": {
+    "arrays_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_residual_bstrict_v1/auxiliary",
+    "directions": [
+      {"source": "n50_hek293t_r1", "destination": "defined_hepg2_r1"},
+      {"source": "defined_hepg2_r1", "destination": "n50_hek293t_r1"}
+    ],
+    "pools_proposals": "reuse frozen dev/test pools and proposals .npy from tcell_residual_bstrict_v1 direction directories verbatim (SHA256-pinned); no rebuild",
+    "split_codes": {"train": 0, "dev": 1, "test": 2},
+    "cap": 16,
+    "pool_size": 64,
+    "seeds": [101, 202, 303, 404, 505],
+    "identity_check": "kappa=0 dev/test cap16_mean_regret must exactly equal residual v1 selection.json baseline values in both directions",
+    "member_mean_check_max_abs_diff": 0.0001,
+    "selection_role": "destination_dev",
+    "primary_metric": "cap16_bon_mean_regret",
+    "tie_tolerance": 1e-12,
+    "tie_breaker": "smaller_kappa",
+    "gate_role": "destination_test",
+    "gate": "chosen kappa test cap16 mean regret strictly lower than kappa=0 in BOTH directions; any failure stops the experiment without reading T-cell MRL",
+    "diagnostics": "destination dev pools only: per-pool top16 by frozen proxy_mean (index tie-break); Spearman(proxy_std, p-y) and Spearman(proxy_std, |p-y|); reported regardless of outcome; never used for selection"
+  },
+  "target_evaluation": {
+    "permitted_only_if": "auxiliary_gate_passed.json exists with both directions passing",
+    "pools": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/data/derived/castillo_fixed_pools_v3_strict_h1_retry1/defined_tcell_r1 and defined_tcell_r2",
+    "scores": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/paper1_v3_strict_h1_retry1/defined_tcell_r1 and defined_tcell_r2/cnn_scores",
+    "prefix_reconstruction": "paper1_budget_matched_v1/PROTOCOL.md frozen _draw_index nested proposal prefixes, seeds 101/202/303/404/505",
+    "caps": [1, 2, 4, 8, 16],
+    "primary_contrast": "UPTS(kappa*) cap16 minus frozen-BoN cap16 per-pool mean measured-MRL regret; negative favors UPTS",
+    "controls": ["RandomN (frozen reconstruction)", "frozen BoN (kappa=0)", "frozen 4-mer MLP BoN (simple baseline; no additive ridge exists for T-cell, disclosed)"],
+    "cluster_unit": "complete pool (16 per context)",
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": "20261128 + 100*context_index + cap_index, context order [defined_tcell_r1, defined_tcell_r2], cap order [1,2,4,8,16]",
+    "multiplicity": "per-context 10-row Holm family (caps 1/2/4/8/16 plus cap1 deterministic zero rows with p=1), secondary caps only; primary cap16 judged by section 8.3 joint criteria",
+    "success_criteria_section_8_3": [
+      "r1 and r2 cap16 point estimates both < 0",
+      "pooled two-context pool-cluster bootstrap 95% CI upper bound < 0",
+      "per-context absolute reduction >= max(0.1 MRL, 5% of frozen baseline mean BoN16 regret); thresholds frozen in frozen_thresholds.json from pinned budget results.json",
+      "isolation and all logs verified"
+    ],
+    "failure_rule": "any criterion unmet => not proven substantive improvement; retain all values; no cap/subset/kappa switching; this frozen test ends",
+    "mechanism_attribution": "opportunity loss identical by construction; delta regret entirely within-tail ranking loss; report per-pool demoted/promoted candidate proxy_std, within-tail loss change, turnover; global MAE/Spearman unchanged by construction"
+  },
+  "compute": "CPU-only statistics and record reconstruction; no training, no inference, no GPU; all scores frozen. Labeled per execution prompt hard constraint 4.",
+  "code_root": "/home/proxy-function-gap-tcell-upts-v1",
+  "artifact_root": "/teams/HoulabData_1788502323/liucunyu/proxy_function_gap/tcell_upts_v1",
+  "read_only_inputs": true,
+  "target_mrl_read_before_gate": false
+}
