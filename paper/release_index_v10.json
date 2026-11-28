@@ -1,7 +1,7 @@
 {
   "release": "Paper 1 tail-reliability V10",
-  "release_commit": null,
-  "github_upload": "not_claimed",
+  "release_commit": "c8d9852",
+  "github_upload": "pushed to origin/paper23-gates-v1",
   "paper_markdown_sha256": "34012f15091246a3bdedb39ec4ec996b03ed620a9e29352edf7eac36d0c758c6",
   "evidence_boundary": "All retrospective historical-data studies; grouped holdouts are not prospective blind tests. UPTS v1 failed its auxiliary gate; T-cell target not evaluated. Independent candidates (Cao endogenous TE, Ogden AAV2 tropism) qualified but access-barred and not evaluated. DRAFT_NOT_SUBMITTED.",
   "statistical_boundary": "No cross-task pooled raw effect; endpoint-specific regret; cluster bootstrap; cross-scenario tail association is associational (n=10), difference CI touches zero; algorithm seeds are not biological replicates.",
