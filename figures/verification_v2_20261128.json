@@ -494,5 +494,30 @@
       "MLP": 0.1116987234,
       "kNN": 0.1853595262
     }
+  },
+  "fig7_n_tasks": {
+    "computed": 4380.0,
+    "report": 4380.0
+  },
+  "fig7_best_min": {
+    "computed": 1.0,
+    "report": 1.0
+  },
+  "fig7_best_max": {
+    "computed": 43.0,
+    "report": 43.0
+  },
+  "fig7_stop_max": {
+    "computed": 63.0,
+    "report": 63.0
+  },
+  "fig7_convergence": {
+    "n_tasks": 4380,
+    "best_min": 1,
+    "best_max": 43,
+    "stop_max": 63,
+    "all_stop_eq_best_plus_20": true,
+    "all_early_stopped": true,
+    "failsafe_never_reached": true
   }
 }

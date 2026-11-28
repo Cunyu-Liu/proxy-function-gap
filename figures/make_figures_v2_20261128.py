@@ -438,7 +438,62 @@ def fig3_lowhom():
     save(fig, "Fig3_low_homology_stratification_v2_20261128")
 
 
+# ---------------------------------------------------------------- Fig 7 (convergence)
+def fig7():
+    """Convergence evidence: best/stop epochs across all 15 accepted modern runs.
+
+    Source: e1_main_strict3train_p20_v2 f{0-4}_modern_bce_s{0-2}/modern_results.tsv
+    (accepted E1 main matrix). Contract: stop = best + patience(20) < 1000 failsafe.
+    """
+    files = sorted((DATA / "e1_convergence").glob("f*_modern_bce_s*/modern_results.tsv"))
+    assert len(files) == 15, f"expected 15 runs, found {len(files)}"
+    frames = []
+    for f in files:
+        df = pd.read_csv(f, sep="\t")
+        df = df[df.split == "val"].copy()
+        df["run"] = f.parent.name
+        frames.append(df)
+    allrows = pd.concat(frames, ignore_index=True)
+    check("fig7_n_tasks", len(allrows), 4380, tol=0.5)
+    check("fig7_best_min", allrows.best_epoch.min(), 1, tol=0.5)
+    check("fig7_best_max", allrows.best_epoch.max(), 43, tol=0.5)
+    check("fig7_stop_max", allrows.stopped_epoch.max(), 63, tol=0.5)
+    assert (allrows.stopped_epoch == allrows.best_epoch + 20).all(), "stop != best+20"
+    assert allrows.early_stopped.all(), "not all early stopped"
+    assert (allrows.stopped_epoch < 1000).all(), "failsafe reached"
+
+    fig, axes = plt.subplots(1, 2, figsize=(11.5, 4.3), width_ratios=[1.2, 1])
+    ax = axes[0]
+    for track, col, mk in [("neg1c", PALETTE["blue_main"], "o"), ("neg2", PALETTE["teal"], "^")]:
+        sub = allrows[allrows.track == track]
+        ax.scatter(sub.best_epoch, sub.stopped_epoch, s=10, alpha=0.45, color=col, marker=mk, label=track)
+    lim = [0, 70]
+    ax.plot(lim, [x + 20 for x in lim], color=PALETTE["red_strong"], lw=1.2, ls="--", label="stop = best + 20")
+    ax.axhline(1000, color=PALETTE["neutral"], lw=1.0)
+    ax.set_xlim(lim); ax.set_ylim(0, 75)
+    ax.set_xlabel("Best epoch (validation AUPRC)")
+    ax.set_ylabel("Stopped epoch")
+    ax.set_title("4,380 tasks: all early-stopped, none hit 1000-epoch failsafe", fontsize=11)
+    ax.legend(loc="upper left", fontsize=9.5)
+    ax.grid(color="#EEEEEE", lw=0.7); ax.set_axisbelow(True)
+    panel_label(ax, "a")
+    ax = axes[1]
+    ax.hist(allrows.best_epoch, bins=np.arange(0.5, 45.5, 1), color=PALETTE["blue_secondary"], alpha=0.85)
+    ax.set_xlabel("Best epoch")
+    ax.set_ylabel("Task count (15 runs × 292 tasks)")
+    ax.set_title(f"Best-epoch distribution (range {int(allrows.best_epoch.min())}–{int(allrows.best_epoch.max())})", fontsize=11)
+    ax.grid(axis="y", color="#EEEEEE", lw=0.7); ax.set_axisbelow(True)
+    panel_label(ax, "b")
+    fig.suptitle("Convergence contract evidence: frozen RNA-FM BCE main matrix (accepted)", fontsize=12.5, y=1.03)
+    fig.tight_layout()
+    VERIFICATION["fig7_convergence"] = {
+        "n_tasks": int(len(allrows)), "best_min": int(allrows.best_epoch.min()),
+        "best_max": int(allrows.best_epoch.max()), "stop_max": int(allrows.stopped_epoch.max()),
+        "all_stop_eq_best_plus_20": True, "all_early_stopped": True, "failsafe_never_reached": True}
+    save(fig, "Fig7_convergence_evidence_v2_20261128")
+
+
 if __name__ == "__main__":
-    fig1(); fig2(); fig3_lowhom(); fig3(); fig4(); fig5()
+    fig1(); fig2(); fig3_lowhom(); fig3(); fig4(); fig5(); fig7()
     (OUT / "verification_v2_20261128.json").write_text(json.dumps(VERIFICATION, indent=2))
     print("ALL_FIGURES_DONE", len(VERIFICATION), "verification entries")
