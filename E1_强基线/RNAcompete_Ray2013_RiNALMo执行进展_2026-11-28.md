@@ -29,6 +29,12 @@
 
 注：val 指标为选择口径（fold0 validation 宏），不与 RNA-FM 已验收 test 数字横比；最终对照待全矩阵验收。
 
+## 2026-11-28 18:44 fold2 训练 CUDA OOM 与重试修复
+
+- `train_rbp_ood_linear_f2_s1` 在 `xtr_t.to(device)`（1.05GB）时 OOM：资源门 18:43:55 见 8746MiB 空闲，但 20 秒内外部进程（LoRA 9.2GB + 另一进程 8.6GB + codonflow ~10.9GB）占满至 162MiB。门与分配之间的竞态。
+- **修复**（科学代码/RNG 不变）：driver `run_cuda` 增加 OOM 自动重试（最多 48 次，每次重过资源门 + sleep 120s），非 OOM 失败仍传播。`bash -n` 三遍通过；原脚本备份 `.bak_oom`。
+- 19:09 重启 driver：fold0/1 已完成 run SKIP，verify_fold0 复核后从 fold2 断点续跑。GPU 空闲回升至 20GB。
+
 ## 待办
 
 1. 逐 selection 配置与 val 指标摘录归档（下轮 SSH 窗口补取）。

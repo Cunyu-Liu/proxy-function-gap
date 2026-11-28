@@ -47,12 +47,23 @@ resource_gate() {
 run_cuda() {
   local LABEL=$1 MIN_FREE=$2 LOGFILE=$3
   shift 3
-  resource_gate "$LABEL" "$MIN_FREE" 12582912 || return 1
-  echo "START $LABEL $(date -Is)"
-  "$PY" "$@" >"$LOGFILE" 2>&1
-  local RC=$?
-  echo "END $LABEL rc=$RC $(date -Is)"
-  return "$RC"
+  local ATTEMPT RC
+  for ATTEMPT in $(seq 1 48); do
+    resource_gate "$LABEL" "$MIN_FREE" 12582912 || return 1
+    echo "START $LABEL $(date -Is)"
+    "$PY" "$@" >"$LOGFILE" 2>&1
+    RC=$?
+    echo "END $LABEL rc=$RC $(date -Is)"
+    if [ "$RC" -eq 0 ]; then return 0; fi
+    if grep -q "OutOfMemoryError\|CUDA out of memory" "$LOGFILE"; then
+      echo "OOM_RETRY $LABEL attempt=$ATTEMPT $(date -Is)"
+      sleep 120
+      continue
+    fi
+    return "$RC"
+  done
+  echo "OOM_EXHAUSTED $LABEL" >&2
+  return 1
 }
 
 run_cpu() {
