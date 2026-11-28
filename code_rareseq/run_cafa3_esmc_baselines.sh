@@ -46,6 +46,7 @@ gpu_wait() {
   done
 }
 
+if [ ! -f "$SMOKE/CUDA_ACCEPTED" ]; then
 set_status "RUNNING CUDA embedding smoke"
 gpu_wait 10000 16
 "$PY" cafa3_esmc_embed.py --data-dir "$DATA" --out "$SMOKE/embeddings" \
@@ -78,11 +79,14 @@ with open(f"{emb}/../cuda_smoke.json", "w") as handle:
 print(json.dumps(report))
 PY
 date -Is > "$SMOKE/CUDA_ACCEPTED"
+fi
+if [ ! -f "$EMB/.complete" ]; then
 set_status "CUDA_SMOKE_ACCEPTED; RUNNING full t0+t1 embedding"
 gpu_wait 10000 24
 "$PY" cafa3_esmc_embed.py --data-dir "$DATA" --out "$EMB" --splits t0,t1 \
   --batch 16 --max-length 512 > "$LOGDIR/full_embed.log" 2>&1
 date -Is > "$EMB/.complete"
+fi
 
 for fold in 0 1 2; do
   for track in main id30 id50 id90; do
@@ -94,7 +98,7 @@ for fold in 0 1 2; do
         continue
       fi
       set_status "RUNNING fold=$fold track=$track ontology=$ontology"
-      gpu_wait 12000 40
+      gpu_wait 6000 12  # measured BPO probe: RSS 4.89GiB, GPU 3.9GB (resource_probe_BPO.json)
       "$PY" cafa3_esmc_baselines.py --data-dir "$DATA" --emb-dir "$EMB" --out "$out" \
         --fold "$fold" --track "$track" --ontology "$ontology" --seeds 0,1,2 \
         --epochs 1000 --patience 20 --min-delta 0.0001 --batch 512 \
