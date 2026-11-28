@@ -2,6 +2,12 @@
 
 日期：2026-11-24 ｜ 状态：**M1a 三种配方均未通过，共享残差方法线停止；不运行 M1b–M1f** ｜ 历史 G1/G3/G4 记录保持不变
 
+> **2026-11-28 当前状态（优先于下文全部历史正文）**
+>
+> - **执行队列全部恢复**：RiNALMo eCLIP 主集 20/20 run 训练完成，全量独立审计进行中（driver 伪语法错误根因为运行中脚本被编辑，已重启复用全部 run）；RNA-FM LoRA/full 微调主队列从 RESOURCE_BLOCKED 恢复，fold0 rank4 真实 CUDA 训练；CAFA3 内存门经实测探针（BPO 峰值 RSS 4.89GiB/GPU 3.9GB）由 40GiB 修正为 12GiB 后恢复，fold0/id50/BPO 收敛中；RNAcompete RiNALMo 跨编码器扩展按预注册附录启动（smoke 通过，219,990 RNA 全量嵌入进行中，独立产物树）。**四者均未过最终验收门，不写性能结论。**
+> - **叙事与图表升级**：新版主线 `论文证据/预印本科学主线与证据链_2026-11-28.md`（四幕推理链）取代旧版叙事组织，旧版保留为证据台账；五张 v2 主图（数据审计/尾部森林图/OOD 指标冲突/蛋白与跨协议/RNAcompete 双轨）完成三遍数值核验，见 `figures/图目录与证据映射_2026-11-28.md`。
+> - RNAcompete RNA-FM 五折 70/70、E1 strict3train 主集、E5 72/72、E6 五划分与 PAR-CLIP 三 seed 的已验收结论与边界不变，见 2026-11-27/11-26 状态框。
+
 > **2026-11-27 当前状态（优先于下文全部历史正文）**
 >
 > - **RNAcompete 五折 60/60 神经 eval + 10/10 kNN 已验收。**序列 tail Spearman：MLP **0.475605** > linear **0.430202** > kNN **0.352559**；RBP-OOD 实验宏 Spearman：kNN **0.185360** > MLP **0.111699** > linear **0.098188**，但绝对相关性均弱，支撑任务依赖而非统一赢家。70/70 eval、60 次 checkpoint replay、525 条 run 记录与 45 行统计通过；Fig. 6 与 15 页 `manuscript/preprint_draft.pdf` 已完成。见 [RNAcompete 最终报告](../E1_强基线/RNAcompete_Ray2013_RNAFM五折最终报告_2026-11-27.md)。
