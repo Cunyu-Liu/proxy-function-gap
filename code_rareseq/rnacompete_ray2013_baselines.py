@@ -128,9 +128,11 @@ def better_candidate(candidate, incumbent):
 
 
 class BenchmarkData:
-    def __init__(self, frozen_root, embedding_dir, label_cache):
+    def __init__(self, frozen_root, embedding_dir, label_cache, encoder="rnafm", emb_dim=640):
         self.frozen_root = frozen_root
         self.label_cache = label_cache
+        self.encoder = encoder
+        self.emb_dim = emb_dim
         manifest_path = os.path.join(frozen_root, "split_manifest.json")
         with open(manifest_path) as handle:
             self.manifest = json.load(handle)
@@ -151,12 +153,12 @@ class BenchmarkData:
             raise ValueError("Invalid label cache shape")
         if not np.isfinite(self.labels).any() or np.isinf(self.labels).any():
             raise ValueError("Invalid labels")
-        with open(os.path.join(embedding_dir, "rnafm.ids")) as handle:
+        with open(os.path.join(embedding_dir, f"{encoder}.ids")) as handle:
             embedding_ids = [line.strip() for line in handle]
         if embedding_ids != self.sequences.sequence_id.tolist():
             raise ValueError("Embedding IDs differ from frozen order")
-        self.embeddings = np.load(os.path.join(embedding_dir, "rnafm.mean_masked.fp16.npy"), mmap_mode="r")
-        if self.embeddings.shape != (len(self.sequences), 640):
+        self.embeddings = np.load(os.path.join(embedding_dir, f"{encoder}.mean_masked.fp16.npy"), mmap_mode="r")
+        if self.embeddings.shape != (len(self.sequences), emb_dim):
             raise ValueError("Invalid embedding shape")
         for start in range(0, len(self.sequences), 4096):
             if not np.isfinite(np.asarray(self.embeddings[start:start + 4096])).all():
@@ -324,7 +326,7 @@ def train_core(data, track, arch, fold, seed, weight_decay, out, args, device_in
     mask_t = torch.from_numpy(observed.astype(np.float32)).to(device)
     xva_t = torch.from_numpy(xva).to(device)
     output_dim = len(context["tasks"]["train"]) if track == "sequence" else 1
-    model = make_model(arch, 640, output_dim).to(device)
+    model = make_model(arch, data.embeddings.shape[1], output_dim).to(device)
     if next(model.parameters()).device.type != "cuda":
         raise RuntimeError("Training head is not on CUDA")
     optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=weight_decay)
@@ -513,7 +515,7 @@ def evaluate_neural(data, track, arch, fold, seed, args, device_info):
     x = np.asarray(data.embeddings[rows], dtype=np.float32)
     x = (x - checkpoint["feature_mean"]) / checkpoint["feature_std"]
     device = torch.device("cuda:0")
-    model = make_model(arch, 640, checkpoint["output_dim"]).to(device)
+    model = make_model(arch, data.embeddings.shape[1], checkpoint["output_dim"]).to(device)
     model.load_state_dict(checkpoint["model_state"])
     model.eval()
     x_t = torch.from_numpy(x).to(device)
@@ -675,7 +677,7 @@ def replay_neural_checkpoint(data, run, track, arch, fold, context, saved_predic
     x = np.asarray(data.embeddings[rows], dtype=np.float32)
     x = (x - checkpoint["feature_mean"]) / checkpoint["feature_std"]
     device = torch.device("cuda:0")
-    model = make_model(arch, 640, checkpoint["output_dim"]).to(device)
+    model = make_model(arch, data.embeddings.shape[1], checkpoint["output_dim"]).to(device)
     model.load_state_dict(checkpoint["model_state"])
     model.eval()
     prediction = predict_neural(model, torch.from_numpy(x).to(device))
@@ -796,7 +798,9 @@ def summarize(data, root):
 
 
 def data_from_args(args):
-    return BenchmarkData(args.frozen_root, args.embedding_dir, args.label_cache)
+    return BenchmarkData(args.frozen_root, args.embedding_dir, args.label_cache,
+                         encoder=getattr(args, "encoder", "rnafm"),
+                         emb_dim=getattr(args, "emb_dim", 640))
 
 
 def main():
@@ -806,6 +810,8 @@ def main():
     parser.add_argument("--frozen-root", default="/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/external_benchmarks/rnacompete/" + VERSION)
     parser.add_argument("--input-root", default="/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/external_benchmarks/rnacompete/ray2013_nature12311")
     parser.add_argument("--embedding-dir")
+    parser.add_argument("--encoder", choices=["rnafm", "rinalmo"], default="rnafm")
+    parser.add_argument("--emb-dim", type=int, default=640)
     parser.add_argument("--label-cache")
     parser.add_argument("--out", required=True)
     parser.add_argument("--contract", required=True)
@@ -831,6 +837,8 @@ def main():
         args.embedding_dir = os.path.join(args.out, "embeddings")
     if args.fold not in range(5) or args.seed not in SEEDS:
         raise ValueError("Invalid fold or seed")
+    if (args.encoder == "rinalmo") != (args.emb_dim == 1280):
+        raise ValueError("encoder/emb-dim mismatch: rnafm=640, rinalmo=1280")
     if args.command in ("select", "train", "evaluate", "knn-select", "knn-evaluate") and not args.track:
         raise ValueError("--track is required")
     if args.command in ("select", "train", "evaluate") and not args.arch:
