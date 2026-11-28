@@ -1,0 +1,24 @@
+{
+  "round": 1,
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "v9_claims",
+      "status": "PASS"
+    },
+    {
+      "name": "v9_figures",
+      "status": "PASS"
+    },
+    {
+      "name": "v9_pdf",
+      "status": "PASS"
+    },
+    {
+      "name": "v9_clean_rebuild",
+      "status": "PASS"
+    }
+  ],
+  "source_sha256": "cc6f9e7b297b9a22b2cb053faee929b2953317bb05bc0beb426b7df3b886f8b4",
+  "pdf_sha256": "767deebc8ee9963769330e9468ff41325d1ef9ffc43f60428792116b911defb7"
+}
