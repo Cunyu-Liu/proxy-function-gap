@@ -8,7 +8,7 @@
 - 13:55–14:03 全量嵌入 219,990 唯一 RNA（1280 维 mean-masked fp16）：`RNACOMPETE_RINALMO_EMBED_OK`，ID 顺序与冻结 sequence_folds 一致，双 SHA + 逐 4096 行有限值检查通过。
 - 14:03–14:05 标签缓存独立重算验收（`LABEL_CACHE_OK`，有限计数与冻结实验审计一致）。
 - 14:05–15:11 六个 validation-only selection 依次冻结：sequence/rbp_ood × linear/mlp/kNN（fold0/seed0，weight_decay 网格与 k∈{5,10,20}，test 未触碰）。
-- 15:11 fold0 矩阵训练启动（`train_sequence_linear_f0_s0`）；随后 fold0 门（verify-fold0）→ fold1–4 扩展 → verify-final（checkpoint CUDA 重放）→ summarize。
+- 15:11 fold0 矩阵训练启动；**16:21:37 fold0 门通过（FOLD0_GATE_PASSED，verify-fold0 checkpoint CUDA 重放）**，自动进入 fold1–4 扩展（16:25 起）。
 
 ## 产物与日志
 
