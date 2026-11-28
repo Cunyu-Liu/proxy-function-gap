@@ -4,7 +4,8 @@
 
 > **2026-11-28 当前状态（优先于下文全部历史正文）**
 >
-> - **执行队列全部恢复**：RiNALMo eCLIP 主集 20/20 run 训练完成，全量独立审计进行中（driver 伪语法错误根因为运行中脚本被编辑，已重启复用全部 run）；RNA-FM LoRA/full 微调主队列从 RESOURCE_BLOCKED 恢复，fold0 rank4 真实 CUDA 训练；CAFA3 内存门经实测探针（BPO 峰值 RSS 4.89GiB/GPU 3.9GB）由 40GiB 修正为 12GiB 后恢复，fold0/id50/BPO 收敛中；RNAcompete RiNALMo 跨编码器扩展按预注册附录启动（smoke 通过，219,990 RNA 全量嵌入进行中，独立产物树）。**四者均未过最终验收门，不写性能结论。**
+> - **执行队列全部恢复并推进**：RiNALMo eCLIP 主集 20/20 run 训练完成，**全量独立审计已通过**（15 modern+5 kNN、严格三折、无 fold=-1、CUDA 探针、预测逐折对齐与 RNA-FM 一致），10,000 次配对 bootstrap 运行中→低同源→独立回算（post watcher 自动）；RNA-FM LoRA/full 微调 fold0 rank4 真实 CUDA 训练（~7 分钟/任务，加载缓存已构建并逐 ID 抽查通过，后续 run 准备期秒级）；CAFA3 内存门经实测探针修正后恢复，fold0/id50/BPO 三 seed 早停完成、指标重算收尾；RNAcompete RiNALMo 跨编码器扩展嵌入+六选择完成、**fold0 门通过**、五折扩展运行中。**bootstrap/CAFA/RC/微调未过最终门部分不写性能结论。**
+> - **微调期限范围规则**：实测外推 fold0 完整容量对照 ~19 天可行、五折扩展 ~62 天超期；预设规则——fold0 门后若时间不足，微调冻结为 fold0 三 seed 描述性（D-test），主集 M-test 仍由 frozen 五折承担。见微调交接文档 15:0x 节。
 > - **叙事与图表升级**：新版主线 `论文证据/预印本科学主线与证据链_2026-11-28.md`（四幕推理链）取代旧版叙事组织，旧版保留为证据台账；五张 v2 主图（数据审计/尾部森林图/OOD 指标冲突/蛋白与跨协议/RNAcompete 双轨）完成三遍数值核验，见 `figures/图目录与证据映射_2026-11-28.md`。
 > - RNAcompete RNA-FM 五折 70/70、E1 strict3train 主集、E5 72/72、E6 五划分与 PAR-CLIP 三 seed 的已验收结论与边界不变，见 2026-11-27/11-26 状态框。
 
