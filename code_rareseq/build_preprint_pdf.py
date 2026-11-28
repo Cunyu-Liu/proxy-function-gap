@@ -22,11 +22,11 @@ DEFAULT_OUTPUT = MANUSCRIPT / "preprint_draft.pdf"
 DEFAULT_CUTOFF = "2026-11-27"
 FIGURES = {
     1: "Fig1_E0_data_and_leakage_audit_300dpi.png",
-    2: "Fig2_E1_main_strict3train_five_fold_three_seed_300dpi.png",
+    2: "Fig2_eclip_tail_forest_v2_20261128.png",
     3: "Fig3_E5_PARCLIP_cross_protocol_300dpi.png",
     4: "Fig4_E6_GRIMM_five_split_frequency_and_OOD_v2_300dpi.png",
-    5: "Fig5_E5_whole_RBP_holdout_three_seed_OOD_300dpi.png",
-    6: "Fig6_RNAcompete_Ray2013_five_fold_sequence_and_RBP_OOD_300dpi.png",
+    5: "Fig5_ood_metric_conflicts_v2_20261128.png",
+    6: "Fig6_rnacompete_dual_track_v2_20261128.png",
 }
 
 CSL = """<?xml version="1.0" encoding="utf-8"?>
@@ -179,7 +179,8 @@ def prepare_source(text: str) -> str:
         caption = latex_caption(match.group(1)) + latex_caption(match.group(2))
         replacement = (
             "```{=latex}\n"
-            "\\begin{figure}[!htbp]\n"
+            "\\clearpage\n"
+            "\\begin{figure}[!ht]\n"
             "\\centering\n"
             f"\\includegraphics[width=\\linewidth,height=0.72\\textheight,keepaspectratio]{{figure{number}.png}}\n"
             f"\\caption*{{\\textbf{{{caption}}}}}\n"
