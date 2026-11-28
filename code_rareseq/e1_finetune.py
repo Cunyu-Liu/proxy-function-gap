@@ -5,6 +5,7 @@ import gc
 import hashlib
 import json
 import os
+import pickle
 import shutil
 import sys
 import tempfile
@@ -144,6 +145,53 @@ def load_checkpoint_compressed(directory):
             os.remove(raw_path)
 
 
+LOADER_CACHE_ROOT = "/teams/HoulabData_1788502323/liucunyu/ProxyFunctionGap/RARESeq/e1_rnafm_finetune_strict3train_p20/loader_cache"
+
+
+def _loader_cache_key(args):
+    h = hashlib.sha256()
+    for path in (args.split_clstr, args.exps_file, args.positives_audit,
+                 os.path.join(args.neg_dir, "window_fold_map.tsv")):
+        h.update(file_sha256(path).encode())
+    h.update(f"{args.windows_dir}|{args.neg_dir}|{DATA_VERSION}".encode())
+    return h.hexdigest()[:32]
+
+
+def cached_tasks(loader, args):
+    key = _loader_cache_key(args)
+    folds = [int(x) for x in args.folds.split(",")]
+    tracks = args.tracks.split(",")
+    paths = {f: os.path.join(LOADER_CACHE_ROOT, f"tasks_{key}_f{f}.pkl") for f in range(5)}
+    expected = len(read_exps(args.exps_file)) * len(folds) * len(tracks)
+    if all(os.path.isfile(paths[f]) for f in folds):
+        tasks = []
+        for f in folds:
+            with open(paths[f], "rb") as handle:
+                payload = pickle.load(handle)
+            if payload["key"] != key or payload["fold"] != f:
+                raise ValueError("Loader cache key/fold mismatch")
+            tasks.extend(t for t in payload["tasks"] if t["track"] in tracks)
+        if len(tasks) != expected:
+            raise ValueError(f"Loader cache count {len(tasks)} != expected {expected}")
+        print(f"LOADER_CACHE_HIT key={key} folds={folds} n={len(tasks)}", flush=True)
+        return tasks
+    full_args = SimpleNamespace(**{**vars(args), "folds": "0,1,2,3,4", "tracks": "neg1c,neg2"})
+    grouped = {f: [] for f in range(5)}
+    for task in SequenceLoader(full_args).tasks():
+        grouped[task["fold"]].append(task)
+    os.makedirs(LOADER_CACHE_ROOT, exist_ok=True)
+    for f in range(5):
+        tmp = paths[f] + ".tmp"
+        with open(tmp, "wb") as handle:
+            pickle.dump({"key": key, "fold": f, "tasks": grouped[f]}, handle, protocol=4)
+        os.replace(tmp, paths[f])
+    print(f"LOADER_CACHE_BUILT key={key}", flush=True)
+    tasks = [t for f in folds for t in grouped[f] if t["track"] in tracks]
+    if len(tasks) != expected:
+        raise ValueError(f"Loader cache build count {len(tasks)} != expected {expected}")
+    return tasks
+
+
 class SequenceLoader(TaskLoader):
     def __init__(self, args):
         super().__init__(args)
@@ -190,13 +238,27 @@ class SequenceLoader(TaskLoader):
                            "track": track, "splits": splits, "fold_counts": fold_counts}
 
     def sequences(self, name):
-        if name not in self.cache:
-            pos = pd.read_csv(os.path.join(self.args.windows_dir, f"{name}.windows.tsv"), sep="\t",
-                              usecols=["window_id", "seq"])
-            neg = pd.read_csv(os.path.join(self.args.neg_dir, f"{name}.negatives.tsv"), sep="\t",
-                              usecols=["window_id", "seq"])
-            both = pd.concat([pos, neg], ignore_index=True)
-            self.cache[name] = dict(zip(both.window_id, both.seq))
+        if name in self.cache:
+            return self.cache[name]
+        wpath = os.path.join(self.args.windows_dir, f"{name}.windows.tsv")
+        npath = os.path.join(self.args.neg_dir, f"{name}.negatives.tsv")
+        sw, sn = os.stat(wpath), os.stat(npath)
+        sig = hashlib.sha256(
+            f"{name}|{sw.st_size}|{sw.st_mtime_ns}|{sn.st_size}|{sn.st_mtime_ns}".encode()).hexdigest()[:24]
+        path = os.path.join(LOADER_CACHE_ROOT, f"seq_{name}_{sig}.pkl")
+        if os.path.isfile(path):
+            with open(path, "rb") as handle:
+                self.cache[name] = pickle.load(handle)
+            return self.cache[name]
+        pos = pd.read_csv(wpath, sep="\t", usecols=["window_id", "seq"])
+        neg = pd.read_csv(npath, sep="\t", usecols=["window_id", "seq"])
+        both = pd.concat([pos, neg], ignore_index=True)
+        self.cache[name] = dict(zip(both.window_id, both.seq))
+        os.makedirs(LOADER_CACHE_ROOT, exist_ok=True)
+        tmp = path + ".tmp"
+        with open(tmp, "wb") as handle:
+            pickle.dump(self.cache[name], handle, protocol=4)
+        os.replace(tmp, path)
         return self.cache[name]
 
     def arrays(self, task, include_test=False):
@@ -519,7 +581,7 @@ def cmd_train(args):
             raise ValueError("Frozen convergence contract is epochs=1000, patience=20, min_delta=1e-4")
         device, device_info = require_cuda()
         loader = SequenceLoader(args)
-        tasks = list(loader.tasks())
+        tasks = cached_tasks(loader, args)
         preflight_storage(args, tasks)
         tokenizer, fast_encode, fast_ok = load_tokenizer(args.model)
         run_config = {"args": vars(args).copy(), "code_sha256": config["code_sha256"],
@@ -571,7 +633,7 @@ def cmd_evaluate(args):
     try:
         device, device_info = require_cuda()
         loader = SequenceLoader(train_args)
-        tasks = list(loader.tasks())
+        tasks = cached_tasks(loader, args)
         pending_test_bytes = sum(len(task["splits"][2][0]) for task in tasks
                                  if not os.path.isfile(os.path.join(
                                      args.out, "test_tasks",
