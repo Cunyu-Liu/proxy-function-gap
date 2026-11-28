@@ -41,7 +41,6 @@ MANUAL_ITEMS = [
     "目标期刊/仓库与投稿格式",
     "是否需要公开数据/代码 DOI（Zenodo）",
     "参考文献 [17] T3PO-mRNA 作者/年份补核（审计时 OpenReview 403）",
-    "PPT 更新至 V9/UPTS 叙事",
 ]
 
 
@@ -76,6 +75,10 @@ def artifact_paths():
         paths.append(f"deliverables/reports/source_data/tcell_upts_v1/artifact/auxiliary/{d}/selection.json")
     for code in ("configs/upts_frozen.json", "src/upts.py", "scripts/freeze_inputs.py", "scripts/run_auxiliary.py", "scripts/verify_round2.py", "tests/test_upts.py"):
         paths.append(f"deliverables/reports/source_data/tcell_upts_v1/code/{code}")
+    paths += [
+        "deliverables/ppt/proxy_function_gap_paper1_v9_20261128.pptx",
+        "deliverables/ppt/build_paper1_v9_deck.py",
+    ]
     return paths
 
 
@@ -109,7 +112,7 @@ def main():
         "paper_markdown_sha256": digest(PAPER_MD),
         "evidence_boundary": "All retrospective historical-data studies; grouped holdouts are not prospective blind tests. UPTS v1 failed its auxiliary gate; T-cell target not evaluated. DRAFT_NOT_SUBMITTED.",
         "statistical_boundary": "No cross-task pooled raw effect; endpoint-specific regret; cluster bootstrap; algorithm seeds are not biological replicates.",
-        "ppt_status": "pending_update_to_V9",
+        "ppt_status": "updated_to_V9_20261128",
         "manual_items_before_submission": MANUAL_ITEMS,
         "artifacts": artifacts,
     }

@@ -5,7 +5,7 @@
   "paper_markdown_sha256": "cc6f9e7b297b9a22b2cb053faee929b2953317bb05bc0beb426b7df3b886f8b4",
   "evidence_boundary": "All retrospective historical-data studies; grouped holdouts are not prospective blind tests. UPTS v1 failed its auxiliary gate; T-cell target not evaluated. DRAFT_NOT_SUBMITTED.",
   "statistical_boundary": "No cross-task pooled raw effect; endpoint-specific regret; cluster bootstrap; algorithm seeds are not biological replicates.",
-  "ppt_status": "pending_update_to_V9",
+  "ppt_status": "updated_to_V9_20261128",
   "manual_items_before_submission": [
     "作者署名与顺序",
     "单位/通讯作者",
@@ -13,8 +13,7 @@
     "数据与代码许可（含各公开数据集原始许可）",
     "目标期刊/仓库与投稿格式",
     "是否需要公开数据/代码 DOI（Zenodo）",
-    "参考文献 [17] T3PO-mRNA 作者/年份补核（审计时 OpenReview 403）",
-    "PPT 更新至 V9/UPTS 叙事"
+    "参考文献 [17] T3PO-mRNA 作者/年份补核（审计时 OpenReview 403）"
   ],
   "artifacts": [
     {
@@ -301,6 +300,16 @@
       "local_path": "deliverables/reports/source_data/tcell_upts_v1/code/tests/test_upts.py",
       "bytes": 2317,
       "sha256": "5cc5a030537790b9e5134c039dc09dee59de7b5c15d6ff3c5867ce894202c74d"
+    },
+    {
+      "local_path": "deliverables/ppt/proxy_function_gap_paper1_v9_20261128.pptx",
+      "bytes": 753949,
+      "sha256": "3895f141f735ffc536adb5af5ab4a6045f075ade32fd3aa39f23adb8704114d4"
+    },
+    {
+      "local_path": "deliverables/ppt/build_paper1_v9_deck.py",
+      "bytes": 9191,
+      "sha256": "96202ced36046fb63961da64f0304e8c35781d39b1e69eb9c7d9443668a718ed"
     }
   ]
 }
